@@ -1,5 +1,11 @@
 (function (window, undefined) {
+    var NOW = (new Date()).getTime();
     var PV_DOMAIN = 'sina.com.cn'; //曝光监测地址
+
+    var SSP_ALLOW_SIZE = {
+        '980*90'    : true,
+        '300*500'   : true
+    };
 
     var _IFRAME_ONLOAD_CODE = '' + 
         'console.debug(window)' + 
@@ -20,6 +26,14 @@
         //     '}' + 
         // '}' + 
     ';';
+
+    //html转移相关
+    var da = /&/g,
+        ea = /</g, 
+        fa = />/g, 
+        ga = /\"/g, 
+        B = {"\x00": "\\0","\b": "\\b","\f": "\\f","\n": "\\n","\r": "\\r","\t": "\\t","\x0B": "\\x0B",'"': '\\"',"\\": "\\\\"},
+        C = {"'": "\\'"};
 
     //字符串中需要转义的字符及对应的转义字符串
     var ESCAPE_MAP = {
@@ -249,7 +263,10 @@
     }
 
 
-    function _isCrossDomain(window) {
+    /**
+     * 是否可以操作iframe内容
+     */
+    function _canOptIframeContent(window) {
         try {
             return !!window.location.href || "" === window.location.href
         } catch (e) {
@@ -259,57 +276,64 @@
 
     function _getFillIframeContentFn(window, iframeId, content, b) {
         return function() {
-            var f = !1;
+            var done = false;
             //e && Q().al(3E4);
             try {
-                if (_isCrossDomain(window.document.getElementById(iframeId).contentWindow)) {
+                if (_canOptIframeContent(window.document.getElementById(iframeId).contentWindow)) {
                     var contentWindow = window.document.getElementById(iframeId).contentWindow, 
                         doc = contentWindow.document;
-                    (doc.body && doc.body.firstChild || (doc.open(), doc.sinaads_async_iframe_close = true, doc.write(content)))
+                    (doc.body && doc.body.firstChild || (doc.open(), doc.sinaads_async_iframe_close = true, doc.write(content)));
                 } else {
-                    // var m = a.document.getElementById(b).contentWindow, g;
-                    // d = c;
-                    // d = String(d);
-                    // if (d.quote)
-                    //     g = d.quote();
-                    // else {
-                    //     for (var k = ['"'], h = 0; h < d.length; h++) {
-                    //         var l = d.charAt(h), y = l.charCodeAt(0), v = k, w = h + 1, s;
-                    //         if (!(s = B[l])) {
-                    //             var z;
-                    //             if (31 < y && 127 > y)
-                    //                 z = l;
-                    //             else {
-                    //                 var r = l;
-                    //                 if (r in C)
-                    //                     z = C[r];
-                    //                 else if (r in B)
-                    //                     z = C[r] = B[r];
-                    //                 else {
-                    //                     var q = r, t = r.charCodeAt(0);
-                    //                     if (31 < t && 127 > t)
-                    //                         q = r;
-                    //                     else {
-                    //                         if (256 > t) {
-                    //                             if (q = "\\x", 16 > t || 256 < t)
-                    //                                 q += "0"
-                    //                         } else
-                    //                             q = "\\u", 4096 > t && (q += "0");
-                    //                         q += t.toString(16).toUpperCase()
-                    //                     }
-                    //                     z = C[r] = q
-                    //                 }
-                    //             }
-                    //             s = z
-                    //         }
-                    //         v[w] = s
-                    //     }
-                    //     k.push('"');
-                    //     g = k.join("")
-                    // }
-                    // m.location.replace("javascript:" + g)
+                    var contentWindow = window.document.getElementById(iframeId).contentWindow,
+                        code,
+                        d;
+                    d = content;
+                    d = String(content);
+
+                    if (d.quote) {
+                        g = d.quote();
+                    } else {
+                        for (var tmp = ['"'], i = 0; i < d.length; i++) {
+                            var l = d.charAt(i), 
+                                y = l.charCodeAt(0), 
+                                v = tmp, 
+                                w = i + 1,
+                                s;
+                            if (!(s = B[l])) {
+                                var z;
+                                if (31 < y && 127 > y)
+                                    z = l;
+                                else {
+                                    var r = l;
+                                    if (r in C)
+                                        z = C[r];
+                                    else if (r in B)
+                                        z = C[r] = B[r];
+                                    else {
+                                        var q = r, t = r.charCodeAt(0);
+                                        if (31 < t && 127 > t)
+                                            q = r;
+                                        else {
+                                            if (256 > t) {
+                                                if (q = "\\x", 16 > t || 256 < t)
+                                                    q += "0"
+                                            } else
+                                                q = "\\u", 4096 > t && (q += "0");
+                                            q += t.toString(16).toUpperCase()
+                                        }
+                                        z = C[r] = q
+                                    }
+                                }
+                                s = z
+                            }
+                            v[w] = s
+                        }
+                        tmp.push('"');
+                        code = tmp.join("");
+                    }
+                    contentWindow.location.replace("javascript:" + code);
                 }
-                f = !0
+                done = true
             } catch (e) {
                 console.debug(e);
                 //m = J().sinaads_jobrunner, P(m) && m.rl()
@@ -338,132 +362,90 @@
 
         
         var varDecalareCode = _configToJsVarCode(config); //将config的属性转成变量声明的语句, 用于塞入iframe中作为真正广告的参数
-        //     type = adObj.sina_ad_output, //g
-        //     format = adObj.sina_ad_format; //h
-
-        // format || "html" != type && null != type || (format = adObj.sina_ad_width + "x" + adObj.sina_ad_height);
-
-        // //设置sina_ad_format;
-        // var bool = !adObj.sina_ad_slot || adObj.sina_override_format || "aa" == adObj.sina_loader_used;
-        // format = format && bool ? format.toLowerCase() : "";
-        // adObj.sina_ad_format = format;
 
 
-        // var config = adObj || window; //获取adObj参数的上下文环境
-        // config = [
-        //     config.sina_ad_slot,
-        //     config.sina_ad_format,
-        //     config.sina_ad_type,
-        //     config.sina_ad_width,
-        //     config.sina_ad_height
-        // ];
+        var auth = config || window; //如果没有config, 则取window中的参数，这个config用与生成唯一的验证码
+        auth = [
+            auth.sinaads_ad_pdps,
+            auth.sinaads_ad_width,
+            auth.sinaads_ad_height
+        ];
+        //最大25层，找到element嵌套的所有id的路径
+        var path = [],  
+            i = 0;
 
-
-        // //最大25层，找到adins嵌套的所有id的路径
-        // var path; 
-        // if (adins) {
-        //     if (adins) {
-        //         for (var tmp = [], i = 0; adins && 25 > i; adins = adins.parentNode, ++i) {
-        //             tmp.push(9 != adins.nodeType && adins.id || "");
-        //         }
-        //         path = tmp.join();
-        //     } else {
-        //         path = "";
-        //     }
-        //     path && config.push(path);
-        // }
-        
-        // //使用配置项生成一个唯一的key
-        // var unitKey = 0;
-        // if (config) {
-        //     if (unitKey = config.join(":"), config = unitKey.length, 0 == config) {
-        //         unitKey = 0;
-        //     } else {
-        //         tmp = 305419896;
-        //         for (i = 0; i < config; i++)
-        //             tmp ^= (tmp << 5) + (tmp >> 2) + i.charCodeAt() & 4294967295;
-        //         unitKey = 0 < tmp ? tmp : 4294967296 + tmp
-        //     }
-        // }
-        // unitKey = unitKey.toString();
+        if (element) {
+            if (element) {
+                for ( ; element && 25 > i; element = element.parentNode, ++i) {
+                    path.push(9 != element.nodeType && element.id || "");
+                }
+                path = path.join();
+            } else {
+                path = "";
+            }
+            path && auth.push(path);
+        }
+        var authKey,
+            len,
+            seed = 305419896;
+        if (auth) {
+            if (authKey = auth.join(":"), len = authKey.length, 0 == len) {
+                authKey = 0;
+            } else {
+                for (i = 0; i < len; i++)
+                    seed ^= (seed << 5) + (seed >> 2) + authKey.charCodeAt(i) & 4294967295;
+                authKey = 0 < seed ? seed : 4294967296 + seed;
+            }
+        }
+        authKey = authKey.toString();
 
         
 
-        // //测试浏览器功能
-        // var w3c = ta(win);
+        pvIframeId = "ads_pv_iframe" + config.sinaads_uid;
 
-        // //支持prerender功能
-        // var supportPrerender = 3 == (
-        //     {
-        //         visible: 1,
-        //         hidden: 2,
-        //         prerender: 3,
-        //         preview: 4
-        //     }[
-        //         win.document.webkitVisibilityState ||
-        //         win.document.mozVisibilityState || 
-        //         win.document.visibilityState || 
-        //         ""
-        //     ]
-        // || 0);
+        // //获取page_url 广告所在页面url
+        // var page_url = adObj.sina_page_url;
+        // if (!page_url) {
+        //     n: {
+        //         var doc = win.document;
 
+        //         width = width || win.sina_ad_width, height = height || win.sina_ad_height;
 
-        // w3c && (!supportPrerender && void 0 === adObj.sina_ad_handling_experiment) && (adObj.sina_ad_handling_experiment = G(["XN", "EI"], ja) || G(["PC"], ka));
-
-
-        // handling_experiment = adObj.sina_ad_handling_experiment ? String(adObj.sina_ad_handling_experiment) : null; //null
-        // //handling_experiment = null;
-
-        // if (w3c && 1 == win.sina_unique_id && "XN" != handling_experiment) {
-            pvIframeId = "ads_pv_iframe" + config.sinaads_uid;
-
-        //     //获取page_url 广告所在页面url
-        //     var page_url = adObj.sina_page_url;
-        //     if (!page_url) {
-        //         n: {
-        //             var doc = win.document;
-
-        //             width = width || win.sina_ad_width, height = height || win.sina_ad_height;
-
-        //             if (win.top == win) {
-        //                 var inIframe = !1;
-        //             } else {
-        //                 var doc = doc.documentElement;
-        //                 if (width && height) {
-        //                     var w = 1, s = 1;
-        //                     a.innerHeight ? (w = a.innerWidth, s = a.innerHeight) : v && v.clientHeight ? (w = v.clientWidth, s = v.clientHeight) : b.body && (w = b.body.clientWidth, s = b.body.clientHeight);
-        //                     if (s > 2 * y || w > 2 * l) {
-        //                         b = !1;
-        //                         break n
-        //                     }
+        //         if (win.top == win) {
+        //             var inIframe = !1;
+        //         } else {
+        //             var doc = doc.documentElement;
+        //             if (width && height) {
+        //                 var w = 1, s = 1;
+        //                 a.innerHeight ? (w = a.innerWidth, s = a.innerHeight) : v && v.clientHeight ? (w = v.clientWidth, s = v.clientHeight) : b.body && (w = b.body.clientWidth, s = b.body.clientHeight);
+        //                 if (s > 2 * y || w > 2 * l) {
+        //                     b = !1;
+        //                     break n
         //                 }
-        //                 inIframe = !0
         //             }
+        //             inIframe = !0
         //         }
-        //         page_url = inIframe ? win.document.referrer : win.document.URL
         //     }
-
-        //     var loc = encodeURIComponent(page_url);
-        //     b = null;
-        //     "PC" != h && "EI" != h || (b = ("PC" == h ? "K" : "I") + "-" + (l + "/" + c + "/" + a.sinaads_unique_id));
-            
-            //构造曝光监控iframe
-            _initIframeProp(pvIframeConfig, width, height, false);
-            pvIframeConfig.style = "display:none";
-            //d = b; //神马
-            pvIframeConfig.id = pvIframeId;
-            pvIframeConfig.name = pvIframeId;
-            pvIframeConfig.src = _createURL(_getDomain("", PV_DOMAIN), ["/path", config.sinaads_page_url ? "#" + encodeURIComponent(config.sinaads_page_url) : ""].join(""));
-            pvIframeHTML = _createIframeHTML(pvIframeConfig);
-        // } else {
-        //     pvIframeHTML = '';
+        //     page_url = inIframe ? win.document.referrer : win.document.URL
         // }
 
+        // var loc = encodeURIComponent(page_url);
+        // b = null;
+        // "PC" != h && "EI" != h || (b = ("PC" == h ? "K" : "I") + "-" + (l + "/" + c + "/" + a.sinaads_unique_id));
+        
+        //构造曝光监控iframe
+        _initIframeProp(pvIframeConfig, width, height, false);
+        pvIframeConfig.style = "display:none";
+        //d = b; //神马
+        pvIframeConfig.id = pvIframeId;
+        pvIframeConfig.name = pvIframeId;
+        pvIframeConfig.src = _createURL(_getDomain("", PV_DOMAIN), ["/path", config.sinaads_page_url ? "#" + encodeURIComponent(config.sinaads_page_url) : ""].join(""));
+        pvIframeHTML = _createIframeHTML(pvIframeConfig);
 
 
-        // var time = (new Date).getTime();
-        // var top_experiment = adObj.sinaads_top_experiment;
-        // var async_for_oa_experiment = adObj.sinaads_async_for_oa_experiment;
+
+        var time = (new Date).getTime();
+
 
         var content = [
             '<!doctype html><html><body>',
@@ -473,11 +455,8 @@
                     //'sinaads_show_ads_impl=true;',
                     'sinaads_uid=', window.sinaads_uid, ';',
                     'sinaads_async_iframe_id="', iframeId, '";',
-                    //'"sinaads_ad_unit_key="', unitKey, '";",
-                    //"sinaads_start_time=", now, ";",
-                    //top_experiment ? 'sinaads_top_experiment="' + top_experiment + '";' : "",
-                    //h ? 'sinaads_ad_handling_experiment="' + handling_experiment + '";' : "",
-                    //async_for_oa_experiment ? 'sinaads_async_for_oa_experiment="' + async_for_oa_experiment + '";' : "",
+                    'sinaads_ad_auth_key="', authKey, '";',
+                    "sinaads_start_time=", NOW, ";",
                     //"sinaads_bpp=", time > now ? time - now : 1, ";",
                 '</', tag, '>',
                 _getShowADScript(),
@@ -541,7 +520,7 @@
 
         config = config.params || {};   //广告配置
 
-        //1. 从confi.element中得到需要渲染的ins元素
+        //从confi.element中得到需要渲染的ins元素
         if (element) {
             if (!_isPaddingSinaad(element) && (element = element.id && _getSinaAd(element.id), !element)) {
                 throw Error("sinaads: 该元素已经被渲染完成，无需渲染");
@@ -549,19 +528,19 @@
             if (!("innerHTML" in element)) {
                 throw Error("sinaads: 无法渲染该元素");
             }
-        //2. 没有对应的ins元素, 获取一个待初始化的ins, 如果没有，抛出异常
+        //没有对应的ins元素, 获取一个待初始化的ins, 如果没有，抛出异常
         } else if (element = _getSinaAd(), !element) {
             throw Error("sinaads: 所有待渲染的元素都已经被渲染完成");
         }
 
-        //3. 置成完成状态，下面开始渲染
+        //置成完成状态，下面开始渲染
         element.setAttribute("data-ad-status", "done"); 
 
 
         //全局唯一id标识，用于后面为容器命名
         window.sinaads_uid ? ++window.sinaads_uid : window.sinaads_uid = 1;
 
-        //4. 将data-xxx-xxxx,转换成sinaads_xxx_xxxx，并把值写入config
+        //将data-xxx-xxxx,转换成sinaads_xxx_xxxx，并把值写入config
         //这里因为上面设置了data-ad-status属性, 所以sinaads-ad-status的状态也会被写入conf
         for (var attrs = element.attributes, len = attrs.length, i = 0; i < len; i++) {
             var attr = attrs[i];
@@ -572,7 +551,7 @@
         }
 
 
-        //5. 设置宽高属性到adObj中, sinaads_ad_height, sinaads_ad_width
+        //设置宽高属性到config中, sinaads_ad_height, sinaads_ad_width
         var reg = /([0-9]+)px/,
             keys = ["width", "height"],
             key,
@@ -583,14 +562,16 @@
             config.hasOwnProperty(key) || (value = reg.exec(element.style[keys[i]])) && (config[key] = value[1]);
         }
 
-        //6. 根据尺寸判断使用什么样的广告加载器
-        //config.sinaads_loader_used = sinaadsAllowSize[adObj.sina_ad_width + "x" + a.sina_ad_height] ? "ar" : "aa";
+        //@todo 判断使用什么样的广告脚本
+        //比如使用宽高白名单等SSP_ALLOW_SIZE[config.sinaads_ad_width + '*' + config.sinaads_ad_height]
+        config.sinaads_loader_used = config.sinaads_loader_used || "ssp"; //目前暂时只使用ssp加载方式
 
 
-        //7. 判断是否是广告位支持的格式
+        //判断是否是广告位支持的格式
+        //@todo 控制某个广告位只支持加载某种类型广告
         // var type;
         // if ((type = config.sinaads_ad_output) && "html" !== type) {
-        //     throw Error("No support for sinaads_ad_output=" + type);
+        //     throw Error("目前不支持sinaads_ad_output中配置的广告类型" + type);
 
         _render(window, config, element);
     }
