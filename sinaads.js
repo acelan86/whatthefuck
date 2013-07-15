@@ -1,39 +1,36 @@
 (function (window, undefined) {
     var NOW = (new Date()).getTime();
-    var PV_DOMAIN = 'sina.com.cn'; //曝光监测地址
 
+    var PV_DOMAIN = 'sina.com.cn'; //默认曝光监测地址
+
+    //@todo 目前没有用到，这里预留可以配置允许的广告尺寸
     var SSP_ALLOW_SIZE = {
         '980*90'    : true,
         '300*500'   : true
     };
 
-    var _IFRAME_ONLOAD_CODE = '' + 
-        'console.debug(window)' + 
-        // 'var i = this.id,' + 
-        //     's = window.sinaads_iframe_oncopy,' + 
-        //     'H = s && s.handlers,' +
-        //     'h = H && H[i],' + 
-        //     'w = this.contentWindow,' + 
-        //     'd;' +
-        // 'try {' + 
-        //     'd = w.document;' +
-        // '} catch ( e ) {}' + 
-        // 'if (h && d && (!d.body || !d.body.firstChild)) {' + 
-        //     'if (h.call) {' + 
-        //         'setTimeout(h, 0)' +
-        //     '} else if (h.match) {' + 
-        //         'w.location.replace(h);' + 
-        //     '}' + 
-        // '}' + 
-    ';';
+    var _IFRAME_ONLOAD_CODE = ''; //预留，当iframe广告加载完成后需要做的事情可以在外部定义
 
-    //html转移相关
-    var da = /&/g,
-        ea = /</g, 
-        fa = />/g, 
-        ga = /\"/g, 
-        B = {"\x00": "\\0","\b": "\\b","\f": "\\f","\n": "\\n","\r": "\\r","\t": "\\t","\x0B": "\\x0B",'"': '\\"',"\\": "\\\\"},
-        C = {"'": "\\'"};
+
+    //html转义相关
+    var AMP_REG = /&/g,
+        LT_REG = /</g, 
+        GT_REG = />/g, 
+        DOUBLE_QUOTE_REG = /\"/g, 
+        BLANK_REG = {
+            "\x00"  : "\\0",
+            "\b"    : "\\b",
+            "\f"    : "\\f",
+            "\n"    : "\\n",
+            "\r"    : "\\r",
+            "\t"    : "\\t",
+            "\x0B"  : "\\x0B",
+            '"'     : '\\"',
+            "\\"    : "\\\\"
+        },
+        QUOTE_REG = {
+            "'": "\\'"
+        };
 
     //字符串中需要转义的字符及对应的转义字符串
     var ESCAPE_MAP = {
@@ -49,7 +46,6 @@
         },
         //字符串中非中文字符串
         STR_REG = /\uffff/.test("\uffff") ? (/[\\\"\x00-\x1f\x7f-\uffff]/g) : (/[\\\"\x00-\x1f\x7f-\xff]/g);
-
     /**
      * 转义特殊字符并将其他字符换成unicode
      */
@@ -70,26 +66,6 @@
         }));
         arr.push('"');
     }
-
-
-    /**
-     * 从url中获取主域名
-     */
-    var DOMAIN_REG = /^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/;
-    function  _getDomain(url, def_domain) {
-        if (!url) {
-            return def_domain;
-        }
-        var domain = url.match(DOMAIN_REG);
-        return domain ? domain[0] : def_domain;
-    }
-
-    function _createURL(domain, path, useSSL) {
-        var protocal = useSSL ? "https" : "http";
-        return [protocal, "://", domain, path].join("");
-    }
-
-
     /**
      * 将对象转换成字符串形式表示
      */
@@ -152,6 +128,24 @@
         }
     }
 
+
+    /**
+     * 从url中获取主域名
+     */
+    var DOMAIN_REG = /^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/;
+    function  _getDomain(url, def_domain) {
+        if (!url) {
+            return def_domain;
+        }
+        var domain = url.match(DOMAIN_REG);
+        return domain ? domain[0] : def_domain;
+    }
+    function _createURL(domain, path, useSSL) {
+        var protocal = useSSL ? "https" : "http";
+        return [protocal, "://", domain, path].join("");
+    }
+
+
     /**
      * 遍历对象并执行方法，Object.map
      */
@@ -160,6 +154,7 @@
             Object.prototype.hasOwnProperty.call(obj, key) && iterator.call(null, obj[key], key, obj);
         }
     }
+
 
     /**
      * 将config的属性值转换成变量声明代码
@@ -189,7 +184,7 @@
      */
     //1.class=sinaads 
     //2.data-sinaads-status !== "done"
-    function _isPaddingSinaad(element) {
+    function _isPenddingSinaad(element) {
         return /(^| )sinaads($| )/.test(element.className) && "done" !== element.getAttribute("data-ad-status");
     }
     /**
@@ -203,7 +198,7 @@
             len = inss.length,
             ins;
         for (ins = inss[i]; i < len; ins = inss[++i]) {
-            if (_isPaddingSinaad(ins) && (!id || ins.id === id)) { 
+            if (_isPenddingSinaad(ins) && (!id || ins.id === id)) { 
                 return ins;
             }
         }
@@ -225,8 +220,8 @@
 
     function _getShowADScript() {
         var tag = "script";
-        //return ["<", tag, ' src="', R(A(), "/pagead/js/r20130709/r20130206/show_ads_impl.js", ""), '"></', tag, ">"].join("");
-        return '<script src="./sinaads_ssp.js"></script>';
+        //@todo 可以在这里根据sinaads_ad_format使用不同的加载脚本
+        return ['<', tag, ' src="./sinaads_ssp.js"></', tag, '>'].join('');
     }
     /**
      * 创建公共的iframe属性值，填充到iframeConfig参数中
@@ -247,7 +242,7 @@
         iframeConfig.vspace = zero;
         iframeConfig.hspace = zero;
         iframeConfig.allowtransparency = quote + "true" + quote;
-        iframeConfig.scrolling = quote + "no" + quote
+        iframeConfig.scrolling = quote + "no" + quote;
     }
 
     /**
@@ -403,36 +398,47 @@
 
         pvIframeId = "ads_pv_iframe" + config.sinaads_uid;
 
-        // //获取page_url 广告所在页面url
-        // var page_url = adObj.sina_page_url;
-        // if (!page_url) {
-        //     n: {
-        //         var doc = win.document;
+        //获取page_url 广告所在页面url
+        var page_url = config.sinaads_page_url, //是否配置了page_url, 广告所在页面
+            isInIframe;
+        if (!page_url) {
+            // n : {
+            //     var doc = window.document;
 
-        //         width = width || win.sina_ad_width, height = height || win.sina_ad_height;
+            //     var width = width || window.sinaads_ad_width, 
+            //     var height = height || window.sinaads_ad_height;
 
-        //         if (win.top == win) {
-        //             var inIframe = !1;
-        //         } else {
-        //             var doc = doc.documentElement;
-        //             if (width && height) {
-        //                 var w = 1, s = 1;
-        //                 a.innerHeight ? (w = a.innerWidth, s = a.innerHeight) : v && v.clientHeight ? (w = v.clientWidth, s = v.clientHeight) : b.body && (w = b.body.clientWidth, s = b.body.clientHeight);
-        //                 if (s > 2 * y || w > 2 * l) {
-        //                     b = !1;
-        //                     break n
-        //                 }
-        //             }
-        //             inIframe = !0
-        //         }
-        //     }
-        //     page_url = inIframe ? win.document.referrer : win.document.URL
-        // }
+            //     if (window.top == window) {
+            //         var _isInIframe = false;
+            //     } else {
+            //         var docElement = doc.documentElement;
+            //         if (width && height) {
+            //             var _clientWidth = 1, 
+            //                 _clientHeight = 1;
+            //             if (window.innerHeight) {
+            //                 _clientWidth = window.innerWidth;
+            //                 _clientHeight = window.innerHeight;
+            //             } else{
+            //                 if (docElement && docElement.clientHeight) {
+            //                     _clientWidth = docElement.clientWidth;
+            //                     _clientHeight = docElement.clientHeight;
+            //                 } else {
+            //                     if (doc.body) {
+            //                         _clientWidth = doc.body.clientWidth;
+            //                         _clientHeight = doc.body.clientHeight;
+            //                     }
+            //                 }
+            //             if (_clientWidth > 2 * width || _clientHeight > 2 * height) {
+            //                 isInIframe = false;
+            //                 break n;
+            //             }
+            //         }
+            //         isInIframe = true;
+            //     }
+            // }
+            page_url = (window.top === window) ?  window.document.URL : window.document.referrer;
+        }
 
-        // var loc = encodeURIComponent(page_url);
-        // b = null;
-        // "PC" != h && "EI" != h || (b = ("PC" == h ? "K" : "I") + "-" + (l + "/" + c + "/" + a.sinaads_unique_id));
-        
         //构造曝光监控iframe
         _initIframeProp(pvIframeConfig, width, height, false);
         pvIframeConfig.style = "display:none";
@@ -522,7 +528,7 @@
 
         //从confi.element中得到需要渲染的ins元素
         if (element) {
-            if (!_isPaddingSinaad(element) && (element = element.id && _getSinaAd(element.id), !element)) {
+            if (!_isPenddingSinaad(element) && (element = element.id && _getSinaAd(element.id), !element)) {
                 throw Error("sinaads: 该元素已经被渲染完成，无需渲染");
             }
             if (!("innerHTML" in element)) {
