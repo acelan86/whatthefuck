@@ -272,68 +272,16 @@
     function _getFillIframeContentFn(window, iframeId, content, b) {
         return function() {
             var done = false;
-            //e && Q().al(3E4);
             try {
                 if (_canOptIframeContent(window.document.getElementById(iframeId).contentWindow)) {
                     var contentWindow = window.document.getElementById(iframeId).contentWindow, 
                         doc = contentWindow.document;
                     (doc.body && doc.body.firstChild || (doc.open(), doc.sinaads_async_iframe_close = true, doc.write(content)));
-                } else {
-                    var contentWindow = window.document.getElementById(iframeId).contentWindow,
-                        code,
-                        d;
-                    d = content;
-                    d = String(content);
-
-                    if (d.quote) {
-                        g = d.quote();
-                    } else {
-                        for (var tmp = ['"'], i = 0; i < d.length; i++) {
-                            var l = d.charAt(i), 
-                                y = l.charCodeAt(0), 
-                                v = tmp, 
-                                w = i + 1,
-                                s;
-                            if (!(s = B[l])) {
-                                var z;
-                                if (31 < y && 127 > y)
-                                    z = l;
-                                else {
-                                    var r = l;
-                                    if (r in C)
-                                        z = C[r];
-                                    else if (r in B)
-                                        z = C[r] = B[r];
-                                    else {
-                                        var q = r, t = r.charCodeAt(0);
-                                        if (31 < t && 127 > t)
-                                            q = r;
-                                        else {
-                                            if (256 > t) {
-                                                if (q = "\\x", 16 > t || 256 < t)
-                                                    q += "0"
-                                            } else
-                                                q = "\\u", 4096 > t && (q += "0");
-                                            q += t.toString(16).toUpperCase()
-                                        }
-                                        z = C[r] = q
-                                    }
-                                }
-                                s = z
-                            }
-                            v[w] = s
-                        }
-                        tmp.push('"');
-                        code = tmp.join("");
-                    }
-                    contentWindow.location.replace("javascript:" + code);
                 }
-                done = true
+                done = true;
             } catch (e) {
                 console.debug(e);
-                //m = J().sinaads_jobrunner, P(m) && m.rl()
             }
-            //f && (new U(a)).set(b, wa(a, b, c, !1))
         }
     }
 
@@ -402,47 +350,12 @@
         var page_url = config.sinaads_page_url, //是否配置了page_url, 广告所在页面
             isInIframe;
         if (!page_url) {
-            // n : {
-            //     var doc = window.document;
-
-            //     var width = width || window.sinaads_ad_width, 
-            //     var height = height || window.sinaads_ad_height;
-
-            //     if (window.top == window) {
-            //         var _isInIframe = false;
-            //     } else {
-            //         var docElement = doc.documentElement;
-            //         if (width && height) {
-            //             var _clientWidth = 1, 
-            //                 _clientHeight = 1;
-            //             if (window.innerHeight) {
-            //                 _clientWidth = window.innerWidth;
-            //                 _clientHeight = window.innerHeight;
-            //             } else{
-            //                 if (docElement && docElement.clientHeight) {
-            //                     _clientWidth = docElement.clientWidth;
-            //                     _clientHeight = docElement.clientHeight;
-            //                 } else {
-            //                     if (doc.body) {
-            //                         _clientWidth = doc.body.clientWidth;
-            //                         _clientHeight = doc.body.clientHeight;
-            //                     }
-            //                 }
-            //             if (_clientWidth > 2 * width || _clientHeight > 2 * height) {
-            //                 isInIframe = false;
-            //                 break n;
-            //             }
-            //         }
-            //         isInIframe = true;
-            //     }
-            // }
             page_url = (window.top === window) ?  window.document.URL : window.document.referrer;
         }
 
         //构造曝光监控iframe
         _initIframeProp(pvIframeConfig, width, height, false);
         pvIframeConfig.style = "display:none";
-        //d = b; //神马
         pvIframeConfig.id = pvIframeId;
         pvIframeConfig.name = pvIframeId;
         pvIframeConfig.src = _createURL(_getDomain("", PV_DOMAIN), ["/path", config.sinaads_page_url ? "#" + encodeURIComponent(config.sinaads_page_url) : ""].join(""));
@@ -457,21 +370,17 @@
             '<!doctype html><html><body>',
                 pvIframeHTML, //这里应该是曝光记录 
                 '<', tag + '>',
-                    varDecalareCode, 
-                    //'sinaads_show_ads_impl=true;',
+                    varDecalareCode,
                     'sinaads_uid=', window.sinaads_uid, ';',
                     'sinaads_async_iframe_id="', iframeId, '";',
                     'sinaads_ad_auth_key="', authKey, '";',
-                    "sinaads_start_time=", NOW, ";",
-                    //"sinaads_bpp=", time > now ? time - now : 1, ";",
+                    "sinaads_start_time=", NOW, ";"
                 '</', tag, '>',
                 _getShowADScript(),
             '</body></html>'
         ].join("");
 
         _getFillIframeContentFn(window, iframeId, content, !0)();
-
-        //(a.document.getElementById(e) ? ma : na)(wa(a, e, content, !0))
     }
 
     /**
@@ -495,7 +404,7 @@
 
             var width = Number(config.sinaads_ad_width),
                 height = Number(config.sinaads_ad_height),
-                style = "border:none;height:" + width + "px;margin:0;padding:0;position:relative;visibility:visible;width:" + height + "px",
+                style = "border:none;height:" + height + "px;margin:0;padding:0;position:relative;visibility:visible;width:" + width + "px",
                 html = ["<iframe"];
             
             for (var key in iframeConfig) {
@@ -575,12 +484,11 @@
 
         //判断是否是广告位支持的格式
         //@todo 控制某个广告位只支持加载某种类型广告
-        // var type;
-        // if ((type = config.sinaads_ad_output) && "html" !== type) {
-        //     throw Error("目前不支持sinaads_ad_output中配置的广告类型" + type);
-
+        //
         _render(window, config, element);
     }
+
+
 
     /* 在脚本加载之前注入的广告数据存入再sinaads数组中，遍历数组进行初始化 */
     var perloadAds = window.sinaads;

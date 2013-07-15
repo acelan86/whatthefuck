@@ -19,7 +19,7 @@
 	function sinaads_couple(document, data) {
 		var div = document.createElement('div');
 		div.innerHTML = '<iframe src="' + data.value[0] + '" frameborder="0" style="width:' + width + 'px;height:' + height + 'px;"></iframe>';
-		div.style.cssText = 'position:absolute;top:' + top + 'px;width:' + width + 'px;height:' + height + 'px;';
+		div.style.cssText = 'position:absolute;top:' + (top || 10) + 'px;width:' + width + 'px;height:' + height + 'px;';
 		document.body.appendChild(div);
 	}
 })(window);

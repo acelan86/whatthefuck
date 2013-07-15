@@ -12,5 +12,7 @@
 
 	$array['pdps7'] = "{type:'EMBED', size:'950*90', content:{type:'html', src:'\\x3cscript type=\"text\/javascript\"\\x3etry { var google_page_url = window.top.location.href;}catch(err) {    var google_page_url = document.referrer || window.location.href;}var google_ad_client = \"ca-pub-1948721619348611\";var google_ad_slot = 9150438679;var google_ad_width = 950;var google_ad_height = 90;\\x3c\/script\\x3e\\x3cscript type=\"text\/javascript\"src=\"http:\/\/pagead2.googlesyndication.com\/pagead\/show_ads.js\"\\x3e\\x3c\/script\\x3e'}}";
     
+    $array["pdps1000_90"] = "{'id':'pdps1000_90', 'type':'EMBED','size':'1000*90', 'engineType':'sina', 'content':{type : 'url', src : 'http://d4.sina.com.cn/201307/12/501436.html', pv: 'http://d1.sina.com.cn/click/pdps0'}, mapping:['http://d1.sina.com.cn/mapping/pdps0', 'http://d2.sina.com.cn/mapping/pdps0']}";
+    
     echo $_GET["callback"]."(".$array[$_GET['pdps']].");";
 ?>
