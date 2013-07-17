@@ -4,7 +4,7 @@
     $array["pdps0"] = "{'id':'pdps0', 'type':'Couple','size':'980*90', 'engineType':'sina', 'value':['http://img.adbox.sina.com.cn/ad/11521.html', 'http://img.adbox.sina.com.cn/ad/14954.html', 'http://img.adbox.sina.com.cn/ad/14954.html'], pv: 'http://d1.sina.com.cn/click/pdps0', mapping:['http://d1.sina.com.cn/mapping/pdps0', 'http://d2.sina.com.cn/mapping/pdps0']}";
     $array["pdps1"] = "{'id':'pdps1', 'size':'300*500','type':'EMBED', 'content':{type:'url',src:'http://img.adbox.sina.com.cn/ad/6009.html', pv:'http://testpv.com'}}";
     $array["pdps4"] = "{'type':'BP', 'value':'http://baidu.com'}";
-    $array["pdps2"] = "{'type':'Wins', size:'250*230','content':'http://img.adbox.sina.com.cn/ad/4739.html'}";
+    $array["pdps2"] = "{'type':'Wins', size:'250*230','content':{src:'http://d1.sina.com.cn/rwei/shijia2012/shichuang1129/300x250.swf', link:'http://sina.allyes.com/main/adfclick?db=sina&bid=508601,573886,579158&cid=0,0,0&sid=581485&advid=18960&camid=89632&show=ignore&url=http://www.china-shijia.com/'}}";
     $array["pdps3"] = "{'type':'Stream', size:'960*300','value':['http://img.adbox.sina.com.cn/ad/14785.html', 'http://img.adbox.sina.com.cn/ad/14954.html']}";
 	$array['pdps5'] = "{'type':'EMBED', size:'300*250', content:{type:'html',src:'\\x3cscript type=\"text\/javascript\"\\x3e \/*120*120，创建于2013-6-5*\/ var cpro_id = \"u1297930\"; \\x3c\/script\\x3e \\x3cscript src=\"http:\/\/cpro.baidustatic.com\/cpro\/ui\/f.js\" type=\"text\/javascript\"\\x3e\\x3c\/script\\x3e'}}";
     

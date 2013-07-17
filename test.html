@@ -10018,27 +10018,17 @@ FullScreenData.push([
 <!--加载全屏 end-->
 
 <!--加载流媒体 begin-->
-<span id="SteamMediaWrap"></span>
-<script language="javascript" type="text/javascript">
-//<![CDATA[
-var SteamMediaData = new Array();
-/*--投放列表 begin--*/
+<script async charset="utf-8" src="./sinaads.js"></script>
+<ins class="sinaads" style="display:none;width:1000px;height:300px" data-ad-pdps="pdps3"></ins>
+<script>
+    (sinaads = window.sinaads || []).push({
+        params : {
 
-<!--ADS:begin=PDPS000000005521:{74EE3E63-8978-4304-BE1E-71D7FFBEE318}--><!--ADS:end-->
-
-/*--投放列表 end--*/
-//]]>
+        }
+    });
 </script>
 
 <!--加载流媒体 end-->
-
-<!--加载跨栏 begin-->
-<script async charset="utf-8" src="./sinaads.js"></script>
-<ins class="sinaads" style="display:inline-block;width:1000px;height:90px" data-ad-pdps="pdps0"></ins>
-<script>
-    (sinaads = window.sinaads || []).push({});
-</script>
-<!--加载跨栏 end-->
 
 <!--新闻中心调研开始-->
 
@@ -10082,7 +10072,13 @@ new RotatorPB(rpb);
 <script async charset="utf-8" src="./sinaads.js"></script>
 <ins class="sinaads" style="display:none;width:250px;height:230px" data-ad-pdps="pdps2"></ins>
 <script>
-    (sinaads = window.sinaads || []).push({});
+    (sinaads = window.sinaads || []).push({
+        params : {
+            sinaads_ad_replay_mo : "http://dcads.sina.com.cn/event.ng/Type=replay&FlightID=$FlightID$&AdID=$AdID$&TargetID=$TargetID$&Segments=$Segments$&Targets=$Targets$&Values=$Values$&RawValues=$RawValues$&Redirect=http://dcads.sina.com.cn/ads/dcfc.gif", //重播数监测
+            sinaads_ad_download_mo : "http://dcads.sina.com.cn/event.ng/Type=download&FlightID=$FlightID$&AdID=$AdID$&TargetID=$TargetID$&Segments=$Segments$&Targets=$Targets$&Values=$Values$&RawValues=$RawValues$&Redirect=http://dcads.sina.com.cn/ads/dcfc.gif",  //下载数监测
+            sinaads_ad_repos_mo : "http://dcads.sina.com.cn/event.ng/Type=forward&FlightID=$FlightID$&AdID=$AdID$&TargetID=$TargetID$&Segments=$Segments$&Targets=$Targets$&Values=$Values$&RawValues=$RawValues$&Redirect=http://dcads.sina.com.cn/ads/dcfc.gif"//转发数监测
+        }
+    });
 </script>
 <!--新闻中心轮播新浪视窗广告结束-->
 

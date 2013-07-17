@@ -1,9 +1,9 @@
-(function (window) {
+(function (window, undefind) {
 	var width = window.sinaads_ad_width,
 		height = window.sinaads_ad_height,
-		top = window.sinaads_couple_top;
+		coupleTop = window.sinaads_couple_top;
 
-	if (top === self) {
+	if (window.top === window.self) {
 		sinaads_couple(window.document, sinaads_ad_data);
 		/* 广告不在 iframe 中。展示该广告。可以使用 document.write 展示该广告。*/
 	} else {
@@ -19,7 +19,7 @@
 	function sinaads_couple(document, data) {
 		var div = document.createElement('div');
 		div.innerHTML = '<iframe src="' + data.value[0] + '" frameborder="0" style="width:' + width + 'px;height:' + height + 'px;"></iframe>';
-		div.style.cssText = 'position:absolute;top:' + (top || 10) + 'px;width:' + width + 'px;height:' + height + 'px;';
+		div.style.cssText = 'position:absolute;top:' + (coupleTop || 10) + 'px;width:' + width + 'px;height:' + height + 'px;';
 		document.body.appendChild(div);
 	}
 })(window);

@@ -1,5 +1,13 @@
+/**
+ * 渣浪统一商业广告脚本
+ * @param  {[type]} window    [description]
+ * @param  {[type]} undefined [description]
+ * @return {[type]}           [description]
+ * @usage  
+ *     (sinaads = window.sinaads || []).push({});
+ */
 (function (window, undefined) {
-    var NOW = (new Date()).getTime();
+    var now = (new Date()).getTime();
 
     var PV_DOMAIN = 'sina.com.cn'; //默认曝光监测地址
 
@@ -49,7 +57,7 @@
     /**
      * 转义特殊字符并将其他字符换成unicode
      */
-    function _string(str, arr) {
+    function _toUnicode(str, arr) {
         arr.push('"');
         arr.push(str.replace(STR_REG, function(s) {
             //如果再需要转义的字符表中，替换成转移字符对应的值
@@ -61,6 +69,7 @@
                 unicodePerfix = "\\u";
             //需要增加几位0来补位
             16 > alphaCode ? unicodePerfix += "000" : 256 > alphaCode ? unicodePerfix += "00" : 4096 > alphaCode && (unicodePerfix += "0");
+
             //保存转移过的值到ESCAPE_MAP提高转义效率，同时返回进行替换
             return ESCAPE_MAP[s] = unicodePerfix + alphaCode.toString(16);
         }));
@@ -72,7 +81,7 @@
     function _stringify(value, arr) {
         switch (typeof value) {
             case "string":
-                _string(value, arr);
+                _toUnicode(value, arr);
                 break;
             case "number":
                 arr.push(isFinite(value) && !isNaN(value) ? value : "null");
@@ -112,7 +121,7 @@
                         v = value[key];
                         if ("function" != typeof v) { 
                             arr.push(comma);
-                            _string(key, arr); 
+                            _toUnicode(key, arr); 
                             arr.push(":");
                             _stringify(v, arr);
                             comma = ",";
@@ -221,7 +230,7 @@
     function _getShowADScript() {
         var tag = "script";
         //@todo 可以在这里根据sinaads_ad_format使用不同的加载脚本
-        return ['<', tag, ' src="./sinaads_ssp.js"></', tag, '>'].join('');
+        return ['<', tag, ' src="./ssp.js"></', tag, '>'].join('');
     }
     /**
      * 创建公共的iframe属性值，填充到iframeConfig参数中
@@ -374,7 +383,7 @@
                     'sinaads_uid=', window.sinaads_uid, ';',
                     'sinaads_async_iframe_id="', iframeId, '";',
                     'sinaads_ad_auth_key="', authKey, '";',
-                    "sinaads_start_time=", NOW, ";"
+                    "sinaads_start_time=", now, ";",
                 '</', tag, '>',
                 _getShowADScript(),
             '</body></html>'
@@ -499,7 +508,4 @@
     }
     //在脚本加载之后，sinaad重新定义，并赋予push方法为初始化方法
     window.sinaads = {push : init};
-    /**
-     * @usage  (sinaads = window.sinaads || []).push({});
-     */
 })(window);

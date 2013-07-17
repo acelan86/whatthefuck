@@ -1,6 +1,7 @@
 (function (window, undefined) {
 
     window.sinaads_render = function (data) {
+        document.write('<script src="./core.js"></script>');
         var type = data.type;
         window.sinaads_ad_data = data;
         switch (type) {
