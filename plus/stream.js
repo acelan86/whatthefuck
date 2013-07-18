@@ -1,25 +1,49 @@
 (function (window, undefined) {
-    var SINAADS_AD_TYPE = 'sinaads_stream' + window.sinaads_ad_pdps;
+    var SINAADS_AD_TYPE = 'sinaads_stream';
 
 
-    var data = window.sinaads_ad_data;
+    var data = window.sinaads_ad_data,
+        config = {
+            main : {
+                src : data.content.src[0],
+                link : data.content.link[0]]
+            },
+            left : {
+                src : data.content.src[1]],
+                link : data.content.link[1] || data.content.link[0]
+            },
+            right : {
+                src : data.content.src[2] || data.content.src[1],
+                src : data.content.link[2] || data.content.link[1] || data.content.link[0]
+            }
+        };
 
-    if (window.top === window) {
-        stream(data, window, window.document);
-    } else {
-        try {
-            stream(data, window.top, window.top.document);
-        } catch (e) {
-
+    //引入核心包
+    var core = window.sinaads.core;
+    if (!core) {
+        if (!core) {
+            throw new Error('请先引入sinaads.core包，地址xxx');
+            return;
         }
     }
 
-    function stream(data, window, document, undefined) {
+    if (window.top === window.self) {
+        stream(config, window, window.document);
+    } else {
+        try {
+            stream(config, window.top, window.top.document);
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+
+    function stream(config, window, document) {
+        var docBody = core.browser.isStrict ? document.documentElement : document.body;
         //sinaads.core.cookie.get(name);
-        var _as_getcv = sinaads.core.cookie.get;
+        var _as_getcv = core.cookie.get;
         //sinaads.core.cookie.set(key, value, options)
         var _as_setcv = function (key, value, expires, path, domain, secure) {
-            sinaads.core.cookie.set(key, value, {
+            core.cookie.set(key, value, {
                 expires : expires,
                 path : path,
                 domain : domain,
@@ -80,42 +104,17 @@
             }
         }
 
-        function _as_setstyle(A, B) {
-            if (_as_bro.isIe(B)) A.style.cssText = B;
-            else A.setAttribute("style", B)
+        function setStyle(dom, styles) {
+            dom.style.cssText += ';' + styles;
         }
-        function getBody() {
-            if (sinaads.core.browser.isStrict) {
-                return (document.documentElement) ? document.documentElement: document.body;
-            } else {
-                return document.body;
-            }
-        }
-        //_as_getbst
         function getScrollTop() {
-            var top = 0;
-            if (self.pageYOffset) {
-                var top = self.pageYOffset;
-            } else if (document.documentElement && document.documentElement.scrollTop) {
-                top = document.documentElement.scrollTop;
-            } else if (document.body) {
-                top = document.body.scrollTop;
-            }
-            return top;
+            return docBody.scrollTop;
         }
         //_as_getbsl
         function getScrollLeft() {
-            var left = 0;
-            if (self.pageXOffset) {
-                var left = self.pageXOffset;
-            } else if (document.documentElement && document.documentElement.scrollLeft) {
-                left = document.documentElement.scrollLeft;
-            } else if (document.body) {
-                left = document.body.scrollLeft;
-            }
-            return left;
+            return docBody.scrollLeft;
         }
-        function _as_extend(A, F, E) {
+        function extend(A, F, E) {
             if (typeof F == "object") {
                 E = F;
                 F = A;
@@ -139,201 +138,199 @@
             };
             return A;
         }
+
+
         function createDom(tagName, attrs, content) {
-            function create() {
-                var dom = document.createElement(tagName);
-                for (var attr in attrs) {
-                    dom.setAttribute(attr, attrs[attr]);
+            var dom = document.createElement(tagName);
+
+            for (var attr in attrs) {
+                dom.setAttribute(attr, attrs[attr]);
+            }
+
+            if (content) {
+                if (tagName.toLowerCase() != "script") { 
+                    dom.innerHTML = content;
+                } else {
+                    dom.text = content;
                 }
-                if (content) {
-                    if (tagName.toLowerCase() != "script") { 
-                        dom.innerHTML = content;
-                    } else {
-                        dom.text = content;
-                    }
-                }
-                return dom;
-            };
-            document.body.insertBefore(create(), document.body.firstChild);
+            }
+            return dom;
         }
 
-        function AdSomeDiv1(config) {
-            this.c = config;
-            this.id = config.id || "sinaads_AdSame_DIV" + Math.round(Math.random() * 1000);
-            this.w = config.width || 100;
-            this.h = config.height || 100;
-            this.va = config.vAlign || "top";
-            this.ha = config.hAlign || "left";
-            this.hp = config.hPadding || 0;
-            this.vp = config.vPadding || 0;
-            this.zi = config.zIndex || 10002;
-            this.mt = config.minTop || 0;
-            this.fs = config.followScroll || true;
-            this.fscr = config.firstScreen || true;
-            this.pid = config.spanId || "sinaads_AdSame_SPAN" + Math.round(Math.random() * 1000);
-            this.name = config.selfName || "c";
+        function StreamContainer(config) {
+            this.config = config;
+            this.id = config.id || SINAADS_AD_TYPE + 'Container';
+            this.width = config.width || 100;
+            this.height = config.height || 100;
+            this.vAlign = config.vAlign || "top";
+            this.hAlign = config.hAlign || "left";
+            this.vPadding = config.vPadding || 0;
+            this.hPadding = config.hPadding || 0;
+            this.zIndex = config.zIndex || 10002;
+            this.minTop = config.minTop || 0;
+            this.followScroll = config.followScroll || true;
+            this.firstScreen = config.firstScreen || true;
+            this.spanId = config.spanId || SINAADS_AD_TYPE + 'Span';
+            this.name = config.selfName || 'c';
             this.handle = null;
             this.left = this.top = 0;
             this.flag = -1;
             this.first = true;
             this._l = -1;
-            this.at = "absolute";
-            if (this.fs && sinaads.core.browser.isStrict && (!sinaads.core.browser.ie)) {
-                this.at = "fixed";
-            }
-            createDom("SPAN", {id: this.pid}, "");
+            this.position = this.followScroll && core.browser.isSupportFixed ? 'fixed' : 'absolute';
 
-            if (typeof this.onAfterInit == "function") {
+
+            docBody.appendChild(createDom('span', {id : this.spanId}, ''));
+
+            if ('function' === typeof this.onAfterInit) {
                 this.onAfterInit.call(this);
             }
         }
-            AdSomeDiv1.prototype.getTop = function() {
-                switch (this.va) {
-                    case "center":
-                        var height = getBody().clientHeight,
-                            top = Math.round((height - this.h) / 2 + this.vp);
-                        var _top = top - this.h;
-                        return (_top < 0 ? 0 : (top > _top ? _top: top));
-                    case "top":
-                        if (this.vp < 1) {
-                            return Math.round(getBody().clientHeight * this.vp);
-                        }
-                        return this.vp;
-                    case "bottom":
-                        var bottom = getBody().scrollHeight - this.h,
-                            height = getBody().clientHeight;
-                        if (bottom < height) {
-                            bottom = height;
-                        }
-                        var _bottom = height - this.h - this.vp;
-                        return _bottom > bottom ? bottom : _bottom;
-                    default:
-                        return 0;    
-                }
-            };
-            AdSomeDiv1.prototype.getLeft = function() {
-                switch (this.ha) {
-                    case "center":
-                        var width = getBody().clientWidth,
-                            left = Math.round((width - this.w) / 2 + this.hp);
-                        width -= this.w;
-                        return (left < 0 ? 0 : (left > width ? width: left));
-                    case "left":
-                        if (this.hp < 1) {
-                            return Math.round(getBody().clientWidth * this.hp);
-                        }
-                        return this.hp;
-                    case "right":
-                        var _right = getBody().scrollWidth - this.w,
-                            width = getBody().clientWidth;
-                        if (right < width) {
-                            _right = width;
-                        }
-                        var _width = width - this.w - this.hp;
-                        return _width > right ? right : _width;
-                    default:
-                        return 0;
-                }
-            };
-            AdSomeDiv1.prototype.getScrollTop = function() {
-                if (!this.fs && this.fscr) {
-                    return 0;
-                }
-                return getScrollTop();
-            };
-            AdSomeDiv1.prototype.setpos = function (doloop) {
-                var _v_one = false,
-                _h_one = false,
-                st = this.handle.style;
-                st.top = "auto";
-                st.left = "auto";
-                st.right = "auto";
-                st.bottom = "auto";
 
-                if (this.at == "fixed") {
-                    if (this.va == "top" && this.vp >= 0) {
-                        if (this.mt > 0) {
-                            var bst = getScrollLeft(),
-                            tt = bst + this.vp;
-                            st.top = (tt < this.mt ? this.mt - bst: this.vp) + "px"
+        StreamContainer.prototype.getTop = function () {
+            switch (this.vAlign) {
+                case "center":
+                    var top = Math.round((docBody.clientHeight - this.height) / 2 + this.vPadding),
+                        _top = docBody.clientHeight - this.height;
+                    return top < 0 ? 0 : Math.min(top, _top);
+                case "top":
+                    if (this.vPadding < 1) {
+                        return Math.round(docBody.clientHeight * this.vPadding);
+                    }
+                    return this.vPadding;
+                case "bottom":
+                    var bottom = Math.max(docBody.scrollHeight - this.height, docBody.clientHeight),
+                        _bottom = docBody.clientHeight - this.height - this.vPadding;
+                    return Math.min(bottom, _bottom);
+                default:
+                    return 0;    
+            }
+        };
+
+        StreamContainer.prototype.getLeft = function() {
+            switch (this.hAlign) {
+                case "center":
+                    var left = Math.round((width - this.width) / 2 + this.hPadding);
+                        _left = docBody.clientWidth - this.width;
+                    return left < 0 ? 0 : Math.min(left, _left);
+                case "left":
+                    if (this.hPadding < 1) {
+                        return Math.round(docBody.clientWidth * this.hPadding);
+                    }
+                    return this.hPadding;
+                case "right":
+                    var right = Math.max(docBody.scrollWidth - this.width, docBody.clientWidth),
+                        _right = docBody.clientWidth - this.width - this.hPadding;
+                    return Math.min(right, _right);
+                default:
+                    return 0;
+            }
+        };
+
+        StreamContainer.prototype.getScrollTop = function() {
+            return !this.followScroll && this.firstScreen ? 0 : getScrollTop;
+        };
+
+        StreamContainer.prototype.setPosition = function (doloop) {
+                var _v_one = false,
+                    _h_one = false,
+                    style = this.handle.style,
+                    top,
+                    scrollTop,
+                    scrollLeft;
+
+                style.top = "auto";
+                style.left = "auto";
+                style.right = "auto";
+                style.bottom = "auto";
+
+                if (this.position == 'fixed') {
+                    if (this.vAlign == 'top' && this.vPadding >= 0) {
+                        if (this.minTop > 0) {
+                            var scrollTop = getScrollTop(),
+                            top = scrollTop + this.vPadding;
+                            style.top = (top < this.minTop ? this.minTop - scrollTop : this.vPadding) + "px";
                         } else {
-                            st.top = this.vp + "px";
-                            _v_one = true
+                            style.top = this.vPadding + "px";
+                            _v_one = true;
                         }
-                    } else if (this.va == "bottom" && this.vp >= 0) {
-                        if (this.mt > 0) {
-                            tt = this.getTop(),
-                            bst = getScrollTop();
-                            st.top = ((tt + bst) < this.mt ? this.mt - bst: tt) + "px"
+                    } else if (this.vAlign == 'bottom' && this.vPadding >= 0) {
+                        if (this.minTop > 0) {
+                            top = this.getTop(),
+                            scrollTop = getScrollTop();
+                            style.top = ((top + scrollTop) < this.minTop ? this.minTop - scrollTop : top) + "px";
                         } else {
-                            st.bottom = this.vp + "px";
-                            _v_one = true
+                            style.bottom = this.vPadding + "px";
+                            _v_one = true;
                         }
                     } else {
-                        tt = this.getTop(),
-                        bst = getScrollTop();
-                        st.top = ((bst + tt) < this.mt ? this.mt - bst: tt) + "px"
+                        top = this.getTop(),
+                        scrollTop = getScrollTop();
+                        style.top = ((scrollTop + top) < this.minTop ? this.minTop - scrollTop : top) + "px";
                     }
-                    if ((this.ha == "left" || this.ha == "right") && (this.hp >= 1 || this.hp == 0)) {
-                        eval("st." + this.ha + "='" + this.hp + "px';");
-                        _h_one = true
-                    } else st.left = this.getLeft() + "px"
+
+                    if ((this.hAlign == 'left' || this.hA == 'right') && (this.hPadding >= 1 || this.hPadding == 0)) {
+                        style[this.hAlign] = this.hPadding + 'px';
+                        _h_one = true;
+                    } else {
+                        style.left = this.getLeft() + "px";
+                    }
                 } else {
-                    if ((this.va == "top" || this.va == "bottom") && (this.vp >= 1 || this.vp == 0) && (!this.fs)) {
-                        if (this.fscr) {
-                            st[this.va] = this.vp + "px";
+                    if ((this.vAlign == 'top' || this.vAlign == 'bottom') && (this.vPadding >= 1 || this.vPadding == 0) && (!this.followScroll)) {
+                        if (this.firstScreen) {
+                            style[this.vAlign] = this.vPadding + 'px';
                         } else {
-                            st.top = (getScrollTop() + this.gett()) + "px";
+                            style.top = (getScrollTop() + this.getTop()) + "px";
                         }
                         _v_one = true;
                     } else {
-                        tt = getScrollTop() + this.getLeft();
-                        st.top = (tt < this.mt ? this.mt: tt) + "px";
+                        top = getScrollTop() + this.getTop();
+                        style.top = (top < this.minTop ? this.minTop: top) + "px";
                     }
-                    if ((this.ha == "left" || this.ha == "right") && (this.hp >= 1 || this.hp == 0) && (!this.fs)) {
-                        st[this.ha] = this.hp + "px";
+                    if ((this.hAlign == "left" || this.hAlign == "right") && (this.hPadding >= 1 || this.hPadding == 0) && (!this.followScroll)) {
+                        style[this.hAlign] = this.hPadding + "px";
                         _h_one = true;
                     } else {
-                        st.left = (getScrollLeft() + this.getLeft()) + "px";
+                        style.left = (getScrollLeft() + this.getLeft()) + "px";
                     }
                 }
                 if (doloop && ((!_h_one) || (!_v_one))) {
-                    var obj = this;
-                    if (this.at == "fixed") {
-
-                        var timer = window.setInterval(function() {
+                    var obj = this,
+                        timer = null;
+                    if (this.position == "fixed") {
+                        timer = window.setInterval(function () {
                             if (obj.flag <= 0) return;
-                            if (obj.handle != -1) {
+                            if (obj.handle !== -1) {
                                 if (!_h_one) {
-                                    st.left = obj.getLeft() + "px";
+                                    style.left = obj.getLeft() + "px";
                                 }
                                 if (!_v_one) {
-                                    var top = obj.getTop(),
-                                        scrollTop = getScrollTop();
-                                    st.top = ((scrollTop + top) < obj.mt ? obj.mt - scrollTop: top) + "px";
+                                    top = obj.getTop();
+                                    scrollTop = getScrollTop();
+                                    style.top = ((scrollTop + top) < obj.minTop ? obj.minTop - scrollTop : top) + "px";
                                 }
                             } else {
                                 window.clearInterval(timer);
                             }
                         }, 100);
                     } else {
-                        timer = window.setInterval(function() {
+                        timer = window.setInterval(function () {
                             if (obj.flag <= 0) {
                                 return;
                             }
                             if (obj.handle != -1) {
                                 var scrollLeft = 0,
                                     scrollTop = 0;
-                                if (obj.fs) {
+                                if (obj.followScroll) {
                                     scrollLeft = getScrollLeft();
                                     scrollTop = getScrollTop();
                                 }
                                 if (!_h_one) {
-                                    st.left = (scrollLeft + obj.getLeft()) + "px";
+                                    style.left = (scrollLeft + obj.getLeft()) + "px";
                                 }
                                 if (!_v_one) {
-                                    var _top = scrollTop + obj.getTop();
-                                    st.top = (_top < obj.mt ? obj.mt: _top) + "px";
+                                    top = scrollTop + obj.getTop();
+                                    style.top = (top < obj.minTop ? obj.minTop : top) + "px";
                                 }
                             } else {
                                 window.clearInterval(timer);
@@ -342,42 +339,41 @@
                     }
                 }
             };
-            AdSomeDiv1.prototype.create = function(content) {
+            StreamContainer.prototype.create = function (content) {
                 if (this.flag >= 0) {
                     return;
                 }
                 this.top = this.getTop();
                 this.left = this.getLeft();
+
                 if (typeof this.onBeforeCreate == "function") {
                     if (this.onBeforeCreate.call(this) === false) {
                         return false;
                     }
                 }
+
                 var html = [
                     "<div ", 
                         "id='" + this.id + "' ",
                         "name='" + this.id + "' ",
-                        "style='position:" + this.at + ";",
-                        "z-index:" + this.zi + ";",
-                        "top:-" + this.h + "px;",
-                        "left:-" + this.w + "px;",
+                        "style='position:" + this.position + ";",
+                        "z-index:" + this.zIndex + ";",
+                        "top:-" + this.height + "px;",
+                        "left:-" + this.width + "px;",
                         "width:1px;height:1px;",
                         "overflow:hidden;",
-                    "'>"
+                    "'>",
+                        content,
+                        'function' === typeof this.getHTML ? this.getHTML() : '',
+                    '</div>'
                 ];
 
-                html.push(content);
-                if (typeof this.getHTML == "function") {
-                    html.push(this.getHTML());
-                }
-                html.push("</div>");
-
-                document.getElementById(this.pid).innerHTML = html.join('');
+                document.getElementById(this.spanId).innerHTML = html.join('');
 
                 this.flag = 0;
                 this.handle = document.getElementById(this.id);
 
-                if (typeof this.onAfterCreate == "function") {
+                if ('function' === typeof this.onAfterCreate) {
                     if (this.onAfterCreate.call(this) === false) {
                         this.destroy();
                         return false
@@ -385,53 +381,59 @@
                 }
                 return this.handle;
             };
-            AdSomeDiv1.prototype.show = function() {
+
+
+            StreamContainer.prototype.show = function() {
                 var timer;
 
                 if (!this.first) {
                     this.showsmp();
                     this.first = false;
-                    return
+                    return;
                 }
-                if (typeof this.onBeforeShow == "function") {
+                if ('function' === typeof this.onBeforeShow) {
                     if (this.onBeforeShow.call(this) === false) {
                         return false;
                     }
                 }
+
                 if (this.flag > 0) {
                     return;
                 }
+
                 var THIS = this,
-                    _style = this.handle.style;
-                function A() {
-                    THIS.setpos();
-                    _style.width = THIS.w + "px";
-                    _style.height = THIS.h + "px";
-                    _style.display = "block";
+                    style = this.handle.style;
+
+                function _show() {
+                    THIS.setPosition();
+                    style.width = THIS.width + "px";
+                    style.height = THIS.height + "px";
+                    style.display = "block";
                     THIS.flag = 1;
-                    if (typeof THIS.onAfterShow == "function") {
+                    if ('function' === typeof THIS.onAfterShow) {
                         if (THIS.onAfterShow.call(THIS) === false) {
                             return false;
                         }
                     }
-                    THIS.setpos(true);
+                    THIS.setPosition(true);
                 }
 
-                if (THIS.flag >= 0) {
-                    A();
+                if (this.flag >= 0) {
+                    _show();
                 } else {
                     timer = window.setInterval(function() {
                         if (!THIS.flag < 0) {
                             return;
                         }
                         window.clearInterval(timer);
-                        A();
+                        _show();
                     }, 500);
                 }
             };
-            AdSomeDiv1.prototype.showsmp = function() {
-                var _style = this.handle.style;
-                if (typeof this.onBeforeShow == "function") {
+
+            StreamContainer.prototype.showsmp = function() {
+                var style = this.handle.style;
+                if ('function' === typeof this.onBeforeShow) {
                     if (this.onBeforeShow.call(this) === false) {
                         return false;
                     }
@@ -439,19 +441,21 @@
                 if (this.flag > 0) {
                     return;
                 }
-                _style.width = this.w + "px";
-                _style.height = this.h + "px";
-                _style.left = this._l + "px";
-                if (!this.fscr) {
-                    this.setpos();
+                style.width = this.width + "px";
+                style.height = this.height + "px";
+                style.left = this._l + "px";
+
+                if (!this.firstScreen) {
+                    this.setPosition();
                 }
                 this.flag = 1;
-                if (typeof this.onAfterShow == "function") {
+                if ('function' === typeof this.onAfterShow) {
                     this.onAfterShow.call(this);
                 }
             };
-            AdSomeDiv1.prototype.hide = function() {
-                if (typeof this.onBeforeHide == "function") {
+
+            StreamContainer.prototype.hide = function() {
+                if ('function' === typeof this.onBeforeHide) {
                     if (this.onBeforeHide.call(this) === false) {
                         return false;
                     }
@@ -460,41 +464,41 @@
                     this.handle.style.width = "1px";
                     this.handle.style.height = "1px";
                     this._l = this.handle.style.left;
-                    this.handle.style.left = "-" + this.w + "px";
+                    this.handle.style.left = "-" + this.width + "px";
                     this.flag = 0;
-                    if (typeof this.onAfterHide == "function") {
+                    if ('function' === typeof this.onAfterHide) {
                         this.onAfterHide.call(this);
                     }
                 }
             };
-            AdSomeDiv1.prototype.destroy = function() {
-                var A = this.handle.style;
-                if (typeof this.onBeforeDestroy == "function") if (this.onBeforeDestroy.call(this) === false) return false;
+
+            StreamContainer.prototype.destroy = function() {
+                var style = this.handle.style;
+                if ('function' === typeof this.onBeforeDestroy) {
+                    if (this.onBeforeDestroy.call(this) === false) {
+                        return false;
+                    }
+                }
                 if (this.flag >= 0) {
-                    if (!sinaads.core.browser.isSafari) {
-                        this.handle.style.display = "none";
-                    }
-                    if (!sinaads.core.browser.isOpera) {
-                        this.handle.parentNode.removeChild(this.handle);
-                    }
+                    this.handle.parentNode.removeChild(this.handle);
                     this.handle = -1;
                     this.flag = -1;
-                    if (typeof this.onAfterDestroy == "function") {
+                    if ('function' === typeof this.onAfterDestroy) {
                         this.onAfterDestroy.call(this);
                     }
                 }
             };
         
 
-        function AdSomeDiv(config) {
-            this.inishow = config.iniShow || true;
-            this.alwaysshow = config.alwaysShow || false;
-            this.autocls = config.autoClsSeconds || -1;
-            this.autoclsfc = config.autoclsfc || null;
+        function StreamMini(config) {
+            this.initShow = config.initShow || true;
+            this.alwaysShow = config.alwaysShow || false;
+            this.autoClsSeconds = config.autoClsSeconds || -1;
+            this.autoClsfc = config.autoclsfc || null; 
             if (config.btns) {
-                this.btw = config.btnWidth || 0;
-                this.bth = config.btnHeight || 0;
-                this.bta = config.btnAlign || "right";
+                this.btnWidth = config.btnWidth || 0;
+                this.btnHeight = config.btnHeight || 0;
+                this.btnAlign = config.btnAlign || "right";
                 var btn = this.bth;
                 if (btn <= 0 && config.btns.length > 0) {
                     for (var i = 0; i < config.btns.length; i++) {
@@ -504,16 +508,16 @@
                     }
                 }
             }
-            AdSomeDiv.superclass.constructor.call(this, config);
+            StreamContainerBtn.superclass.constructor.call(this, config);
             
             if (btn > 0) {
-                this.h += btn;
+                this.height += btn;
             }
-            this.isini = true;
+            this.isInited = true;
             this.clshd = null;
         }
 
-        _as_extend(AdSomeDiv, AdSomeDiv1, {
+        extend(StreamMini, StreamMain, {
             show: function() {
                 if (!this.inishow && this.isini) {
                     this.isini = false;
@@ -607,17 +611,17 @@
             }
         });
 
-        function AdSomeFlash(config) {
-            this.c = config;
-            this.id = config.id || "_AdSame_Flash" + Math.round(Math.random() * 1000);
+        function StreamFlash(config) {
+            this.config = config;
+            this.id = config.id || SINAADS_AD_TYPE + 'Flash';
             this.name = config.selfName || "f";
-            this.w = config.width || 100;
-            this.h = config.height || 100;
-            this.src = config.srcUrl || "";
-            this.clk = config.clickUrl || "";
+            this.width = config.width || 100;
+            this.height = config.height || 100;
+            this.src = config.src || "";
+            this.link = config.link || "";
             this.fscmd = config.fscmdfc || false;
-            this.exdir = config.expandDirect || "left";
-            this.paras = config.paras || {};
+            this.expandDirect = config.expandDirect || "left"; //展开方向
+            this.params = config.params || {};
             this.loaded = false;
             // if (this.id && this.fscmd) {
             //     var A = "function " + this.id + "_DoFSCommand(command, args) {";
@@ -640,246 +644,233 @@
         }
 
 
-            AdSomeFlash.prototype.getHTML = function() {
-                var html;
-                if (sinaads.core.browser.ie) {
-                    html = [
-                        "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' ", 
-                            "style='z-index:1; display:block;",
-                            this.exdir == "right" ? "position:absolute;right:0px;float:right;" : '',
-                            "width:" + this.w + "px;",
-                            "height:" + this.h + "px' ",
-                            "id='" + this.id + "' ",
-                            "name='" + this.id + "' ",
-                            "codebase='http://active.macromedia.com/flash2/cabs/swflash.cab#version=4,0,0,0'",
-                        ">",
-                            "<param name='wmode' value='transparent'>",
-                            "<param name='quality' value='high'>",
-                            "<param name='allowScriptAccess' value='always'>",
-                            "<param name='swLiveConnect' value=false>",
-                            "<param name='movie' value='" + this.src + "'>",
-                            typeof this.getparas == "function" ? "<param name='FlashVars' value='" + this.getparas() + "'>" : '',
-                        "</object>"
-                    ].join('');
-                } else {
-                    html = [
-                        "<embed style='display:block;' type='application/x-shockwave-flash' ",
-                            "pluginspage='http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash' ",
-                            "src='" + this.src + "' ",
-                            "id='" + this.id + "' ",
-                            "name='" + this.id + "' ",
-                            "allowScriptAccess='always' ",
-                            "quality='high' ",
-                            "width='" + this.w + "' height='" + this.h + "' ",
-                            "swLiveConnect='false' ",
-                            "wmode='transparent' ",
-                            typeof this.getparas == "function" ?  "FlashVars='" + this.getparas() + "'>" : "",
-                        "</embed>"
-                    ].join('');
-                }
+        StreamFlash.prototype.getHTML = function () {
+            var html = core.swf.createHTML({
+                width : this.width,
+                height : this.height,
+                id : this.id,
+                wmode : 'transparent',
+                quality : 'high',
+                allowScriptAccess : 'always',
+                swLiveConnect : false,
+                movie : this.src,
+                flashVars : 'function' === typeof this.getParams ? this.getParams() : ''
+            });
 
-                ('function' === typeof this.onAfterGetCode) && this.onAfterGetCode.call(this);
+                // if (core.browser.ie) {
+                //     html = [
+                //         "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' ", 
+                //             "style='z-index:1; display:block;",
+                //             this.exdir == "right" ? "position:absolute;right:0px;float:right;" : '',
+                //             "width:" + this.w + "px;",
+                //             "height:" + this.h + "px' ",
+                //             "id='" + this.id + "' ",
+                //             "name='" + this.id + "' ",
+                //             "codebase='http://active.macromedia.com/flash2/cabs/swflash.cab#version=4,0,0,0'",
+                //         ">",
+                //             "<param name='wmode' value='transparent'>",
+                //             "<param name='quality' value='high'>",
+                //             "<param name='allowScriptAccess' value='always'>",
+                //             "<param name='swLiveConnect' value=false>",
+                //             "<param name='movie' value='" + this.src + "'>",
+                //             typeof this.getparas == "function" ? "<param name='FlashVars' value='" + this.getparas() + "'>" : '',
+                //         "</object>"
+                //     ].join('');
+                // } else {
+                //     html = [
+                //         "<embed style='display:block;' type='application/x-shockwave-flash' ",
+                //             "pluginspage='http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash' ",
+                //             "src='" + this.src + "' ",
+                //             "id='" + this.id + "' ",
+                //             "name='" + this.id + "' ",
+                //             "allowScriptAccess='always' ",
+                //             "quality='high' ",
+                //             "width='" + this.w + "' height='" + this.h + "' ",
+                //             "swLiveConnect='false' ",
+                //             "wmode='transparent' ",
+                //             typeof this.getparas == "function" ?  "FlashVars='" + this.getparas() + "'>" : "",
+                //         "</embed>"
+                //     ].join('');
+                // }
 
-                return html;
-            };
-        AdSomeFlash.prototype.isloaded = function() {
-                if (this.loaded) {
-                    return true;
-                }
-
-                var movie = document.getElementById(this.id);
-                if ((!movie) || 'undefined' === typeof movie.PercentLoaded) {
-                    return false;
-                }
-                if (parseInt(movie.PercentLoaded()) == 100) {
-                    this.loaded = true;
-                    return true;
-                }
-            };
-            AdSomeFlash.prototype.show = function() {
-                var count = 100,
-                    THIS = this,
-                    movie = document.getElementById(this.id),
-                    timer;
-                timer = window.setInterval(function() {
-                    if (THIS.isloaded() || count-- < 0) {
-                        window.clearInterval(timer);
-                        ('function' === typeof THIS.onAfterShow) && THIS.onAfterShow.call(THIS, movie)
-                    }
-                }, 100);
-            };
-            AdSomeFlash.prototype.getParams = function() {
-                var pars = [];
-                if (this.clk) {
-                    pars.push("clickurl=" + escape(this.clk));
-                }
-                for (var key in this.paras) {
-                    pars.push(key + "=" + escape(this.paras[key]));
-                }
-                return pars.join('&');
-            };
-            AdSomeFlash.prototype.getMovie = function(id) {
-                if (sinaads.core.browser.ie) {
-                    return document.getElementById(id);
-                } else {
-                    var movies = document.getElementsByTagName("embed");
-                    for (var i = 0; i < movies.length; i++) {
-                        if (movies[i].id === id) {
-                            return movies[i];
-                        }
-                    }
-                    return null;
-                }
-            };
-            AdSomeFlash.prototype.stop = function() {
-                try {
-                    this.getMovie(this.id).StopPlay();
-                } catch(e) {
-
-                }
-            };
-            AdSomeFlash.prototype.play = function() {
-                try {
-                    this.getMovie(this.id).Play();
-                } catch(e) {
-
-                }
-            };
-            AdSomeFlash.prototype.replay = function() {
-                var movie = this.getMovie(this.id);
-                try {
-                    movie.GotoFrame(0);
-                    movie.Play();
-                } catch(e) {
-
-                }
-            };
-
-
-        window[sinaads_adsome_key] = {};
-
-        var cyis1 = true;
-        var cyis2 = false;
-
-        window[sinaads_adsome_key].setis = function(val){
-            cyis1 = val;
-            cyis2 =! val;
+            ('function' === typeof this.onAfterGetCode) && this.onAfterGetCode.call(this);
+            return html;
         };
-        window[sinaads_adsome_key].setis(_as_sts(sinaads_adsome_key) <= 2);
-     
-        window[sinaads_adsome_key].status = 0;
+        StreamFlash.prototype.getMovie = function () {
+            return core.swf.getMovie(this.id, window);
+        };
+        StreamFlash.prototype.isLoaded = function() {
+            if (this.loaded) {
+                return true;
+            }
 
-        window[sinaads_adsome_key].fc = function(cmd, args) {
-            switch (cmd) {
-                case "replay":
-                    window[sinaads_adsome_key].b1.show();
-                    window[sinaads_adsome_key].b2.hide();
-                    window[sinaads_adsome_key].status = 1;
+            var movie = this.getMovie();
+            if ((!movie) || 'undefined' === typeof movie.PercentLoaded) {
+                return false;
+            }
+            if (parseInt(movie.PercentLoaded()) >== 100) {
+                this.loaded = true;
+                return true;
+            }
+        };
+        StreamFlash.prototype.show = function () {
+            var count = 100,
+                THIS = this,
+                movie = this.getMovie(),
+                timer;
+            timer = window.setInterval(function () {
+                if (THIS.isLoaded() || count-- < 0) {
+                    window.clearInterval(timer);
+                    ('function' === typeof THIS.onAfterShow) && THIS.onAfterShow.call(THIS, movie)
+                }
+            }, 100);
+        };
+        StreamFlash.prototype.getParams = function () {
+            var pars = [];
+            if (this.link) {
+                pars.push("clickurl=" + escape(this.link));
+            }
+            for (var key in this.params) {
+                pars.push(key + "=" + escape(this.params[key]));
+            }
+            return pars.join('&');
+        };
+        StreamFlash.prototype.stop = function() {
+            try {
+                this.getMovie().StopPlay();
+            } catch(e) {}
+        };
+        StreamFlash.prototype.play = function() {
+            try {
+                this.getMovie().Play();
+            } catch(e) {
+
+            }
+        };
+        StreamFlash.prototype.replay = function() {
+            var movie = this.getMovie();
+            try {
+                movie.GotoFrame(0);
+                movie.Play();
+            } catch(e) {
+
+            }
+        };
+
+
+
+
+
+        window[SINAADS_AD_TYPE] = {
+            status : core.cookie.get(SINAADS_AD_TYPE) <= 2 ? 1 : 0,
+            main : new StreamMain({
+                width: 1000,
+                height: 450,
+                hAlign: "center",
+                vAlign: "top",
+                vPadding: 45,
+                hPadding: 0,
+                followScroll: 1,
+                firstScreen: 0,
+                flash: new StreamFlash({
+                    width: 1000,
+                    height: 450,
+                    srcUrl: "http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fc1715.swf",
+                    target: "_blank",
+                    clsbtn: 0,
+                    clickUrl: "http://sambaclk.adsame.com/c?z=samba&la=0&si=13&ci=1667&c=2749&or=2684&l=2980&bg=2894&b=2946&u=http://e.cn.miaozhen.com/r.gif?k=1006833&p=3yeYY0&ro=sm&vo=39d37f0ef&vr=2&rt=2&ns=[M_ADIP]&ni=[M_IESID]&na=[M_MAC]&o=http%3A%2F%2Fwww.yihaodian.com%3Ftracker_u%3D1014248562",
+                    selfName: "window[sinaads_adsome_key].f1",
+                    fscmdfc: window[SINAADS_AD_TYPE].exec
+                }),
+                selfName: "window[sinaads_adsome_key].main",
+                autoClsSeconds: 10,
+                autoclsfc: "window[sinaads_adsome_key].fc(\"closeBig\")",
+                btnWidth: 77,
+                btnHeight: 31,
+                btns: [{
+                    url: "http://rm.sina.com.cn/bj_chuanyang/yhd20130701/close.jpg",
+                    fc: "window[sinaads_adsome_key].fc(\"closeBig\")"
+                }],
+                iniShow: window[SINAADS_AD_TYPE].status
+            }),
+            mini : new StreamMini({
+                width: 25,
+                height: 220,
+                hAlign: "right",
+                vAlign: "bottom",
+                hPadding: 0,
+                vPadding: 0,
+                followScroll: 1,
+                firstScreen: 0,
+                alwaysShow: 0,
+                flash : new StreamFlash({
+                    width: 25,
+                    height: 220,
+                    srcUrl: "http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fb1.swf",
+                    target: "_blank",
+                    repfc: "window[sinaads_adsome_key].exec(\"replay\")",
+                    clsfc: "window[sinaads_adsome_key].ecec(\"close\")",
+                    clickUrl: "http://sambaclk.adsame.com/c?z=samba&la=0&si=13&ci=1667&c=2749&or=2684&l=2980&bg=2894&b=2946&u=http://e.cn.miaozhen.com/r.gif?k=1006833&p=3yeYY0&ro=sm&vo=39d37f0ef&vr=2&rt=2&ns=[M_ADIP]&ni=[M_IESID]&na=[M_MAC]&o=http%3A%2F%2Fwww.yihaodian.com%3Ftracker_u%3D1014248562",
+                    selfName: "window[sinaads_adsome_key].f2",
+                    fscmdfc: window[sinaads_adsome_key].exec
+                }),
+                selfName: "window[sinaads_adsome_key].b2",
+                iniShow: !widnow[SINAADS_AD_TYPE].status
+            }),
+            exec : function (cmd, args) {
+                switch (cmd) {
+                    case 'replay' : 
+                        window[SINAADS_AD_TYPE].main.show();
+                        window[SINAADS_AD_TYPE].mini.hide();
+                        window[SINAADS_AD_TYPE].status = 1;
                         break;
-                case "closeBig":
-                    window[sinaads_adsome_key].b1.hide();
-                    window[sinaads_adsome_key].status = 0;
-                    break;
-                case "close":
-                    window[sinaads_adsome_key].b1.destroy();
-                    window[sinaads_adsome_key].b2.destroy();
-                    window[sinaads_adsome_key].status = 0;
-                    break;
-            }
-        };
+                    case 'closeMain' : 
+                        window[SINAADS_AD_TYPE].main.hide();
+                        window[SINAADS_AD_TYPE].status = 0;
+                        break;
+                    case 'close' : 
+                        window[SINAADS_AD_TYPE].main.destroy();
+                        window[SINAADS_AD_TYPE].mini.destroy();
+                        window[SINAADS_AD_TYPE].status = 0;
+                        break;
+                    default :
+                        break;
+                }
+            },
+            init : function () {
+                if (window[SINAADS_AD_TYPE].inited) {
+                    return;
+                }
 
-        window[sinaads_adsome_key].f1 = new AdSomeFlash({
-            width: 1000,
-            height: 450,
-            srcUrl: "http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fc1715.swf",
-            target: "_blank",
-            clsbtn: 0,
-            clickUrl: "http://sambaclk.adsame.com/c?z=samba&la=0&si=13&ci=1667&c=2749&or=2684&l=2980&bg=2894&b=2946&u=http://e.cn.miaozhen.com/r.gif?k=1006833&p=3yeYY0&ro=sm&vo=39d37f0ef&vr=2&rt=2&ns=[M_ADIP]&ni=[M_IESID]&na=[M_MAC]&o=http%3A%2F%2Fwww.yihaodian.com%3Ftracker_u%3D1014248562",
-            selfName: "window[sinaads_adsome_key].f1",
-            fscmdfc: window[sinaads_adsome_key].fc
-        });
-        window[sinaads_adsome_key].b1 = new AdSomeDivfl({
-            width: 1000,
-            height: 450,
-            hAlign: "center",
-            vAlign: "top",
-            vPadding: 45,
-            hPadding: 0,
-            followScroll: 1,
-            firstScreen: 0,
-            flash: window[sinaads_adsome_key].f1,
-            selfName: "window[sinaads_adsome_key].b1",
-            autoClsSeconds: 10,
-            autoclsfc: "window[sinaads_adsome_key].fc(\"closeBig\")",
-            btnWidth: 77,
-            btnHeight: 31,
-            btns: [{
-                url: "http://rm.sina.com.cn/bj_chuanyang/yhd20130701/close.jpg",
-                fc: "window[sinaads_adsome_key].fc(\"closeBig\")"
-            }],
-            iniShow: cyis1
-        });
+                window[SINAADS_AD_TYPE].inited = true;
+                window[SINAADS_AD_TYPE].main.show();
+                window[SINAADS_AD_TYPE].mini.show();
 
 
-        window[sinaads_adsome_key].b1.onAfterHide = function() {
+                //跟踪代码，现在还在用么？
+                // var trackcode = "";
+                // var ifmcode = "";
+                // trackcode = "<img style=\'width:0px;height:0px;display:none\' src=\'http://samba.adsame.com/s?z=samba&c=2749&l=2980\' />";
+                // if (sinaads.core.browser.ie) {
+                //     ifmcode = "<iframe frameborder=\'no\' border=\'0\' src=\'about:blank\' style=\'position:absolute; visibility:inherit; top:0px; left:0px; width:100%; height:100%; z-index:-1; filter=progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0);\'></iframe>";
+                // }
+
+                window[sinaads_adsome_key].b1.create(
+                    window[sinaads_adsome_key].f1.getHTML() + trackcode + ifmcode
+                );
+                window[sinaads_adsome_key].b1.show();
+
+                window[sinaads_adsome_key].b2.create(
+                    window[sinaads_adsome_key].f2.getHTML() + ifmcode
+                );
                 window[sinaads_adsome_key].b2.show();
-        }
-
-        window[sinaads_adsome_key].f2 = new AdSomeFlash({
-            width: 25,
-            height: 220,
-            srcUrl: "http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fb1.swf",
-            target: "_blank",
-            repfc: "window[sinaads_adsome_key].fc(\"replay\")",
-            clsfc: "window[sinaads_adsome_key].fc(\"close\")",
-            clickUrl: "http://sambaclk.adsame.com/c?z=samba&la=0&si=13&ci=1667&c=2749&or=2684&l=2980&bg=2894&b=2946&u=http://e.cn.miaozhen.com/r.gif?k=1006833&p=3yeYY0&ro=sm&vo=39d37f0ef&vr=2&rt=2&ns=[M_ADIP]&ni=[M_IESID]&na=[M_MAC]&o=http%3A%2F%2Fwww.yihaodian.com%3Ftracker_u%3D1014248562",
-            selfName: "window[sinaads_adsome_key].f2",
-            fscmdfc: window[sinaads_adsome_key].fc
-        });
-
-        window[sinaads_adsome_key].b2 = new AdSomeDivfl({
-            width: 25,
-            height: 220,
-            hAlign: "right",
-            vAlign: "bottom",
-            hPadding: 0,
-            vPadding: 0,
-            followScroll: 1,
-            firstScreen: 0,
-            alwaysShow: 0,
-            flash: window[sinaads_adsome_key].f2,
-            selfName: "window[sinaads_adsome_key].b2",
-            iniShow: (cyis2 || 0)
-        });
-
-
-        window[sinaads_adsome_key].run = function() {
-            if(window[sinaads_adsome_key].inited) {
-                return;
             }
-            window[sinaads_adsome_key].inited=true;
-
-            var trackcode = "";
-            var ifmcode = "";
-            trackcode = "<img style=\'width:0px;height:0px;display:none\' src=\'http://samba.adsame.com/s?z=samba&c=2749&l=2980\' />";
-            if (sinaads.core.browser.ie) {
-                ifmcode = "<iframe frameborder=\'no\' border=\'0\' src=\'about:blank\' style=\'position:absolute; visibility:inherit; top:0px; left:0px; width:100%; height:100%; z-index:-1; filter=progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0);\'></iframe>";
-            }
-
-            window[sinaads_adsome_key].b1.create(
-                window[sinaads_adsome_key].f1.getHTML() + trackcode + ifmcode
-            );
-            window[sinaads_adsome_key].b1.show();
-
-            window[sinaads_adsome_key].b2.create(
-                window[sinaads_adsome_key].f2.getHTML() + ifmcode
-            );
-            window[sinaads_adsome_key].b2.show();
-
-            window[sinaads_adsome_key].status = cyis1;
-
-
         };
-        window[sinaads_adsome_key].run();
+        /* 初始化 */
+        window[SINAADS_AD_TYPE].init();
+
+        window[SINAADS_AD_TYPE].main.onAfterHide = function() {
+            window[SINAADS_AD_TYPE].mini.show();
+        }
     }
 })(window);

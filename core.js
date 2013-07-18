@@ -35,7 +35,7 @@
      * 数组相关处理
      * @type {Object}
      */
-    sinaads.core.array = {
+    sinaads.core.array = sinaads.core.array || {
         remove : function (source, match) {
             var len = source.length;
                 
@@ -45,6 +45,31 @@
                 }
             }
             return source;
+        }
+    };
+
+    /**
+     * 字符串相关处理
+     */
+    sinaads.core.string = sinaads.core.string || {
+        encodeHTML : function (source) {
+            return String(source)
+                        .replace(/&/g,'&amp;')
+                        .replace(/</g,'&lt;')
+                        .replace(/>/g,'&gt;')
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#39;");
+        },
+        decodeHTML : function (source) {
+            var str = String(source)
+                        .replace(/&quot;/g,'"')
+                        .replace(/&lt;/g,'<')
+                        .replace(/&gt;/g,'>')
+                        .replace(/&amp;/g, "&");
+            //处理转义的中文和实体字符
+            return str.replace(/&#([\d]+);/g, function(_0, _1){
+                return String.fromCharCode(parseInt(_1, 10));
+            });
         }
     };
 
@@ -133,8 +158,199 @@
         }
     };
 
+    /**
+     * 本地存储相关
+     */
+    var UserData = {
+        userData : null,
+        name : location.hostname,
+        init : function () {
+            if (!UserData.userData) {
+                try {
+                    UserData.userData = document.createElement('INPUT');
+                    UserData.userData.type = "hidden";
+                    UserData.userData.style.display = "none";
+                    UserData.userData.addBehavior ("#default#userData");
+                    document.body.appendChild(UserData.userData);
+                    var expires = new Date();
+                    expires.setDate(expires.getDate() + 365);
+                    UserData.userData.expires = expires.toUTCString();
+                } catch (e) {
+                    return false;
+                }
+            }
+            return true;
+        },
+        set : function (key, value, expires) {
+            if (UserData.init()) {
+                expires = expires ? 0 : new Date().getTime() + expires;
+                UserData.userData.load(UserData.name);
+                UserData.userData.setAttribute(key, value + (expires ? ';expires=' + expires : ''));
+                UserData.userData.save(UserData.name);
+            }
+        },
+        get : function (key) {
+            if (UserData.init()) {
+                UserData.userData.load(UserData.name);
+                var value = UserData.userData.getAttribute(key);
+                if (value) {
+                    value = value.split(';');
+                    if (value[1]) {
+                        if (parseInt(value[1]) > new Date().getTime()) {
+                            return value[0];
+                        } else {
+                            userData.remove(key);
+                            return null;
+                        }
+                    } else {
+                        return value;
+                    }
+                }
+            }
+        },
+        remove : function (key) {
+            if (UserData.init()) {
+                UserData.userData.load(UserData.name);
+                UserData.userData.removeAttribute(key);
+                UserData.userData.save(UserData.name);
+            }
 
+       }
+    };
 
+    var localStorage = {
+        init : function () {
+            return window.localStorage ? true : false;
+        }
+        name : location.hostname,
+        get : function (key) {
+            if (localStorage.init()) {
+                var value = window.localStorage.getItem(key);
+                if (value) {
+                    value = value.split(';');
+                    if (value[1]) {
+                        if (parseInt(value[1]) > new Date().getTime()) {
+                            return value[0];
+                        } else {
+                            userData.remove(key);
+                            return null;
+                        }
+                    } else {
+                        return value;
+                    }
+                }
+            }
+        },
+        set : function (key, value, expires) {
+            expires = expires ? new Date().getTime() + expires || 0;
+            window.localStorage.setItem(key, value + expires ? ';expires=' + expires : '');
+        },
+        remove : function (key) {
+            window.localStorage.removeItem(key);
+        }
+
+    };
+
+    /**
+     * 本地存储对象，如果是ie8-，使用userData, 否则使用localstorage, 否则使用cookie
+     */
+    sinaads.core.storage = sinaads.core.storage || (function () {
+        var UserData = {
+            userData : null,
+            name : location.hostname,
+            init : function () {
+                if (!UserData.userData) {
+                    try {
+                        UserData.userData = document.createElement('INPUT');
+                        UserData.userData.type = "hidden";
+                        UserData.userData.style.display = "none";
+                        UserData.userData.addBehavior ("#default#userData");
+                        document.body.appendChild(UserData.userData);
+                        var expires = new Date();
+                        expires.setDate(expires.getDate() + 365);
+                        UserData.userData.expires = expires.toUTCString();
+                    } catch (e) {
+                        return false;
+                    }
+                }
+                return true;
+            },
+            setItem : function (key, value, expires) {
+                if (UserData.init()) {
+                    UserData.userData.load(UserData.name);
+                    UserData.userData.setAttribute(key, value);
+                    UserData.userData.save(UserData.name);
+                }
+            },
+            getItem : function (key) {
+                if (UserData.init()) {
+                    UserData.userData.load(UserData.name);
+                    return UserData.userData.getAttribute(key);
+                }
+            },
+            removeItem : function (key) {
+                if (UserData.init()) {
+                    UserData.userData.load(UserData.name);
+                    UserData.userData.removeAttribute(key);
+                    UserData.userData.save(UserData.name);
+                }
+
+           }
+        };
+
+        var ls = {
+            getItem : function (key) {
+                return window.localStorage.getItem(key);
+            },
+            setItem : function (key, value, expires) {
+                window.localStorage.setItem(key, value + (expires ? ';expires=' + (new Date().getTime() + expires) : ''));
+            },
+            removeItem : function (key) {
+                window.localStorage.removeItem(key);
+            }
+        };
+        var cookie = {
+            getItem : function (key) {
+                return sinaads.core.cookie.get(key);
+            },
+            setItem : function (key, value, expires) {
+                sinaads.core.cookie.set(key, value, {expires : expires || 0});
+            },
+            removeItem : function (key) {
+                sinaads.core.cookie.remove(key);
+            }
+        };
+
+        var storage = sinaads.core.browser.ie && sinaads.core.browser.id < 8 ? userData : window.localStorage ? ls : cookie;
+        
+        return {
+            get : function (key) {
+                var value = storage.getItem(key);
+                if (value) {
+                    value = value.split(';');
+                    //有过期时间
+                    if (value[1] && new Date().getTime() > parseInt(value[1].split('=')[1], 10)) {
+                        storage.removeItem(key);
+                        return null;
+                    } else {
+                        return value[0];
+                    }
+                }
+                return null;
+            },
+            set : function (key, value, expires) {
+                storage.setItem(key, value, expires);
+            },
+            remove : function (key) {
+                storage.removeItem(key);
+            }
+        }
+    })();
+    sinaads.core.storage = sinaads.core.storage || (sinaads.core.browser.ie && sinaads.core.browser.ie < 8) ? userData : localStorage;
+
+    /**
+     * 服务端io相关
+     */
     function _createScriptTag(scr, url, charset) {
         scr.setAttribute('type', 'text/javascript');
         charset && scr.setAttribute('charset', charset);
@@ -271,6 +487,27 @@
 
 
     sinaads.core.swf = sinaads.core.swf || {
+        version : (function () {
+            var n = navigator;
+            if (n.plugins && n.mimeTypes.length) {
+                var plugin = n.plugins["Shockwave Flash"];
+                if (plugin && plugin.description) {
+                    return plugin.description
+                            .replace(/([a-zA-Z]|\s)+/, "")
+                            .replace(/(\s)+r/, ".") + ".0";
+                }
+            } else if (window.ActiveXObject && !window.opera) {
+                for (var i = 12; i >= 2; i--) {
+                    try {
+                        var c = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + i);
+                        if (c) {
+                            var version = c.GetVariable("$version");
+                            return version.replace(/WIN/g,'').replace(/,/g,'.');
+                        }
+                    } catch(e) {}
+                }
+            }
+        })(),
         getMovie : function (name, context) {
             context = context || window;
             //ie9下, Object标签和embed标签嵌套的方式生成flash时,
@@ -285,11 +522,128 @@
                     : movie
                 : movie || context[name];
         },
-        create : function () {
-
-        },
-        createHTML : function () {
-
+        createHTML : function (options) {
+            options = options || {};
+            var version = sinaads.core.swf.version, 
+                needVersion = options['ver'] || '6.0.0', 
+                vUnit1, vUnit2, i, k, len, item, tmpOpt = {},
+                encodeHTML = core.string.encodeHTML;
+            
+            // 复制options，避免修改原对象
+            for (k in options) {
+                tmpOpt[k] = options[k];
+            }
+            options = tmpOpt;
+            
+            // 浏览器支持的flash插件版本判断
+            if (version) {
+                version = version.split('.');
+                needVersion = needVersion.split('.');
+                for (i = 0; i < 3; i++) {
+                    vUnit1 = parseInt(version[i], 10);
+                    vUnit2 = parseInt(needVersion[i], 10);
+                    if (vUnit2 < vUnit1) {
+                        break;
+                    } else if (vUnit2 > vUnit1) {
+                        return ''; // 需要更高的版本号
+                    }
+                }
+            } else {
+                return ''; // 未安装flash插件
+            }
+            
+            var vars = options['vars'],
+                objProperties = ['classid', 'codebase', 'id', 'width', 'height', 'align'];
+            
+            // 初始化object标签需要的classid、codebase属性值
+            options['align'] = options['align'] || 'middle';
+            options['classid'] = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000';
+            options['codebase'] = 'http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0';
+            options['movie'] = options['url'] || '';
+            delete options['vars'];
+            delete options['url'];
+            
+            // 初始化flashvars参数的值
+            if ('string' == typeof vars) {
+                options['flashvars'] = vars;
+            } else {
+                var fvars = [];
+                for (k in vars) {
+                    item = vars[k];
+                    fvars.push(k + "=" + encodeURIComponent(item));
+                }
+                options['flashvars'] = fvars.join('&');
+            }
+            
+            // 构建IE下支持的object字符串，包括属性和参数列表
+            var str = ['<object '];
+            for (i = 0, len = objProperties.length; i < len; i++) {
+                item = objProperties[i];
+                str.push(' ', item, '="', encodeHTML(options[item]), '"');
+            }
+            str.push('>');
+            var params = {
+                'wmode'             : 1,
+                'scale'             : 1,
+                'quality'           : 1,
+                'play'              : 1,
+                'loop'              : 1,
+                'menu'              : 1,
+                'salign'            : 1,
+                'bgcolor'           : 1,
+                'base'              : 1,
+                'allowscriptaccess' : 1,
+                'allownetworking'   : 1,
+                'allowfullscreen'   : 1,
+                'seamlesstabbing'   : 1,
+                'devicefont'        : 1,
+                'swliveconnect'     : 1,
+                'flashvars'         : 1,
+                'movie'             : 1
+            };
+            
+            for (k in options) {
+                item = options[k];
+                k = k.toLowerCase();
+                if (params[k] && (item || item === false || item === 0)) {
+                    str.push('<param name="' + k + '" value="' + encodeHTML(item) + '" />');
+                }
+            }
+            
+            // 使用embed时，flash地址的属性名是src，并且要指定embed的type和pluginspage属性
+            options['src']  = options['movie'];
+            options['name'] = options['id'];
+            delete options['id'];
+            delete options['movie'];
+            delete options['classid'];
+            delete options['codebase'];
+            options['type'] = 'application/x-shockwave-flash';
+            options['pluginspage'] = 'http://www.macromedia.com/go/getflashplayer';
+            
+            
+            // 构建embed标签的字符串
+            str.push('<embed');
+            // 在firefox、opera、safari下，salign属性必须在scale属性之后，否则会失效
+            // 经过讨论，决定采用BT方法，把scale属性的值先保存下来，最后输出
+            var salign;
+            for (k in options) {
+                item = options[k];
+                if (item || item === false || item === 0) {
+                    if ((new RegExp("^salign\x24", "i")).test(k)) {
+                        salign = item;
+                        continue;
+                    }
+                    
+                    str.push(' ', k, '="', encodeHTML(item), '"');
+                }
+            }
+            
+            if (salign) {
+                str.push(' salign="', encodeHTML(salign), '"');
+            }
+            str.push('></embed></object>');
+            
+            return str.join('');
         }
     };
 
