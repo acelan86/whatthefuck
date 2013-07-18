@@ -2,8 +2,6 @@
 
     var sinaads = window.sinaads = window.sinaads || {};
 
-
-
     sinaads.core = sinaads.core || {};
 
 
@@ -75,6 +73,7 @@
         sinaads.core.browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp['\x241'] || RegExp['\x242']) : undefined;
     })();
 
+    sinaads.core.browser.isSupportFixed = !sinaads.core.browser.ie || sinaads.core.browser.ie >=7;
 
     /**
      * cookie相关
