@@ -1,7 +1,6 @@
 (function (window, undefined) {
 
     window.sinaads_render = function (data) {
-        document.write('<script src="./core.js"></script>');
         var type = data.type;
         window.sinaads_ad_data = data;
         switch (type) {
@@ -9,7 +8,7 @@
                 document.write('<script src="./plus/couple.js"></script>');
                 break;
             case 'Wins' :
-                document.write('<script src="./plus/win.js"></script>');
+                document.write('<script src="./plus/videoWindow.js"></script>');
                 break;
             case 'Stream' : 
                 document.write('<script src="./plus/stream.js"></script>');
@@ -22,7 +21,5 @@
                 break;
         }
     }
-
     document.write('<script src="./data/impress.php?pdps=' + window.sinaads_ad_pdps + '&callback=sinaads_render"></script>');
-
 })(window);

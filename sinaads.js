@@ -385,6 +385,7 @@
                     'sinaads_ad_auth_key="', authKey, '";',
                     "sinaads_start_time=", now, ";",
                 '</', tag, '>',
+                '<', tag + ' src="./core.js" charset="utf-8"></' + tag + '>',
                 _getShowADScript(),
             '</body></html>'
         ].join("");

@@ -158,98 +158,6 @@
         }
     };
 
-    /**
-     * 本地存储相关
-     */
-    var UserData = {
-        userData : null,
-        name : location.hostname,
-        init : function () {
-            if (!UserData.userData) {
-                try {
-                    UserData.userData = document.createElement('INPUT');
-                    UserData.userData.type = "hidden";
-                    UserData.userData.style.display = "none";
-                    UserData.userData.addBehavior ("#default#userData");
-                    document.body.appendChild(UserData.userData);
-                    var expires = new Date();
-                    expires.setDate(expires.getDate() + 365);
-                    UserData.userData.expires = expires.toUTCString();
-                } catch (e) {
-                    return false;
-                }
-            }
-            return true;
-        },
-        set : function (key, value, expires) {
-            if (UserData.init()) {
-                expires = expires ? 0 : new Date().getTime() + expires;
-                UserData.userData.load(UserData.name);
-                UserData.userData.setAttribute(key, value + (expires ? ';expires=' + expires : ''));
-                UserData.userData.save(UserData.name);
-            }
-        },
-        get : function (key) {
-            if (UserData.init()) {
-                UserData.userData.load(UserData.name);
-                var value = UserData.userData.getAttribute(key);
-                if (value) {
-                    value = value.split(';');
-                    if (value[1]) {
-                        if (parseInt(value[1]) > new Date().getTime()) {
-                            return value[0];
-                        } else {
-                            userData.remove(key);
-                            return null;
-                        }
-                    } else {
-                        return value;
-                    }
-                }
-            }
-        },
-        remove : function (key) {
-            if (UserData.init()) {
-                UserData.userData.load(UserData.name);
-                UserData.userData.removeAttribute(key);
-                UserData.userData.save(UserData.name);
-            }
-
-       }
-    };
-
-    var localStorage = {
-        init : function () {
-            return window.localStorage ? true : false;
-        }
-        name : location.hostname,
-        get : function (key) {
-            if (localStorage.init()) {
-                var value = window.localStorage.getItem(key);
-                if (value) {
-                    value = value.split(';');
-                    if (value[1]) {
-                        if (parseInt(value[1]) > new Date().getTime()) {
-                            return value[0];
-                        } else {
-                            userData.remove(key);
-                            return null;
-                        }
-                    } else {
-                        return value;
-                    }
-                }
-            }
-        },
-        set : function (key, value, expires) {
-            expires = expires ? new Date().getTime() + expires || 0;
-            window.localStorage.setItem(key, value + expires ? ';expires=' + expires : '');
-        },
-        remove : function (key) {
-            window.localStorage.removeItem(key);
-        }
-
-    };
 
     /**
      * 本地存储对象，如果是ie8-，使用userData, 否则使用localstorage, 否则使用cookie
@@ -344,9 +252,8 @@
             remove : function (key) {
                 storage.removeItem(key);
             }
-        }
+        };
     })();
-    sinaads.core.storage = sinaads.core.storage || (sinaads.core.browser.ie && sinaads.core.browser.ie < 8) ? userData : localStorage;
 
     /**
      * 服务端io相关
