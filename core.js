@@ -45,6 +45,24 @@
                 }
             }
             return source;
+        },
+        each : function (source, iterator, thisObject) {
+            var returnValue, item, i, len = source.length;
+            
+            if ('function' == typeof iterator) {
+                for (i = 0; i < len; i++) {
+                    item = source[i];
+                    //TODO
+                    //此处实现和标准不符合，标准中是这样说的：
+                    //If a thisObject parameter is provided to forEach, it will be used as the this for each invocation of the callback. If it is not provided, or is null, the global object associated with callback is used instead.
+                    returnValue = iterator.call(thisObject || source, item, i);
+            
+                    if (returnValue === false) {
+                        break;
+                    }
+                }
+            }
+            return source;
         }
     };
 
@@ -70,6 +88,22 @@
             return str.replace(/&#([\d]+);/g, function(_0, _1){
                 return String.fromCharCode(parseInt(_1, 10));
             });
+        }
+    };
+
+
+    /**
+     * object相关
+     */
+    sinaads.core.object = sinaads.core.object || {
+        map : function (source, iterator) {
+            var results = {};
+            for (var key in source) {
+                if (source.hasOwnProperty(key)) {
+                    results[key] = iterator(source[key], key);
+                }
+            }
+            return results;
         }
     };
 
@@ -553,5 +587,75 @@
             return str.join('');
         }
     };
+
+
+    /**
+     * 渲染广告相关
+     */
+    sinaads.core.iframe = sinaads.core.iframe || {
+        init : function (width, height, useQuote) {
+            var quote = useQuote ? '"' : "", //是否使用引号将属性包裹
+                zero = quote + "0" + quote;
+
+            return {
+                width               : quote + width + quote,
+                height              : quote + height + quote,
+                frameborder         : zero,
+                marginwidth         : zero,
+                marginheight        : zero,
+                vspace              : zero,
+                hspace              : zero,
+                allowtransparency   : quote + "true" + quote,
+                scrolling           : quote + "no" + quote
+            };
+        }, 
+        createHTML : function (config) {
+            var html = ["<iframe"];
+            sinaads.core.object.map(config, function(value, key) {
+                html.push(" " + key + '="' + (null == value ? "" : value) + '"')
+            });
+            html.push("></iframe>");
+
+            return html.join("");
+        },
+        fill : function (iframe, content) {
+            try {
+                var contentWindow = iframe.contentWindow, 
+                    doc = contentWindow.document;
+
+                doc.open();
+                doc.write(content);
+                doc.close();
+            } catch (e) {
+                console.debug(e);
+            }
+        }
+    };
+
+    sinaads.core.render = sinaads.core.render || {
+        createHTML : function (config) {
+            var html;
+            switch (config.type) {
+                case 'url' :
+                    var iframeConfig = sinaads.core.iframe.init(config.width, config.height);
+                    iframeConfig.src = config.src;
+                    html = sinaads.core.iframe.createHTML(iframeConfig);
+                    break;
+                case 'image' : 
+                    html = '<img src="' + config.src + '" border="0" alt="' + config.src + '" style="width:' + config.width + 'px;height' + config.height + ':px"/>';
+                    html = config.link ? '<a href="' + config.link + '" target="_blank">' + html + '</a>' : html;
+                    break;
+                case 'js' :
+                    html = '<' + 'script src="' + config.src + '"></' + 'script>';
+                    break;
+                case 'fragment' : 
+                    html = config.src;
+                    break;
+                default : 
+                    break;
+            }
+            return html;
+        }
+    }
 
 })(window);
