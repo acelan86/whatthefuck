@@ -47,6 +47,14 @@
      * @return {[type]}          [description]
      */
     function sinaads_videoWindow(config, window, document){
+
+        function getScrollTop() {
+            return core.browser.isStrict ? document.documentElement.scrollTop : document.body.scrollTop;
+        }
+        function getScrollLeft() {
+            return core.browser.isStrict ? document.documentElement.scrollLeft : document.body.scrollLeft;
+        }
+
         if(core.browser.firefox) {
             return;
         }
@@ -55,7 +63,7 @@
             innerContainerId = SINAADS_AD_TYPE + 'Inner',
             movieId = SINAADS_AD_TYPE + 'Movie',
             container,
-            docBody = core.browser.isStrict ? document.documentElement : document.body,
+            docBody = document.body,
             position = core.browser.isSupportFixed ? 'fixed' : 'absolute',
             innerContainer,
             movie,
@@ -84,30 +92,33 @@
                     '</a>',
                 '</div>',
                 '<div style="position:absolute;left:0px;top:0px;width:300px;height:297px;z-index:10;">',
-                    '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="300" height="297" id="' + movieId +'" name="' + movieId + '" align="middle">',
-                        '<param name="allowScriptAccess" value="always" />',
-                        '<param name="movie" value="' + config.src + '" />',
-                        '<param name="wmode" value="opaque" />',
-                        '<param name="flashvars" value="url=' + escape(config.link) + '&rp=' + escape(config.replayMonitor) + '&dl=' + escape(config.downloadMonitor) + '&fw=' + escape(config.reposMonitor) + '" />',
-                        '<param name="menu" value="false" />',
-                        '<param name="quality" value="high" />',
-                        '<param name="bgcolor" value="#ffffff" />',
-                        '<embed src="' + config.src + '" id="' + movieId + '" name="' + movieId + '" allowScriptAccess="always" wmode="transeparent" menu="false" flashvars="url=' + escape(config.link) + '&rp=' + escape(config.replayMonitor) + '&dl=' + escape(config.downloadMonitor) + '&fw=' + escape(config.reposMonitor) + '" quality="high" bgcolor="#ffffff" width="300" height="297" align="middle" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" style="position:relative; z-index:2;" />',
-                    '</object>',
+                    core.swf.createHTML({
+                        width : 300,
+                        height : 297,
+                        allowScriptAccess : 'always', 
+                        id : movieId,
+                        url : config.src,
+                        wmode : 'opaque',
+                        vars : {
+                            url : escape(config.link),
+                            rp : escape(config.replayMonitor),
+                            dl : escape(config.downloadMonitor),
+                            fw : escape(config.reposMonitor)
+                        },
+                        align : 'middle',
+                        menu : false,
+                        quality : 'hight',
+                        bgcolor : '#ffffff'
+                    }),
                 '</div>',
                 '<iframe style="width:100%;height:297px;" frameborder="0"></iframe>',
             '</div>'
         ].join('');
-        docBody.appendChild(container);
+        docBody.insertBefore(container, docBody.firstChild);
 
 
         innerContainer = document.getElementById(innerContainerId);
         movie = core.swf.getMovie(movieId, window, document);
-
-        try{
-            movie.StopPlay();
-        }catch(e){}
-
 
         if (config.delay) {
             setTimeout(function () {
@@ -116,13 +127,19 @@
         }
 
         var timer = setInterval(function () {
-            if(movie.PercentLoaded() >= 100 && config.enabled){
+            if(config.enabled){
                 clearInterval(timer);
                 start();
             }
         }, 200);
 
         function start(){
+            try {
+                movie.StopPlay();
+            } catch (e) {
+                
+            }
+
             if (core.browser.isSupportFixed) {
                 container.style.bottom = '0px';
             } else {
@@ -162,7 +179,7 @@
 
         function setPosition(){
             if (!core.browser.isSupportFixed) {
-                container.style.top = docBody.scrollTop + docBody.clientHeight - 297 + 'px';
+                container.style.top = getScrollTop + docBody.clientHeight - 297 + 'px';
             }
         }
     }

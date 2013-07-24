@@ -2,32 +2,27 @@
 
     var sinaads = window.sinaads = window.sinaads || {};
 
-    sinaads.core = sinaads.core || {};
-
-
-
-    sinaads.core.isFunction = function (source) {
-        return '[object Function]' == Object.prototype.toString.call(source);
-    };
-
-    sinaads.core.isString = function (source) {
-       return '[object String]' == Object.prototype.toString.call(source);
-    };
-
-    sinaads.core.isArray = function (source) {
-        return '[object Array]' == Object.prototype.toString.call(source);
-    };
-
-    sinaads.core.toArray = function (source) {
-        if (source === null || source === undefined) {
-            return [];
-        }
-        if (sinaads.core.isArray(source)) {
-            return source;
-        }
-        // The strings and functions also have 'length'
-        if (typeof source.length !== 'number' || typeof source === 'string' || sinaads.core.isFunction(source)) {
-            return [source];
+    var core = sinaads.core = sinaads.core || {
+        isFunction : function (source) {
+            return '[object Function]' == Object.prototype.toString.call(source);
+        },
+        isString : function (source) {
+           return '[object String]' == Object.prototype.toString.call(source);
+        },
+        isArray : function (source) {
+            return '[object Array]' == Object.prototype.toString.call(source);
+        },
+        toArray : function (source) {
+            if (source === null || source === undefined) {
+                return [];
+            }
+            if (core.isArray(source)) {
+                return source;
+            }
+            // The strings and functions also have 'length'
+            if (typeof source.length !== 'number' || typeof source === 'string' || core.isFunction(source)) {
+                return [source];
+            }
         }
     };
 
@@ -35,7 +30,7 @@
      * 数组相关处理
      * @type {Object}
      */
-    sinaads.core.array = sinaads.core.array || {
+    core.array = core.array || {
         remove : function (source, match) {
             var len = source.length;
                 
@@ -69,7 +64,7 @@
     /**
      * 字符串相关处理
      */
-    sinaads.core.string = sinaads.core.string || {
+    core.string = core.string || {
         encodeHTML : function (source) {
             return String(source)
                         .replace(/&/g,'&amp;')
@@ -95,7 +90,7 @@
     /**
      * object相关
      */
-    sinaads.core.object = sinaads.core.object || {
+    core.object = core.object || {
         map : function (source, iterator) {
             var results = {};
             for (var key in source) {
@@ -111,7 +106,7 @@
     /**
      * 判断浏览器类型和特性的属性
      */
-    sinaads.core.browser = sinaads.core.browser || {
+    core.browser = core.browser || {
         chrome : /chrome\/(\d+\.\d+)/i.test(navigator.userAgent) ? + RegExp['\x241'] : undefined,
         firefox : /firefox\/(\d+\.\d+)/i.test(navigator.userAgent) ? + RegExp['\x241'] : undefined,
         ie : /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || + RegExp['\x241']) : undefined,
@@ -123,26 +118,26 @@
 
     try {
         if (/(\d+\.\d+)/.test(external.max_version)) {
-            sinaads.core.browser.maxthon = + RegExp['\x241'];
+            core.browser.maxthon = + RegExp['\x241'];
         }
     } catch (e) {}
 
     (function(){
         var ua = navigator.userAgent;
-        sinaads.core.browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp['\x241'] || RegExp['\x242']) : undefined;
+        core.browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp['\x241'] || RegExp['\x242']) : undefined;
     })();
 
-    sinaads.core.browser.isSupportFixed = !sinaads.core.browser.ie || sinaads.core.browser.ie >=7;
+    core.browser.isSupportFixed = !core.browser.ie || core.browser.ie >=7;
 
     /**
      * cookie相关
      */
-    sinaads.core.cookie = sinaads.core.cookie || {
+    core.cookie = core.cookie || {
         _isValidKey : function (key) {
             return (new RegExp("^[^\\x00-\\x20\\x7f\\(\\)<>@,;:\\\\\\\"\\[\\]\\?=\\{\\}\\/\\u0080-\\uffff]+\x24")).test(key);
         },
         getRaw : function (key) {
-            if (sinaads.core.cookie._isValidKey(key)) {
+            if (core.cookie._isValidKey(key)) {
                 var reg = new RegExp("(^| )" + key + "=([^;]*)(;|\x24)"),
                     result = reg.exec(document.cookie);
                      
@@ -153,7 +148,7 @@
             return null;
         },
         setRaw : function (key, value, options) {
-            if (!sinaads.core.cookie._isValidKey(key)) {
+            if (!core.cookie._isValidKey(key)) {
                 return;
             }
              
@@ -175,7 +170,7 @@
 
         },
         get : function (key) {
-            var value = sinaads.core.cookie.getRaw(key);
+            var value = core.cookie.getRaw(key);
             if ('string' == typeof value) {
                 value = decodeURIComponent(value);
                 return value;
@@ -183,7 +178,7 @@
             return null;
         },
         set : function (key, value, options) {
-            sinaads.core.cookie.setRaw(key, encodeURIComponent(value), options);
+            core.cookie.setRaw(key, encodeURIComponent(value), options);
         },
         remove : function (key, options) {
             options = options || {};
@@ -196,7 +191,7 @@
     /**
      * 本地存储对象，如果是ie8-，使用userData, 否则使用localstorage, 否则使用cookie
      */
-    sinaads.core.storage = sinaads.core.storage || (function () {
+    core.storage = core.storage || (function () {
         var UserData = {
             userData : null,
             name : location.hostname,
@@ -253,17 +248,17 @@
         };
         var cookie = {
             getItem : function (key) {
-                return sinaads.core.cookie.get(key);
+                return core.cookie.get(key);
             },
             setItem : function (key, value, expires) {
-                sinaads.core.cookie.set(key, value, {expires : expires || 0});
+                core.cookie.set(key, value, {expires : expires || 0});
             },
             removeItem : function (key) {
-                sinaads.core.cookie.remove(key);
+                core.cookie.remove(key);
             }
         };
 
-        var storage = sinaads.core.browser.ie && sinaads.core.browser.id < 8 ? userData : window.localStorage ? ls : cookie;
+        var storage = core.browser.ie && core.browser.id < 8 ? userData : window.localStorage ? ls : cookie;
         
         return {
             get : function (key) {
@@ -292,63 +287,20 @@
     /**
      * 服务端io相关
      */
-    function _createScriptTag(scr, url, charset) {
-        scr.setAttribute('type', 'text/javascript');
-        charset && scr.setAttribute('charset', charset);
-        scr.setAttribute('src', url);
-        document.getElementsByTagName('head')[0].appendChild(scr);
-    };
 
-    function _removeScriptTag(scr) {
-        if(scr && scr.parentNode){
-            scr.parentNode.removeChild(scr);
-        }
-        scr = null;
-    };
-
-    sinaads.core.sio = sinaads.core.sio || {
-        callByBrowser : function (url, opt_callback, opt_options) {
-            var scr = document.createElement("SCRIPT"),
-                scriptLoaded = 0,
-                options = opt_options || {},
-                charset = options['charset'],
-                callback = opt_callback || function(){},
-                timeOut = options['timeOut'] || 0,
-                timer;
-             
-            // IE和opera支持onreadystatechange
-            // safari、chrome、opera支持onload
-            scr.onload = scr.onreadystatechange = function () {
-                // 避免opera下的多次调用
-                if (scriptLoaded) {
-                    return;
-                };
-                 
-                var readyState = scr.readyState;
-                if ('undefined' == typeof readyState
-                    || readyState == "loaded"
-                    || readyState == "complete") {
-                    scriptLoaded = 1;
-                    try {
-                        callback();
-                        clearTimeout(timer);
-                    } finally {
-                        scr.onload = scr.onreadystatechange = null;
-                        _removeScriptTag(scr);
-                    }
-                }
-            };
-     
-            if( timeOut ){
-                timer = setTimeout(function(){
-                    scr.onload = scr.onreadystatechange = null;
-                    _removeScriptTag(scr);
-                    options.onfailure && options.onfailure();
-                }, timeOut);
-            };
-            _createScriptTag(scr, url, charset);
+    core.sio = core.sio || {
+        _createScriptTag : function (scr, url, charset) {
+            scr.setAttribute('type', 'text/javascript');
+            charset && scr.setAttribute('charset', charset);
+            scr.setAttribute('src', url);
+            document.getElementsByTagName('head')[0].appendChild(scr);
         },
-
+        _removeScriptTag : function (scr) {
+            if(scr && scr.parentNode){
+                scr.parentNode.removeChild(scr);
+            }
+            scr = null;
+        },
         callByServer : function(url, callback, opt_options) {
             var scr = document.createElement('SCRIPT'),
                 prefix = '_sinaads_cbs_',
@@ -362,10 +314,10 @@
                 reg = new RegExp('(\\?|&)' + queryField + '=([^&]*)'),
                 matches;
      
-            if (sinaads.core.isFunction(callback)) {
+            if (core.isFunction(callback)) {
                 callbackName = prefix + Math.floor(Math.random() * 2147483648).toString(36);
                 window[callbackName] = getCallBack(0);
-            } else if(sinaads.core.isString(callback)){
+            } else if(core.isString(callback)){
                 // 如果callback是一个字符串的话，就需要保证url是唯一的，不要去改变它
                 // TODO 当调用了callback之后，无法删除动态创建的script标签
                 callbackName = callback;
@@ -427,7 +379,7 @@
     };
 
 
-    sinaads.core.swf = sinaads.core.swf || {
+    core.swf = core.swf || {
         version : (function () {
             var n = navigator;
             if (n.plugins && n.mimeTypes.length) {
@@ -455,9 +407,9 @@
             //会导致document[name]多返回一个Object元素,而起作用的只有embed标签
             var movie = context.document[name],
                 ret;
-            return sinaads.core.browser.ie == 9 ?
+            return core.browser.ie == 9 ?
                 movie && movie.length ? 
-                    (ret = sinaads.core.array.remove(sinaads.core.toArray(movie), function(item){
+                    (ret = core.array.remove(core.toArray(movie), function(item){
                         return item.tagName.toLowerCase() != "embed";
                     })).length == 1 ? ret[0] : ret
                     : movie
@@ -465,7 +417,7 @@
         },
         createHTML : function (options) {
             options = options || {};
-            var version = sinaads.core.swf.version, 
+            var version = core.swf.version, 
                 needVersion = options['ver'] || '6.0.0', 
                 vUnit1, vUnit2, i, k, len, item, tmpOpt = {},
                 encodeHTML = core.string.encodeHTML;
@@ -592,7 +544,7 @@
     /**
      * 渲染广告相关
      */
-    sinaads.core.iframe = sinaads.core.iframe || {
+    core.iframe = core.iframe || {
         init : function (width, height, useQuote) {
             var quote = useQuote ? '"' : "", //是否使用引号将属性包裹
                 zero = quote + "0" + quote;
@@ -611,7 +563,7 @@
         }, 
         createHTML : function (config) {
             var html = ["<iframe"];
-            sinaads.core.object.map(config, function(value, key) {
+            core.object.map(config, function(value, key) {
                 html.push(" " + key + '="' + (null == value ? "" : value) + '"')
             });
             html.push("></iframe>");
@@ -627,19 +579,19 @@
                 doc.write(content);
                 doc.close();
             } catch (e) {
-                console.debug(e);
+                ////console.debug(e);
             }
         }
     };
 
-    sinaads.core.render = sinaads.core.render || {
+    core.render = core.render || {
         createHTML : function (config) {
             var html;
             switch (config.type) {
                 case 'url' :
-                    var iframeConfig = sinaads.core.iframe.init(config.width, config.height);
+                    var iframeConfig = core.iframe.init(config.width, config.height);
                     iframeConfig.src = config.src;
-                    html = sinaads.core.iframe.createHTML(iframeConfig);
+                    html = core.iframe.createHTML(iframeConfig);
                     break;
                 case 'image' : 
                     html = '<img src="' + config.src + '" border="0" alt="' + config.src + '" style="width:' + config.width + 'px;height' + config.height + ':px"/>';
@@ -657,5 +609,4 @@
             return html;
         }
     }
-
 })(window);
