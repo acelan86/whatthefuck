@@ -1,36 +1,90 @@
+/**
+ * sinaadToolkit
+ * 新浪广告工具包，提供了浏览器判断，渲染，cookie, storage, iframe, 转义等基础操作
+ * @param  {[type]} window    [description]
+ * @param  {[type]} undefined [description]
+ * @return {[type]}           [description]
+ */
 (function (window, undefined) {
 
-    var sinaads = window.sinaads = window.sinaads || {};
-
-    var core = sinaads.core = sinaads.core || {
+    var core = window.sinaadToolkit = window.sinaadToolkit || {
+        /**
+         * 工具包资源地址
+         */
+        TOOLKIT_URL : 'http://d1.sina.com.cn/litong/zhitou/sinaads/src/core.js',
+        /**
+         * 获取当前时间戳
+         * @return {[type]} [description]
+         */
+        now : function () {
+            return new Date().getTime();
+        },
+        /**
+         * 判断是否是函数
+         * @param  {[type]} source [description]
+         * @return {[type]}        [description]
+         */
         isFunction : function (source) {
             return '[object Function]' == Object.prototype.toString.call(source);
         },
+        /**
+         * 判断是否是字符串
+         * @param  {[type]} source [description]
+         * @return {[type]}        [description]
+         */
         isString : function (source) {
            return '[object String]' == Object.prototype.toString.call(source);
-        },
-        isArray : function (source) {
-            return '[object Array]' == Object.prototype.toString.call(source);
-        },
-        toArray : function (source) {
-            if (source === null || source === undefined) {
-                return [];
-            }
-            if (core.isArray(source)) {
-                return source;
-            }
-            // The strings and functions also have 'length'
-            if (typeof source.length !== 'number' || typeof source === 'string' || core.isFunction(source)) {
-                return [source];
-            }
         }
     };
 
-    /**
-     * 数组相关处理
-     * @type {Object}
+    /** =============
+     * 判断浏览器类型和特性的属性
      */
-    core.array = core.array || {
+    core.browser = core.browser || (function (ua) {
+        var browser =   {
+            android : /(Android)\s+([\d.]+)/i.test(ua),
+            ipad : /(iPad).*OS\s([\d_]+)/i.test(ua),
+            webos : /(webOS|hpwOS)[\s\/]([\d.]+)/i.test(ua),
+            kindle : /Kindle\/([\d.]+)/i.test(ua),
+            silk : /Silk\/([\d._]+)/i.test(ua),
+            blackberry : /(BlackBerry).*Version\/([\d.]+)/i.test(ua),
+            bb10 : /(BB10).*Version\/([\d.]+)/i.test(ua),
+            rimtabletos : /(RIM\sTablet\sOS)\s([\d.]+)/i.test(ua),
+            playbook : /PlayBook/i.test(ua),
+            chrome : /chrome\/(\d+\.\d+)/i.test(ua) ? + RegExp['\x241'] : undefined,
+            firefox : /firefox\/(\d+\.\d+)/i.test(ua) ? + RegExp['\x241'] : undefined,
+            ie : /msie (\d+\.\d+)/i.test(ua) ? (document.documentMode || + RegExp['\x241']) : undefined,
+            isGecko : /gecko/i.test(ua) && !/like gecko/i.test(ua),
+            isStrict : document.compatMode == "CSS1Compat",
+            isWebkit : /webkit/i.test(ua),
+            opera : /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.test(ua) ?  + ( RegExp["\x246"] || RegExp["\x242"] ) : undefined
+        };
+
+        browser.iphone = !browser.ipad && /(iPhone\sOS)\s([\d_]+)/i.test(ua);
+        browser.touchpad = browser.webos && /TouchPad/.test(ua);
+
+        browser.tablet = !!(browser.ipad || browser.playbook || (browser.android && !/Mobile/.test(ua)) || (browser.firefox && /Tablet/.test(ua)));
+        browser.phone  = !!(!browser.tablet && (browser.android || browser.iphone || browser.webos || browser.blackberry || browser.bb10 || (browser.chrome && /Android/.test(ua)) || (browser.chrome && /CriOS\/([\d.]+)/.test(ua)) || (browser.firefox && /Mobile/.test(ua))));
+
+        try {
+            if (/(\d+\.\d+)/.test(external.max_version)) {
+                browser.maxthon = + RegExp['\x241'];
+            }
+        } catch (e) {}
+        browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp['\x241'] || RegExp['\x242']) : undefined;
+        browser.isSupportFixed = !browser.ie || browser.ie >=7;
+
+        return browser;
+    })(navigator.userAgent);
+
+
+
+    /** =======================
+     * 数组相关处理
+     * core.array.remove
+     * core.array.each
+     */
+    core.array = core.array = {
         remove : function (source, match) {
             var len = source.length;
                 
@@ -42,7 +96,10 @@
             return source;
         },
         each : function (source, iterator, thisObject) {
-            var returnValue, item, i, len = source.length;
+            var returnValue, 
+                item, 
+                i, 
+                len = source.length;
             
             if ('function' == typeof iterator) {
                 for (i = 0; i < len; i++) {
@@ -61,34 +118,76 @@
         }
     };
 
-    /**
+
+    /** ==================
      * 字符串相关处理
+     * core.string.encodeHTML
+     * core.string.decodeHTML
+     * core.string.formalString
      */
-    core.string = core.string || {
-        encodeHTML : function (source) {
-            return String(source)
-                        .replace(/&/g,'&amp;')
-                        .replace(/</g,'&lt;')
-                        .replace(/>/g,'&gt;')
-                        .replace(/"/g, "&quot;")
-                        .replace(/'/g, "&#39;");
-        },
-        decodeHTML : function (source) {
-            var str = String(source)
-                        .replace(/&quot;/g,'"')
-                        .replace(/&lt;/g,'<')
-                        .replace(/&gt;/g,'>')
-                        .replace(/&amp;/g, "&");
-            //处理转义的中文和实体字符
-            return str.replace(/&#([\d]+);/g, function(_0, _1){
-                return String.fromCharCode(parseInt(_1, 10));
-            });
-        }
-    };
+    core.string = core.string || (function () {
+        var ESCAPE_MAP = {
+                '"'     : '\\"',
+                "\\"    : "\\\\", 
+                "/"     : "\\/",
+                "\b"    : "\\b",
+                "\f"    : "\\f",
+                "\n"    : "\\n",
+                "\r"    : "\\r",
+                "\t"    : "\\t",
+                "\x0B"  : "\\u000b"
+            },
+            //字符串中非中文字符串
+            STR_REG =  /\uffff/.test("\uffff") ? (/[\\\"\x00-\x1f\x7f-\uffff]/g) : (/[\\\"\x00-\x1f\x7f-\xff]/g);
+        return {
+            //转义html
+            encodeHTML : function (source) {
+                return String(source)
+                            .replace(/&/g,'&amp;')
+                            .replace(/</g,'&lt;')
+                            .replace(/>/g,'&gt;')
+                            .replace(/"/g, "&quot;")
+                            .replace(/'/g, "&#39;");
+            },
+            //反转义html
+            decodeHTML : function (source) {
+                var str = String(source)
+                            .replace(/&quot;/g,'"')
+                            .replace(/&lt;/g,'<')
+                            .replace(/&gt;/g,'>')
+                            .replace(/&amp;/g, "&");
+                //处理转义的中文和实体字符
+                return str.replace(/&#([\d]+);/g, function(_0, _1){
+                    return String.fromCharCode(parseInt(_1, 10));
+                });
+            },
+            /**
+             * 转义字符串中的特殊字符
+             */
+            formalString : function (str) {
+                var ret = [];
+                ret.push(str.replace(STR_REG, function(s) {
+                    //如果再需要转义的字符表中，替换成转移字符对应的值
+                    if (s in ESCAPE_MAP) {
+                        return ESCAPE_MAP[s];
+                    }
+                    //否则转成对应的unicode码
+                    var alphaCode = s.charCodeAt(0), 
+                        unicodePerfix = "\\u";
+                    //需要增加几位0来补位
+                    16 > alphaCode ? unicodePerfix += "000" : 256 > alphaCode ? unicodePerfix += "00" : 4096 > alphaCode && (unicodePerfix += "0");
 
+                    //保存转移过的值到ESCAPE_MAP提高转义效率，同时返回进行替换
+                    return ESCAPE_MAP[s] = unicodePerfix + alphaCode.toString(16);
+                }));
+                return '"' + ret.join('') + '"';
+            }
+        };
+    })();
 
-    /**
+    /** ================
      * object相关
+     * core.object.map
      */
     core.object = core.object || {
         map : function (source, iterator) {
@@ -102,35 +201,11 @@
         }
     };
 
-
-    /**
-     * 判断浏览器类型和特性的属性
-     */
-    core.browser = core.browser || {
-        chrome : /chrome\/(\d+\.\d+)/i.test(navigator.userAgent) ? + RegExp['\x241'] : undefined,
-        firefox : /firefox\/(\d+\.\d+)/i.test(navigator.userAgent) ? + RegExp['\x241'] : undefined,
-        ie : /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || + RegExp['\x241']) : undefined,
-        isGecko : /gecko/i.test(navigator.userAgent) && !/like gecko/i.test(navigator.userAgent),
-        isStrict : document.compatMode == "CSS1Compat",
-        isWebkit : /webkit/i.test(navigator.userAgent),
-        opera : /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.test(navigator.userAgent) ?  + ( RegExp["\x246"] || RegExp["\x242"] ) : undefined
-    };
-
-    try {
-        if (/(\d+\.\d+)/.test(external.max_version)) {
-            core.browser.maxthon = + RegExp['\x241'];
-        }
-    } catch (e) {}
-
-    (function(){
-        var ua = navigator.userAgent;
-        core.browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp['\x241'] || RegExp['\x242']) : undefined;
-    })();
-
-    core.browser.isSupportFixed = !core.browser.ie || core.browser.ie >=7;
-
-    /**
+    /** ====================
      * cookie相关
+     * core.cookie.get
+     * core.cookie.set
+     * core.cookie.remove
      */
     core.cookie = core.cookie || {
         _isValidKey : function (key) {
@@ -188,8 +263,11 @@
     };
 
 
-    /**
+    /** ===================
      * 本地存储对象，如果是ie8-，使用userData, 否则使用localstorage, 否则使用cookie
+     * core.storage.get
+     * core.storage.set
+     * core.storage.remove
      */
     core.storage = core.storage || (function () {
         var UserData = {
@@ -240,7 +318,7 @@
                 return window.localStorage.getItem(key);
             },
             setItem : function (key, value, expires) {
-                window.localStorage.setItem(key, value + (expires ? ';expires=' + (new Date().getTime() + expires) : ''));
+                window.localStorage.setItem(key, value + (expires ? ';expires=' + (core.now() + expires) : ''));
             },
             removeItem : function (key) {
                 window.localStorage.removeItem(key);
@@ -266,7 +344,7 @@
                 if (value) {
                     value = value.split(';');
                     //有过期时间
-                    if (value[1] && new Date().getTime() > parseInt(value[1].split('=')[1], 10)) {
+                    if (value[1] && core.now() > parseInt(value[1].split('=')[1], 10)) {
                         storage.removeItem(key);
                         return null;
                     } else {
@@ -284,101 +362,256 @@
         };
     })();
 
-    /**
-     * 服务端io相关
+
+
+    /** ==================
+     * url相关
+     * core.url.getDomain
+     * core.url.createURL
+     * core.url.top
      */
+    core.url = core.url || (function () {
+        var DOMAIN_REG = /^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/;
+        return {
+            getDomain : function (url, def_domain) {
+                if (!url) {
+                    return def_domain;
+                }
+                var domain = url.match(DOMAIN_REG);
+                return domain ? domain[0] : def_domain;
+            },
+            createURL : function (domain, path, useSSL) {
+                return [useSSL ? "https" : "http", "://", domain, path].join("");
+            },
+            top : (function () {
+                var top;
+                try {
+                    top = window.top.location.href;
+                } catch (e) {}
+                return top || document.referrer || window.location.href;
+            })()
+        };
+    })();
 
-    core.sio = core.sio || {
-        _createScriptTag : function (scr, url, charset) {
-            scr.setAttribute('type', 'text/javascript');
-            charset && scr.setAttribute('charset', charset);
-            scr.setAttribute('src', url);
-            document.getElementsByTagName('head')[0].appendChild(scr);
+
+
+    /** ================
+     * DOM相关方法
+     * core.dom.getDocument
+     * core.dom.getComputedStyle
+     * core.dom.getCurrentStyle
+     */
+    core.dom = core.dom || {
+        getDocument : function (element) {
+            return element.nodeType == 9 ? element : element.ownerDocument || element.document;
         },
-        _removeScriptTag : function (scr) {
-            if(scr && scr.parentNode){
-                scr.parentNode.removeChild(scr);
-            }
-            scr = null;
-        },
-        callByServer : function(url, callback, opt_options) {
-            var scr = document.createElement('SCRIPT'),
-                prefix = '_sinaads_cbs_',
-                callbackName,
-                callbackImpl,
-                options = opt_options || {},
-                charset = options['charset'],
-                queryField = options['queryField'] || 'callback',
-                timeOut = options['timeOut'] || 0,
-                timer,
-                reg = new RegExp('(\\?|&)' + queryField + '=([^&]*)'),
-                matches;
-     
-            if (core.isFunction(callback)) {
-                callbackName = prefix + Math.floor(Math.random() * 2147483648).toString(36);
-                window[callbackName] = getCallBack(0);
-            } else if(core.isString(callback)){
-                // 如果callback是一个字符串的话，就需要保证url是唯一的，不要去改变它
-                // TODO 当调用了callback之后，无法删除动态创建的script标签
-                callbackName = callback;
-            } else {
-                if (matches = reg.exec(url)) {
-                    callbackName = matches[2];
+        getComputedStyle : function(element, key){
+            var doc = core.dom.getDocument(element),
+                styles;
+            if (doc.defaultView && doc.defaultView.getComputedStyle) {
+                styles = doc.defaultView.getComputedStyle(element, null);
+                if (styles) {
+                    return styles[key] || styles.getPropertyValue(key);
                 }
             }
-     
-            if( timeOut ){
-                timer = setTimeout(getCallBack(1), timeOut);
-            }
-     
-            //如果用户在URL中已有callback，用参数传入的callback替换之
-            url = url.replace(reg, '\x241' + queryField + '=' + callbackName);
-             
-            if (url.search(reg) < 0) {
-                url += (url.indexOf('?') < 0 ? '?' : '&') + queryField + '=' + callbackName;
-            }
-            _createScriptTag(scr, url, charset);
-     
-            function getCallBack(onTimeOut){
-                 
-                return function(){
-                    try {
-                        if( onTimeOut ){
-                            options.onfailure && options.onfailure();
-                        }else{
-                            callback.apply(window, arguments);
-                            clearTimeout(timer);
-                        }
-                        window[callbackName] = null;
-                        delete window[callbackName];
-                    } catch (exception) {
-                        // ignore the exception
-                    } finally {
-                        _removeScriptTag(scr);
-                    }
-                }
-            }
+            return ''; 
         },
-
-        log : function(url) {
-            var img = new Image(),
-                key = '_sinaads_sio_log_' + Math.floor(Math.random() *
-                      2147483648).toString(36);
-
-            window[key] = img;
-         
-            img.onload = img.onerror = img.onabort = function() {
-              img.onload = img.onerror = img.onabort = null;
-         
-              window[key] = null;
-              img = null;
-            };
-     
-            img.src = url;
+        getCurrentStyle : function(element, key){
+            return element.style[key] || (element.currentStyle ? element.currentStyle[key] : "") || core.dom.getComputedStyle(element, key);
         }
     };
 
 
+    /** =====================
+     * 页面相关
+     * core.page.getScrollTop
+     * core.page.getScrollLeft
+     * core.page.getViewHeight
+     * core.page.getViewWidth
+     */
+    core.page = core.page || {
+        getScrollTop : function () {
+            var d = document;
+            return window.pageYOffset || d.documentElement.scrollTop || d.body.scrollTop;
+        },
+        getScrollLeft : function () {
+            var d = document;
+            return window.pageXOffset || d.documentElement.scrollLeft || d.body.scrollLeft;
+        },
+        getViewHeight : function () {
+            var doc = document,
+            client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+            return client.clientHeight;
+        },
+        getViewWidth : function () {
+            var doc = document,
+            client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+            return client.clientWidth;
+        }
+    };
+
+    /** ===========
+     * 事件相关
+     * core.event.on
+     */
+    core.event = core.event || {
+        on : function (dom, type, callback) {
+            if (dom.attachEvent) {
+                dom.attachEvent('on' + type, callback);
+            } else {
+                dom.addEventListener(type, callback, false);
+            }
+        }
+    };
+
+    /**
+     * serveer io
+     * core.sio.loadScript
+     * core.sio.jsonp
+     * core.sio.log
+     */
+    core.sio = core.sio || (function () {
+        function _createScriptTag(scr, url, charset) {
+            scr.setAttribute('type', 'text/javascript');
+            charset && scr.setAttribute('charset', charset);
+            scr.setAttribute('src', url);
+            document.getElementsByTagName('head')[0].appendChild(scr);
+        }
+        function _removeScriptTag(scr) {
+            if(scr && scr.parentNode){
+                scr.parentNode.removeChild(scr);
+            }
+            scr = null;
+        }
+        return {
+            //加载js模块
+            loadScript : function (url, opt_callback, opt_options) {
+                var scr = document.createElement("SCRIPT"),
+                    scriptLoaded = 0,
+                    options = opt_options || {},
+                    charset = options['charset'],
+                    callback = opt_callback || function(){},
+                    timeOut = options['timeOut'] || 0,
+                    timer;
+                
+                // IE和opera支持onreadystatechange
+                // safari、chrome、opera支持onload
+                scr.onload = scr.onreadystatechange = function () {
+                    // 避免opera下的多次调用
+                    if (scriptLoaded) {
+                        return;
+                    }
+                    
+                    var readyState = scr.readyState;
+                    if ('undefined' == typeof readyState
+                        || readyState == "loaded"
+                        || readyState == "complete") {
+                        scriptLoaded = 1;
+                        try {
+                            callback();
+                            clearTimeout(timer);
+                        } finally {
+                            scr.onload = scr.onreadystatechange = null;
+                            _removeScriptTag(scr);
+                        }
+                    }
+                };
+
+                if( timeOut ){
+                    timer = setTimeout(function(){
+                        scr.onload = scr.onreadystatechange = null;
+                        _removeScriptTag(scr);
+                        options.onfailure && options.onfailure();
+                    }, timeOut);
+                }
+                
+                _createScriptTag(scr, url, charset);
+            },
+            //jsonp方式回调
+            jsonp : function(url, callback, opt_options) {
+                var scr = document.createElement('SCRIPT'),
+                    prefix = '_sinaads_cbs_',
+                    callbackName,
+                    callbackImpl,
+                    options = opt_options || {},
+                    charset = options['charset'],
+                    queryField = options['queryField'] || 'callback',
+                    timeOut = options['timeOut'] || 0,
+                    timer,
+                    reg = new RegExp('(\\?|&)' + queryField + '=([^&]*)'),
+                    matches;
+         
+                if (core.isFunction(callback)) {
+                    callbackName = prefix + Math.floor(Math.random() * 2147483648).toString(36);
+                    window[callbackName] = getCallBack(0);
+                } else if(core.isString(callback)){
+                    // 如果callback是一个字符串的话，就需要保证url是唯一的，不要去改变它
+                    // TODO 当调用了callback之后，无法删除动态创建的script标签
+                    callbackName = callback;
+                } else {
+                    if (matches = reg.exec(url)) {
+                        callbackName = matches[2];
+                    }
+                }
+         
+                if( timeOut ){
+                    timer = setTimeout(getCallBack(1), timeOut);
+                }
+         
+                //如果用户在URL中已有callback，用参数传入的callback替换之
+                url = url.replace(reg, '\x241' + queryField + '=' + callbackName);
+                 
+                if (url.search(reg) < 0) {
+                    url += (url.indexOf('?') < 0 ? '?' : '&') + queryField + '=' + callbackName;
+                }
+                _createScriptTag(scr, url, charset);
+         
+                function getCallBack(onTimeOut){
+                     
+                    return function(){
+                        try {
+                            if( onTimeOut ){
+                                options.onfailure && options.onfailure();
+                            }else{
+                                callback.apply(window, arguments);
+                                clearTimeout(timer);
+                            }
+                            window[callbackName] = null;
+                            delete window[callbackName];
+                        } catch (exception) {
+                            // ignore the exception
+                        } finally {
+                            _removeScriptTag(scr);
+                        }
+                    }
+                }
+            },
+
+            log : function(url) {
+                var img = new Image(),
+                    key = '_sinaads_sio_log_' + Math.floor(Math.random() *
+                          2147483648).toString(36);
+
+                window[key] = img;
+             
+                img.onload = img.onerror = img.onabort = function() {
+                  img.onload = img.onerror = img.onabort = null;
+             
+                  window[key] = null;
+                  img = null;
+                };
+         
+                img.src = url;
+            }
+        };
+    })();
+
+    /** ================
+     * swf相关方法
+     * core.swf.getMovie
+     * core.swf.createHTML
+     * 
+     */
     core.swf = core.swf || {
         version : (function () {
             var n = navigator;
@@ -542,71 +775,321 @@
 
 
     /**
-     * 渲染广告相关
+     * iframe相关方法
+     * core.iframe.init
+     * core.iframe.createHTML
+     * core.iframe.fill
      */
     core.iframe = core.iframe || {
-        init : function (width, height, useQuote) {
-            var quote = useQuote ? '"' : "", //是否使用引号将属性包裹
-                zero = quote + "0" + quote;
-
-            return {
-                width               : quote + width + quote,
-                height              : quote + height + quote,
-                frameborder         : zero,
-                marginwidth         : zero,
-                marginheight        : zero,
-                vspace              : zero,
-                hspace              : zero,
-                allowtransparency   : quote + "true" + quote,
-                scrolling           : quote + "no" + quote
-            };
-        }, 
+        init : function (config, width, height, useQuote) {
+            var quote = useQuote ? '"' : ""; //是否使用引号将属性包裹
+            var zero = quote + "0" + quote;
+            config.width = quote + width + quote;
+            config.height = quote + height + quote;
+            config.frameborder = zero;
+            config.marginwidth = zero;
+            config.marginheight = zero;
+            config.vspace = zero;
+            config.hspace = zero;
+            config.allowtransparency = quote + "true" + quote;
+            config.scrolling = quote + "no" + quote;
+        },
         createHTML : function (config) {
-            var html = ["<iframe"];
+            var html = [];
             core.object.map(config, function(value, key) {
                 html.push(" " + key + '="' + (null == value ? "" : value) + '"')
             });
-            html.push("></iframe>");
-
-            return html.join("");
+            return "<iframe" + html.join("") + "></iframe>";
         },
         fill : function (iframe, content) {
             try {
-                var contentWindow = iframe.contentWindow, 
-                    doc = contentWindow.document;
-
+                var doc = iframe.contentWindow.document;
                 doc.open();
                 doc.write(content);
-                doc.close();
-            } catch (e) {
-                ////console.debug(e);
-            }
+                iframe.onload = function () {
+                    try {
+                        this.contentWindow.document.close();
+                    } catch (e) {}
+                };
+                //doc.close(); //这里不close，防止后面的document.write无法生效， 在iframe onload的时候关闭
+            } catch (e) {}
         }
     };
 
-    core.render = core.render || {
-        createHTML : function (config) {
-            var html;
-            switch (config.type) {
-                case 'url' :
-                    var iframeConfig = core.iframe.init(config.width, config.height);
-                    iframeConfig.src = config.src;
-                    html = core.iframe.createHTML(iframeConfig);
+
+    /** ==================
+     * 监测相关
+     * core.monitor.parseTpl
+     * core.monitor.createImpressMonitor
+     * core.monitor.createClickMonitor
+     */
+    core.monitor  = core.monitor || {
+
+        //将监控url中的__xxx__变量名替换成正确的值
+        parseTpl : (function (monitorUrl, data) {
+            var reg = /\{__([a-zA-Z0-9]+(_*[a-zA-Z0-9])*)__\}/g;
+
+            return function (monitorUrl, data) {
+                if (!monitorUrl) return '';
+                return monitorUrl.replace(reg, function (s1, s2) {
+                    //插入adbox能支持的模版变量
+                    //见adbox监控接口文档，
+                    //https://github.com/acelan86/pandora/wiki/%E6%B8%B2%E6%9F%93%E5%BC%95%E6%93%8E%E6%96%87%E6%A1%A3%E8%AF%B4%E6%98%8E
+                    //adbox的监控需要插入到iframe的name中，使用api_exu=xxx的方式
+                    if (s2.indexOf('adbox_') > 0) {
+                        s2 = s2.split('_');
+                        return '{__mo' + s2[2] + '__}';
+                    }
+                    return data[s2] || s1;
+                });
+            };
+        })(),
+        //创建曝光监测
+        createImpressMonitor : function (pvs) {
+            var html = [];
+
+            core.array.each(pvs, function (pv, i) {
+                var config = {};
+                core.iframe.init(config, 1, 1, false);
+                config.src = pv;
+                config.style = 'display:none;';
+                html.push(core.iframe.createHTML(config));
+            });
+            return html.join('');
+        },
+        //创建点击监测
+        createClickMonitor : function (type, monitor) {
+            if (!monitor) {
+                return;
+            }
+            var monitor = 'string' === typeof monitor ? [monitor] : monitor,
+                ret = [],
+                comma = '';
+
+            core.array.each(monitor, function(url, i) {
+                var code = '';
+
+                if (url) {
+                    switch (type) {
+                        case 'image' :
+                        case 'flash' :
+                            code = 'sinaadToolkit.sio.log(\'' + url + '\')';
+                            comma = ';'
+                            break;
+                        case 'adbox' :
+                            code = 'api_exu=' + encodeURIComponent(url);
+                            comma = '&';
+                            break;
+                        default :
+                            break;
+                    }
+                    code && ret.push(code);
+                } 
+            });
+            return ret.join(comma);
+        }
+    };
+
+
+
+    /** ==============
+     * 广告渲染相关
+     * core.ad.createHTML
+     */
+    core.ad = core.ad || {
+        createHTML : function (type, src, width, height, link, monitor) {
+            var html = '',
+                config,
+                monitorCode;
+
+            width += String(width).indexOf('%') !== -1 ? '' : 'px';
+            height += String(height).indexOf('%') !== -1 ? '' : 'px';
+
+            monitorCode = core.monitor.createClickMonitor(type, monitor);
+            switch (type) {
+                case 'js' :
+                    html = ['<', 'script src="', src, '"></','script>'].join('');
+                    break;
+                case 'url' : 
+                    config = {};
+                    core.iframe.init(config, width, height, false);
+                    config.src = src;
+                    html = core.iframe.createHTML(config);
                     break;
                 case 'image' : 
-                    html = '<img src="' + config.src + '" border="0" alt="' + config.src + '" style="width:' + config.width + 'px;height' + config.height + ':px"/>';
-                    html = config.link ? '<a href="' + config.link + '" target="_blank">' + html + '</a>' : html;
+                    html = '<img border="0" src="' + src + '" style="width:' + width + ';height:' + height +';border:0" alt="' + src + '"/>';
+                    html = link ? '<a href="' + link + '" target="' + (core.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + html + '</a>' : html;
                     break;
-                case 'js' :
-                    html = '<' + 'script src="' + config.src + '"></' + 'script>';
+                case 'text' : 
+                    html = '<span>' + src + '</span>';
                     break;
-                case 'fragment' : 
-                    html = config.src;
+                case 'flash' : 
+                    html = core.swf.createHTML({
+                        url : src,
+                        width : width,
+                        height : height,
+                        wmode : 'transparent'
+                    });
+                    if (link) {
+                        html = [
+                            '<div style="width:' + width + ';height:' + height + ';position:relative;overflow:hidden;">',
+                                html,
+                                '<a style="position:absolute;background:#fff;opacity:0;_filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="' + (core.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '></a>',
+                            '</div>'
+                        ].join('');
+                    }
+                    break;
+                case 'adbox' :
+                    config = {};
+                    core.iframe.init(config, width, height, false);
+                    config.src = src;
+                    monitorCode && (config.name = monitorCode);
+                    html = core.iframe.createHTML(config);
                     break;
                 default : 
+                    html = src;
                     break;
             }
             return html;
         }
+    };
+
+
+    /** =================
+     * 广告沙箱
+     * core.sandbox.create
+     */
+    core.sandbox = core.sandbox || (function () {
+        var uid = 0;
+        /**
+         * 将对象转换成字符串形式表示
+         */
+        function _stringify(value, arr) {
+            switch (typeof value) {
+                case "string":
+                    arr.push(core.string.formalString(value));
+                    break;
+                case "number":
+                    arr.push(isFinite(value) && !isNaN(value) ? value : "null");
+                    break;
+                case "boolean":
+                    arr.push(value);
+                    break;
+                case "undefined":
+                    arr.push("null");
+                    break;
+                case "object":
+                    //is Null
+                    if (null == value) {
+                        arr.push("null");
+                        break;
+                    }
+                    //is Array
+                    if (value instanceof Array) {
+                        var len = value.length,
+                            comma;
+                        arr.push("[");
+                        for (comma = "", i = 0; i < len; i++) {
+                            arr.push(comma);
+                            _stringify(value[i], arr);
+                            comma = ",";
+                        }
+                        arr.push("]");
+                        break;
+                    }
+
+                    //is Object
+                    arr.push("{");
+                    var comma = "",
+                        v;
+                    for (var key in value) {
+                        if (value.hasOwnProperty(key)) {
+                            v = value[key];
+                            if ("function" != typeof v) { 
+                                arr.push(comma);
+                                arr.push(key); 
+                                arr.push(":");
+                                _stringify(v, arr);
+                                comma = ",";
+                            }
+                        }
+                    }
+                    arr.push("}");
+                    break;
+                case "function":
+                    break;
+                default:
+                    //throw Error("未知的值类型: " + typeof value);
+            }
+        }
+ 
+
+        /**
+         * 将config的属性值转换成变量声明代码
+         */
+        function _objToJsVarCode(obj) {
+            var code = [];
+
+            core.object.map(obj, function(value, key) {
+                if (null != value) {
+                    var tmp = [];
+                    try {
+                        _stringify(value, tmp);
+                        tmp = tmp.join("");
+                    } catch (k) {
+                    }
+                    tmp && code.push(key, "=", tmp, ";");
+                }
+            });
+
+            return code.join("");
+        }
+
+        return {
+            create : function (container, width, height, content, context) {
+                var context = context || {},
+                    sandboxId =  context.sandboxId || (context.sandboxId = '_sinaads_sandbox_id' + (uid++));
+
+                width += String(width).indexOf('%') !== -1 ? '' : 'px';
+                height += String(height).indexOf('%') !== -1 ? '' : 'px';
+
+                var iframeConfig = {};
+                core.iframe.init(iframeConfig, width, height, 0);
+                iframeConfig.src = 'javascript:\'<html><body style=background:transparent;></body></html>\'';
+                iframeConfig.id = sandboxId;
+                iframeConfig.style = 'float:left;';
+
+                container.innerHTML = [
+                    '<ins style="margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';">',
+                        core.iframe.createHTML(iframeConfig),
+                    '</ind>'
+                ].join('');
+
+                container.style.cssText += ';overflow:hidden;display:block;';
+
+                //context转成js代码描述，用于注入到iframe中
+                context = _objToJsVarCode(context);
+
+                //构造iframe实体
+                core.iframe.fill(document.getElementById(sandboxId), [
+                    '<!doctype html><html><body style="background:transparent">',
+                        '<', 'script>', context, '</', 'script>',
+                        '<', 'script src="' + core.TOOLKIT_URL + '" charset="utf-8"></', 'script>',
+                        content,
+                    '</body></html>'
+                ].join(""));
+            }
+        };
+    })();
+
+    /**
+     * core.seed 种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
+     */
+    if (!core.seed) {
+        var KEY = 'rotatecount';
+        core.seed = parseInt(core.storage.get(KEY), 10) || Math.floor(Math.random() * 100);
+        //大于1000就从0开始，防止整数过大
+        core.storage.set(KEY, core.seed > 1000 ? 0 : ++core.seed);
     }
+
 })(window);
