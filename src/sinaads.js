@@ -1,9 +1,8 @@
-/**
+/*!
  * sinaadToolkit
  * 新浪广告工具包，提供了浏览器判断，渲染，cookie, storage, iframe, 转义等基础操作
- * @param  {[type]} window    [description]
- * @param  {[type]} undefined [description]
- * @return {[type]}           [description]
+ * @author  acelan(xiaobin8[at]staff.sina.com.cn)
+ * @version  1.0.0
  */
 (function (window, undefined) {
 
@@ -372,20 +371,20 @@
 
     /** ==================
      * url相关
-     * core.url.getDomain
+     * core.url.getDomain //
      * core.url.createURL
      * core.url.top
      */
     core.url = core.url || (function () {
-        var DOMAIN_REG = /^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/;
+        //var DOMAIN_REG = /^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/;
         return {
-            getDomain : function (url, def_domain) {
-                if (!url) {
-                    return def_domain;
-                }
-                var domain = url.match(DOMAIN_REG);
-                return domain ? domain[0] : def_domain;
-            },
+            // getDomain : function (url, def_domain) {
+            //     if (!url) {
+            //         return def_domain;
+            //     }
+            //     var domain = url.match(DOMAIN_REG);
+            //     return domain ? domain[0] : def_domain;
+            // },
             createURL : function (domain, path, useSSL) {
                 return [useSSL ? "https" : "http", "://", domain, path].join("");
             },
@@ -863,6 +862,7 @@
                     /**
                      * ie下，且iframe.contentWindow.document无法取到，跨域
                      * 比如宿主页面设置了document.domain, 而iframe没有设置
+                     * 在iframe中设置document.domain  
                      */
                     try {
                         var key = "sinaads-ad-iframecontent-" + core.rnd();
@@ -1016,7 +1016,7 @@
                         html = [
                             '<div style="width:' + width + ';height:' + height + ';position:relative;overflow:hidden;">',
                                 html,
-                                '<a style="position:absolute;background:#fff;opacity:0;_filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="' + (core.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '></a>',
+                                '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="' + (core.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '></a>',
                             '</div>'
                         ].join('');
                     }
@@ -1029,7 +1029,7 @@
                     html = core.iframe.createHTML(config);
                     break;
                 default : 
-                    html = src;
+                    html = src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>');
                     break;
             }
             return html;
@@ -1147,7 +1147,7 @@
                     '</ind>'
                 ].join('');
 
-                container.style.cssText += ';overflow:hidden;display:block;';
+                container.style.cssText += ';display:block;overflow:hidden;';
 
                 //context转成js代码描述，用于注入到iframe中
                 context = _objToJsVarCode(context);
@@ -1168,13 +1168,19 @@
      * core.seed 种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
      */
     if (!core.seed) {
-        var KEY = 'rotatecount';
+        var KEY = 'sinaadtoolkit_seed';
         core.seed = parseInt(core.storage.get(KEY), 10) || Math.floor(Math.random() * 100);
         //大于1000就从0开始，防止整数过大
         core.storage.set(KEY, core.seed > 1000 ? 0 : ++core.seed);
     }
 
 })(window);
+
+
+
+
+
+
 
 
 
@@ -1228,7 +1234,8 @@
             link = config.link,
             monitor = config.monitor,
             src = config.src,
-            pdps = config.pdps;
+            pdps = config.pdps,
+            coupletTop = config.coupletTop || 0;
 
         //广告内容
         var adContent = core.ad.createHTML(type, src, width, height, link, monitor);
@@ -1243,7 +1250,8 @@
             sinaads_ad_width : width,
             sinaads_ad_height : height,
             sinaads_page_url : config.pageurl,
-            sandboxId : iframeId
+            sandboxId : iframeId,
+            sinaads_couplet_top : coupletTop
         });
     }
     /**
@@ -1323,6 +1331,85 @@
         
         core.sio.loadScript(IMPRESS_URL + '?' + params.join('&'), function (data) {
 
+            // //测试乐居数据
+            // window._ssp_ad.data["PDPS000000000020"] = {
+            //     size : "1000*90",
+            //     type : 'embed',
+            //     content : {
+            //         pv : ["http://baidu.com/?leju", "http://baidu.com/?leju2"],
+            //         type : 'html',
+            //         src : [
+                        // [
+                        //     '\x3c!-- 乐居广告js start--\x3e',
+                        //     '\x3cscript charset="utf-8" src="http://d5.sina.com.cn/litong/zhitou/leju/leju.js"\x3e\x3c/script\x3e',
+                        //     '\x3cscript\x3e',
+                        //         'leju.conf.url = \'http://adm.leju.sina.com.cn/get_ad_list/PG_514AC4246D2142\';',
+                        //         'leju.conf.defaultUrl = \'http://d3.sina.com.cn/litong/zhitou/leju/news.js\';',
+                        //         'var position = \'ad_47200\';',
+                        //         'var lejuMedia = leju.getData();',
+                        //         'lejuMedia.then(function (data) {',
+                        //             'var data = data[position][0];',
+                        //             'document.write(sinaadToolkit.ad.createHTML(\'flash\', data.params.src, sinaads_ad_width, sinaads_ad_height, data.params.link, []));',
+                        //         '});',
+                        //     '\x3c/script\x3e',
+                        //     '\x3c!-- 乐居广告js end --\x3e',
+                        // ].join('')
+            //         ],
+            //         monitor : ["http://leju.com"],
+            //         link : ['http://leju.com']
+            //     }
+            // };
+
+            // //测试乐居数据-跨栏
+            // window._ssp_ad.data["PDPS000000000021"] = {
+            //     size : "1000*90",
+            //     type : 'embed',
+            //     content : {
+            //         pv : [],
+            //         type : 'html',
+            //         src : [
+            //             [
+            //                 '\x3c!-- 乐居广告js start--\x3e',
+            //                 '\x3cscript charset="utf-8" src="http://d5.sina.com.cn/litong/zhitou/leju/leju.js"\x3e\x3c/script\x3e',
+            //                 '\x3cscript\x3e',
+            //                     'leju.conf.url = \'http://adm.leju.sina.com.cn/get_ad_list/PG_514AC47514A055\';',
+            //                     'leju.conf.defaultUrl = \'http://d3.sina.com.cn/litong/zhitou/leju/news.js\';',
+            //                     'var position = \'couplet\';',
+            //                     'var lejuMedia = leju.getData();',
+            //                     'lejuMedia.then(function (data) {',
+            //                         'var data = data[position][0];',
+            //                         'var win;',
+            //                         'try {',
+            //                             'var parent = window.parent;',
+            //                             'parent.lejuCoupleData = {',
+            //                                 'src : [data.params.bar, data.params.left, data.params.right],',
+            //                                 'link : data.params.link,',
+            //                                 'top : 10,',
+            //                                 'mainW : sinaads_ad_width,',
+            //                                 'mainH : sinaads_ad_height,',
+            //                                 'sideW : 25,',
+            //                                 'sideH : 300',
+            //                             '};',
+            //                             'if (!parent.sinaads_couple) {',
+            //                                 'parent.sinaadToolkit.sio.loadScript(\'./src/plus/couple.js\', function () {',
+            //                                     'parent.sinaads_couple(parent.lejuCoupleData);',
+            //                                 '});',
+            //                             '} else {',
+            //                                 'parent.sinaads_couple(parent.lejuCoupleData);',
+            //                             '}',
+            //                         '} catch (e) {',
+            //                             'alert(e.message);',
+            //                         '}',
+            //                     '});',
+            //                 '\x3c/script\x3e',
+            //                 '\x3c!-- 乐居广告js end --\x3e',
+            //             ].join('')
+            //         ],
+            //         monitor : ["http://leju.com"],
+            //         link : ['http://leju.com']
+            //     }
+            // };
+
             data = window._ssp_ad.data[config.sinaads_ad_pdps]; //兼容方法
             
             if (!data || data === 'nodata') {
@@ -1331,14 +1418,18 @@
             }
 
             var size = data.size.split('*'),
-                mapping = data.mapUrl,
-                pv = data.content.pv || [],
-                monitor = data.content.monitor || [],
                 width = config.sinaads_ad_width || (config.sinaads_ad_width = Number(size[0])),
                 height = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])),
                 oWidth = width,
                 oHeight = height;
 
+            data.content.src = data.content.src instanceof Array ? data.content.src : data.content.src ? [data.content.src] : [];
+            data.content.link = data.content.link instanceof Array ? data.content.link : data.content.link ? [data.content.link] : [];
+            data.content.type = data.content.type instanceof Array ? data.content.type : data.content.type ? [data.content.type] : [];
+            
+            var monitor = data.content.monitor = data.content.monitor instanceof Array ? data.content.monitor : data.content.monitor ? [dta.content.monitor] : [];
+            var pv = data.content.pv = data.content.pv instanceof Array ? data.content.pv : data.content.pv ? [dta.content.pv] : [];
+            var mapping = data.mapUrl instanceof Array ? data.mapUrl : data.mapUrl ? [data.mapUrl] : [];
 
             // 自适应处理 
             if (!!config.sinaads_ad_fullview && !!width) {
@@ -1370,37 +1461,42 @@
             core.array.each(monitor, function (url, i) {
                 monitor[i] = core.monitor.parseTpl(url, config);
             });
-
-            /**
-             * 曝光监测
-             */
-            var pvIframeHTML = core.monitor.createImpressMonitor(pv);
-
-
             /** 
              * 渲染广告
              */
             switch (data.type) {
-                case 'couple' : 
-                    // if (!window.sinaads_couple) {
-                    //     core.sio.loadScript('./src/plus/couple.js', function () {
-                    //         sinaads.couple({
-                    //             src: config.sinaads_ad_content,
-                    //             //[主,左,右]
-                    //             link: config.sinaads_ad_link,
-                    //             //[主,左,右]
-                    //             top: config.sinaads_couple_top || 10,
-                    //             //距离顶部高度
-                    //             mainW: config.sinaads_ad_width,
-                    //             mainH: config.sinaads_ad_height,
-                    //             sideW: 120,
-                    //             sideH: 270,
-                    //             showCoupletMonitor: ""
-                    //         });
-                    //     });
-                    // } else {
-                    //     sinaads_couple(config);
-                    // }
+                case 'couplet' : 
+                    //是跨栏，隐藏掉改区块
+                    element.style.cssText = 'position:absolute;top:-9999px';
+                    //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
+                    if (data.content.src.length > 1) {
+                        //注入跨栏数据
+                        window.sinaads_coupletData = {
+                            src : data.content.src,
+                            type : data.content.type,
+                            link : data.content.link,
+                            top : config.sinaads_couple_top || 0,
+                            mainW : width,
+                            mainH : height,
+                            sideW : 25,
+                            sideH : 300,
+                            monitor : data.content.monitor || []
+                        };
+                        data.content.src = [
+                            [
+                                '\x3cscript\x3e',
+                                    'if (!parent.sinaads_couple) {',
+                                        'parent.sinaadToolkit.sio.loadScript(\'./src/plus/couple.js\', function () {',
+                                            'parent.sinaads_couple(parent.sinaads_coupletData);',
+                                        '});',
+                                    '} else {',
+                                        'parent.sinaads_couple(parent.sinaads_coupletData);',
+                                    '}',
+                                '\x3c/script\x3e'
+                            ].join('')
+                        ];
+                        data.content.type = ['html'];
+                    }
                     break;
                 case 'videoWindow' : 
                     // if (!window.sinaads_videoWindow) {
@@ -1430,22 +1526,24 @@
                     // }
                     break;
                 default : 
-                    _renderWidthEmbedIframe(element, {
-                        uid : config.sinaads_uid,
-                        pdps : config.sinaads_ad_pdps,
-                        pageurl : config.sinaads_page_url,
-                        width : width,
-                        height : height,
-
-                        type : (data.content.type || [])[0] || 'html',
-                        src : (data.content.src || [])[0] || '',
-                        link : (data.content.link || [])[0] || '',
-                        monitor : monitor,
-
-                        pv : pvIframeHTML || ''
-                    });
                     break;
             }
+
+            _renderWidthEmbedIframe(element, {
+                uid : config.sinaads_uid,
+                pdps : config.sinaads_ad_pdps,
+                pageurl : config.sinaads_page_url,
+                width : width,
+                height : height,
+
+                type : data.content.type[0] || 'html',
+                src : data.content.src[0] || '',
+                link : data.content.link[0] || '',
+                monitor : monitor,
+
+                pv : core.monitor.createImpressMonitor(pv) || '',
+                coupletTop : config.sinaads_couplet_top || 0
+            });
 
             /**
              * cookie mapping
@@ -1540,7 +1638,7 @@ window._ssp_ad = {
                 case 'bt' :
                     return 'bp';
                 case 'kl' :
-                    return 'couple';
+                    return 'couplet';
                 default : 
                     return 'embed';
             }

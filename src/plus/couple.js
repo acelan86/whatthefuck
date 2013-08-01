@@ -1,7 +1,7 @@
 (function (window, undefind) {
     //常量定义
     var SINAADS_AD_TYPE = 'sinaads_couple' + window.sinaads_ad_pdps,
-        SINAADS_AD_TYPE_CLOSE_PIC = "http://d1.sina.com.cn/litong/zhitou/pic/close-h.jpg",
+        SINAADS_AD_TYPE_CLOSE_PIC = "http://d1.sina.com.cn/d1images/lmt/close2.gif",
         SINAADS_AD_TYPE_CLOSE_CENTER_PIC = "http://d2.sina.com.cn/d1images/lmt/cls_66x22.gif";
         
     /**
@@ -42,11 +42,11 @@
             margin: "0 auto",
             position: "relative"
         });
-        this.cciWrap = new crtEl("embed",{
+        this.cciWrap = new crtEl("div",{
             width: config.mainW,
             height: config.mainH
         });
-        this.cciWrap.src = config.src[0];
+        this.cciWrap.innerHTML = sinaadToolkit.ad.createHTML(config.type[0] || 'flash', config.src[0], config.mainW, config.mainH, config.link[0], config.monitor || []);
         
         this.ccClose = new crtEl("div",{
             width: 66,
@@ -63,20 +63,20 @@
         //构造容器:左
         this.clWrap = new crtEl("div", {
             width: config.sideW,
-            height: 284,
+            height: config.sideH,
             position: "absolute",
             left: 0,
             top: 0
         });
-        this.cliWrap = new crtEl("embed",{
+        this.cliWrap = new crtEl("div",{
             width: config.sideW,
             height: config.sideH
-        })
-        this.cliWrap.src = config.src[1];
+        });
+        this.cliWrap.innerHTML = sinaadToolkit.ad.createHTML(config.type[1] || 'flash', config.src[1], config.sideW, config.sideH, config.link[1], config.monitor || []);
 
         this.clClose = new crtEl("div",{
-            width: 40,
-            height: 18,
+            width: 25,
+            height: 48,
             position: "absolute",
             top: config.sideH,
             right: 0,
@@ -88,19 +88,20 @@
         //构造容器:右
         this.crWrap = new crtEl("div", {
             width: config.sideW,
-            height: 284,
+            height: config.sideH,
             position: "absolute",
             right: 0,
             top: 0
         });
-        this.criWrap = new crtEl("embed",{
+        this.criWrap = new crtEl("div", {
             width: config.sideW,
             height: config.sideH
         })
-        this.criWrap.src = config.src[2];
+        this.criWrap.innerHTML = sinaadToolkit.ad.createHTML(config.type[2] || 'flash', config.src[2], config.sideW, config.sideH, config.link[2], config.monitor || []);
+        
         this.crClose = new crtEl("div",{
-            width: 40,
-            height: 18,
+            width: 25,
+            height: 48,
             position: "absolute",
             top: config.sideH,
             left: 0,

@@ -1,9 +1,14 @@
 <!doctype html>
 <html>
 	<head>
+		<title>win</title>
 		<meta charset="utf-8" />
 	</head>
 	<body>
-		<script src="../src/core.js"></script>
+		<!-- document.write方式引入脚本顺序问题 -->
+		<script>
+			var a = '<script src="./js.js"></' + 'script><script>alert(\'page load\');window.onload=function(){alert(window.b);}<' + '/script>';
+		</script>
+		<iframe name="iframe" src="javascript:'\x3cscript\x3edocument.write(window.parent.a)\x3c/script\x3e'"></iframe>
 	</body>
 </html>

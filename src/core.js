@@ -1,9 +1,8 @@
-/**
+/*!
  * sinaadToolkit
  * 新浪广告工具包，提供了浏览器判断，渲染，cookie, storage, iframe, 转义等基础操作
- * @param  {[type]} window    [description]
- * @param  {[type]} undefined [description]
- * @return {[type]}           [description]
+ * @author  acelan(xiaobin8[at]staff.sina.com.cn)
+ * @version  1.0.0
  */
 (function (window, undefined) {
 
@@ -18,6 +17,12 @@
          */
         now : function () {
             return new Date().getTime();
+        },
+        /**
+         * 随机数生成，生成一个随机数的36进制表示方法
+         */
+        rnd : function () {
+            return Math.floor(Math.random() * 2147483648).toString(36);
         },
         /**
          * 判断是否是函数
@@ -364,22 +369,23 @@
 
 
 
+
     /** ==================
      * url相关
-     * core.url.getDomain
+     * core.url.getDomain //
      * core.url.createURL
      * core.url.top
      */
     core.url = core.url || (function () {
-        var DOMAIN_REG = /^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/;
+        //var DOMAIN_REG = /^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/;
         return {
-            getDomain : function (url, def_domain) {
-                if (!url) {
-                    return def_domain;
-                }
-                var domain = url.match(DOMAIN_REG);
-                return domain ? domain[0] : def_domain;
-            },
+            // getDomain : function (url, def_domain) {
+            //     if (!url) {
+            //         return def_domain;
+            //     }
+            //     var domain = url.match(DOMAIN_REG);
+            //     return domain ? domain[0] : def_domain;
+            // },
             createURL : function (domain, path, useSSL) {
                 return [useSSL ? "https" : "http", "://", domain, path].join("");
             },
@@ -796,23 +802,100 @@
         },
         createHTML : function (config) {
             var html = [];
+
+            //将iframe的name设置成跟id一样，如果没有的配置name的话
+            config.name = config.name || config.id;
+
             core.object.map(config, function(value, key) {
                 html.push(" " + key + '="' + (null == value ? "" : value) + '"')
             });
             return "<iframe" + html.join("") + "></iframe>";
         },
         fill : function (iframe, content) {
-            try {
-                var doc = iframe.contentWindow.document;
-                doc.open();
-                doc.write(content);
-                iframe.onload = function () {
+            var doc,
+                ie = core.browser.ie;
+            //ie
+            if (ie) {
+                //是否可以获取到iframe的document
+                try {
+                    doc = !!iframe.contentWindow.document
+                } catch(e) {
+                    doc = false;
+                }
+                if (doc) {
                     try {
-                        this.contentWindow.document.close();
-                    } catch (e) {}
-                };
-                //doc.close(); //这里不close，防止后面的document.write无法生效， 在iframe onload的时候关闭
-            } catch (e) {}
+                        //ie > 6
+                        if (ie > 6) {
+                            var k;
+                            i: {
+                                //ie 7 - 10
+                                if (ie > 7 && ie <= 10) {
+                                    for (var i = 0; i < content.length; ++i) {
+                                        if (127 < content.charCodeAt(i)) {
+                                            k = true;
+                                            break i;
+                                        }
+                                    }
+                                }
+                                k = false;
+                            }
+                            if (k) {
+                                var content = unescape(encodeURIComponent(content));
+                                var mid = Math.floor(content.length / 2);
+                                k = [];
+                                for (var i = 0; i < mid; ++i) {
+                                    k[i] = String.fromCharCode(256 * content.charCodeAt(2 * i + 1) + content.charCodeAt(2 * i));
+                                }
+                                1 == content.length % 2 && (k[mid] = content.charAt(content.length - 1));
+                                content = k.join("");
+                            }
+                            window.frames[iframe.name].contents = content;
+                            iframe.src = 'javascript:window["contents"]';
+                        // ie < 6
+                        } else {
+                            window.frames[iframe.name].contents = content;
+                            iframe.src = 'javascript:document.write(window["contents"]);/* document.close(); */';
+                        }
+                    } catch(e) {
+                        alert("无法ie的iframe中写入内容: " + e.message);
+                    }
+                } else {
+                    /**
+                     * ie下，且iframe.contentWindow.document无法取到，跨域
+                     * 比如宿主页面设置了document.domain, 而iframe没有设置
+                     * 在iframe中设置document.domain  
+                     */
+                    try {
+                        var key = "sinaads-ad-iframecontent-" + core.rnd();
+                        window[key] = content;
+                        content = 'var adContent = window.parent["' + key + '"];window.parent["' + key + '"] = null;document.write(adContent);';
+                        content = core.browser.ie && core.browser.ie <= 6 ? 
+                             "window.onload = function() {"
+                                + "document.write(\\'<sc\\' + \\'ript type=\"text/javascript\">document.domain = \"" + document.domain + '";' + content + "<\\/scr\\' + \\'ipt>\\');"
+                                + "document.close();"
+                            + "};" :
+                             'document.domain = "' + document.domain + '";'
+                            + content
+                            + "document.close();";
+
+                        iframe.src = 'javascript:\'<script type="text/javascript">' + content + "\x3c/script>'";
+                    } catch(e) {
+                        window[key] = null;
+                        alert("无法通过修改document.domain的方式来填充IE下的iframe内容: " + e.message);
+                    }
+                }
+            //标准浏览器，标准方法
+            } else {
+                try {
+                    doc = iframe.contentWindow ? iframe.contentWindow.document : iframe.contentDocument, 
+                    core.browser.firefox 
+                    && doc.open("text/html", "replace");
+                       doc.write(content);
+                       doc.close();
+                } catch(e) {
+                    alert("无法使用标准方法填充iframe的内容: " + e.message);
+                }
+            }
         }
     };
 
@@ -934,7 +1017,7 @@
                         html = [
                             '<div style="width:' + width + ';height:' + height + ';position:relative;overflow:hidden;">',
                                 html,
-                                '<a style="position:absolute;background:#fff;opacity:0;_filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="' + (core.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '></a>',
+                                '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="' + (core.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '></a>',
                             '</div>'
                         ].join('');
                     }
@@ -947,7 +1030,7 @@
                     html = core.iframe.createHTML(config);
                     break;
                 default : 
-                    html = src;
+                    html = src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>');
                     break;
             }
             return html;
@@ -1065,7 +1148,7 @@
                     '</ind>'
                 ].join('');
 
-                container.style.cssText += ';overflow:hidden;display:block;';
+                container.style.cssText += ';display:block;overflow:hidden;';
 
                 //context转成js代码描述，用于注入到iframe中
                 context = _objToJsVarCode(context);
@@ -1086,7 +1169,7 @@
      * core.seed 种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
      */
     if (!core.seed) {
-        var KEY = 'rotatecount';
+        var KEY = 'sinaadtoolkit_seed_core';
         core.seed = parseInt(core.storage.get(KEY), 10) || Math.floor(Math.random() * 100);
         //大于1000就从0开始，防止整数过大
         core.storage.set(KEY, core.seed > 1000 ? 0 : ++core.seed);

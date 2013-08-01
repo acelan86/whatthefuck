@@ -1,1 +1,2 @@
-document.write('<div>我是广告' + sinaads_ad_pdps + '</div>');
+alert('js load');
+b = 1;
