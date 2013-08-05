@@ -1,103 +1,128 @@
-/**
+/*!
  * sinaadToolkit
  * 新浪广告工具包，提供了浏览器判断，渲染，cookie, storage, iframe, 转义等基础操作
- * @param  {[type]} window    [description]
- * @param  {[type]} undefined [description]
- * @return {[type]}           [description]
+ * @author  acelan(xiaobin8[at]staff.sina.com.cn)
+ * @version  1.0.0
  */
 (function (window, undefined) {
+
     var core = window.sinaadToolkit = window.sinaadToolkit || {
+        /**
+         * 工具包资源地址
+         */
+        TOOLKIT_URL : 'http://d1.sina.com.cn/litong/zhitou/sinaads/src/core.js',
+        /**
+         * 获取当前时间戳
+         * @return {[type]} [description]
+         */
         now : function () {
-            return new Date().getTime().toString(36);
+            return new Date().getTime();
         },
+        /**
+         * 随机数生成，生成一个随机数的36进制表示方法
+         */
+        rnd : function () {
+            return Math.floor(Math.random() * 2147483648).toString(36);
+        },
+        /**
+         * 判断是否是函数
+         * @param  {[type]} source [description]
+         * @return {[type]}        [description]
+         */
         isFunction : function (source) {
             return '[object Function]' == Object.prototype.toString.call(source);
         },
+        /**
+         * 判断是否是字符串
+         * @param  {[type]} source [description]
+         * @return {[type]}        [description]
+         */
         isString : function (source) {
            return '[object String]' == Object.prototype.toString.call(source);
         }
     };
 
-    /**
+    /** =============
      * 判断浏览器类型和特性的属性
      */
-    core.browser = core.browser || {
-        chrome : /chrome\/(\d+\.\d+)/i.test(navigator.userAgent) ? + RegExp['\x241'] : undefined,
-        firefox : /firefox\/(\d+\.\d+)/i.test(navigator.userAgent) ? + RegExp['\x241'] : undefined,
-        ie : /msie (\d+\.\d+)/i.test(navigator.userAgent) ? (document.documentMode || + RegExp['\x241']) : undefined,
-        isGecko : /gecko/i.test(navigator.userAgent) && !/like gecko/i.test(navigator.userAgent),
-        isStrict : document.compatMode == "CSS1Compat",
-        isWebkit : /webkit/i.test(navigator.userAgent),
-        opera : /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.test(navigator.userAgent) ?  + ( RegExp["\x246"] || RegExp["\x242"] ) : undefined
+    core.browser = core.browser || (function (ua) {
+        var browser =   {
+            android : /(Android)\s+([\d.]+)/i.test(ua),
+            ipad : /(iPad).*OS\s([\d_]+)/i.test(ua),
+            webos : /(webOS|hpwOS)[\s\/]([\d.]+)/i.test(ua),
+            kindle : /Kindle\/([\d.]+)/i.test(ua),
+            silk : /Silk\/([\d._]+)/i.test(ua),
+            blackberry : /(BlackBerry).*Version\/([\d.]+)/i.test(ua),
+            bb10 : /(BB10).*Version\/([\d.]+)/i.test(ua),
+            rimtabletos : /(RIM\sTablet\sOS)\s([\d.]+)/i.test(ua),
+            playbook : /PlayBook/i.test(ua),
+            chrome : /chrome\/(\d+\.\d+)/i.test(ua) ? + RegExp['\x241'] : undefined,
+            firefox : /firefox\/(\d+\.\d+)/i.test(ua) ? + RegExp['\x241'] : undefined,
+            ie : /msie (\d+\.\d+)/i.test(ua) ? (document.documentMode || + RegExp['\x241']) : undefined,
+            isGecko : /gecko/i.test(ua) && !/like gecko/i.test(ua),
+            isStrict : document.compatMode == "CSS1Compat",
+            isWebkit : /webkit/i.test(ua),
+            opera : /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.test(ua) ?  + ( RegExp["\x246"] || RegExp["\x242"] ) : undefined
+        };
+
+        browser.iphone = !browser.ipad && /(iPhone\sOS)\s([\d_]+)/i.test(ua);
+        browser.touchpad = browser.webos && /TouchPad/.test(ua);
+
+        browser.tablet = !!(browser.ipad || browser.playbook || (browser.android && !/Mobile/.test(ua)) || (browser.firefox && /Tablet/.test(ua)));
+        browser.phone  = !!(!browser.tablet && (browser.android || browser.iphone || browser.webos || browser.blackberry || browser.bb10 || (browser.chrome && /Android/.test(ua)) || (browser.chrome && /CriOS\/([\d.]+)/.test(ua)) || (browser.firefox && /Mobile/.test(ua))));
+
+        try {
+            if (/(\d+\.\d+)/.test(external.max_version)) {
+                browser.maxthon = + RegExp['\x241'];
+            }
+        } catch (e) {}
+        browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp['\x241'] || RegExp['\x242']) : undefined;
+        browser.isSupportFixed = !browser.ie || browser.ie >=7;
+
+        return browser;
+    })(navigator.userAgent);
+
+
+
+    /** =======================
+     * 数组相关处理
+     * core.array.remove
+     * core.array.each
+     */
+    core.array = core.array = {
+        each : function (source, iterator, thisObject) {
+            var returnValue, 
+                item, 
+                i, 
+                len = source.length;
+            
+            if ('function' == typeof iterator) {
+                for (i = 0; i < len; i++) {
+                    item = source[i];
+                    //TODO
+                    //此处实现和标准不符合，标准中是这样说的：
+                    //If a thisObject parameter is provided to forEach, it will be used as the this for each invocation of the callback. If it is not provided, or is null, the global object associated with callback is used instead.
+                    returnValue = iterator.call(thisObject || source, item, i);
+            
+                    if (returnValue === false) {
+                        break;
+                    }
+                }
+            }
+            return source;
+        }
     };
 
-    try {
-        if (/(\d+\.\d+)/.test(external.max_version)) {
-            core.browser.maxthon = + RegExp['\x241'];
-        }
-    } catch (e) {}
 
-    (function(){
-        var ua = navigator.userAgent;
-        core.browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp['\x241'] || RegExp['\x242']) : undefined;
-    })();
-
-    core.browser.isSupportFixed = !core.browser.ie || core.browser.ie >=7;
-
-
-    /**
-     * 数组相关处理
-     * @type {Object}
-     */
-    // var array = core.array = {
-    //     remove : function (source, match) {
-    //         var len = source.length;
-                
-    //         while (len--) {
-    //             if (len in source && source[len] === match) {
-    //                 source.splice(len, 1);
-    //             }
-    //         }
-    //         return source;
-    //     },
-    //     each : function (source, iterator, thisObject) {
-    //         var returnValue, item, i, len = source.length;
-            
-    //         if ('function' == typeof iterator) {
-    //             for (i = 0; i < len; i++) {
-    //                 item = source[i];
-    //                 //TODO
-    //                 //此处实现和标准不符合，标准中是这样说的：
-    //                 //If a thisObject parameter is provided to forEach, it will be used as the this for each invocation of the callback. If it is not provided, or is null, the global object associated with callback is used instead.
-    //                 returnValue = iterator.call(thisObject || source, item, i);
-            
-    //                 if (returnValue === false) {
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //         return source;
-    //     }
-    // };
-
-
-    /**
+    /** ==================
      * 字符串相关处理
+     * core.string.encodeHTML
+     * core.string.decodeHTML
+     * core.string.formalString
      */
     core.string = core.string || (function () {
-        var ESCAPE_MAP = {
-                '"'     : '\\"',
-                "\\"    : "\\\\", 
-                "/"     : "\\/",
-                "\b"    : "\\b",
-                "\f"    : "\\f",
-                "\n"    : "\\n",
-                "\r"    : "\\r",
-                "\t"    : "\\t",
-                "\x0B"  : "\\u000b"
-            },
-            //字符串中非中文字符串
-            STR_REG =  /\uffff/.test("\uffff") ? (/[\\\"\x00-\x1f\x7f-\uffff]/g) : (/[\\\"\x00-\x1f\x7f-\xff]/g);
+        var STR_REG =  /\uffff/.test("\uffff") ? (/[\\\"\x00-\x1f\x7f-\uffff]/g) : (/[\\\"\x00-\x1f\x7f-\xff]/g);
+        
         return {
             //转义html
             encodeHTML : function (source) {
@@ -119,33 +144,13 @@
                 return str.replace(/&#([\d]+);/g, function(_0, _1){
                     return String.fromCharCode(parseInt(_1, 10));
                 });
-            },
-            /**
-             * 转义字符串中的特殊字符
-             */
-            formalString : function (str) {
-                var ret = [];
-                ret.push(str.replace(STR_REG, function(s) {
-                    //如果再需要转义的字符表中，替换成转移字符对应的值
-                    if (s in ESCAPE_MAP) {
-                        return ESCAPE_MAP[s];
-                    }
-                    //否则转成对应的unicode码
-                    var alphaCode = s.charCodeAt(0), 
-                        unicodePerfix = "\\u";
-                    //需要增加几位0来补位
-                    16 > alphaCode ? unicodePerfix += "000" : 256 > alphaCode ? unicodePerfix += "00" : 4096 > alphaCode && (unicodePerfix += "0");
-
-                    //保存转移过的值到ESCAPE_MAP提高转义效率，同时返回进行替换
-                    return ESCAPE_MAP[s] = unicodePerfix + alphaCode.toString(16);
-                }));
-                return '"' + ret.join('') + '"';
             }
         };
     })();
 
-    /**
+    /** ================
      * object相关
+     * core.object.map
      */
     core.object = core.object || {
         map : function (source, iterator) {
@@ -159,8 +164,11 @@
         }
     };
 
-    /**
+    /** ====================
      * cookie相关
+     * core.cookie.get
+     * core.cookie.set
+     * core.cookie.remove
      */
     core.cookie = core.cookie || {
         _isValidKey : function (key) {
@@ -218,8 +226,11 @@
     };
 
 
-    /**
+    /** ===================
      * 本地存储对象，如果是ie8-，使用userData, 否则使用localstorage, 否则使用cookie
+     * core.storage.get
+     * core.storage.set
+     * core.storage.remove
      */
     core.storage = core.storage || (function () {
         var UserData = {
@@ -270,7 +281,7 @@
                 return window.localStorage.getItem(key);
             },
             setItem : function (key, value, expires) {
-                window.localStorage.setItem(key, value + (expires ? ';expires=' + (new Date().getTime() + expires) : ''));
+                window.localStorage.setItem(key, value + (expires ? ';expires=' + (core.now() + expires) : ''));
             },
             removeItem : function (key) {
                 window.localStorage.removeItem(key);
@@ -296,7 +307,7 @@
                 if (value) {
                     value = value.split(';');
                     //有过期时间
-                    if (value[1] && new Date().getTime() > parseInt(value[1].split('=')[1], 10)) {
+                    if (value[1] && core.now() > parseInt(value[1].split('=')[1], 10)) {
                         storage.removeItem(key);
                         return null;
                     } else {
@@ -316,29 +327,40 @@
 
 
 
-    /**
+    /** ==================
      * url相关
-     * @type {[type]}
+     * core.url.getDomain //
+     * core.url.createURL
+     * core.url.top
      */
     core.url = core.url || (function () {
-        var DOMAIN_REG = /^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/;
+        //var DOMAIN_REG = /^([\w-]+\.)*([\w-]{2,})(\:[0-9]+)?$/;
         return {
-            getDomain : function (url, def_domain) {
-                if (!url) {
-                    return def_domain;
-                }
-                var domain = url.match(DOMAIN_REG);
-                return domain ? domain[0] : def_domain;
-            },
+            // getDomain : function (url, def_domain) {
+            //     if (!url) {
+            //         return def_domain;
+            //     }
+            //     var domain = url.match(DOMAIN_REG);
+            //     return domain ? domain[0] : def_domain;
+            // },
             createURL : function (domain, path, useSSL) {
                 return [useSSL ? "https" : "http", "://", domain, path].join("");
-            }
+            },
+            top : (function () {
+                var top;
+                try {
+                    top = window.top.location.href;
+                } catch (e) {}
+                return top || document.referrer || window.location.href;
+            })()
         };
     })();
 
     /**
-     * server io
-     * @type {Object}
+     * serveer io
+     * core.sio.loadScript
+     * core.sio.jsonp
+     * core.sio.log
      */
     core.sio = core.sio || (function () {
         function _createScriptTag(scr, url, charset) {
@@ -476,165 +498,63 @@
         };
     })();
 
+    /** ==================
+     * 监测相关
+     * core.monitor.parseTpl
+     * core.monitor.createImpressMonitor
+     * core.monitor.createClickMonitor
+     */
+    core.monitor  = core.monitor || {
 
-    core.swf = core.swf || {
-        version : (function () {
-            var n = navigator;
-            if (n.plugins && n.mimeTypes.length) {
-                var plugin = n.plugins["Shockwave Flash"];
-                if (plugin && plugin.description) {
-                    return plugin.description
-                            .replace(/([a-zA-Z]|\s)+/, "")
-                            .replace(/(\s)+r/, ".") + ".0";
-                }
-            } else if (window.ActiveXObject && !window.opera) {
-                for (var i = 12; i >= 2; i--) {
-                    try {
-                        var c = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + i);
-                        if (c) {
-                            var version = c.GetVariable("$version");
-                            return version.replace(/WIN/g,'').replace(/,/g,'.');
-                        }
-                    } catch(e) {}
-                }
-            }
-        })(),
-        getMovie : function (name, context) {
-            context = context || window;
-            //ie9下, Object标签和embed标签嵌套的方式生成flash时,
-            //会导致document[name]多返回一个Object元素,而起作用的只有embed标签
-            var movie = context.document[name],
-                ret;
-            return core.browser.ie == 9 ?
-                movie && movie.length ? 
-                    (ret = core.array.remove(core.toArray(movie), function(item){
-                        return item.tagName.toLowerCase() != "embed";
-                    })).length == 1 ? ret[0] : ret
-                    : movie
-                : movie || context[name];
-        },
-        createHTML : function (options) {
-            options = options || {};
-            var version = core.swf.version, 
-                needVersion = options['ver'] || '6.0.0', 
-                vUnit1, vUnit2, i, k, len, item, tmpOpt = {},
-                encodeHTML = core.string.encodeHTML;
-            
-            // 复制options，避免修改原对象
-            for (k in options) {
-                tmpOpt[k] = options[k];
-            }
-            options = tmpOpt;
-            
-            // 浏览器支持的flash插件版本判断
-            if (version) {
-                version = version.split('.');
-                needVersion = needVersion.split('.');
-                for (i = 0; i < 3; i++) {
-                    vUnit1 = parseInt(version[i], 10);
-                    vUnit2 = parseInt(needVersion[i], 10);
-                    if (vUnit2 < vUnit1) {
-                        break;
-                    } else if (vUnit2 > vUnit1) {
-                        return ''; // 需要更高的版本号
-                    }
-                }
-            } else {
-                return ''; // 未安装flash插件
-            }
-            
-            var vars = options['vars'],
-                objProperties = ['classid', 'codebase', 'id', 'width', 'height', 'align'];
-            
-            // 初始化object标签需要的classid、codebase属性值
-            options['align'] = options['align'] || 'middle';
-            options['classid'] = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000';
-            options['codebase'] = 'http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0';
-            options['movie'] = options['url'] || '';
-            delete options['vars'];
-            delete options['url'];
-            
-            // 初始化flashvars参数的值
-            if ('string' == typeof vars) {
-                options['flashvars'] = vars;
-            } else {
-                var fvars = [];
-                for (k in vars) {
-                    item = vars[k];
-                    fvars.push(k + "=" + encodeURIComponent(item));
-                }
-                options['flashvars'] = fvars.join('&');
-            }
-            
-            // 构建IE下支持的object字符串，包括属性和参数列表
-            var str = ['<object '];
-            for (i = 0, len = objProperties.length; i < len; i++) {
-                item = objProperties[i];
-                str.push(' ', item, '="', encodeHTML(options[item]), '"');
-            }
-            str.push('>');
-            var params = {
-                'wmode'             : 1,
-                'scale'             : 1,
-                'quality'           : 1,
-                'play'              : 1,
-                'loop'              : 1,
-                'menu'              : 1,
-                'salign'            : 1,
-                'bgcolor'           : 1,
-                'base'              : 1,
-                'allowscriptaccess' : 1,
-                'allownetworking'   : 1,
-                'allowfullscreen'   : 1,
-                'seamlesstabbing'   : 1,
-                'devicefont'        : 1,
-                'swliveconnect'     : 1,
-                'flashvars'         : 1,
-                'movie'             : 1
+        //将监控url中的__xxx__变量名替换成正确的值
+        parseTpl : (function (monitorUrl, data) {
+            var reg = /\{__([a-zA-Z0-9]+(_*[a-zA-Z0-9])*)__\}/g;
+
+            return function (monitorUrl, data) {
+                if (!monitorUrl) return '';
+                return monitorUrl.replace(reg, function (s1, s2) {
+                    return data[s2] || s1;
+                });
             };
-            
-            for (k in options) {
-                item = options[k];
-                k = k.toLowerCase();
-                if (params[k] && (item || item === false || item === 0)) {
-                    str.push('<param name="' + k + '" value="' + encodeHTML(item) + '" />');
-                }
+        })(),
+        //创建曝光监测
+        createImpressMonitor : function (pvs) {
+            var html = [];
+
+            core.array.each(pvs, function (pv, i) {
+                var config = {};
+                core.iframe.init(config, 1, 1, false);
+                config.src = pv;
+                config.style = 'display:none;';
+                html.push(core.iframe.createHTML(config));
+            });
+            return html.join('');
+        },
+        //创建点击监测
+        createClickMonitor : function (type, monitor) {
+            if (!monitor) {
+                return;
             }
-            
-            // 使用embed时，flash地址的属性名是src，并且要指定embed的type和pluginspage属性
-            options['src']  = options['movie'];
-            options['name'] = options['id'];
-            delete options['id'];
-            delete options['movie'];
-            delete options['classid'];
-            delete options['codebase'];
-            options['type'] = 'application/x-shockwave-flash';
-            options['pluginspage'] = 'http://www.macromedia.com/go/getflashplayer';
-            
-            
-            // 构建embed标签的字符串
-            str.push('<embed');
-            // 在firefox、opera、safari下，salign属性必须在scale属性之后，否则会失效
-            // 经过讨论，决定采用BT方法，把scale属性的值先保存下来，最后输出
-            var salign;
-            for (k in options) {
-                item = options[k];
-                if (item || item === false || item === 0) {
-                    if ((new RegExp("^salign\x24", "i")).test(k)) {
-                        salign = item;
-                        continue;
+            var monitor = 'string' === typeof monitor ? [monitor] : monitor,
+                ret = [],
+                comma = '';
+
+            core.array.each(monitor, function(url, i) {
+                var code = '';
+
+                if (url) {
+                    switch (type) {
+                        case 'image' :
+                            code = 'sinaadToolkit.sio.log(\'' + url + '\')';
+                            comma = ';'
+                            break;
+                        default :
+                            break;
                     }
-                    
-                    str.push(' ', k, '="', encodeHTML(item), '"');
-                }
-            }
-            
-            if (salign) {
-                str.push(' salign="', encodeHTML(salign), '"');
-            }
-            str.push('></embed></object>');
-            
-            return str.join('');
+                    code && ret.push(code);
+                } 
+            });
+            return ret.join(comma);
         }
     };
 
@@ -655,126 +575,64 @@
         },
         createHTML : function (config) {
             var html = [];
+
+            //将iframe的name设置成跟id一样，如果没有的配置name的话
+            config.name = config.name || config.id;
+
             core.object.map(config, function(value, key) {
                 html.push(" " + key + '="' + (null == value ? "" : value) + '"')
             });
             return "<iframe" + html.join("") + "></iframe>";
-        },
-        fill : function (iframe, content) {
-            try {
-                var doc = iframe.contentWindow.document;
-                doc.open();
-                doc.write(content);
-                iframe.onload = function () {
-                    try {
-                        this.contentWindow.document.close();
-                    } catch (e) {}
-                };
-                //doc.close(); //这里不close，防止后面的document.write无法生效， 在iframe onload的时候关闭
-            } catch (e) {}
         }
     };
 
 
+
+    /** ==============
+     * 广告渲染相关
+     * core.ad.createHTML
+     */
     core.ad = core.ad || {
-        //创建监测链接
-        createMonitor : function (type, monitor) {
-            if (!monitor) {
-                return;
-            }
-            var monitor = 'string' === typeof monitor ? [monitor] : monitor,
-                url,
-                ret = [],
-                code = '',
-                comma = '';
-            for (var i = 0, len = monitor.length; i < len; i++) {
-                url = monitor[i];
-                if (url) {
-                    switch (type) {
-                        case 'image' :
-                        case 'flash' :
-                            code = 'sinaadToolkit.sio.log(\'' + url + '\')';
-                            comma = ';'
-                            break;
-                        case 'adbox' :
-                            code = 'api_exu=' + encodeURIComponent(url);
-                            comma = '&';
-                            break;
-                        default :
-                            break;
-                    }
-                    code && ret.push(code);
-                } 
-            }
-            return ret.join(comma);
-        },
         createHTML : function (type, src, width, height, link, monitor) {
             var html = '',
                 config,
                 monitorCode;
 
-            //适配adbox链接
-            if (type === 'url' && src.indexOf('adbox.sina.com.cn/ad/') > 0) {
-                type = 'adbox';
-            }
-
-            monitorCode = core.ad.createMonitor(type, monitor);
+            monitorCode = core.monitor.createClickMonitor(type, monitor);
             switch (type) {
-                case 'js' :
-                    html = ['<', 'script src="', src, '"></','script>'].join('');
-                    break;
-                case 'url' : 
-                    config = {};
-                    core.iframe.init(config, width, height, false);
-                    config.src = src;
-                    html = core.iframe.createHTML(config);
-                    break;
                 case 'image' : 
-                    html = '<img src="' + src + '" style="width:' + width + 'px;height:' + height + 'px" alt="' + src + '"/>';
-                    html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="alert(\'click\');try{' + monitorCode + '}catch(e){alert(e);}"' : '') + '>' + html + '</a>' : html;
+                    html = '<img border="0" src="' + src + '" style="width:100%;border:0" alt="' + src + '"/>';
+                    html = link ? '<a href="' + link + '" target="' + (core.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + html + '</a>' : html;
                     break;
                 case 'text' : 
                     html = '<span>' + src + '</span>';
                     break;
-                case 'flash' : 
-                    html = core.swf.createHTML({
-                        url : src,
-                        width : width,
-                        height : height,
-                        wmode : 'transparent'
-                    });
-                    if (link) {
-                        html = [
-                            '<div style="width:' + width + 'px;height:' + height + 'px;position:relative;overflow:hidden;">',
-                                html,
-                                '<a style="position:absolute;background:#fff;opacity:0;_filter:alpha(opacity=0);width:' + width + 'px;height:' + height + 'px;left:0;top:0" href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="alert(\'click\');try{' + monitorCode + '}catch(e){alert(e)}"' : '') + '></a>',
-                            '</div>'
-                        ].join('');
-                    }
-                    break;
-                case 'adbox' :
-                    config = {};
-                    core.iframe.init(config, width, height, false);
-                    config.src = src;
-                    monitorCode && (config.name = monitorCode);
-                    html = core.iframe.createHTML(config);
-                    break;
-                default : 
-                    html = src;
-                    break;
+                default : break;
             }
             return html;
         }
     };
 
-    /* core.seed 种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值 */
+    /**
+     * core.seed 种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
+     */
     if (!core.seed) {
-        var KEY = 'rotatecount';
-        core.seed = core.storage.get(KEY) || Math.floor(Math.random() * 100);
-        core.storage.set(KEY, ++core.seed);
+        var KEY = 'sinaadtoolkit_seed';
+        core.seed = parseInt(core.storage.get(KEY), 10) || Math.floor(Math.random() * 100);
+        //大于1000就从0开始，防止整数过大
+        core.storage.set(KEY, core.seed > 1000 ? 0 : ++core.seed);
     }
 
 })(window);
+
+
+
+
+
+
+
+
+
 
 
 /**
@@ -785,99 +643,10 @@
  * @return {[type]}           [description]
  */
 (function (window, undefined) {
-    var IMPRESS_URL = 'http://123.126.53.109/impress.php',
-    	SINAAD_TOOLKIT_URL = 'http://d1.sina.com.cn/litong/zhitou/sinaads/src/core.js';
+    var IMPRESS_URL = 'http://123.126.53.109/impress.php';
 
-    var now = new Date().getTime(), //加载sinaads的时间
-        core = window.sinaadToolkit;
-
-    /**
-     * 将对象转换成字符串形式表示
-     */
-    function _stringify(value, arr) {
-        switch (typeof value) {
-            case "string":
-                arr.push(core.string.formalString(value));
-                break;
-            case "number":
-                arr.push(isFinite(value) && !isNaN(value) ? value : "null");
-                break;
-            case "boolean":
-                arr.push(value);
-                break;
-            case "undefined":
-                arr.push("null");
-                break;
-            case "object":
-                //is Null
-                if (null == value) {
-                    arr.push("null");
-                    break;
-                }
-                //is Array
-                if (value instanceof Array) {
-                    var len = value.length,
-                        comma;
-                    arr.push("[");
-                    for (comma = "", i = 0; i < len; i++) {
-                        arr.push(comma);
-                        _stringify(value[i], arr);
-                        comma = ",";
-                    }
-                    arr.push("]");
-                    break;
-                }
-
-                //is Object
-                arr.push("{");
-                var comma = "",
-                    v;
-                for (var key in value) {
-                    if (value.hasOwnProperty(key)) {
-                        v = value[key];
-                        if ("function" != typeof v) { 
-                            arr.push(comma);
-                            arr.push(key); 
-                            arr.push(":");
-                            _stringify(v, arr);
-                            comma = ",";
-                        }
-                    }
-                }
-                arr.push("}");
-                break;
-            case "function":
-                break;
-            default:
-                //throw Error("未知的值类型: " + typeof value);
-        }
-    }
-
-
-    
-
-    /**
-     * 将config的属性值转换成变量声明代码
-     */
-    function _configToJsVarCode(config) {
-        var code = [];
-
-        core.object.map(config, function(value, key) {
-            if (null != value) {
-                var tmp = [];
-                try {
-                    _stringify(value, tmp);
-                    tmp = tmp.join("");
-                } catch (k) {
-                }
-                tmp && code.push(key, "=", tmp, ";");
-            }
-        });
-
-        return code.join("");
-    }
-
-
+    var core = window.sinaadToolkit,
+        now = core.now(); //加载sinaads的时间
 
     /**
      * 判断是否为sina商业广告节点且为未完成状态
@@ -906,65 +675,13 @@
     }
 
     function _renderWidthEmbedIframe(element, config) {
-        //embed Iframe
-        var iframeId = 'sinaads_iframe_' + config.sinaads_uid,
-            iframeConfig = {};
-        core.iframe.init(iframeConfig, config.sinaads_ad_width, config.sinaads_ad_height, false);
-        iframeConfig.id = iframeId;
-        iframeConfig.src = 'javascript:\'<html><body style=background:transparent;></body></html>\'';
-        iframeConfig.style = "float:left;";
-        element.innerHTML = core.iframe.createHTML(iframeConfig);
-        element.style.overflow = 'hidden';
-        element.style.display = 'block';
-
-
-        //pv iframe
-        var pvIframeHTML = (function (pvs) {
-            var html = [],
-                config;
-
-            for (var i = 0, len = pvs.length; i < len; i++) {
-                config = {};
-                core.iframe.init(config, 1, 1, false);
-                config.src = pvs[i];
-                config.style = 'display:none;';
-                html.push(core.iframe.createHTML(config));
-            }
-            return html.join('');
-        })(config.sinaads_ad_pv);
-
-        //传递到内嵌iframe中的变量
-        var varDecalareCode = _configToJsVarCode({
-            sinaads_uid : config.sinaads_uid,
-            sinaads_async_iframe_id : iframeId,
-            sinaads_start_time : now,
-            sinaads_span_time : new Date().getTime() - now,
-            sinaads_ad_pdps : config.sinaads_ad_pdps,
-            sinaads_ad_width : config.sinaads_ad_width,
-            sinaads_ad_height : config.sinaads_ad_height,
-            sinaads_page_url : config.sinaads_page_url
-        });
-
-
-        //广告内容
-        var fragment = core.ad.createHTML(
-            config.sinaads_ad_content_type[0],
-            config.sinaads_ad_content[0],
-            config.sinaads_ad_width,
-            config.sinaads_ad_height,
-            config.sinaads_ad_link[0],
-            config.sinaads_ad_monitor
-        );
-
-        //构造iframe实体
-        core.iframe.fill(document.getElementById(iframeId), [
-            '<!doctype html><html><body style="background:transparent">',
-                pvIframeHTML, //这里应该是曝光记录 
-                '<', 'script>', varDecalareCode, '</', 'script>',
-                '<', 'script src="' + SINAAD_TOOLKIT_URL + '" charset="utf-8"></', 'script>',
-                fragment,
-            '</body></html>'
-        ].join(""));
+        element.innerHTML = [
+            '<ins style="margin:0px auto;display:block;">',
+                config.pv,
+                core.ad.createHTML(config.type, config.src, config.width, config.height, config.link, config.monitor),
+            '</ind>'
+        ].join('');
+        element.style.cssText += ';display:block;overflow:hidden;';
     }
     /**
      * 初始化广告对象
@@ -1006,14 +723,56 @@
             }
         }
 
-        //判断是否是广告位支持的格式
-        //@todo 控制某个广告位只支持加载某种类型广告
-
-
         //获取page_url 广告所在页面url
-        var page_url = config.sinaads_page_url = config.sinaads_page_url || ((window.top === window) ?  window.document.URL : window.document.referrer);
+        var page_url = config.sinaads_page_url = config.sinaads_page_url || ((window.top === window.self) ?  window.document.URL : window.document.referrer);
 
-        core.sio.loadScript(IMPRESS_URL + '?adunitid=' + config.sinaads_ad_pdps + '&rotate_count=' + core.seed +'&TIMESTAMP=' + core.now() +'&referral=' + encodeURIComponent(page_url), function (data) {
+        
+        //获取定向关键词
+        var metas = document.getElementsByTagName('head')[0].getElementsByTagName('meta'),
+            targeting = {
+                keywords : '', //关键字定向
+                template : '', //模版定向
+                entry : ''     //入口定向
+            };
+        core.array.each(metas, function (meta, i) {
+            var entry = '',
+                meta = metas[i];
+            if (meta.name.toLowerCase() === 'keywords') {
+                targeting.keywords += ',' + meta.content;
+            } else if (meta.name.toLowerCase() === 'templateTargeting') {
+                targeting.template += ',' + meta.conrent;
+            }
+            if (entry = core.cookie.get('sinaads_entry_targeting')) {
+                targeting.entry = entry;
+            }
+        });
+
+
+        var params = [
+            'adunitid=' + config.sinaads_ad_pdps,
+            'rotate_count=' + core.seed,
+            'TIMESTAMP=' + core.now().toString(36),
+            'referral=' + encodeURIComponent(page_url),
+            'tgkw=' + (targeting.keywords ? encodeURIComponent(targeting.keywords) : ''),
+            'tgtpl=' + (targeting.template ? encodeURIComponent(targeting.template) : ''),
+            'tgentry=' + (targeting.entry ? encodeURIComponent(targeting.entry) : '')
+        ];
+        
+        core.sio.loadScript(IMPRESS_URL + '?' + params.join('&'), function (data) {
+
+            //测试移动端数据
+            // window._ssp_ad.data["PDPS000000045274"] = {
+            //     size : "320*35",
+            //     type : 'embed',
+            //     content : {
+            //         pv : ["http://baidu.com/?mobi", "http://baidu.com/?mobi"],
+            //         type : 'image',
+            //         src : ["http://d1.sina.com.cn/litong/zhitou/test/images/dbc92931.png"],
+            //         monitor : ["http://mobi.com"],
+            //         link : ['http://mobi.com']
+            //     }
+            // };
+
 
             data = window._ssp_ad.data[config.sinaads_ad_pdps]; //兼容方法
             
@@ -1023,71 +782,57 @@
             }
 
             var size = data.size.split('*'),
-                mapping = data.mapUrl;
-            config.sinaads_ad_width = config.sinaads_ad_width || Number(size[0]);
-            config.sinaads_ad_height = config.sinaads_ad_height || Number(size[1]);
-            config.sinaads_ad_type = data.type;
-            config.sinaads_ad_content = data.content.src || [];
-            config.sinaads_ad_content_type = data.content.type || [];
-            config.sinaads_ad_pv = data.content.pv || [];
-            config.sinaads_ad_monitor = data.content.monitor || [];
-            config.sinaads_ad_link = data.content.link || [];
+                width = config.sinaads_ad_width || (config.sinaads_ad_width = Number(size[0])),
+                height = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])),
+                oWidth = width,
+                oHeight = height;
 
-            switch (config.sinaads_ad_type) {
-                case 'couple' : 
-                    // if (!window.sinaads_couple) {
-                    //     core.sio.loadScript('./src/plus/couple.js', function () {
-                    //         sinaads.couple({
-                    //             src: config.sinaads_ad_content,
-                    //             //[主,左,右]
-                    //             link: config.sinaads_ad_link,
-                    //             //[主,左,右]
-                    //             top: config.sinaads_couple_top || 10,
-                    //             //距离顶部高度
-                    //             mainW: config.sinaads_ad_width,
-                    //             mainH: config.sinaads_ad_height,
-                    //             sideW: 120,
-                    //             sideH: 270,
-                    //             showCoupletMonitor: ""
-                    //         });
-                    //     });
-                    // } else {
-                    //     sinaads_couple(config);
-                    // }
-                    break;
-                case 'videoWindow' : 
-                    // if (!window.sinaads_videoWindow) {
-                    //     core.sio.loadScript('./plus/videoWindow.js', function () {
-                    //         sinaads_videoWindow(config);
-                    //     });
-                    // } else {
-                    //     sinaads_videoWindow(config);
-                    // }
-                    break;
-                case 'stream' : 
-                    // if (!window.sinaads_stream) {
-                    //     core.sio.loadScript('./plus/stream.js', function () {
-                    //         sinaads_stream(config);
-                    //     });
-                    // } else {
-                    //     sinaads_stream(config);
-                    // }
-                    break;
-                case 'fullscreen' : 
-                    // if (!window.sinaads_fullscreen) {
-                    //     core.sio.loadScript('./plus/fullscreen', function () {
-                    //         sinaads_fullscreen(config);
-                    //     });
-                    // } else {
-                    //     sinaads_fullscreen(config);
-                    // }
-                    break;
-                default : 
-                    _renderWidthEmbedIframe(element, config);
-                    break;
-            }
+            data.content.src = data.content.src instanceof Array ? data.content.src : data.content.src ? [data.content.src] : [];
+            data.content.link = data.content.link instanceof Array ? data.content.link : data.content.link ? [data.content.link] : [];
+            data.content.type = data.content.type instanceof Array ? data.content.type : data.content.type ? [data.content.type] : [];
+            
+            var monitor = data.content.monitor = data.content.monitor instanceof Array ? data.content.monitor : data.content.monitor ? [dta.content.monitor] : [];
+            var pv = data.content.pv = data.content.pv instanceof Array ? data.content.pv : data.content.pv ? [dta.content.pv] : [];
+            var mapping = data.mapUrl instanceof Array ? data.mapUrl : data.mapUrl ? [data.mapUrl] : [];
 
-            //cookie mapping
+            //test
+            // pv = [
+            //    'http://click.sina.com.cn?a={__sinaads_ad_width__}&b={__sinaads_ad_pdps__}',
+            //    'http://click.sina.com.cn?ad_x={__sinaads_adbox_el__}&pdps={__sinaads_ad_pdps__}'
+            // ];
+
+            // monitor = [
+            //    'http://click.sina.com.cn?a={__sinaads_ad_width__}&b={__sinaads_ad_pdps__}',
+            //    'http://click.sina.com.cn?ad_x={__sinaads_adbox_el__}&pdps={__sinaads_ad_pdps__}'
+            // ];
+
+            /** 解析监控链接，并注入模版值 **/
+            core.array.each(pv, function (url, i) {
+                pv[i] = core.monitor.parseTpl(url, config);
+            });
+            core.array.each(monitor, function (url, i) {
+                monitor[i] = core.monitor.parseTpl(url, config);
+            });
+
+            _renderWidthEmbedIframe(element, {
+                uid : config.sinaads_uid,
+                pdps : config.sinaads_ad_pdps,
+                pageurl : config.sinaads_page_url,
+                width : width,
+                height : height,
+
+                type : data.content.type[0] || 'html',
+                src : data.content.src[0] || '',
+                link : data.content.link[0] || '',
+                monitor : monitor,
+
+                pv : core.monitor.createImpressMonitor(pv) || ''
+            });
+
+            /**
+             * cookie mapping
+             * @type {Number}
+             */
             for (var i = 0, len = mapping.length; i < len; i++) {
                 mapping[i] && core.sio.log(mapping[i]);
             }
@@ -1134,28 +879,21 @@ window._ssp_ad = {
             type = ['html'];
         }
 
-        if (type.length <= 0) {
-            for (var i = 0, len = src.length; i < len; i++) {
-                var _type = src[i].substring(src[i].length - 3);
+        for (var i = 0, len = src.length; i < len; i++) {
+            var _type;
+            if (!type[i]) {
+                _type = src[i].substring(src[i].length - 3);
                 switch (_type) {
-                    case 'swf' :
-                        type.push('flash');
-                        break;
                     case 'tml' :
-                        type.push('url');
-                        break;
-                    case '.js' :
-                        type.push('js');
+                        type[i] = 'url';
                         break;
                     case 'png':
                     case 'jpg':
                     case 'gif':
                     case 'bmp':
-                        type.push('image');
+                        type[i] = 'image';
                         break;
-                    default:
-                        type.push('html');
-                        break;
+                    default: break;
                 }
             }
         }
@@ -1173,7 +911,7 @@ window._ssp_ad = {
                 case 'bt' :
                     return 'bp';
                 case 'kl' :
-                    return 'couple';
+                    return 'couplet';
                 default : 
                     return 'embed';
             }
