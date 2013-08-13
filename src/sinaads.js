@@ -941,7 +941,7 @@
                             }
                             window[callbackName] = null;
                             delete window[callbackName];
-                        } catch (exception) {
+                        } catch (e) {
                             // ignore the exception
                         } finally {
                             _removeScriptTag(scr);
@@ -955,8 +955,7 @@
              */
             log : function(url) {
                 var img = new Image(),
-                    key = '_sinaads_sio_log_' + Math.floor(Math.random() *
-                          2147483648).toString(36);
+                    key = '_sinaads_sio_log_' + sinaadToolkit.rnd();
 
                 window[key] = img;
              
@@ -1356,6 +1355,7 @@
                     switch (type) {
                         case 'image' :
                         case 'flash' :
+                        case 'text'  :
                             code = 'sinaadToolkit.sio.log(\'' + url + '\')';
                             comma = ';'
                             break;
@@ -1414,7 +1414,7 @@
                     html = link ? '<a href="' + link + '" target="' + (sinaadToolkit.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + html + '</a>' : html;
                     break;
                 case 'text' : 
-                    html = '<span>' + src + '</span>';
+                    html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + src + '</a>' : src;
                     break;
                 case 'flash' : 
                     html = sinaadToolkit.swf.createHTML({
@@ -1582,7 +1582,7 @@
                 sinaadToolkit.iframe.fill(document.getElementById(sandboxId), [
                     '<!doctype html><html><body style="background:transparent">',
                         '<', 'script>', context, '</', 'script>',
-                        '<', 'script src="' + sinaadToolkit.TOOLKIT_URL + '" charset="utf-8"></', 'script>',
+                        //'<', 'script src="' + sinaadToolkit.TOOLKIT_URL + '" charset="utf-8"></', 'script>',
                         content,
                     '</body></html>'
                 ].join(""));
@@ -1764,15 +1764,15 @@
         targeting = {
             keywords : '', //关键字定向
             template : '', //模版定向
-            entry : ''     //入口定向
+            entry    : ''     //入口定向
         };
     core.array.each(metas, function (meta, i) {
         var entry = '',
             meta = metas[i];
         if (meta.name.toLowerCase() === 'keywords') {
             targeting.keywords += ',' + meta.content;
-        } else if (meta.name.toLowerCase() === 'templateTargeting') {
-            targeting.template += ',' + meta.conrent;
+        } else if (meta.name.toLowerCase() === 'templatetargeting') {
+            targeting.template += ',' + meta.content;
         }
         if (entry = core.cookie.get('sinaads_entry_targeting')) {
             targeting.entry = entry;
@@ -1788,14 +1788,15 @@
         var pdps = pdps instanceof Array ? pdps : [pdps],
             deferred = new core.Deferred(),
             params = [
-            'adunitid=' + pdps.join(','),
-            'rotate_count=' + core.seed,
-            'TIMESTAMP=' + core.now().toString(36),
-            'referral=' + encodeURIComponent(core.url.top),
-            targeting.keywords ? 'tgkw=' + encodeURIComponent(targeting.keywords) : '',
-            targeting.template ? 'tgtpl=' + encodeURIComponent(targeting.template) : '',
-            targeting.entry ? 'tgentry=' + encodeURIComponent(targeting.entry) : ''
-        ];
+                'adunitid=' + pdps.join(','),                   //pdps数组
+                'rotate_count=' + core.seed,                    //轮播数
+                'TIMESTAMP=' + core.now().toString(36),         //时间戳
+                'referral=' + encodeURIComponent(core.url.top)  //当前页面url
+            ];
+
+        targeting.keywords && params.push('tgkw=' + encodeURIComponent(targeting.keywords)); //关键词定向
+        targeting.template && params.push('tgtpl=' + encodeURIComponent(targeting.template));//模版定向
+        targeting.entry && params.push('tgentry=' + encodeURIComponent(targeting.entry));    //入口定向
 
         core.sio.loadScript(IMPRESS_URL + '?' + params.join('&'), function () {
             deferred.resolve();
@@ -1805,33 +1806,38 @@
     }
 
 
+    /**
+     * 创建常规广告的曝光请求html, 若存在src，创建广告html并填充
+     * @param  {[type]} element [description]
+     * @param  {[type]} config  [description]
+     * @return {[type]}         [description]
+     */
     function _renderWidthEmbedIframe(element, config) {
-        var uid = config.uid,
-            iframeId = 'sinaads_iframe_' + uid,
-            type = config.type,
-            width = config.width,
-            height = config.height,
-            link = config.link,
-            monitor = config.monitor,
-            src = config.src,
-            pdps = config.pdps,
-            coupletTop = config.coupletTop || 0;
-
-        //广告内容， 如果没有src，则不渲染
-        var adContent = src ? core.ad.createHTML(type, src, width, height, link, monitor) : '';
+        var uid         = config.uid,
+            iframeId    = 'sinaads_iframe_' + uid,
+            type        = config.type,
+            width       = config.width,
+            height      = config.height,
+            link        = config.link,
+            monitor     = config.monitor,
+            pv          = core.monitor.createImpressMonitor(config.pv) || '',
+            src         = config.src,
+            pdps        = config.pdps,
+            coupletTop  = config.coupletTop || 0,
+            adContent   = src ? core.ad.createHTML(type, src, width, height, link, monitor) : ''; //广告内容， 如果没有src，则不渲染
 
         //创建广告渲染的沙箱环境，并传递部分广告参数到沙箱中
-        core.sandbox.create(element, width, height, config.pv + adContent, {
-            sinaads_uid : uid,
+        core.sandbox.create(element, width, height, pv + adContent, {
+            sinaads_uid             : uid,
             sinaads_async_iframe_id : iframeId,
-            sinaads_start_time : now,
-            sinaads_span_time : core.now() - now,
-            sinaads_ad_pdps : pdps,
-            sinaads_ad_width : width,
-            sinaads_ad_height : height,
-            sinaads_page_url : config.pageurl,
-            sandboxId : iframeId,
-            sinaads_couplet_top : coupletTop
+            sinaads_start_time      : now,
+            sinaads_span_time       : core.now() - now,
+            sinaads_ad_pdps         : pdps,
+            sinaads_ad_width        : width,
+            sinaads_ad_height       : height,
+            sinaads_page_url        : config.pageurl,
+            sandboxId               : iframeId,
+            sinaads_couplet_top     : coupletTop
         });
     }
     /**
@@ -1839,9 +1845,8 @@
      * @param  {object} config 配置项
      */
     function _init(config) {
-        var element = config.element; //广告容器
-
-        config = config.params || {};   //广告配置
+        var element = config.element,       //广告容器
+            config = config.params || {};   //广告配置
 
         //从config.element中得到需要渲染的ins元素，如果没有，则获取页面上未完成状态的广告节点
         if (element) {
@@ -1871,208 +1876,214 @@
                 config.hasOwnProperty(key) || (config[key] = attr.nodeValue);
             }
         }
-
         //获取page_url 广告所在页面url
         config.sinaads_page_url = core.url.top;
 
-        function render() {
 
-            var data = window._ssp_ad.data[config.sinaads_ad_pdps]; //兼容方法
-            
-            if (!data || data === 'nodata') {
-                //console.log(config.sinaads_ad_pdps + ': 该广告位没有获取到可用的数据');
-                return;
-            }
-
-            var size = data.size.split('*'),
-                width = config.sinaads_ad_width || (config.sinaads_ad_width = Number(size[0])),
-                height = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])),
-                oWidth = width,
-                oHeight = height;
-
-            data.content.src = data.content.src instanceof Array ? data.content.src : data.content.src ? [data.content.src] : [];
-            data.content.link = data.content.link instanceof Array ? data.content.link : data.content.link ? [data.content.link] : [];
-            data.content.type = data.content.type instanceof Array ? data.content.type : data.content.type ? [data.content.type] : [];
-            
-            var monitor = data.content.monitor = data.content.monitor instanceof Array ? data.content.monitor : data.content.monitor ? [dta.content.monitor] : [];
-            var pv = data.content.pv = data.content.pv instanceof Array ? data.content.pv : data.content.pv ? [dta.content.pv] : [];
-            var mapping = data.mapUrl instanceof Array ? data.mapUrl : data.mapUrl ? [data.mapUrl] : [];
-
-            // 自适应处理 
-            if (!!config.sinaads_ad_fullview && !!width) {
-                width = '100%';
-                height = '100%';
-                element.style.cssText = 'display:block;visiable:hidden;';
-                element.style.cssText = 'width:100%;height:' + (element.offsetWidth * oHeight / oWidth) + 'px;visiable:visiablity';
-
-                core.event.on(window, 'resize', function () {
-                    element.style.height = (element.offsetWidth * oHeight / oWidth) + 'px';
-                });
-            }
-
-            //test
-            // pv = [
-            //    'http://click.sina.com.cn?a={__sinaads_ad_width__}&b={__sinaads_ad_pdps__}',
-            //    'http://click.sina.com.cn?ad_x={__sinaads_adbox_el__}&pdps={__sinaads_ad_pdps__}'
-            // ];
-
-            // monitor = [
-            //    'http://click.sina.com.cn?a={__sinaads_ad_width__}&b={__sinaads_ad_pdps__}',
-            //    'http://click.sina.com.cn?ad_x={__sinaads_adbox_el__}&pdps={__sinaads_ad_pdps__}'
-            // ];
-
-            /** 解析监控链接，并注入模版值 **/
-            core.array.each(pv, function (url, i) {
-                pv[i] = core.monitor.parseTpl(url, config);
-            });
-            core.array.each(monitor, function (url, i) {
-                monitor[i] = core.monitor.parseTpl(url, config);
-            });
-            /** 
-             * 渲染广告
-             */
-            switch (data.type) {
-                case 'couplet' : 
-                    //是跨栏，隐藏掉改区块
-                    element.style.cssText = 'position:absolute;top:-9999px';
-                    //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
-                    if (data.content.src.length > 1) {
-                        //注入跨栏数据
-                        var CoupletMediaData = {
-                            src : data.content.src,
-                            type : data.content.type,
-                            link : data.content.link,
-                            top : config.sinaads_couple_top || 0,
-                            mainWidth : width,
-                            mainHeight : height,
-                            sideWidth : 25,
-                            sideHeight : 300,
-                            monitor : data.content.monitor || [],
-                            delay : config.sinaads_ad_delay || 0
-                        };
-                        sinaadToolkit.sio.loadScript('./src/plus/CoupletMedia.js', function () {
-                            new sinaadToolkit.CoupletMedia(CoupletMediaData);
-                        });
-                        data.content.src = [];
-                    }
-                    break;
-                case 'videoWindow' : 
-                    element.style.cssText = 'position:absolute;top:-9999px';
-                    if (data.content.type[0] !== 'js') {
-                        var VideoWindowMediaData = {
-                            src : data.content.src[0],
-                            type : data.content.type[0],
-                            width : width,
-                            height : height,
-                            link : data.content.link[0],
-                            monitor : data.content.monitor,
-                            delay : config.sinaads_ad_delay || 0
-                        };
-                        sinaadToolkit.sio.loadScript('./src/plus/VideoWindowMedia.js', function () {
-                            new sinaadToolkit.VideoWindowMedia(VideoWindowMediaData);
-                        });
-                    }
-                    data.content.src = [] //已经处理过，无需再处理
-                    break;
-                case 'stream' :
-                    //流媒体，隐藏掉该区块
-                    element.style.cssText = 'position:absolute;top:-9999px';
-                    //这里认为如果给的是素材的话，那么素材必须大于1个，否则为js类型
-                    if (data.content.src.length > 1) {
-                        //注入流媒体数据
-                        var StreamMediaData = {
-                            main : {
-                                type : 'flash',
-                                src : 'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fc1715.swf',
-                                link : 'http://sina.com.cn',
-                                width : width,
-                                height : height
-                            },
-                            mini : {
-                                src : 'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fb1.swf',
-                                type : 'flash',
-                                link : 'http://sina.com.cn'
-                            },
-                            delay : config.sinaads_ad_delay || 0
-                        };
-                        sinaadToolkit.sio.loadScript('./src/plus/StreamMedia.js', function () {
-                            new sinaadToolkit.StreamMedia(StreamMediaData);
-                        });
-                        data.content.src = [];
-                    } else {
-                        //富媒体供应商提供的js
-                        //生成一个用于渲染容器到页面中
-                        var streamContainer = document.createElement('div');
-                        streamContainer.id = 'SteamMediaWrap';
-                        document.body.insertBefore(streamContainer, document.body.firstChild);
-                            
-                        sinaadToolkit.sio.loadScript(data.content.src[0]);
-                        data.content.src = [] //已经处理过，无需再处理
-                    }
-                    break;
-                case 'fullscreen' : 
-                    //是全屏广告，隐藏掉改区块
-                    element.style.cssText = 'position:absolute;top:-9999px';
-                    var FullScreenMediaData = {
-                        type : data.content.type[0] || '',
-                        src : data.content.src[0] || '',
-                        link : data.content.link[0] || '',
-                        width : width,
-                        height : height,
-                        hasClose : 1,
-                        delay : config.sinaads_ad_delay || 0
-                    };
-
-                    sinaadToolkit.sio.loadScript('./src/plus/FullscreenMedia.js', function () {
-                        new sinaadToolkit.FullscreenMedia(element, FullScreenMediaData);
-                    });
-                    data.content.src = [];
-                    break;
-                case 'bp' : 
-                    //是背投广告，隐藏掉改区块
-                    element.style.cssText = 'position:absolute;top:-9999px';
-                    //这里规定背投的素材不能是js或者代码片段，而且只能有1个
-                    window.open('http://d1.sina.com.cn/d1images/pb/pbv4.html?' + data.content.link[0] + '${}' + data.content.type[0] + '${}' + data.content.src[0]);
-                    data.content.src = [];
-                    break;
-                case 'textlink': 
-
-                default : 
-
-                    break;
-            }
-
-            _renderWidthEmbedIframe(element, {
-                uid : config.sinaads_uid,
-                pdps : config.sinaads_ad_pdps,
-                pageurl : config.sinaads_page_url,
-                width : width,
-                height : height,
-
-                type : data.content.type[0] || 'html',
-                src : data.content.src[0] || '',
-                link : data.content.link[0] || '',
-                monitor : monitor,
-
-                pv : core.monitor.createImpressMonitor(pv) || '',
-                coupletTop : config.sinaads_couplet_top || 0
-            });
-
-            /**
-             * cookie mapping
-             * @type {Number}
-             */
-            for (var i = 0, len = mapping.length; i < len; i++) {
-                mapping[i] && core.sio.log(mapping[i]);
-            }
-        };
-
+        //判断pdps相关数据是否存在，如果存在，渲染，否则，请求后渲染
         if (!_ssp_ad.data[config.sinaads_ad_pdps]) {
-            getData([config.sinaads_ad_pdps]).done(render);
+            getData([config.sinaads_ad_pdps]).done(function () {
+                render(element, _ssp_ad.data[config.sinaads_ad_pdps], config);
+            });
         } else {
-            render();
+            render(element, _ssp_ad.data[config.sinaads_ad_pdps], config);
         }
     }
+
+    /**
+     * 根据广告媒体类型渲染广告
+     */
+    function render(element, data, config) {
+        if (!data || data === 'nodata') {
+            //console.log(config.sinaads_ad_pdps + ': 该广告位没有获取到可用的数据');
+            return;
+        }
+
+        var size    = data.size.split('*'),
+            width   = config.sinaads_ad_width || (config.sinaads_ad_width = Number(size[0])) || 0,
+            height  = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])) || 0,
+            oWidth  = width,
+            oHeight = height;
+
+        data.content.src    = data.content.src instanceof Array ? data.content.src : data.content.src ? [data.content.src] : [];
+        data.content.link   = data.content.link instanceof Array ? data.content.link : data.content.link ? [data.content.link] : [];
+        data.content.type   = data.content.type instanceof Array ? data.content.type : data.content.type ? [data.content.type] : [];
+        
+        var monitor = data.content.monitor = data.content.monitor instanceof Array ? data.content.monitor : data.content.monitor ? [dta.content.monitor] : [];
+        var pv = data.content.pv = data.content.pv instanceof Array ? data.content.pv : data.content.pv ? [dta.content.pv] : [];
+        var mapping = data.mapUrl instanceof Array ? data.mapUrl : data.mapUrl ? [data.mapUrl] : [];
+
+        // 自适应处理 
+        if (!!config.sinaads_ad_fullview && !!width) {
+            width = '100%';
+            height = '100%';
+            element.style.cssText = 'display:block;visiable:hidden;';
+            element.style.cssText = 'width:100%;height:' + (element.offsetWidth * oHeight / oWidth) + 'px;visiable:visiablity';
+
+            core.event.on(window, 'resize', function () {
+                element.style.height = (element.offsetWidth * oHeight / oWidth) + 'px';
+            });
+        }
+
+        //test
+        // pv = [
+        //    'http://click.sina.com.cn?a={__sinaads_ad_width__}&b={__sinaads_ad_pdps__}',
+        //    'http://click.sina.com.cn?ad_x={__sinaads_adbox_el__}&pdps={__sinaads_ad_pdps__}'
+        // ];
+
+        // monitor = [
+        //    'http://click.sina.com.cn?a={__sinaads_ad_width__}&b={__sinaads_ad_pdps__}',
+        //    'http://click.sina.com.cn?ad_x={__sinaads_adbox_el__}&pdps={__sinaads_ad_pdps__}'
+        // ];
+
+        /** 解析曝光和监控链接，并注入模版值 **/
+        core.array.each(pv, function (url, i) {
+            pv[i] = core.monitor.parseTpl(url, config);
+        });
+        core.array.each(monitor, function (url, i) {
+            monitor[i] = core.monitor.parseTpl(url, config);
+        });
+        /** 
+         * 渲染广告
+         */
+        switch (data.type) {
+            case 'couplet' : 
+                //是跨栏，隐藏掉改区块
+                element.style.cssText = 'position:absolute;top:-9999px';
+                //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
+                if (data.content.src.length > 1) {
+                    //注入跨栏数据
+                    var CoupletMediaData = {
+                        src         : data.content.src,
+                        type        : data.content.type,
+                        link        : data.content.link,
+                        top         : config.sinaads_couple_top || 0,
+                        mainWidth   : width,
+                        mainHeight  : height,
+                        sideWidth   : 25,
+                        sideHeight  : 300,
+                        monitor     : data.content.monitor || [],
+                        delay       : config.sinaads_ad_delay || 0
+                    };
+                    sinaadToolkit.sio.loadScript('./src/plus/CoupletMedia.js', function () {
+                        new sinaadToolkit.CoupletMedia(CoupletMediaData);
+                    });
+                    data.content.src = [];
+                }
+                break;
+            case 'videoWindow' : 
+                element.style.cssText = 'position:absolute;top:-9999px';
+                if (data.content.type[0] !== 'js') {
+                    var VideoWindowMediaData = {
+                        src     : data.content.src[0],
+                        type    : data.content.type[0],
+                        width   : width,
+                        height  : height,
+                        link    : data.content.link[0],
+                        monitor : data.content.monitor,
+                        delay   : config.sinaads_ad_delay || 0
+                    };
+                    sinaadToolkit.sio.loadScript('./src/plus/VideoWindowMedia.js', function () {
+                        new sinaadToolkit.VideoWindowMedia(VideoWindowMediaData);
+                    });
+                }
+                data.content.src = []; //已经处理过，无需再处理
+                break;
+            case 'stream' :
+                //流媒体，隐藏掉该区块
+                element.style.cssText = 'position:absolute;top:-9999px';
+                //这里认为如果给的是素材的话，那么素材必须大于1个，否则为js类型
+                if (data.content.src.length > 1) {
+                    //注入流媒体数据
+                    var StreamMediaData = {
+                        main : {
+                            type    : 'flash',
+                            src     : 'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fc1715.swf',
+                            link    : 'http://sina.com.cn',
+                            width   : width,
+                            height  : height
+                        },
+                        mini : {
+                            src     : 'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fb1.swf',
+                            type    : 'flash',
+                            link    : 'http://sina.com.cn'
+                        },
+                        delay : config.sinaads_ad_delay || 0
+                    };
+                    sinaadToolkit.sio.loadScript('./src/plus/StreamMedia.js', function () {
+                        new sinaadToolkit.StreamMedia(StreamMediaData);
+                    });
+                    data.content.src = [];
+                } else {
+                    //富媒体供应商提供的js
+                    //生成一个用于渲染容器到页面中
+                    var streamContainer = document.createElement('div');
+                    streamContainer.id = 'SteamMediaWrap';
+                    document.body.insertBefore(streamContainer, document.body.firstChild);
+                        
+                    sinaadToolkit.sio.loadScript(data.content.src[0]);
+                    data.content.src = [] //已经处理过，无需再处理
+                }
+                break;
+            case 'fullscreen' : 
+                //是全屏广告，隐藏掉改区块
+                element.style.cssText = 'position:absolute;top:-9999px';
+                var FullScreenMediaData = {
+                    type        : data.content.type[0] || '',
+                    src         : data.content.src[0] || '',
+                    link        : data.content.link[0] || '',
+                    width       : width,
+                    height      : height,
+                    hasClose    : 1,
+                    delay       : config.sinaads_ad_delay || 0
+                };
+
+                sinaadToolkit.sio.loadScript('./src/plus/FullscreenMedia.js', function () {
+                    new sinaadToolkit.FullscreenMedia(element, FullScreenMediaData);
+                });
+                data.content.src = [];
+                break;
+            case 'bp' : 
+                //是背投广告，隐藏掉改区块
+                element.style.cssText = 'position:absolute;top:-9999px';
+                //这里规定背投的素材不能是js或者代码片段，而且只能有1个
+                window.open('http://d1.sina.com.cn/d1images/pb/pbv4.html?' + data.content.link[0] + '${}' + data.content.type[0] + '${}' + data.content.src[0]);
+                data.content.src = [];
+                break;
+            case 'textlink': 
+                element.style.cssText = 'position:absolute;top:-9999px';
+                var fragmentNode = document.createElement('span');
+                fragmentNode.innerHTML = sinaadToolkit.ad.createHTML('text', data.content.src[0], 0, 0, data.content.link[0], monitor);
+                element.parentNode.insertBefore(fragmentNode, element);
+                data.content.src = [];
+                break;
+            default : 
+                break;
+        }
+
+        _renderWidthEmbedIframe(element, {
+            uid         : config.sinaads_uid,
+            pdps        : config.sinaads_ad_pdps,
+            pageurl     : config.sinaads_page_url,
+            width       : width,
+            height      : height,
+
+            type        : data.content.type[0] || 'html',
+            src         : data.content.src[0] || '',
+            link        : data.content.link[0] || '',
+            monitor     : monitor,
+            pv          : pv,
+            coupletTop  : config.sinaads_couplet_top || 0
+        });
+
+        /**
+         * cookie mapping
+         * @type {Number}
+         */
+        for (var i = 0, len = mapping.length; i < len; i++) {
+            mapping[i] && core.sio.log(mapping[i]);
+        }
+    };
 
 
     /**
@@ -2340,6 +2351,121 @@ window._ssp_ad.data["PDPS000000000068"] = {
         type : ['flash'],
         src : [
             'http://d1.sina.com.cn/rwei/shijia2012/shichuang1129/300x250.swf'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
+
+
+
+//文字链广告
+window._ssp_ad.data["PDPS000000000081"] = {
+    size : "0*0",
+    type : 'textlink',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['text'],
+        src : [
+            '我是文字链1'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
+//文字链广告
+window._ssp_ad.data["PDPS000000000082"] = {
+    size : "0*0",
+    type : 'textlink',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['text'],
+        src : [
+            '我是文字链2'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
+//文字链广告
+window._ssp_ad.data["PDPS000000000083"] = {
+    size : "0*0",
+    type : 'textlink',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['text'],
+        src : [
+            '我是文字链3'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
+//文字链广告
+window._ssp_ad.data["PDPS000000000084"] = {
+    size : "0*0",
+    type : 'textlink',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['text'],
+        src : [
+            '我是文字链4'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
+//文字链广告
+window._ssp_ad.data["PDPS000000000085"] = {
+    size : "0*0",
+    type : 'textlink',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['text'],
+        src : [
+            '我是文字链5'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
+//文字链广告
+window._ssp_ad.data["PDPS000000000086"] = {
+    size : "0*0",
+    type : 'textlink',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['text'],
+        src : [
+            '我是文字链6'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
+//文字链广告
+window._ssp_ad.data["PDPS000000000087"] = {
+    size : "0*0",
+    type : 'textlink',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['text'],
+        src : [
+            '我是文字链7'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
+//文字链广告
+window._ssp_ad.data["PDPS000000000088"] = {
+    size : "0*0",
+    type : 'textlink',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['text'],
+        src : [
+            '我是文字链8'
         ],
         monitor : ["http://stream.com"],
         link : ['http://stream.com', 'http://stream.sina.com.cn']
