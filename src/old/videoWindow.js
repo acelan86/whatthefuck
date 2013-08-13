@@ -1,9 +1,3 @@
-(function (window, undefined) {
-    //常量定义
-    var SINAADS_AD_TYPE = 'sinaads_videoWindow' + window.sinaads_ad_pdps,
-        SINAADS_AD_TYPE_CLOSE_PIC = "http://d1.sina.com.cn/shh/ws/2012/09/29/1/close1.gif",
-        SINAADS_AD_TYPE_CLOSE_HOVER_PIC = "http://d1.sina.com.cn/shh/ws/2012/09/29/1/close2.gif";
-
     //获取所需变量及广告数据构造
     var data = window.sinaads_ad_data.content,
         config = {
@@ -183,4 +177,3 @@
             }
         }
     }
-})(window);

@@ -643,7 +643,7 @@
  * @return {[type]}           [description]
  */
 (function (window, undefined) {
-    var IMPRESS_URL = 'http://123.126.53.109/impress.php';
+    var IMPRESS_URL = 'http://sax.sina.com.cn/impress.php';
 
     var core = window.sinaadToolkit,
         now = core.now(); //加载sinaads的时间

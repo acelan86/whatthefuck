@@ -447,22 +447,22 @@
      */
     sinaadToolkit.storage = sinaadToolkit.storage || (function () {
         /**
-         * UserData相关方法
+         * userData相关方法
          */
-        var UserData = {
+        var userData = {
             userData : null,
             name : location.hostname,
             init : function () {
-                if (!UserData.userData) {
+                if (!userData.userData) {
                     try {
-                        UserData.userData = document.createElement('INPUT');
-                        UserData.userData.type = "hidden";
-                        UserData.userData.style.display = "none";
-                        UserData.userData.addBehavior ("#default#userData");
-                        document.body.appendChild(UserData.userData);
+                        userData.userData = document.createElement('INPUT');
+                        userData.userData.type = "hidden";
+                        userData.userData.style.display = "none";
+                        userData.userData.addBehavior ("#default#userData");
+                        document.body.appendChild(userData.userData);
                         var expires = new Date();
                         expires.setDate(expires.getDate() + 365);
-                        UserData.userData.expires = expires.toUTCString();
+                        userData.userData.expires = expires.toUTCString();
                     } catch (e) {
                         return false;
                     }
@@ -470,23 +470,23 @@
                 return true;
             },
             setItem : function (key, value, expires) {
-                if (UserData.init()) {
-                    UserData.userData.load(UserData.name);
-                    UserData.userData.setAttribute(key, value);
-                    UserData.userData.save(UserData.name);
+                if (userData.init()) {
+                    userData.userData.load(userData.name);
+                    userData.userData.setAttribute(key, value);
+                    userData.userData.save(userData.name);
                 }
             },
             getItem : function (key) {
-                if (UserData.init()) {
-                    UserData.userData.load(UserData.name);
-                    return UserData.userData.getAttribute(key);
+                if (userData.init()) {
+                    userData.userData.load(userData.name);
+                    return userData.userData.getAttribute(key);
                 }
             },
             removeItem : function (key) {
-                if (UserData.init()) {
-                    UserData.userData.load(UserData.name);
-                    UserData.userData.removeAttribute(key);
-                    UserData.userData.save(UserData.name);
+                if (userData.init()) {
+                    userData.userData.load(userData.name);
+                    userData.userData.removeAttribute(key);
+                    userData.userData.save(userData.name);
                 }
 
            }
@@ -859,7 +859,7 @@
                   img = null;
                 };
          
-                img.src = url;
+                img.src = url + (url.indexOf('?') > 0 ? '&' : '?') + key;
             }
         };
     })();
@@ -1485,7 +1485,7 @@
      * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
      */
     if (!sinaadToolkit.seed) {
-        var KEY = 'sinaadtoolkit_seed_core';
+        var KEY = 'sinaadtoolkit_seed';
         sinaadToolkit.seed = parseInt(sinaadToolkit.storage.get(KEY), 10) || Math.floor(Math.random() * 100);
         //大于1000就从0开始，防止整数过大
         sinaadToolkit.storage.set(KEY, sinaadToolkit.seed > 1000 ? 0 : ++sinaadToolkit.seed);

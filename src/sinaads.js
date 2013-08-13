@@ -1,4 +1,4 @@
-/**
+/*!
  * sinaadToolkit
  * @description 新浪广告工具包，提供了浏览器判断，渲染，cookie, storage, iframe, 转义等基础操作
  * @author  acelan <xiaobin8[at]staff.sina.com.cn>
@@ -18,14 +18,14 @@
          * @static
          * @const
          */
-        TOOLKIT_URL : 'http://d1.sina.com.cn/litong/zhitou/sinaads/src/core.js',
+        TOOLKIT_URL : './src/sinaadToolkit.js',
         /**
          * 获取当前时间戳
          * @return {Number} 当前时间戳
          * @static
          */
         now : function () {
-            return new Date().getTime();
+            return +new Date();
         },
         /**
          * 随机数生成，生成一个随机数的36进制表示方法
@@ -447,22 +447,22 @@
      */
     sinaadToolkit.storage = sinaadToolkit.storage || (function () {
         /**
-         * UserData相关方法
+         * userData相关方法
          */
-        var UserData = {
+        var userData = {
             userData : null,
             name : location.hostname,
             init : function () {
-                if (!UserData.userData) {
+                if (!userData.userData) {
                     try {
-                        UserData.userData = document.createElement('INPUT');
-                        UserData.userData.type = "hidden";
-                        UserData.userData.style.display = "none";
-                        UserData.userData.addBehavior ("#default#userData");
-                        document.body.appendChild(UserData.userData);
+                        userData.userData = document.createElement('INPUT');
+                        userData.userData.type = "hidden";
+                        userData.userData.style.display = "none";
+                        userData.userData.addBehavior ("#default#userData");
+                        document.body.appendChild(userData.userData);
                         var expires = new Date();
                         expires.setDate(expires.getDate() + 365);
-                        UserData.userData.expires = expires.toUTCString();
+                        userData.userData.expires = expires.toUTCString();
                     } catch (e) {
                         return false;
                     }
@@ -470,23 +470,23 @@
                 return true;
             },
             setItem : function (key, value, expires) {
-                if (UserData.init()) {
-                    UserData.userData.load(UserData.name);
-                    UserData.userData.setAttribute(key, value);
-                    UserData.userData.save(UserData.name);
+                if (userData.init()) {
+                    userData.userData.load(userData.name);
+                    userData.userData.setAttribute(key, value);
+                    userData.userData.save(userData.name);
                 }
             },
             getItem : function (key) {
-                if (UserData.init()) {
-                    UserData.userData.load(UserData.name);
-                    return UserData.userData.getAttribute(key);
+                if (userData.init()) {
+                    userData.userData.load(userData.name);
+                    return userData.userData.getAttribute(key);
                 }
             },
             removeItem : function (key) {
-                if (UserData.init()) {
-                    UserData.userData.load(UserData.name);
-                    UserData.userData.removeAttribute(key);
-                    UserData.userData.save(UserData.name);
+                if (userData.init()) {
+                    userData.userData.load(userData.name);
+                    userData.userData.removeAttribute(key);
+                    userData.userData.save(userData.name);
                 }
 
            }
@@ -593,7 +593,7 @@
             try {
                 top = window.top.location.href;
             } catch (e) {}
-            return top || document.referrer || window.location.href;
+            return top || ((window.top === window.self) ?  window.location.href : window.document.referrer);
         })()
     };
 
@@ -650,16 +650,16 @@
          * @return {Number} 向上滚动高度
          */
         getScrollTop : function () {
-            var d = document;
-            return window.pageYOffset || d.documentElement.scrollTop || d.body.scrollTop;
+            var doc = document;
+            return window.pageYOffset || doc.documentElement.scrollTop || doc.body.scrollTop;
         },
         /**
          * 获取向左滚动高度
          * @return {Number} 向左滚动高度
          */
         getScrollLeft : function () {
-            var d = document;
-            return window.pageXOffset || d.documentElement.scrollLeft || d.body.scrollLeft;
+            var doc = document;
+            return window.pageXOffset || doc.documentElement.scrollLeft || doc.body.scrollLeft;
         },
         /**
          * 获取页面高度
@@ -667,7 +667,7 @@
          */
         getViewHeight : function () {
             var doc = document,
-            client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+                client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
             return client.clientHeight;
         },
         /**
@@ -676,7 +676,7 @@
          */
         getViewWidth : function () {
             var doc = document,
-            client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+                client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
             return client.clientWidth;
         }
     };
@@ -701,6 +701,114 @@
         }
     };
 
+
+    /**
+     * @namespace sinaadToolkit.Defered
+     */
+    sinaadToolkit.Deferred = sinaadToolkit.Deferred || (function (core) {
+        function _pipe(original, deferred, callback, actionType) {
+            return function () {
+                if (typeof callback === 'function') {
+                    try {
+                        var returnValue = 
+                            callback.apply(original, arguments);
+
+                        if (Deferred.isPromise(returnValue)) {
+                            returnValue.then(
+                                function () {
+                                    deferred.resolve.apply(deferred, arguments);
+                                },
+                                function () {
+                                    deferred.reject.apply(deferred, arguments);
+                                }
+                            );
+                        }
+                        else {
+                            deferred.resolve.call(deferred, returnValue);
+                        }
+                    }
+                    catch (error) {
+                        deferred.reject(error);
+                    }
+                }
+                // `.then()`及`.then(done, null)`时使用
+                // 直接使用原`Deferred`保存的参数将`deferred`改为对应状态
+                else {
+                    deferred[actionType].apply(deferred, original._args);
+                }
+            };
+        }
+        //判断promise状态决定指定回调方法
+        function _flush(deferred) {
+            if (deferred._state === 'pending') {
+                return;
+            }
+            var callbacks = deferred._state === 'resolved' ? deferred._resolves.slice() : deferred._rejects.slice();
+
+            setTimeout(function () {
+                core.array.each(callbacks, function (callback, i) {
+                    try {
+                        callback.apply(deferred, deferred._args);
+                    } catch (e) {}
+                });
+            }, 0);
+
+            deferred._resolves = [];
+            deferred._rejects = [];
+        }
+
+        function Deferred() {
+            this._state = 'pending'; //当前promise状态
+            this._args = null;       //传递参数
+            this._resolves = [];     //成功回调集合
+            this._rejects = [];      //失败回调集合
+        }
+        
+        Deferred.prototype = {
+            resolve : function (args) {
+                if (this._state !== "pending") {
+                    return;
+                }
+
+                this._state = 'resolved';
+                this._args = [].slice.call(arguments);
+
+                _flush(this);
+            },
+            reject : function () {
+                if (this._state !== 'pending') {
+                    return;
+                }
+                this._state = 'rejected';
+                this._args = [].slice.call(arguments);
+
+                _flush(this);
+            },
+            then : function (resolve, reject) {
+                var deferred = new Deferred();
+                
+                this._resolves.push(_pipe(this, deferred, resolve, 'resolve'));
+                this._rejects.push(_pipe(this, deferred, reject, 'reject'));
+
+                _flush(this);
+
+                return deferred;
+            },
+            done : function (callback) {
+                return this.then(callback);
+            },
+            fail : function (callback) {
+                return this.then(null, callback);
+            }
+        };
+
+        Deferred.isPromise = function (value) {
+            return value && typeof value.then === 'function';
+        };
+
+        return Deferred;
+
+    })(sinaadToolkit);
 
     /**
      * @namespace sinaadToolkit.sio
@@ -739,7 +847,7 @@
                 var scr = document.createElement("SCRIPT"),
                     scriptLoaded = 0,
                     options = opt_options || {},
-                    charset = options['charset'],
+                    charset = options['charset'] || 'utf-8',
                     callback = opt_callback || function(){},
                     timeOut = options['timeOut'] || 0,
                     timer;
@@ -789,7 +897,7 @@
                     callbackName,
                     callbackImpl,
                     options = opt_options || {},
-                    charset = options['charset'],
+                    charset = options['charset'] || 'utf-8',
                     queryField = options['queryField'] || 'callback',
                     timeOut = options['timeOut'] || 0,
                     timer,
@@ -859,7 +967,7 @@
                   img = null;
                 };
          
-                img.src = url;
+                img.src = url + (url.indexOf('?') > 0 ? '&' : '?') + key;
             }
         };
     })();
@@ -1059,8 +1167,8 @@
          * @return {Object}          填充完初始属性，用于生成iframe的对象
          */
         init : function (config, width, height, useQuote) {
-            var quote = useQuote ? '"' : ""; //是否使用引号将属性包裹
-            var zero = quote + "0" + quote;
+            var quote = useQuote ? '"' : "", //是否使用引号将属性包裹
+                zero = quote + "0" + quote;
             config.width = quote + width + quote;
             config.height = quote + height + quote;
             config.frameborder = zero;
@@ -1290,6 +1398,7 @@
             height += String(height).indexOf('%') !== -1 ? '' : 'px';
 
             monitorCode = sinaadToolkit.monitor.createClickMonitor(type, monitor);
+
             switch (type) {
                 case 'js' :
                     html = ['<', 'script src="', src, '"></','script>'].join('');
@@ -1481,6 +1590,109 @@
         };
     })();
 
+
+
+    /**
+     * 跟随容器基类
+     */
+    function Box(config) {
+        var THIS = this;
+
+        this.width = config.width || 0;
+        this.height = config.height || 'auto';
+        this.position = config.position || "center center";
+        this.follow = config.follow || 0;
+
+        this.positionStyle = this.follow ? (sinaadToolkit.browser.isSupportFixed ? 'fixed' : 'absolute') : 'absolute';
+
+        this.element = document.createElement('div');
+        this.element.style.position = this.positionStyle;
+
+        this.element.style.cssText += ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:9999;display:' + (config.autoShow ? 'block' : 'none');
+
+        this.setPosition();
+
+        sinaadToolkit.event.on(window, 'resize', function () {
+            THIS.setPosition();
+        });
+
+        if (this.follow && !sinaadToolkit.browser.isSupportFixed) {
+            sinaadToolkit.event.on(window, 'scroll', function () {
+                THIS.setPosition();
+            });
+        }
+
+        document.body.insertBefore(this.element, document.body.firstChild);
+
+    }
+
+    Box.prototype = {
+        setPosition : function () {
+            var position = this.position.split(' '),
+                viewWidth = sinaadToolkit.page.getViewWidth(),
+                viewHeight = sinaadToolkit.page.getViewHeight(),
+                offsetTop = 0,
+                offsetLeft = 0,
+                left = 0,
+                top = 0;
+
+            if (this.follow) {
+                offsetTop = sinaadToolkit.browser.isSupportFixed ? 0 : sinaadToolkit.page.getScrollTop() || 0;
+                offsetLeft = sinaadToolkit.browser.isSupportFixed ? 0 : sinaadToolkit.page.getScrollLeft() || 0;
+            }
+
+            switch (position[0]) {
+                case 'center' :
+                    this.element.style.left = (viewWidth - this.width) / 2 + offsetLeft + 'px';
+                    break;
+                case 'left' :
+                    this.element.style.left = offsetLeft + 'px';
+                    break;
+                case 'right' :
+                    if (this.follow) {
+                        this.element.style.left = offsetLeft + (viewWidth - this.width) + 'px'; 
+                    } else {
+                        this.element.style.right = '0px';
+                    }
+                    break;
+                default :
+                    this.element.style.left = offsetLeft + (parseInt(position[0], 10) || 0) + 'px';
+                    break;
+            }
+            switch (position[1]) {
+                case 'center' :
+                    this.element.style.top = (viewHeight - this.height) / 2 + offsetTop + 'px';
+                    break;
+                case 'top' :
+                    this.element.style.top = offsetTop + 'px';
+                    break;
+                case 'bottom' :
+                    if (this.follow) {
+                        this.element.style.top = offsetTop + (viewHeight - this.height) + 'px'; 
+                    } else {
+                        this.element.style.bottom = '0px';
+                    }
+                    break;
+                default :
+                    this.element.style.top = offsetTop + (parseInt(position[1], 10) || 0) + 'px';
+                    break;
+            }
+        },
+        show : function () {
+            this.element.style.display = 'block';
+        },
+        hide : function () {
+            this.element.style.display = 'none';
+        }
+    };
+    sinaadToolkit.Box = sinaadToolkit.Box || Box;
+
+    /**
+     * 简单动画方法
+     * @todo
+     */
+    
+
     /**
      * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
      */
@@ -1508,16 +1720,17 @@
 
 /*!
  * sinaads
- * 新浪统一商业广告脚本, 负责使用pdps(新浪广告资源管理码)向广告引擎请求数据并处理广告渲染
+ * 新浪统一商业广告脚本
+ * 负责使用pdps(新浪广告资源管理码)向广告引擎请求数据并处理广告渲染
  * @author acelan <xiaobin8[at]staff.sina.com.cn>
  * @version 1.0.0
  * @date 2013-08-08
  */
-(function (window, undefined) {
+(function (window, core, undefined) {
     var IMPRESS_URL = 'http://123.126.53.109/impress.php';
 
-    var core = window.sinaadToolkit,
-        now = core.now(); //加载sinaads的时间
+    var now = core.now(); //加载sinaads的时间
+
 
     /**
      * 判断是否为sina商业广告节点且为未完成状态
@@ -1545,6 +1758,53 @@
         return null;
     }
 
+
+    //获取定向关键词
+    var metas = document.getElementsByTagName('head')[0].getElementsByTagName('meta'),
+        targeting = {
+            keywords : '', //关键字定向
+            template : '', //模版定向
+            entry : ''     //入口定向
+        };
+    core.array.each(metas, function (meta, i) {
+        var entry = '',
+            meta = metas[i];
+        if (meta.name.toLowerCase() === 'keywords') {
+            targeting.keywords += ',' + meta.content;
+        } else if (meta.name.toLowerCase() === 'templateTargeting') {
+            targeting.template += ',' + meta.conrent;
+        }
+        if (entry = core.cookie.get('sinaads_entry_targeting')) {
+            targeting.entry = entry;
+        }
+    });
+
+    /**
+     * 获取广告数据
+     * @param  {Array} pdps 广告pdps
+     * @return {Deferred}      promise调用对象
+     */
+    function getData(pdps) {
+        var pdps = pdps instanceof Array ? pdps : [pdps],
+            deferred = new core.Deferred(),
+            params = [
+            'adunitid=' + pdps.join(','),
+            'rotate_count=' + core.seed,
+            'TIMESTAMP=' + core.now().toString(36),
+            'referral=' + encodeURIComponent(core.url.top),
+            targeting.keywords ? 'tgkw=' + encodeURIComponent(targeting.keywords) : '',
+            targeting.template ? 'tgtpl=' + encodeURIComponent(targeting.template) : '',
+            targeting.entry ? 'tgentry=' + encodeURIComponent(targeting.entry) : ''
+        ];
+
+        core.sio.loadScript(IMPRESS_URL + '?' + params.join('&'), function () {
+            deferred.resolve();
+        });
+
+        return deferred;
+    }
+
+
     function _renderWidthEmbedIframe(element, config) {
         var uid = config.uid,
             iframeId = 'sinaads_iframe_' + uid,
@@ -1557,8 +1817,8 @@
             pdps = config.pdps,
             coupletTop = config.coupletTop || 0;
 
-        //广告内容
-        var adContent = core.ad.createHTML(type, src, width, height, link, monitor);
+        //广告内容， 如果没有src，则不渲染
+        var adContent = src ? core.ad.createHTML(type, src, width, height, link, monitor) : '';
 
         //创建广告渲染的沙箱环境，并传递部分广告参数到沙箱中
         core.sandbox.create(element, width, height, config.pv + adContent, {
@@ -1576,15 +1836,14 @@
     }
     /**
      * 初始化广告对象
-     * @param  {object} adConf [description]
-     * @return {[type]}       [description]
+     * @param  {object} config 配置项
      */
     function _init(config) {
         var element = config.element; //广告容器
 
         config = config.params || {};   //广告配置
 
-        //从confi.element中得到需要渲染的ins元素
+        //从config.element中得到需要渲染的ins元素，如果没有，则获取页面上未完成状态的广告节点
         if (element) {
             if (!_isPenddingSinaad(element) && (element = element.id && _getSinaAd(element.id), !element)) {
                 //throw Error("sinaads: 该元素已经被渲染完成，无需渲染");
@@ -1600,7 +1859,6 @@
         //置成完成状态，下面开始渲染
         element.setAttribute("data-ad-status", "done"); 
 
-
         //全局唯一id标识，用于后面为容器命名
         config.sinaads_uid = (window.sinaads_uid ? ++window.sinaads_uid : window.sinaads_uid = 1);
 
@@ -1615,43 +1873,11 @@
         }
 
         //获取page_url 广告所在页面url
-        var page_url = config.sinaads_page_url = config.sinaads_page_url || ((window.top === window.self) ?  window.document.URL : window.document.referrer);
+        config.sinaads_page_url = core.url.top;
 
-        
-        //获取定向关键词
-        var metas = document.getElementsByTagName('head')[0].getElementsByTagName('meta'),
-            targeting = {
-                keywords : '', //关键字定向
-                template : '', //模版定向
-                entry : ''     //入口定向
-            };
-        core.array.each(metas, function (meta, i) {
-            var entry = '',
-                meta = metas[i];
-            if (meta.name.toLowerCase() === 'keywords') {
-                targeting.keywords += ',' + meta.content;
-            } else if (meta.name.toLowerCase() === 'templateTargeting') {
-                targeting.template += ',' + meta.conrent;
-            }
-            if (entry = core.cookie.get('sinaads_entry_targeting')) {
-                targeting.entry = entry;
-            }
-        });
+        function render() {
 
-
-        var params = [
-            'adunitid=' + config.sinaads_ad_pdps,
-            'rotate_count=' + core.seed,
-            'TIMESTAMP=' + core.now().toString(36),
-            'referral=' + encodeURIComponent(page_url),
-            'tgkw=' + (targeting.keywords ? encodeURIComponent(targeting.keywords) : ''),
-            'tgtpl=' + (targeting.template ? encodeURIComponent(targeting.template) : ''),
-            'tgentry=' + (targeting.entry ? encodeURIComponent(targeting.entry) : '')
-        ];
-        
-        core.sio.loadScript(IMPRESS_URL + '?' + params.join('&'), function (data) {
-
-            data = window._ssp_ad.data[config.sinaads_ad_pdps]; //兼容方法
+            var data = window._ssp_ad.data[config.sinaads_ad_pdps]; //兼容方法
             
             if (!data || data === 'nodata') {
                 //console.log(config.sinaads_ad_pdps + ': 该广告位没有获取到可用的数据');
@@ -1712,61 +1938,107 @@
                     //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
                     if (data.content.src.length > 1) {
                         //注入跨栏数据
-                        window.sinaads_coupletData = {
+                        var CoupletMediaData = {
                             src : data.content.src,
                             type : data.content.type,
                             link : data.content.link,
                             top : config.sinaads_couple_top || 0,
-                            mainW : width,
-                            mainH : height,
-                            sideW : 25,
-                            sideH : 300,
-                            monitor : data.content.monitor || []
+                            mainWidth : width,
+                            mainHeight : height,
+                            sideWidth : 25,
+                            sideHeight : 300,
+                            monitor : data.content.monitor || [],
+                            delay : config.sinaads_ad_delay || 0
                         };
-                        data.content.src = [
-                            [
-                                '\x3cscript\x3e',
-                                    'if (!parent.sinaads_couple) {',
-                                        'parent.sinaadToolkit.sio.loadScript(\'./src/plus/couple.js\', function () {',
-                                            'parent.sinaads_couple(parent.sinaads_coupletData);',
-                                        '});',
-                                    '} else {',
-                                        'parent.sinaads_couple(parent.sinaads_coupletData);',
-                                    '}',
-                                '\x3c/script\x3e'
-                            ].join('')
-                        ];
-                        data.content.type = ['html'];
+                        sinaadToolkit.sio.loadScript('./src/plus/CoupletMedia.js', function () {
+                            new sinaadToolkit.CoupletMedia(CoupletMediaData);
+                        });
+                        data.content.src = [];
                     }
                     break;
                 case 'videoWindow' : 
-                    // if (!window.sinaads_videoWindow) {
-                    //     core.sio.loadScript('./plus/videoWindow.js', function () {
-                    //         sinaads_videoWindow(config);
-                    //     });
-                    // } else {
-                    //     sinaads_videoWindow(config);
-                    // }
+                    element.style.cssText = 'position:absolute;top:-9999px';
+                    if (data.content.type[0] !== 'js') {
+                        var VideoWindowMediaData = {
+                            src : data.content.src[0],
+                            type : data.content.type[0],
+                            width : width,
+                            height : height,
+                            link : data.content.link[0],
+                            monitor : data.content.monitor,
+                            delay : config.sinaads_ad_delay || 0
+                        };
+                        sinaadToolkit.sio.loadScript('./src/plus/VideoWindowMedia.js', function () {
+                            new sinaadToolkit.VideoWindowMedia(VideoWindowMediaData);
+                        });
+                    }
+                    data.content.src = [] //已经处理过，无需再处理
                     break;
-                case 'stream' : 
-                    // if (!window.sinaads_stream) {
-                    //     core.sio.loadScript('./plus/stream.js', function () {
-                    //         sinaads_stream(config);
-                    //     });
-                    // } else {
-                    //     sinaads_stream(config);
-                    // }
+                case 'stream' :
+                    //流媒体，隐藏掉该区块
+                    element.style.cssText = 'position:absolute;top:-9999px';
+                    //这里认为如果给的是素材的话，那么素材必须大于1个，否则为js类型
+                    if (data.content.src.length > 1) {
+                        //注入流媒体数据
+                        var StreamMediaData = {
+                            main : {
+                                type : 'flash',
+                                src : 'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fc1715.swf',
+                                link : 'http://sina.com.cn',
+                                width : width,
+                                height : height
+                            },
+                            mini : {
+                                src : 'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fb1.swf',
+                                type : 'flash',
+                                link : 'http://sina.com.cn'
+                            },
+                            delay : config.sinaads_ad_delay || 0
+                        };
+                        sinaadToolkit.sio.loadScript('./src/plus/StreamMedia.js', function () {
+                            new sinaadToolkit.StreamMedia(StreamMediaData);
+                        });
+                        data.content.src = [];
+                    } else {
+                        //富媒体供应商提供的js
+                        //生成一个用于渲染容器到页面中
+                        var streamContainer = document.createElement('div');
+                        streamContainer.id = 'SteamMediaWrap';
+                        document.body.insertBefore(streamContainer, document.body.firstChild);
+                            
+                        sinaadToolkit.sio.loadScript(data.content.src[0]);
+                        data.content.src = [] //已经处理过，无需再处理
+                    }
                     break;
                 case 'fullscreen' : 
-                    // if (!window.sinaads_fullscreen) {
-                    //     core.sio.loadScript('./plus/fullscreen', function () {
-                    //         sinaads_fullscreen(config);
-                    //     });
-                    // } else {
-                    //     sinaads_fullscreen(config);
-                    // }
+                    //是全屏广告，隐藏掉改区块
+                    element.style.cssText = 'position:absolute;top:-9999px';
+                    var FullScreenMediaData = {
+                        type : data.content.type[0] || '',
+                        src : data.content.src[0] || '',
+                        link : data.content.link[0] || '',
+                        width : width,
+                        height : height,
+                        hasClose : 1,
+                        delay : config.sinaads_ad_delay || 0
+                    };
+
+                    sinaadToolkit.sio.loadScript('./src/plus/FullscreenMedia.js', function () {
+                        new sinaadToolkit.FullscreenMedia(element, FullScreenMediaData);
+                    });
+                    data.content.src = [];
                     break;
+                case 'bp' : 
+                    //是背投广告，隐藏掉改区块
+                    element.style.cssText = 'position:absolute;top:-9999px';
+                    //这里规定背投的素材不能是js或者代码片段，而且只能有1个
+                    window.open('http://d1.sina.com.cn/d1images/pb/pbv4.html?' + data.content.link[0] + '${}' + data.content.type[0] + '${}' + data.content.src[0]);
+                    data.content.src = [];
+                    break;
+                case 'textlink': 
+
                 default : 
+
                     break;
             }
 
@@ -1793,19 +2065,42 @@
             for (var i = 0, len = mapping.length; i < len; i++) {
                 mapping[i] && core.sio.log(mapping[i]);
             }
-        });
-    }
+        };
 
-    /* 在脚本加载之前注入的广告数据存入再sinaads数组中，遍历数组进行初始化 */
-    var perloadAds = window.sinaads;
-    if (perloadAds && perloadAds.shift) {
-        for (var ad, len = 20; (ad = perloadAds.shift()) && 0 < len--;) {
-            _init(ad);
+        if (!_ssp_ad.data[config.sinaads_ad_pdps]) {
+            getData([config.sinaads_ad_pdps]).done(render);
+        } else {
+            render();
         }
     }
-    //在脚本加载之后，sinaad重新定义，并赋予push方法为初始化方法
-    window.sinaads = {push : _init};
-})(window);
+
+
+    /**
+     * 初始化方法，处理js加载成功之前压入延迟触发的广告位，
+     * 并将后续广告压入方法置成内部初始化方法
+     */
+    function init() {
+        /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
+        var perloadAds = window.sinaads;
+        if (perloadAds && perloadAds.shift) {
+            for (var ad, len = 20; (ad = perloadAds.shift()) && 0 < len--;) {
+                _init(ad);
+            }
+        }
+        //在脚本加载之后，sinaad重新定义，并赋予push方法为初始化方法
+        window.sinaads = {push : _init};
+    }
+
+    /* 判断是否有需要预加载的数据，加载完成后执行初始化操作，否则执行初始化操作 */
+    var perloadData = window.sinaadsPerloadData;
+    if (perloadData instanceof Array && perloadData.length > 0) {
+        getData(perloadData).done(init).fail(init);
+    } else {
+        init();
+    }
+    window.sinaadsPerloadData = null;
+
+})(window, window.sinaadToolkit);
 
 
 
@@ -1882,6 +2177,10 @@ window._ssp_ad = {
         // 文字链 wzl
         ret.type = (function (type) {
             switch (type) {
+                case 'lmt' : 
+                    return 'stream';
+                case 'sc' : 
+                    return 'videoOpen';
                 case 'bt' :
                     return 'bp';
                 case 'kl' :
@@ -1903,10 +2202,18 @@ window._ssp_ad = {
         return ret;
     },
     callback : function (data) {
-        if (data === 'nodata' || (data.ad && data.ad[0] && (!data.ad[0].value || data.ad[0].value && data.ad[0].value.length <= 0))) {
+        if (data === 'nodata' || data.ad.length <= 0) {
             return;
         }
-        window._ssp_ad.data[data.ad[0].id] = window._ssp_ad.adapter(data);
+        for (var i = 0, len = data.ad.length; i < len; i++) {
+            if (data.ad[i] && (!data.ad[i].value || data.ad[i].value && data.ad[0].value.length <= 0)) {
+                return;
+            }
+            window._ssp_ad.data[data.ad[i].id] = window._ssp_ad.adapter({
+                mapUrl : data.mapUrl,
+                ad : [data.ad[i]]
+            });
+        }
     }
 };
 
@@ -1992,3 +2299,49 @@ window._ssp_ad = {
 //         link : ['http://leju.com']
 //     }
 // };
+// 
+// 流媒体广告
+window._ssp_ad.data["PDPS000000000066"] = {
+    size : "1000*450",
+    type : 'stream',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['flash', 'flash'],
+        src : [
+            'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fc1715.swf',
+            'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fb1.swf'
+            //'http://rm.sina.com.cn/bj-icast/mv/cr/2013/07/129132/31641/code.js'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
+//全屏广告
+window._ssp_ad.data["PDPS000000000067"] = {
+    size : "1000*400",
+    type : 'fullscreen',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['image'],
+        src : [
+            'http://d1.sina.com.cn/201308/06/504904_sina-fulls-1000X450-0806-CC.jpg'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
+
+//视窗广告
+window._ssp_ad.data["PDPS000000000068"] = {
+    size : "300*297",
+    type : 'videoWindow',
+    content : {
+        pv : ["http://baidu.com/?stream", "http://baidu.com/?stream2"],
+        type : ['flash'],
+        src : [
+            'http://d1.sina.com.cn/rwei/shijia2012/shichuang1129/300x250.swf'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }
+};
