@@ -1,7 +1,14 @@
 (function (window, undefind) {
     //常量定义
-    var SIDE_CLOSE_BTN = "http://d1.sina.com.cn/d1images/lmt/close2.gif",
-        MAIN_CLOSE_BTN = "http://d2.sina.com.cn/d1images/lmt/cls_66x22.gif";
+    var //SIDE_CLOSE_BTN = "http://d1.sina.com.cn/d1images/lmt/close2.gif",
+        SIDE_CLOSE_BTN = 'http://d9.sina.com.cn/litong/zhitou/test/images/close-h.jpg',
+        MAIN_CLOSE_BTN = "http://d2.sina.com.cn/d1images/lmt/cls_66x22.gif",
+        //SIDE_CLOSE_BTN_SIZE = [25, 48],
+        SIDE_CLOSE_BTN_SIZE = [120, 18],
+        MAIN_CLOSE_BTN_SIZE = [66, 22],
+        MAIN_SIZE = [1000, 90],
+        //SIDE_SIZE = [25, 300],
+        SIDE_SIZE = [120, 270];
         
     /**
      * 跨栏广告
@@ -15,22 +22,29 @@
 
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
+        config.mainWidth = config.mainWidth || MAIN_SIZE[0];
+        config.mainHeight = config.mainHeight || MAIN_SIZE[1];
+        config.sideWidth = SIDE_SIZE[0];
+        config.sideHeight = SIDE_SIZE[1];
+
         this.config = config;
 
         this.deferred = new sinaadToolkit.Deferred();
 
         var left = this.left = new sinaadToolkit.Box({
             width : config.sideWidth,
-            height : config.sideHeight + 48,
+            height : config.sideHeight + SIDE_CLOSE_BTN_SIZE[1],
             position : 'left ' + config.top || 0,
-            autoShow : 1
+            autoShow : 1,
+            minViewportWidth : config.mainWidth + 2 * config.sideWidth
         });
 
         var right = this.right = new sinaadToolkit.Box({
             width : config.sideWidth,
-            height : config.sideHeight + 48,
+            height : config.sideHeight + SIDE_CLOSE_BTN_SIZE[1],
             position : 'right ' + config.top || 0,
-            autoShow : 1
+            autoShow : 1,
+            minViewportWidth : config.mainWidth + 2 * config.sideWidth
         });
 
         var main = this.main = new sinaadToolkit.Box({
@@ -44,7 +58,7 @@
         mainContent.style.cssText = 'width:' + config.mainWidth + 'px;height:' + config.mainHeight + 'px;overflow:hidden;margin:0px auto;position:relative;';
 
         var mainCloseBtn = this.mainCloseBtn = document.createElement('div');
-        mainCloseBtn.style.cssText = 'width:66px;height:22px;position:absolute;top:' + config.mainHeight + 'px;right:0px;background:url(' + MAIN_CLOSE_BTN + ') no-repeat;pointer:cursor;';
+        mainCloseBtn.style.cssText = 'width:' + MAIN_CLOSE_BTN_SIZE[0] + 'px;height:' + MAIN_CLOSE_BTN_SIZE[1] + 'px;position:absolute;top:' + config.mainHeight + 'px;right:0px;background:url(' + MAIN_CLOSE_BTN + ') no-repeat;pointer:cursor;';
 
         var leftContent = this.leftContent = document.createElement('div');
         leftContent.style.cssText = 'width:' + config.sideWidth + 'px;height:' + config.sideHeight + 'px;position:absolute;left:0px;top:0px;';
@@ -58,7 +72,7 @@
         );
 
         var leftCloseBtn = this.leftCloseBtn = document.createElement('div');
-        leftCloseBtn.style.cssText = 'width:' + 25 + 'px;height:' + 48 + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat;cursor:pointer';
+        leftCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat right center #ebebeb;cursor:pointer';
 
         var rightContent = this.rightContent = document.createElement('div');
         rightContent.style.cssText = 'width:' + config.sideWidth + 'px;height:' + config.sideHeight + 'px;position:absolute;left:0px;top:0px;';
@@ -72,7 +86,7 @@
         );
 
         var rightCloseBtn = this.rightCloseBtn = document.createElement('div');
-        rightCloseBtn.style.cssText = 'width:' + 25 + 'px;height:' + 48 + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat;cursor:pointer';
+        rightCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat left center #ebebeb;cursor:pointer';
 
 
         main.element.appendChild(mainContent);
@@ -122,7 +136,7 @@
 
             this.aniTimer = setInterval(function () {
                 if (THIS.tmpWidth < THIS.config.mainWidth) {
-                    THIS.tmpWidth += (THIS.config.mainWidth - THIS.tmpWidth) / 2;
+                    THIS.tmpWidth += (THIS.config.mainWidth - THIS.tmpWidth) / 4;
                     THIS.mainContent.style.width = THIS.tmpWidth + 'px';
                 } else {
                     THIS.mainContent.style.width = THIS.config.mainWidth + 'px';
@@ -146,12 +160,15 @@
             var THIS = this;
             return function () {
                 THIS.hide();
+                THIS.mainIsClose = true; //主跨栏已经被主动关闭
             };
         },
         getHoverSideHandler : function () {
             var THIS = this;
             return function () {
-                THIS.show();
+                if (!THIS.mainIsClose) {
+                    THIS.show();
+                }
             }
         },
         getCloseSideHandler : function () {

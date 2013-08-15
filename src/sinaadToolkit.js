@@ -1,4 +1,4 @@
-/**
+/*!
  * sinaadToolkit
  * @description 新浪广告工具包，提供了浏览器判断，渲染，cookie, storage, iframe, 转义等基础操作
  * @author  acelan <xiaobin8[at]staff.sina.com.cn>
@@ -18,14 +18,14 @@
          * @static
          * @const
          */
-        TOOLKIT_URL : 'http://d1.sina.com.cn/litong/zhitou/sinaads/src/core.js',
+        TOOLKIT_URL : './src/sinaadToolkit.js',
         /**
          * 获取当前时间戳
          * @return {Number} 当前时间戳
          * @static
          */
         now : function () {
-            return new Date().getTime();
+            return +new Date();
         },
         /**
          * 随机数生成，生成一个随机数的36进制表示方法
@@ -52,6 +52,14 @@
          */
         isString : function (source) {
            return '[object String]' == Object.prototype.toString.call(source);
+        },
+        /**
+         * 判断是否是null或者未定义
+         * @param  {Any} source  要判断的对象
+         * @return {Boolean}      是否为null或未定义
+         */
+        isNull : function (source) {
+            return ('undefined' === typeof source) || (source === null);
         }
     };
 
@@ -224,6 +232,14 @@
                 }
             }
             return source;
+        },
+        /**
+         * 断言，这里必须转换成一个数组
+         * @param  {[type]} source [description]
+         * @return {[type]}        [description]
+         */
+        assert : function (source) {
+            return source instanceof Array ? source : sinaadToolkit.isNull(source) ? [] : [source];
         }
     };
 
@@ -298,6 +314,31 @@
                     return ESCAPE_MAP[str] = unicodePerfix + alphaCode.toString(16);
                 }));
                 return '"' + ret.join('') + '"';
+            },
+            /**
+             * 简单模版方法
+             * @param  {String} source 模版
+             * @param  {Object} opts   替换变量
+             * @return {String}        模版替换后的结果
+             */
+            format : function (source, opts) {
+                source = String(source);
+                var data = Array.prototype.slice.call(arguments, 1), 
+                    toString = Object.prototype.toString;
+                if(data.length){
+                    data = data.length == 1 ? 
+                        /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
+                        (opts !== null && (/\[object Array\]|\[object Object\]/.test(toString.call(opts))) ? opts : data) : data;
+                    return source.replace(/#\{(.+?)\}/g, function (match, key){
+                        var replacer = data[key];
+                        // chrome 下 typeof /a/ == 'function'
+                        if('[object Function]' == toString.call(replacer)){
+                            replacer = replacer(key);
+                        }
+                        return ('undefined' == typeof replacer ? '' : replacer);
+                    });
+                }
+                return source;
             }
         };
     })();
@@ -488,8 +529,7 @@
                     userData.userData.removeAttribute(key);
                     userData.userData.save(userData.name);
                 }
-
-           }
+            }
         };
 
         /**
@@ -526,7 +566,7 @@
          * 根据浏览器支持选择相关的存储方案
          * 当ie且ie<8时使用userData方案，否则使用localStorage方案，否则使用cookie方案
          */
-        var storage = sinaadToolkit.browser.ie && sinaadToolkit.browser.ie < 8 ? userData : window.localStorage ? ls : cookie;
+        var storage = window.localStorage ? ls : sinaadToolkit.browser.ie && sinaadToolkit.browser.ie < 8 ? userData : cookie;
         
         return /** @lends sinaadToolkit.storage */{
             /**
@@ -593,7 +633,7 @@
             try {
                 top = window.top.location.href;
             } catch (e) {}
-            return top || document.referrer || window.location.href;
+            return top || ((window.top === window.self) ?  window.location.href : window.document.referrer);
         })()
     };
 
@@ -650,16 +690,16 @@
          * @return {Number} 向上滚动高度
          */
         getScrollTop : function () {
-            var d = document;
-            return window.pageYOffset || d.documentElement.scrollTop || d.body.scrollTop;
+            var doc = document;
+            return window.pageYOffset || doc.documentElement.scrollTop || doc.body.scrollTop;
         },
         /**
          * 获取向左滚动高度
          * @return {Number} 向左滚动高度
          */
         getScrollLeft : function () {
-            var d = document;
-            return window.pageXOffset || d.documentElement.scrollLeft || d.body.scrollLeft;
+            var doc = document;
+            return window.pageXOffset || doc.documentElement.scrollLeft || doc.body.scrollLeft;
         },
         /**
          * 获取页面高度
@@ -667,7 +707,7 @@
          */
         getViewHeight : function () {
             var doc = document,
-            client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+                client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
             return client.clientHeight;
         },
         /**
@@ -676,7 +716,7 @@
          */
         getViewWidth : function () {
             var doc = document,
-            client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+                client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
             return client.clientWidth;
         }
     };
@@ -694,13 +734,125 @@
          */
         on : function (dom, type, callback) {
             if (dom.attachEvent) {
-                dom.attachEvent('on' + type, callback);
+                dom.attachEvent('on' + type, function (e) {
+                    callback.call(dom, e);
+                });
             } else {
-                dom.addEventListener(type, callback, false);
+                dom.addEventListener(type, function (e) {
+                    callback.call(dom, e);
+                }, false);
             }
         }
     };
 
+
+    /**
+     * @namespace sinaadToolkit.Defered
+     */
+    sinaadToolkit.Deferred = sinaadToolkit.Deferred || (function (core) {
+        function _pipe(original, deferred, callback, actionType) {
+            return function () {
+                if (typeof callback === 'function') {
+                    try {
+                        var returnValue = 
+                            callback.apply(original, arguments);
+
+                        if (Deferred.isPromise(returnValue)) {
+                            returnValue.then(
+                                function () {
+                                    deferred.resolve.apply(deferred, arguments);
+                                },
+                                function () {
+                                    deferred.reject.apply(deferred, arguments);
+                                }
+                            );
+                        }
+                        else {
+                            deferred.resolve.call(deferred, returnValue);
+                        }
+                    }
+                    catch (error) {
+                        deferred.reject(error);
+                    }
+                }
+                // `.then()`及`.then(done, null)`时使用
+                // 直接使用原`Deferred`保存的参数将`deferred`改为对应状态
+                else {
+                    deferred[actionType].apply(deferred, original._args);
+                }
+            };
+        }
+        //判断promise状态决定指定回调方法
+        function _flush(deferred) {
+            if (deferred._state === 'pending') {
+                return;
+            }
+            var callbacks = deferred._state === 'resolved' ? deferred._resolves.slice() : deferred._rejects.slice();
+
+            setTimeout(function () {
+                core.array.each(callbacks, function (callback, i) {
+                    try {
+                        callback.apply(deferred, deferred._args);
+                    } catch (e) {}
+                });
+            }, 0);
+
+            deferred._resolves = [];
+            deferred._rejects = [];
+        }
+
+        function Deferred() {
+            this._state = 'pending'; //当前promise状态
+            this._args = null;       //传递参数
+            this._resolves = [];     //成功回调集合
+            this._rejects = [];      //失败回调集合
+        }
+        
+        Deferred.prototype = {
+            resolve : function (args) {
+                if (this._state !== "pending") {
+                    return;
+                }
+
+                this._state = 'resolved';
+                this._args = [].slice.call(arguments);
+
+                _flush(this);
+            },
+            reject : function () {
+                if (this._state !== 'pending') {
+                    return;
+                }
+                this._state = 'rejected';
+                this._args = [].slice.call(arguments);
+
+                _flush(this);
+            },
+            then : function (resolve, reject) {
+                var deferred = new Deferred();
+                
+                this._resolves.push(_pipe(this, deferred, resolve, 'resolve'));
+                this._rejects.push(_pipe(this, deferred, reject, 'reject'));
+
+                _flush(this);
+
+                return deferred;
+            },
+            done : function (callback) {
+                return this.then(callback);
+            },
+            fail : function (callback) {
+                return this.then(null, callback);
+            }
+        };
+
+        Deferred.isPromise = function (value) {
+            return value && typeof value.then === 'function';
+        };
+
+        return Deferred;
+
+    })(sinaadToolkit);
 
     /**
      * @namespace sinaadToolkit.sio
@@ -739,7 +891,7 @@
                 var scr = document.createElement("SCRIPT"),
                     scriptLoaded = 0,
                     options = opt_options || {},
-                    charset = options['charset'],
+                    charset = options['charset'] || 'utf-8',
                     callback = opt_callback || function(){},
                     timeOut = options['timeOut'] || 0,
                     timer;
@@ -789,7 +941,7 @@
                     callbackName,
                     callbackImpl,
                     options = opt_options || {},
-                    charset = options['charset'],
+                    charset = options['charset'] || 'utf-8',
                     queryField = options['queryField'] || 'callback',
                     timeOut = options['timeOut'] || 0,
                     timer,
@@ -833,7 +985,7 @@
                             }
                             window[callbackName] = null;
                             delete window[callbackName];
-                        } catch (exception) {
+                        } catch (e) {
                             // ignore the exception
                         } finally {
                             _removeScriptTag(scr);
@@ -847,8 +999,7 @@
              */
             log : function(url) {
                 var img = new Image(),
-                    key = '_sinaads_sio_log_' + Math.floor(Math.random() *
-                          2147483648).toString(36);
+                    key = '_sinaads_sio_log_' + sinaadToolkit.rnd();
 
                 window[key] = img;
              
@@ -1059,8 +1210,8 @@
          * @return {Object}          填充完初始属性，用于生成iframe的对象
          */
         init : function (config, width, height, useQuote) {
-            var quote = useQuote ? '"' : ""; //是否使用引号将属性包裹
-            var zero = quote + "0" + quote;
+            var quote = useQuote ? '"' : "", //是否使用引号将属性包裹
+                zero = quote + "0" + quote;
             config.width = quote + width + quote;
             config.height = quote + height + quote;
             config.frameborder = zero;
@@ -1107,29 +1258,29 @@
                     try {
                         //ie > 6
                         if (ie > 6) {
-                            var k;
-                            i: {
-                                //ie 7 - 10
-                                if (ie > 7 && ie <= 10) {
-                                    for (var i = 0; i < content.length; ++i) {
-                                        if (127 < content.charCodeAt(i)) {
-                                            k = true;
-                                            break i;
-                                        }
-                                    }
-                                }
-                                k = false;
-                            }
-                            if (k) {
-                                var content = unescape(encodeURIComponent(content));
-                                var mid = Math.floor(content.length / 2);
-                                k = [];
-                                for (var i = 0; i < mid; ++i) {
-                                    k[i] = String.fromCharCode(256 * content.charCodeAt(2 * i + 1) + content.charCodeAt(2 * i));
-                                }
-                                1 == content.length % 2 && (k[mid] = content.charAt(content.length - 1));
-                                content = k.join("");
-                            }
+                            // var k;
+                            // i: {
+                            //     //ie 7 - 10
+                            //     if (ie > 7 && ie <= 10) {
+                            //         for (var i = 0; i < content.length; ++i) {
+                            //             if (127 < content.charCodeAt(i)) {
+                            //                 k = true;
+                            //                 break i;
+                            //             }
+                            //         }
+                            //     }
+                            //     k = false;
+                            // }
+                            // if (k) {
+                            //     var content = unescape(encodeURIComponent(content));
+                            //     var mid = Math.floor(content.length / 2);
+                            //     k = [];
+                            //     for (var i = 0; i < mid; ++i) {
+                            //         k[i] = String.fromCharCode(256 * content.charCodeAt(2 * i + 1) + content.charCodeAt(2 * i));
+                            //     }
+                            //     1 == content.length % 2 && (k[mid] = content.charAt(content.length - 1));
+                            //     content = k.join("");
+                            // }
                             window.frames[iframe.name].contents = content;
                             iframe.src = 'javascript:window["contents"]';
                         // ie < 6
@@ -1248,6 +1399,7 @@
                     switch (type) {
                         case 'image' :
                         case 'flash' :
+                        case 'text'  :
                             code = 'sinaadToolkit.sio.log(\'' + url + '\')';
                             comma = ';'
                             break;
@@ -1279,9 +1431,10 @@
          * @param  {Number} height  广告高
          * @param  {String} link    广告资源落地页地址
          * @param  {Array:String} monitor 广告点击监测的url数组
+         * @param  {String} tpl     模版
          * @return {String}         广告展现html
          */
-        createHTML : function (type, src, width, height, link, monitor) {
+        createHTML : function (type, src, width, height, link, monitor, tpl) {
             var html = '',
                 config,
                 monitorCode;
@@ -1290,6 +1443,20 @@
             height += String(height).indexOf('%') !== -1 ? '' : 'px';
 
             monitorCode = sinaadToolkit.monitor.createClickMonitor(type, monitor);
+
+            //如果提供了模版，则使用模版来渲染广告
+            //模版中可以含有参数type, src, width, height, monitor, link
+            //现在主要用在智投文字链和图文方式
+            if (tpl && 'string' === typeof tpl) {
+                return sinaadToolkit.string.format(tpl, {
+                    type    : type,
+                    src     : src,
+                    width   : width,
+                    monitor : monitorCode,
+                    link    : link
+                });
+            }
+
             switch (type) {
                 case 'js' :
                     html = ['<', 'script src="', src, '"></','script>'].join('');
@@ -1305,7 +1472,7 @@
                     html = link ? '<a href="' + link + '" target="' + (sinaadToolkit.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + html + '</a>' : html;
                     break;
                 case 'text' : 
-                    html = '<span>' + src + '</span>';
+                    html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + src + '</a>' : src;
                     break;
                 case 'flash' : 
                     html = sinaadToolkit.swf.createHTML({
@@ -1461,7 +1628,7 @@
                 container.innerHTML = [
                     '<ins style="margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';">',
                         sinaadToolkit.iframe.createHTML(iframeConfig),
-                    '</ind>'
+                    '</ins>'
                 ].join('');
 
                 container.style.cssText += ';display:block;overflow:hidden;';
@@ -1473,13 +1640,115 @@
                 sinaadToolkit.iframe.fill(document.getElementById(sandboxId), [
                     '<!doctype html><html><body style="background:transparent">',
                         '<', 'script>', context, '</', 'script>',
-                        '<', 'script src="' + sinaadToolkit.TOOLKIT_URL + '" charset="utf-8"></', 'script>',
+                        //'<', 'script src="' + sinaadToolkit.TOOLKIT_URL + '" charset="utf-8"></', 'script>',
                         content,
                     '</body></html>'
                 ].join(""));
             }
         };
     })();
+
+
+
+    /**
+     * 跟随容器基类
+     */
+    function Box(config) {
+        var THIS = this;
+
+        this.width = config.width || 0;
+        this.height = config.height || 'auto';
+        this.position = config.position || "center center";
+        this.follow = config.follow || 0;
+
+        this.positionStyle = this.follow ? (sinaadToolkit.browser.isSupportFixed ? 'fixed' : 'absolute') : 'absolute';
+
+        this.element = document.createElement('div');
+        this.element.style.position = this.positionStyle;
+
+        this.element.style.cssText += ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:9999;display:' + (config.autoShow ? 'block' : 'none');
+
+        this.setPosition();
+
+        sinaadToolkit.event.on(window, 'resize', function () {
+            THIS.setPosition();
+        });
+
+        if (this.follow && !sinaadToolkit.browser.isSupportFixed) {
+            sinaadToolkit.event.on(window, 'scroll', function () {
+                THIS.setPosition();
+            });
+        }
+
+        document.body.insertBefore(this.element, document.body.firstChild);
+
+    }
+
+    Box.prototype = {
+        setPosition : function () {
+            var position = this.position.split(' '),
+                viewWidth = sinaadToolkit.page.getViewWidth(),
+                viewHeight = sinaadToolkit.page.getViewHeight(),
+                offsetTop = 0,
+                offsetLeft = 0,
+                left = 0,
+                top = 0;
+
+            if (this.follow) {
+                offsetTop = sinaadToolkit.browser.isSupportFixed ? 0 : sinaadToolkit.page.getScrollTop() || 0;
+                offsetLeft = sinaadToolkit.browser.isSupportFixed ? 0 : sinaadToolkit.page.getScrollLeft() || 0;
+            }
+
+            switch (position[0]) {
+                case 'center' :
+                    this.element.style.left = (viewWidth - this.width) / 2 + offsetLeft + 'px';
+                    break;
+                case 'left' :
+                    this.element.style.left = offsetLeft + 'px';
+                    break;
+                case 'right' :
+                    if (this.follow) {
+                        this.element.style.left = offsetLeft + (viewWidth - this.width) + 'px'; 
+                    } else {
+                        this.element.style.right = '0px';
+                    }
+                    break;
+                default :
+                    this.element.style.left = offsetLeft + (parseInt(position[0], 10) || 0) + 'px';
+                    break;
+            }
+            switch (position[1]) {
+                case 'center' :
+                    this.element.style.top = (viewHeight - this.height) / 2 + offsetTop + 'px';
+                    break;
+                case 'top' :
+                    this.element.style.top = offsetTop + 'px';
+                    break;
+                case 'bottom' :
+                    if (this.follow) {
+                        this.element.style.top = offsetTop + (viewHeight - this.height) + 'px'; 
+                    } else {
+                        this.element.style.bottom = '0px';
+                    }
+                    break;
+                default :
+                    this.element.style.top = offsetTop + (parseInt(position[1], 10) || 0) + 'px';
+                    break;
+            }
+        },
+        show : function () {
+            this.element.style.display = 'block';
+        },
+        hide : function () {
+            this.element.style.display = 'none';
+        }
+    };
+    sinaadToolkit.Box = sinaadToolkit.Box || Box;
+
+    /**
+     * @todo 简单动画方法
+     */
+    
 
     /**
      * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
