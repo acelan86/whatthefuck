@@ -2484,6 +2484,9 @@ window._ssp_ad.data["PDPS000000000050"] = {
                     //是跨栏，隐藏掉改区块
                     element.style.cssText = 'position:absolute;top:-9999px';
                     //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
+                    if (content.src.length === 1 && conent.type[0] === 'js') {
+                        core.sio.loadScript(content.src[0]);
+                    }
                     if (content.src.length > 1) {
                         //注入跨栏数据
                         var CoupletMediaData = {
@@ -2525,6 +2528,15 @@ window._ssp_ad.data["PDPS000000000050"] = {
                 case 'stream' :
                     //流媒体，隐藏掉该区块
                     element.style.cssText = 'position:absolute;top:-9999px';
+                    if(content.src.length === 1 && content.type[0] === 'js'){
+                        //富媒体供应商提供的js
+                        //生成一个用于渲染容器到页面中
+                        var streamContainer = document.createElement('div');
+                        streamContainer.id = 'SteamMediaWrap';
+                        document.body.insertBefore(streamContainer, document.body.firstChild);
+                            
+                        core.sio.loadScript(content.src[0]);
+                    }
                     //这里认为如果给的是素材的话，那么素材必须大于1个，否则为js类型
                     if (content.src.length > 1) {
                         //注入流媒体数据
@@ -2546,17 +2558,8 @@ window._ssp_ad.data["PDPS000000000050"] = {
                         core.sio.loadScript('./src/plus/StreamMedia.js', function () {
                             new core.StreamMedia(StreamMediaData);
                         });
-                        content.src = [];
-                    } else {
-                        //富媒体供应商提供的js
-                        //生成一个用于渲染容器到页面中
-                        var streamContainer = document.createElement('div');
-                        streamContainer.id = 'SteamMediaWrap';
-                        document.body.insertBefore(streamContainer, document.body.firstChild);
-                            
-                        core.sio.loadScript(content.src[0]);
-                        content.src = [] //已经处理过，无需再处理
                     }
+                    content.src = [];
                     break;
                 case 'fullscreen' : 
                     //是全屏广告，隐藏掉改区块
