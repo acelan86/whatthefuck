@@ -25,16 +25,19 @@
          */
         mode : window.location.href.indexOf('__sinaadToolkitDebug__') !== -1 ? 'debug' : 'release',  //是否开启debug模式
         /**
+         * @private
+         */
+        _consoleView : null,
+        /**
          * 调试方法，用于方便线上调试问题
          * @param  {String} msg 输出的信息
          */
-        consoleView : null,
         debug : function (msg) {
             var console = window.console || { 
                 log : function (msg) {
-                    var consoleView = sinaadToolkit.consoleView;
+                    var consoleView = sinaadToolkit._consoleView;
                     if (!consoleView) {
-                        consoleView = sinaadToolkit.consoleView = document.createElement('ul');
+                        consoleView = sinaadToolkit._consoleView = document.createElement('ul');
                         consoleView.style.cssText = 'z-index:99999;overflow:auto;height:300px;position:absolute;right:0;top:0;opacity:.9;*filter:alpha(opacity=90);background:#fff;width:500px;';
                         document.body.insertBefore(consoleView, document.body.firstChild);
                     }
@@ -274,9 +277,9 @@
             return source;
         },
         /**
-         * 断言，这里必须转换成一个数组
-         * @param  {[type]} source [description]
-         * @return {[type]}        [description]
+         * 将传入元素转换成一个数组，如果是一个数组，直接返回，如果不是，判断是否为null或者undefined,如果不是，返回这个元素组成的数组，否则返回空数组
+         * @param  {Any} source 需要转换的对象
+         * @return {Array}      转换后的数组
          */
         ensureArray : function (source) {
             return source instanceof Array ? source : sinaadToolkit.isNull(source) ? [] : [source];
@@ -1690,7 +1693,9 @@
 
 
     /**
-     * 跟随容器基类
+     * @name Box
+     * @class 跟随容器，创建一个可以指定展现位置的跟随容器盒
+     * @constructor
      */
     function Box(config) {
         var THIS = this;
@@ -1704,9 +1709,7 @@
         this.positionStyle = this.follow ? (sinaadToolkit.browser.isSupportFixed ? 'fixed' : 'absolute') : 'absolute';
 
         this.element = document.createElement('div');
-        this.element.style.position = this.positionStyle;
-
-        this.element.style.cssText += ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:9999;display:' + (config.autoShow ? 'block' : 'none');
+        this.element.style.cssText += 'position:' + this.positionStyle + ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:9999;display:' + (config.autoShow ? 'block' : 'none');
 
         this.setPosition();
 
@@ -1721,10 +1724,12 @@
         }
 
         document.body.insertBefore(this.element, document.body.firstChild);
-
     }
 
-    Box.prototype = {
+    Box.prototype = /** @lends Box.prototype */{
+        /**
+         * 设置盒子的位置
+         */
         setPosition : function () {
             var position = this.position.split(' '),
                 viewWidth = sinaadToolkit.page.getViewWidth(),
@@ -1776,9 +1781,15 @@
                     break;
             }
         },
+        /**
+         * 显示盒子
+         */
         show : function () {
             this.element.style.display = 'block';
         },
+        /**
+         * 隐藏盒子
+         */
         hide : function () {
             this.element.style.display = 'none';
         }
@@ -1824,10 +1835,11 @@ window._ssp_ad = window._ssp_ad || {
                 content : []
             },
             ad = data.ad[0],
-            contents = ad.value[0].content;
+            contents = ad.value;
 
         sinaadToolkit.array.each(contents, function (content, i) {
-            var type = sinaadToolkit.array.ensureArray(content.type),
+            var content = content.content,
+                type = sinaadToolkit.array.ensureArray(content.type),
                 src = sinaadToolkit.array.ensureArray(content.src),
                 size = ad.size.split('*'),
                 link = sinaadToolkit.array.ensureArray(content.link);

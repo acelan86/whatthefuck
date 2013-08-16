@@ -20,6 +20,46 @@
          */
         TOOLKIT_URL : './src/sinaadToolkit.js',
         /**
+         * 模式 debug || release
+         * 在页面url中使用__sinaadToolkitDebug__可以触发debug模式
+         */
+        mode : window.location.href.indexOf('__sinaadToolkitDebug__') !== -1 ? 'debug' : 'release',  //是否开启debug模式
+        /**
+         * @private
+         */
+        _consoleView : null,
+        /**
+         * 调试方法，用于方便线上调试问题
+         * @param  {String} msg 输出的信息
+         */
+        debug : function (msg) {
+            var console = window.console || { 
+                log : function (msg) {
+                    var consoleView = sinaadToolkit._consoleView;
+                    if (!consoleView) {
+                        consoleView = sinaadToolkit._consoleView = document.createElement('ul');
+                        consoleView.style.cssText = 'z-index:99999;overflow:auto;height:300px;position:absolute;right:0;top:0;opacity:.9;*filter:alpha(opacity=90);background:#fff;width:500px;';
+                        document.body.insertBefore(consoleView, document.body.firstChild);
+                    }
+                    var li = document.createElement('li');
+                    li.style.cssText = 'border-bottom:1px dotted #ccc;line-height:30px;font-size:12px;';
+                    li.innerHTML = msg + Array.prototype.slice.call(arguments, 1).join(' ');
+                    consoleView.appendChild(li);
+                }
+            };
+            if (sinaadToolkit.mode === 'debug') {
+                console.log(msg, Array.prototype.slice.call(arguments, 1));
+            }
+        },
+        /**
+         * 错误信息
+         */
+        throwError : function (msg, e) {
+            if (sinaadToolkit.mode === 'debug') {
+                throw new Error(msg + ':' + e.message);
+            }
+        },
+        /**
          * 获取当前时间戳
          * @return {Number} 当前时间戳
          * @static
@@ -213,6 +253,9 @@
          * @return {Array}            被遍历的源数组
          */
         each : function (source, iterator, thisObject) {
+
+            source = sinaadToolkit.array.ensureArray(source);
+
             var returnValue, 
                 item, 
                 i, 
@@ -234,11 +277,11 @@
             return source;
         },
         /**
-         * 断言，这里必须转换成一个数组
-         * @param  {[type]} source [description]
-         * @return {[type]}        [description]
+         * 将传入元素转换成一个数组，如果是一个数组，直接返回，如果不是，判断是否为null或者undefined,如果不是，返回这个元素组成的数组，否则返回空数组
+         * @param  {Any} source 需要转换的对象
+         * @return {Array}      转换后的数组
          */
-        assert : function (source) {
+        ensureArray : function (source) {
             return source instanceof Array ? source : sinaadToolkit.isNull(source) ? [] : [source];
         }
     };
@@ -1289,7 +1332,7 @@
                             iframe.src = 'javascript:document.write(window["contents"]);/* document.close(); */';
                         }
                     } catch(e) {
-                        alert("无法ie的iframe中写入内容: " + e.message);
+                        sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法往ie的iframe中写入内容, ", e);
                     }
                 } else {
                     /**
@@ -1313,7 +1356,7 @@
                         iframe.src = 'javascript:\'<script type="text/javascript">' + content + "\x3c/script>'";
                     } catch(e) {
                         window[key] = null;
-                        alert("无法通过修改document.domain的方式来填充IE下的iframe内容: " + e.message);
+                        sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
                     }
                 }
             //标准浏览器，标准方法
@@ -1325,7 +1368,7 @@
                        doc.write(content);
                        doc.close();
                 } catch(e) {
-                    alert("无法使用标准方法填充iframe的内容: " + e.message);
+                    sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
                 }
             }
         }
@@ -1594,8 +1637,7 @@
                     try {
                         _stringify(value, tmp);
                         tmp = tmp.join("");
-                    } catch (k) {
-                    }
+                    } catch (e) {}
                     tmp && code.push(key, "=", tmp, ";");
                 }
             });
@@ -1651,7 +1693,9 @@
 
 
     /**
-     * 跟随容器基类
+     * @name Box
+     * @class 跟随容器，创建一个可以指定展现位置的跟随容器盒
+     * @constructor
      */
     function Box(config) {
         var THIS = this;
@@ -1660,13 +1704,12 @@
         this.height = config.height || 'auto';
         this.position = config.position || "center center";
         this.follow = config.follow || 0;
+        this.minViewportWidth = config.minViewportWidth || 0;  //容器最小宽度
 
         this.positionStyle = this.follow ? (sinaadToolkit.browser.isSupportFixed ? 'fixed' : 'absolute') : 'absolute';
 
         this.element = document.createElement('div');
-        this.element.style.position = this.positionStyle;
-
-        this.element.style.cssText += ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:9999;display:' + (config.autoShow ? 'block' : 'none');
+        this.element.style.cssText += 'position:' + this.positionStyle + ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:9999;display:' + (config.autoShow ? 'block' : 'none');
 
         this.setPosition();
 
@@ -1681,18 +1724,20 @@
         }
 
         document.body.insertBefore(this.element, document.body.firstChild);
-
     }
 
-    Box.prototype = {
+    Box.prototype = /** @lends Box.prototype */{
+        /**
+         * 设置盒子的位置
+         */
         setPosition : function () {
             var position = this.position.split(' '),
                 viewWidth = sinaadToolkit.page.getViewWidth(),
                 viewHeight = sinaadToolkit.page.getViewHeight(),
                 offsetTop = 0,
                 offsetLeft = 0,
-                left = 0,
-                top = 0;
+                hOffset = Math.min(this.minViewportWidth ? (viewWidth / 2 - this.minViewportWidth / 2) : 0, 0),
+                vOffset = 0;
 
             if (this.follow) {
                 offsetTop = sinaadToolkit.browser.isSupportFixed ? 0 : sinaadToolkit.page.getScrollTop() || 0;
@@ -1701,16 +1746,16 @@
 
             switch (position[0]) {
                 case 'center' :
-                    this.element.style.left = (viewWidth - this.width) / 2 + offsetLeft + 'px';
+                    this.element.style.left = offsetLeft + (viewWidth - this.width) / 2 + offsetLeft + 'px';
                     break;
                 case 'left' :
-                    this.element.style.left = offsetLeft + 'px';
+                    this.element.style.left = offsetLeft + hOffset + 'px';
                     break;
                 case 'right' :
                     if (this.follow) {
-                        this.element.style.left = offsetLeft + (viewWidth - this.width) + 'px'; 
+                        this.element.style.left = offsetLeft + (viewWidth - this.width) - hOffset + 'px'; 
                     } else {
-                        this.element.style.right = '0px';
+                        this.element.style.right = hOffset + 'px';
                     }
                     break;
                 default :
@@ -1736,9 +1781,15 @@
                     break;
             }
         },
+        /**
+         * 显示盒子
+         */
         show : function () {
             this.element.style.display = 'block';
         },
+        /**
+         * 隐藏盒子
+         */
         hide : function () {
             this.element.style.display = 'none';
         }
@@ -1754,7 +1805,7 @@
      * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
      */
     if (!sinaadToolkit.seed) {
-        var KEY = 'sinaadtoolkit_seed';
+        var KEY = 'sinaadtoolkit_seed_core';
         sinaadToolkit.seed = parseInt(sinaadToolkit.storage.get(KEY), 10) || Math.floor(Math.random() * 100);
         //大于1000就从0开始，防止整数过大
         sinaadToolkit.storage.set(KEY, sinaadToolkit.seed > 1000 ? 0 : ++sinaadToolkit.seed);
