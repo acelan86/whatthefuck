@@ -6,19 +6,13 @@
  */
 (function (window, undefined) {
 
-    var sinaadToolkit = window.sinaadToolkit || {
+    var sinaadToolkit = window.sinaadToolkit = window.sinaadToolkit || {
         /**
          * 工具包版本号
          * @type {String}
          * @const
          */
         VERSION : '1.0.0',
-        /**
-         * 工具包资源地址
-         * @static
-         * @const
-         */
-        TOOLKIT_URL : './src/sinaadToolkit.js',
         /**
          * 模式 debug || release
          * 在页面url中使用__sinaadToolkitDebug__可以触发debug模式
@@ -76,6 +70,15 @@
             return Math.floor(Math.random() * 2147483648).toString(36);
         },
         /**
+         * 获取[min, max]区间内任意整数
+         * @param  {Number} min 最小值
+         * @param  {Number} max 最大值
+         * @return {Number}     
+         */
+        rand : function (min, max) {
+            return Math.floor(min + Math.random() * (max - min + 1));
+        },
+        /**
          * 判断是否是函数
          * @param  {Any}        source      需要判断的对象
          * @return {Boolean}                是否是函数
@@ -102,6 +105,31 @@
             return ('undefined' === typeof source) || (source === null);
         }
     };
+
+
+    /**
+     * 资源备选地址
+     * @static
+     * @const
+     */
+    sinaadToolkit.RESOURCE_URL = sinaadToolkit.RESOURCE_URL || [
+        'http://d1.sina.com.cn',
+        'http://d2.sina.com.cn',
+        'http://d3.sina.com.cn',
+        'http://d4.sina.com.cn',
+        'http://d5.sina.com.cn',
+        'http://d6.sina.com.cn',
+        'http://d7.sina.com.cn',
+        'http://d8.sina.com.cn',
+        'http://d9.sina.com.cn'
+    ][sinaadToolkit.rand(0, 8)];
+
+    /**
+     * 工具包资源地址
+     * @static
+     * @const
+     */
+    sinaadToolkit.TOOLKIT_URL = sinaadToolkit.RESOURCE_URL + '/litong/zhitou/sinaads/src/sinaadToolkit.js';
 
     /**
      * @namespace sinaadToolkit.browser
@@ -382,6 +410,15 @@
                     });
                 }
                 return source;
+            },
+            toCamelCase : function (source) {
+                //提前判断，提高getStyle等的效率
+                if (source.indexOf('-') < 0 && source.indexOf('_') < 0) {
+                    return source;
+                }
+                return source.replace(/[-_][^-_]/g, function (match) {
+                    return match.charAt(1).toUpperCase();
+                });
             }
         };
     })();
@@ -687,6 +724,19 @@
      */
     sinaadToolkit.dom = sinaadToolkit.dom || /** @lends sinaadToolkit.dom */{
         /**
+         * 获取元素
+         * 
+         */
+        get : function (id) {
+            if (!id) return null;
+            if ('string' == typeof id || id instanceof String) {
+                return document.getElementById(id);
+            } else if (id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
+                return id;
+            }
+            return null;
+        },
+        /**
          * 获取某个dom节点所属的document
          * @param  {HTMLNodeElement} element 节点
          * @return {DocumentElement}         所属的document节点
@@ -719,9 +769,178 @@
          */
         getCurrentStyle : function(element, key){
             return element.style[key] || (element.currentStyle ? element.currentStyle[key] : "") || sinaadToolkit.dom.getComputedStyle(element, key);
+        },
+
+        _styleFixer : {},
+        _styleFilter : [],
+
+        /**
+         * 获取目标元素的样式值
+         * @name sinaadToolkit.dom.getStyle
+         * @function
+         * @grammar sinaadToolkit.dom.getStyle(element, key)
+         * @param {HTMLElement|string} element 目标元素或目标元素的id
+         * @param {string} key 要获取的样式名
+         * @remark
+         * 
+         * 为了精简代码，本模块默认不对任何浏览器返回值进行归一化处理（如使用getStyle时，不同浏览器下可能返回rgb颜色或hex颜色），也不会修复浏览器的bug和差异性（如设置IE的float属性叫styleFloat，firefox则是cssFloat）。<br />
+         * sinaadToolkit.dom._styleFixer和sinaadToolkit.dom._styleFilter可以为本模块提供支持。<br />
+         * 其中_styleFilter能对颜色和px进行归一化处理，_styleFixer能对display，float，opacity，textOverflow的浏览器兼容性bug进行处理。  
+         * @shortcut getStyle
+         * @meta standard
+         * @returns {string} 目标元素的样式值
+         */
+        // TODO
+        // 1. 无法解决px/em单位统一的问题（IE）
+        // 2. 无法解决样式值为非数字值的情况（medium等 IE）
+        getStyle : function (element, key) {
+            var dom = sinaadToolkit.dom;
+
+            element = dom.get(element);
+            key = sinaadToolkit.string.toCamelCase(key);
+            //computed style, then cascaded style, then explicitly set style.
+            var value = element.style[key] ||
+                        (element.currentStyle ? element.currentStyle[key] : "") || 
+                        dom.getComputedStyle(element, key);
+
+            // 在取不到值的时候，用fixer进行修正
+            if (!value || value == 'auto') {
+                var fixer = dom._styleFixer[key];
+                if(fixer){
+                    value = fixer.get ? fixer.get(element, key, value) : sinaadToolkit.dom.getStyle(element, fixer);
+                }
+            }
+            
+            /* 检查结果过滤器 */
+            if (fixer = dom._styleFilter) {
+                value = fixer.filter(key, value, 'get');
+            }
+            return value;
+        },
+        /**
+         * 获取目标元素相对于整个文档左上角的位置
+         * @name sinaadToolkit.dom.getPosition
+         * @function
+         * @grammar sinaadToolkit.dom.getPosition(element)
+         * @param {HTMLElement|string} element 目标元素或目标元素的id
+         * @meta standard
+         *             
+         * @returns {Object} 目标元素的位置，键值为top和left的Object。
+         */
+        getPosition : function (element) {
+            element = sinaadToolkit.dom.get(element);
+            var doc = sinaadToolkit.dom.getDocument(element), 
+                browser = sinaadToolkit.browser,
+                getStyle = sinaadToolkit.dom.getStyle,
+                // Gecko 1.9版本以下用getBoxObjectFor计算位置
+                // 但是某些情况下是有bug的
+                // 对于这些有bug的情况
+                // 使用递归查找的方式
+                BUGGY_GECKO_BOX_OBJECT = browser.isGecko > 0 && 
+                                         doc.getBoxObjectFor &&
+                                         getStyle(element, 'position') == 'absolute' &&
+                                         (element.style.top === '' || element.style.left === ''),
+                pos = {"left":0,"top":0},
+                viewport = (browser.ie && !browser.isStrict) ? doc.body : doc.documentElement,
+                parent,
+                box;
+            
+            if(element == viewport){
+                return pos;
+            }
+
+
+            if(element.getBoundingClientRect){ // IE and Gecko 1.9+
+                
+                //当HTML或者BODY有border width时, 原生的getBoundingClientRect返回值是不符合预期的
+                //考虑到通常情况下 HTML和BODY的border只会设成0px,所以忽略该问题.
+                box = element.getBoundingClientRect();
+
+                pos.left = Math.floor(box.left) + Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
+                pos.top  = Math.floor(box.top)  + Math.max(doc.documentElement.scrollTop,  doc.body.scrollTop);
+                
+                // IE会给HTML元素添加一个border，默认是medium（2px）
+                // 但是在IE 6 7 的怪异模式下，可以被html { border: 0; } 这条css规则覆盖
+                // 在IE7的标准模式下，border永远是2px，这个值通过clientLeft 和 clientTop取得
+                // 但是。。。在IE 6 7的怪异模式，如果用户使用css覆盖了默认的medium
+                // clientTop和clientLeft不会更新
+                pos.left -= doc.documentElement.clientLeft;
+                pos.top  -= doc.documentElement.clientTop;
+                
+                var htmlDom = doc.body,
+                    // 在这里，不使用element.style.borderLeftWidth，只有computedStyle是可信的
+                    htmlBorderLeftWidth = parseInt(getStyle(htmlDom, 'borderLeftWidth')),
+                    htmlBorderTopWidth = parseInt(getStyle(htmlDom, 'borderTopWidth'));
+                if(browser.ie && !browser.isStrict){
+                    pos.left -= isNaN(htmlBorderLeftWidth) ? 2 : htmlBorderLeftWidth;
+                    pos.top  -= isNaN(htmlBorderTopWidth) ? 2 : htmlBorderTopWidth;
+                }
+            /*
+             * 因为firefox 3.6和4.0在特定页面下(场景待补充)都会出现1px偏移,所以暂时移除该逻辑分支
+             * 如果 2.0版本时firefox仍存在问题,该逻辑分支将彻底移除. by rocy 2011-01-20
+            } else if (doc.getBoxObjectFor && !BUGGY_GECKO_BOX_OBJECT){ // gecko 1.9-
+
+                // 1.9以下的Gecko，会忽略ancestors的scroll值
+                // https://bugzilla.mozilla.org/show_bug.cgi?id=328881 and
+                // https://bugzilla.mozilla.org/show_bug.cgi?id=330619
+
+                box = doc.getBoxObjectFor(element);
+                var vpBox = doc.getBoxObjectFor(viewport);
+                pos.left = box.screenX - vpBox.screenX;
+                pos.top  = box.screenY - vpBox.screenY;
+                */
+            } else { // safari/opera/firefox
+                parent = element;
+
+                do {
+                    pos.left += parent.offsetLeft;
+                    pos.top  += parent.offsetTop;
+              
+                    // safari里面，如果遍历到了一个fixed的元素，后面的offset都不准了
+                    if (browser.isWebkit > 0 && getStyle(parent, 'position') == 'fixed') {
+                        pos.left += doc.body.scrollLeft;
+                        pos.top  += doc.body.scrollTop;
+                        break;
+                    }
+                    
+                    parent = parent.offsetParent;
+                } while (parent && parent != element);
+
+                // 对body offsetTop的修正
+                if(browser.opera > 0 || (browser.isWebkit > 0 && getStyle(element, 'position') == 'absolute')){
+                    pos.top  -= doc.body.offsetTop;
+                }
+
+                // 计算除了body的scroll
+                parent = element.offsetParent;
+                while (parent && parent != doc.body) {
+                    pos.left -= parent.scrollLeft;
+                    // see https://bugs.opera.com/show_bug.cgi?id=249965
+                    // if (!b.opera || parent.tagName != 'TR') {
+                    if (!browser.opera || parent.tagName != 'TR') {
+                        pos.top -= parent.scrollTop;
+                    }
+                    parent = parent.offsetParent;
+                }
+            }
+
+            return pos;
         }
     };
 
+    /**
+     * 为获取和设置样式的过滤器
+     * @private
+     * @meta standard
+     */
+    sinaadToolkit.dom._styleFilter.filter = function (key, value, method) {
+        for (var i = 0, filters = sinaadToolkit.dom._styleFilter, filter; filter = filters[i]; i++) {
+            if (filter = filter[method]) {
+                value = filter(key, value);
+            }
+        }
+        return value;
+    };
 
 
     /**
@@ -814,8 +1033,9 @@
                             deferred.resolve.call(deferred, returnValue);
                         }
                     }
-                    catch (error) {
-                        deferred.reject(error);
+                    catch (e) {
+                        sinaadToolkit.debug('sinaadToolkit.Deferred: _pipe内部方法出错' + e.message);
+                        deferred.reject(e);
                     }
                 }
                 // `.then()`及`.then(done, null)`时使用
@@ -836,7 +1056,9 @@
                 core.array.each(callbacks, function (callback, i) {
                     try {
                         callback.apply(deferred, deferred._args);
-                    } catch (e) {}
+                    } catch (e) {
+                        sinaadToolkit.debug('sinaadToolkit.Deferred: _flush出错' + e.message)
+                    }
                 });
             }, 0);
 
@@ -1004,7 +1226,7 @@
                     }
                 }
          
-                if( timeOut ){
+                if(timeOut){
                     timer = setTimeout(getCallBack(1), timeOut);
                 }
          
@@ -1020,9 +1242,9 @@
                      
                     return function(){
                         try {
-                            if( onTimeOut ){
+                            if (onTimeOut) {
                                 options.onfailure && options.onfailure();
-                            }else{
+                            } else {
                                 callback.apply(window, arguments);
                                 clearTimeout(timer);
                             }
@@ -1650,7 +1872,7 @@
              * 创建一个广告展现沙箱
              * @param  {HTMLNodeElement} container 沙箱所在容器
              * @param  {Number} width     沙箱宽
-             * @param  {Number} height    沙箱搞
+             * @param  {Number} height    沙箱高
              * @param  {String} content   沙箱内容
              * @param  {Object} context   沙箱中传入的外部属性值
              */
@@ -1805,13 +2027,10 @@
      * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
      */
     if (!sinaadToolkit.seed) {
-        var KEY = 'sinaadtoolkit_seed_core';
+        var KEY = 'sinaadtoolkit_seed';
         sinaadToolkit.seed = parseInt(sinaadToolkit.storage.get(KEY), 10) || Math.floor(Math.random() * 100);
         //大于1000就从0开始，防止整数过大
         sinaadToolkit.storage.set(KEY, sinaadToolkit.seed > 1000 ? 0 : ++sinaadToolkit.seed);
     }
-
-    //exports
-    window.sinaadToolkit = window.sinaadToolkit || sinaadToolkit;
 
 })(window);

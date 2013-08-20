@@ -27,6 +27,11 @@
         config.sideWidth = SIDE_SIZE[0];
         config.sideHeight = SIDE_SIZE[1];
 
+        
+        config.src = sinaadToolkit.array.ensureArray(config.src);
+        config.type = sinaadToolkit.array.ensureArray(config.type);
+        config.link = sinaadToolkit.array.ensureArray(config.link);
+
         this.config = config;
 
         this.deferred = new sinaadToolkit.Deferred();
@@ -78,7 +83,7 @@
         rightContent.style.cssText = 'width:' + config.sideWidth + 'px;height:' + config.sideHeight + 'px;position:absolute;left:0px;top:0px;';
         rightContent.innerHTML = sinaadToolkit.ad.createHTML(
             config.type[2] || config.type[1],
-            config.src[1] || config.src[1],
+            config.src[2] || config.src[1],
             config.sideWidth,
             config.sideHeight,
             config.link[2] || config.link[1] || config.link[0],

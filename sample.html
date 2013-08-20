@@ -10,7 +10,7 @@
                 margin:0px;
             }
         </style>
-        <script async charset="utf-8" src="./src/sinaads.js"></script>
+        <script async charset="utf-8" src="./src/sinaads.js" defer></script>
 
 <script type="text/javascript">
 
@@ -23,15 +23,34 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<62?'':e(parseInt(c/62)))+((c=c
             'PDPS000000047211', 
             'PDPS000000042135', 
             'PDPS000000006450',
-            'PDPS000000042135'
             // 'PDPS000000037694',
             // 'PDPS000000003271'
         ];
     </script>
+    <!-- 配置特殊格式的广告媒体类型 -->
+    <script>
+        var sinaadsRenderHandler = {
+            'tip' : function (element, width, height, content, monitor, config) {
+                var RESOURCE_URL = './src/plus/TipsMedia.js';
+                sinaadToolkit.sio.loadScript(RESOURCE_URL, function () {
+                    new sinaadToolkit.TipsMedia(element, {
+                        width : width,
+                        height : height,
+                        src : content.src,
+                        type : content.type,
+                        link : content.link,
+                        monitor : monitor,
+                        autoShow : 1,
+                        top : config.sinaads_tip_top || 0
+                    });
+                });
+            }
+        };
+    </script>
+    <script src="./data/testdata.js"></script>
     </head>
     <body>
         <div style="margin:0px auto;width:1000px;">
-            <h2>文字链</h2>
             <style>
                 h2{
                     clear:both;
@@ -65,8 +84,33 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<62?'':e(parseInt(c/62)))+((c=c
                     font-size:14px;
                 }
             </style>
+            <h2>翻牌广告</h2>
+            <div>
+                <script async defer charset="utf-8" src="./src/sinaads.js"></script>
+                <ins class="sinaads" data-ad-pdps="PDPS000000000100"></ins>
+                <script>
+                    (sinaads = window.sinaads || []).push({});
+                </script>
+            </div>
+            <h2>tip广告</h2>
+            <div>
+                <div style="width:120px;height:50px;overflow:hidden;float:left;">
+                    <script async defer charset="utf-8" src="./src/sinaads.js"></script>
+                    <ins class="sinaads" data-ad-pdps="PDPS000000000300"></ins>
+                    <script>
+                        (sinaads = window.sinaads || []).push({
+                            params : {
+                                sinaads_tip_top : 40
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+
+            <h2>文字链</h2>
             <ul class="textlink">
                 <li>
+                    <script async defer charset="utf-8" src="./src/sinaads.js"></script>
                     <ins class="sinaads" data-ad-pdps="PDPS000000000081"></ins>
                     <script>
                         (sinaads = window.sinaads || []).push({});
@@ -165,11 +209,23 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<62?'':e(parseInt(c/62)))+((c=c
             </div>
 
 
-            <h2>背投</html>
+            <h2>背投</h2>
             <div>
                 <ins class="sinaads" data-ad-pdps="PDPS000000002190"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({});
+                </script>
+            </div>
+
+            <h2>对联</h2>
+            <div>
+                <ins class="sinaads" data-ad-pdps="PDPS000000000070"></ins>
+                <script>
+                    (sinaads = window.sinaads || []).push({
+                        params : {
+                            sinaads_float_top : 350
+                        }
+                    });
                 </script>
             </div>
 
@@ -227,8 +283,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<62?'':e(parseInt(c/62)))+((c=c
             </div>
         </div>
 
-        <!--新闻中心轮播新浪视窗广告开始-->
-        <script async charset="utf-8" src="./src/sinaads.js"></script>
+        <script async charset="utf-8" src="./src/sinaads.js" defer></script>
         <script>
             document.domain = 'sina.com.cn';
         </script>
