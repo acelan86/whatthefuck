@@ -81,6 +81,23 @@
             return Math.floor(min + Math.random() * (max - min + 1));
         },
         /**
+         * 把一个字符串生成唯一hash
+         * @param  {String} s 要生成hash的字符串
+         * @return {String}   36进制字符串
+         */
+        hash : function (s) {
+            var hash = 0,
+                i = 0,
+                w;
+
+            for(; !isNaN(w = s.charCodeAt(i++));) {
+                hash = ((hash << 5) - hash) + w;
+                hash = hash & hash;
+            }
+
+            return Math.abs(hash).toString(36);
+        },
+        /**
          * 判断是否是函数
          * @param  {Any}        source      需要判断的对象
          * @return {Boolean}                是否是函数
@@ -588,6 +605,7 @@
                         expires.setDate(expires.getDate() + 365);
                         userData.userData.expires = expires.toUTCString();
                     } catch (e) {
+                        sinaadToolkit.throwError('sinaadToolkit.storage:userData初始化失败，' + e.message);
                         return false;
                     }
                 }
@@ -673,7 +691,7 @@
                     }
                     return null;
                 } catch (e) {
-                    sinaadToolkit.debug('sinaadToolkit.storage.get:' + e.message);
+                    sinaadToolkit.throwError('sinaadToolkit.storage.get:' + e.message);
                     return null;
                 }
             },
@@ -1595,7 +1613,7 @@
                         iframe.src = 'javascript:\'<script type="text/javascript">' + content + "\x3c/script>'";
                     } catch(e) {
                         window[key] = null;
-                        sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
+                        sinaadToolkit.throwError("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
                     }
                 }
             //标准浏览器，标准方法
@@ -1607,7 +1625,7 @@
                        doc.write(content);
                        doc.close();
                 } catch(e) {
-                    sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
+                    sinaadToolkit.throwError("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
                 }
             }
         }
@@ -2044,8 +2062,15 @@
      * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
      */
     if (!sinaadToolkit.seed) {
-        var KEY = 'sinaadtoolkit_seed';
-        sinaadToolkit.seed = parseInt(sinaadToolkit.storage.get(KEY), 10) || Math.floor(Math.random() * 100);
+        var _pathname = window.location.pathname,
+            _host = window.location.host,
+            KEY = _host.split('.')[0] + _pathname.substring(0, _pathname.lastIndexOf('/'));
+
+        sinaadToolkit.debug('sinaadTookit: 当前页面种子key为:' + KEY);
+
+        KEY = 'SinaadTK_' + sinaadToolkit.hash(KEY); 
+
+        sinaadToolkit.seed = parseInt(sinaadToolkit.storage.get(KEY), 10) || sinaadToolkit.rand(0, 100);
         //大于1000就从0开始，防止整数过大
         sinaadToolkit.storage.set(KEY, sinaadToolkit.seed > 1000 ? 0 : ++sinaadToolkit.seed);
     }
@@ -2219,20 +2244,23 @@
             // 跨栏 1000*90 kl
             // 背投  750*450 bt
             // 文字链 wzl
-            ad.type = (function (type) {
-                switch (type) {
-                    case 'lmt' : 
-                        return 'stream';
-                    case 'sc' : 
-                        return 'videoOpen';
-                    case 'bt' :
-                        return 'bp';
-                    case 'kl' :
-                        return 'couplet';
-                    default : 
-                        return 'embed';
-                }
-            })(ad.type);
+            ad.type = ({
+                'lmt' : 'stream',
+                'kl' : 'couplet',
+                'sc' : 'videoOpen',
+                'hzh' : 'embed',
+                'tl' : 'embed',
+                'jx' : 'embed',
+                'dtl' : 'embed',
+                'an' : 'embed',
+                'dan' : 'embed',
+                'xan' : 'embed',
+                'wzl' : 'textlink',
+                'ztwzl' : 'zhitoutextlink',
+                'fp' : 'turning',
+                'dl' : 'float'
+            }[ad.type]) || ad.type || 'embed';
+
             ad.content[i] = content;
         });
 
@@ -2286,42 +2314,7 @@
 
         return deferred;
     }
-
-
-    /**
-     * 创建常规广告的曝光请求html, 若存在src，创建广告html并填充
-     * @param  {[type]} element [description]
-     * @param  {[type]} config  [description]
-     * @return {[type]}         [description]
-     */
-    function _renderWidthEmbedIframe(element, config) {
-        var uid         = config.uid,
-            iframeId    = 'sinaads_iframe_' + uid,
-            type        = config.type,
-            width       = config.width,
-            height      = config.height,
-            link        = config.link,
-            monitor     = config.monitor,
-            pv          = core.monitor.createImpressMonitor(config.pv) || '',
-            src         = config.src,
-            pdps        = config.pdps,
-            coupletTop  = config.coupletTop || 0,
-            adContent   = src ? core.ad.createHTML(type, src, width, height, link, monitor) : ''; //广告内容， 如果没有src，则不渲染
-
-        //创建广告渲染的沙箱环境，并传递部分广告参数到沙箱中
-        core.sandbox.create(element, width, height, pv + adContent, {
-            sinaads_uid             : uid,
-            sinaads_async_iframe_id : iframeId,
-            sinaads_start_time      : now,
-            sinaads_span_time       : core.now() - now,
-            sinaads_ad_pdps         : pdps,
-            sinaads_ad_width        : width,
-            sinaads_ad_height       : height,
-            sinaads_page_url        : config.pageurl,
-            sandboxId               : iframeId,
-            sinaads_couplet_top     : coupletTop
-        });
-    }
+    
     /**
      * 初始化广告对象
      * @param  {object} config 配置项
@@ -2382,14 +2375,19 @@
     var _renderHandler = window.sinaadsRenderHandler = window.sinaadsRenderHandler || {};
     function _registerHandler(type, handler) {
         if (_renderHandler[type]) {
-            core.debug('sinaads: 覆盖渲染的媒体类型' + type);
+            //core.debug('sinaads: 覆盖渲染的媒体类型' + type);
         }
         _renderHandler[type] = handler;
     }
     function _renderView(type, element, width, height, content, monitor, config) {
-        var handler = _renderHandler[type];
+        var handler = _renderHandler[type],
+            _type = type;
         if ('function' === typeof handler) {
-            handler(element, width, height, content, monitor, config);
+            //如果需要改变类型，由handler返回
+            _type = handler(element, width, height, content, monitor, config) || type;
+        }
+        if (_type === 'embed') {
+            _renderEmbed(element, width, height, content, monitor, config);
         }
     }
 
@@ -2398,8 +2396,14 @@
         //是跨栏，隐藏掉改区块
         element.style.cssText = 'position:absolute;top:-9999px';
         //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
-        if (content.src.length === 1 && conent.type[0] === 'js') {
-            core.sio.loadScript(content.src[0]);
+        if (content.src.length === 1) {
+            switch (content.type[0]) {
+                case 'js' : 
+                    core.sio.loadScript(content.src[0]);
+                    break;
+                case 'html' :
+                    return 'embed'; //某dsp插入一轮，比如乐居
+            }
         }
         if (content.src.length > 1) {
             //注入跨栏数据
@@ -2408,17 +2412,12 @@
                 type        : content.type,
                 link        : content.link,
                 top         : config.sinaads_couple_top || 0,
-                // mainWidth   : width,
-                // mainHeight  : height,
-                // sideWidth   : 120,
-                // sideHeight  : 270,
                 monitor     : content.monitor || [],
                 delay       : config.sinaads_ad_delay || 0
             };
             core.sio.loadScript(RESOURCE_URL, function () {
                 new core.CoupletMedia(CoupletMediaData);
             });
-            content.src = [];
         }
     });
 
@@ -2441,7 +2440,6 @@
         } else {
             core.sio.loadScript(content.src[0]);
         }
-        content.src = []; //已经处理过，无需再处理)
     });
 
     _registerHandler('stream', function (element, width, height, content, monitor, config) {
@@ -2479,7 +2477,6 @@
                 new core.StreamMedia(StreamMediaData);
             });
         }
-        content.src = [];
     });
 
 
@@ -2550,6 +2547,7 @@
             })
         ];
         content.type = ['html'];
+        return 'embed'; //使用embed来解析
     });
 
     _registerHandler('textlink', function (element, width, height, content, monitor, config) {
@@ -2561,6 +2559,36 @@
     });
 
     _registerHandler('zhitoutextlink', _renderHandler['textlink']);
+
+
+    /**
+     * 创建常规广告的曝光请求html
+     * @param  {[type]} element [description]
+     * @param  {[type]} config  [description]
+     * @return {[type]}         [description]
+     */
+    function _renderEmbed(element, width, height, content, monitor, config) {
+        var uid         = config.sinaads_uid,
+            iframeId    = 'sinaads_iframe_' + uid,
+            type        = content.type[0] || '',
+            link        = content.link[0] || '',
+            src         = content.src[0] || '',
+            pdps        = config.sinaads_ad_pdps,
+            adContent   = src ? core.ad.createHTML(type, src, width, height, link, monitor) : ''; //广告内容， 如果没有src，则不渲染
+
+        //创建广告渲染的沙箱环境，并传递部分广告参数到沙箱中
+        core.sandbox.create(element, width, height, adContent, {
+            sinaads_uid             : uid,
+            sinaads_async_iframe_id : iframeId,
+            sinaads_start_time      : now,
+            sinaads_span_time       : core.now() - now,
+            sinaads_ad_pdps         : pdps,
+            sinaads_ad_width        : width,
+            sinaads_ad_height       : height,
+            sinaads_page_url        : config.pageurl,
+            sandboxId               : iframeId
+        });
+    }
 
     /**
      * 根据广告媒体类型渲染广告
@@ -2613,6 +2641,8 @@
             /** 解析曝光和监控链接，并注入模版值 **/
             core.array.each(pv, function (url, i) {
                 pv[i] = core.monitor.parseTpl(url, config);
+                //发送曝光
+                core.sio.log(pv[i]);
             });
             core.array.each(monitor, function (url, i) {
                 monitor[i] = core.monitor.parseTpl(url, config);
@@ -2621,21 +2651,6 @@
              * 渲染广告
              */
             _renderView(config.sinaads_ad_type || data.type, element, width, height, content, monitor, config);
-
-            _renderWidthEmbedIframe(element, {
-                uid         : config.sinaads_uid,
-                pdps        : config.sinaads_ad_pdps,
-                pageurl     : config.sinaads_page_url,
-                width       : width,
-                height      : height,
-
-                type        : content.type[0] || 'html',
-                src         : content.src[0] || '',
-                link        : content.link[0] || '',
-                monitor     : monitor,
-                pv          : pv,
-                coupletTop  : config.sinaads_couplet_top || 0
-            });
         });
 
         core.debug('sinaads: 渲染广告完毕(耗时ms)', core.now() - start);

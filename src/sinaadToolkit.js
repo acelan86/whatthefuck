@@ -30,15 +30,17 @@
             var console = window.console || { 
                 log : function (msg) {
                     var consoleView = sinaadToolkit._consoleView;
-                    if (!consoleView) {
-                        consoleView = sinaadToolkit._consoleView = document.createElement('ul');
-                        consoleView.style.cssText = 'z-index:99999;overflow:auto;height:300px;position:absolute;right:0;top:0;opacity:.9;*filter:alpha(opacity=90);background:#fff;width:500px;';
-                        document.body.insertBefore(consoleView, document.body.firstChild);
-                    }
-                    var li = document.createElement('li');
-                    li.style.cssText = 'border-bottom:1px dotted #ccc;line-height:30px;font-size:12px;';
-                    li.innerHTML = msg + Array.prototype.slice.call(arguments, 1).join(' ');
-                    consoleView.appendChild(li);
+                    //if (document.body) {
+                        if (!consoleView) {
+                            consoleView = sinaadToolkit._consoleView = document.createElement('ul');
+                            consoleView.style.cssText = 'z-index:99999;overflow:auto;height:300px;position:absolute;right:0;top:0;opacity:.9;*filter:alpha(opacity=90);background:#fff;width:500px;';
+                            document.body.insertBefore(consoleView, document.body.firstChild);
+                        }
+                        var li = document.createElement('li');
+                        li.style.cssText = 'border-bottom:1px dotted #ccc;line-height:30px;font-size:12px;';
+                        li.innerHTML = msg + Array.prototype.slice.call(arguments, 1).join(' ');
+                        consoleView.appendChild(li)
+                    //}
                 }
             };
             if (sinaadToolkit.mode === 'debug') {
@@ -79,6 +81,23 @@
             return Math.floor(min + Math.random() * (max - min + 1));
         },
         /**
+         * 把一个字符串生成唯一hash
+         * @param  {String} s 要生成hash的字符串
+         * @return {String}   36进制字符串
+         */
+        hash : function (s) {
+            var hash = 0,
+                i = 0,
+                w;
+
+            for(; !isNaN(w = s.charCodeAt(i++));) {
+                hash = ((hash << 5) - hash) + w;
+                hash = hash & hash;
+            }
+
+            return Math.abs(hash).toString(36);
+        },
+        /**
          * 判断是否是函数
          * @param  {Any}        source      需要判断的对象
          * @return {Boolean}                是否是函数
@@ -113,23 +132,24 @@
      * @const
      */
     sinaadToolkit.RESOURCE_URL = sinaadToolkit.RESOURCE_URL || [
-        'http://d1.sina.com.cn',
-        'http://d2.sina.com.cn',
-        'http://d3.sina.com.cn',
-        'http://d4.sina.com.cn',
-        'http://d5.sina.com.cn',
-        'http://d6.sina.com.cn',
-        'http://d7.sina.com.cn',
-        'http://d8.sina.com.cn',
-        'http://d9.sina.com.cn'
-    ][sinaadToolkit.rand(0, 8)];
+        // 'http://d1.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d2.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d3.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d4.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d5.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d6.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d7.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d8.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d9.sina.com.cn/litong/zhitou/sinaads'
+        '.'
+    ][sinaadToolkit.rand(0, 0)];
 
     /**
      * 工具包资源地址
      * @static
      * @const
      */
-    sinaadToolkit.TOOLKIT_URL = sinaadToolkit.RESOURCE_URL + '/litong/zhitou/sinaads/src/sinaadToolkit.js';
+    sinaadToolkit.TOOLKIT_URL = sinaadToolkit.RESOURCE_URL + '/src/sinaadToolkit.js';
 
     /**
      * @namespace sinaadToolkit.browser
@@ -585,6 +605,7 @@
                         expires.setDate(expires.getDate() + 365);
                         userData.userData.expires = expires.toUTCString();
                     } catch (e) {
+                        sinaadToolkit.throwError('sinaadToolkit.storage:userData初始化失败，' + e.message);
                         return false;
                     }
                 }
@@ -655,18 +676,24 @@
              * @return {String}     取得的值
              */
             get : function (key) {
-                var value = storage.getItem(key);
-                if (value) {
-                    value = value.split(';');
-                    //有过期时间
-                    if (value[1] && sinaadToolkit.now() > parseInt(value[1].split('=')[1], 10)) {
-                        storage.removeItem(key);
-                        return null;
-                    } else {
-                        return value[0];
+                try {
+                    var value = storage.getItem(key);
+                    if (value) {
+                        sinaadToolkit.debug('sinaadToolkit.storage.get:获取到' + key + '的值: ' + value);
+                        value = value.split(';');
+                        //有过期时间
+                        if (value[1] && sinaadToolkit.now() > parseInt(value[1].split('=')[1], 10)) {
+                            storage.removeItem(key);
+                            return null;
+                        } else {
+                            return value[0];
+                        }
                     }
+                    return null;
+                } catch (e) {
+                    sinaadToolkit.throwError('sinaadToolkit.storage.get:' + e.message);
+                    return null;
                 }
-                return null;
             },
             /**
              * 设置本地存储key的值为value
@@ -676,14 +703,22 @@
              * @param  {Number} expires 过期时间毫秒数
              */
             set : function (key, value, expires) {
-                storage.setItem(key, value, expires);
+                try {
+                    storage.setItem(key, value, expires);
+                } catch (e) {
+                    sinaadToolkit.debug('sinaadToolkit.storage.set:' + e.message);
+                }
             },
             /**
              * 移除本地存储中key的值
              * @param  {String} key 要移除的key
              */
             remove : function (key) {
-                storage.removeItem(key);
+                try {
+                    storage.removeItem(key);
+                } catch (e) {
+                    sinaadToolkit.debug('sinaadToolkit.storage.remove:' + e.message);
+                }
             }
         };
     })();
@@ -1578,7 +1613,7 @@
                         iframe.src = 'javascript:\'<script type="text/javascript">' + content + "\x3c/script>'";
                     } catch(e) {
                         window[key] = null;
-                        sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
+                        sinaadToolkit.throwError("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
                     }
                 }
             //标准浏览器，标准方法
@@ -1590,7 +1625,7 @@
                        doc.write(content);
                        doc.close();
                 } catch(e) {
-                    sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
+                    sinaadToolkit.throwError("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
                 }
             }
         }
@@ -2018,19 +2053,6 @@
     };
     sinaadToolkit.Box = sinaadToolkit.Box || Box;
 
-    /**
-     * @todo 简单动画方法
-     */
-    
-
-    /**
-     * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
-     */
-    if (!sinaadToolkit.seed) {
-        var KEY = 'sinaadtoolkit_seed';
-        sinaadToolkit.seed = parseInt(sinaadToolkit.storage.get(KEY), 10) || Math.floor(Math.random() * 100);
-        //大于1000就从0开始，防止整数过大
-        sinaadToolkit.storage.set(KEY, sinaadToolkit.seed > 1000 ? 0 : ++sinaadToolkit.seed);
-    }
-
 })(window);
+
+

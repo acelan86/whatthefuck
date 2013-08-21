@@ -3,36 +3,47 @@ _sinaadsCacheData = window._sinaadsCacheData || {};
 /**
  *  测试数据填充区域
  */
-//测试乐居数据
-// _sinaadsCacheData["PDPS000000000020"] = {
-//     size : "1000*90",
-//     type : 'embed',
-//     content : {
-//         pv : ["http://baidu.com/?leju", "http://baidu.com/?leju2"],
-//         type : 'html',
-//         src : [
-//             [
-//                 '\x3c!-- 乐居广告js start--\x3e',
-//                 '\x3cscript charset="utf-8" src="http://d5.sina.com.cn/litong/zhitou/leju/leju.js"\x3e\x3c/script\x3e',
-//                 '\x3cscript\x3e',
-//                     'leju.conf.url = \'http://adm.leju.sina.com.cn/get_ad_list/PG_514AC4246D2142\';',
-//                     'leju.conf.defaultUrl = \'http://d3.sina.com.cn/litong/zhitou/leju/news.js\';',
-//                     'var position = \'ad_47200\';',
-//                     'var lejuMedia = leju.getData();',
-//                     'lejuMedia.then(function (data) {',
-//                         'var data = data[position][0];',
-//                         'document.write(sinaadToolkit.ad.createHTML(\'flash\', data.params.src, sinaads_ad_width, sinaads_ad_height, data.params.link, []));',
-//                     '});',
-//                 '\x3c/script\x3e',
-//                 '\x3c!-- 乐居广告js end --\x3e',
-//             ].join('')
-//         ],
-//         monitor : ["http://leju.com"],
-//         link : ['http://leju.com']
-//     }
-// };
-// 
-// 
+_sinaadsCacheData["PDPS000000006450"] = {
+    size : "1000*90",
+    type : 'couplet',
+    content : {
+        pv : ["http://baidu.com/?leju", "http://baidu.com/?leju2"],
+        type : 'html',
+        src : [
+            [
+                '\\x3c!-- 乐居广告js start--\\x3e',
+                '\\x3cscript charset="utf-8" src="http://d5.sina.com.cn/litong/zhitou/leju/leju.js"\\x3e\\x3c/script\\x3e',
+                '\\x3cscript\\x3e',
+                    'leju.conf.url = \'http://adm.leju.sina.com.cn/get_ad_\';',
+                    'leju.conf.defaultUrl = \'http://staticadm.leju.sina.com.cn/get_ad_list/PG_514AC4246D2142.js\';',
+                    'var position = \'couplet\';',
+                    'var lejuMedia = leju.getData();',
+                    'lejuMedia.then(function (data) {',
+                        'var data = data[position][0];',
+                        'console.log("xxx", data);',
+                        // 'if (!parent.sinaadToolkit.CoupletMedia) {',
+                        //     'parent.sinaadToolkit.sio.loadScript(\'.\/src\/plus\/CoupletMedia.js\', function () {',
+                        //         'new parent.sinaadToolkit.CoupletMedia({',
+                        //             'src         : content.src,',
+                        //             'type        : content.type,',
+                        //             'link        : content.link,',
+                        //             'top         : config.sinaads_couple_top || 0,',
+                        //             'monitor     : content.monitor || [],',
+                        //             'delay       : config.sinaads_ad_delay || 0',
+                        //         '});',
+                        //     '});',
+                        // '}',
+                    '});',
+                '\\x3c/script\\x3e',
+                '\\x3c!-- 乐居广告js end --\\x3e',
+            ].join('\n')
+        ],
+        monitor : ["http://leju.com"],
+        link : ['http://leju.com']
+    }
+};
+
+
 //翻牌广告
 _sinaadsCacheData["PDPS000000000100"] = {
     size : "125*95",
@@ -69,24 +80,24 @@ _sinaadsCacheData["PDPS000000000300"] = {
         }
     ]
 };
-//跨栏广告
-_sinaadsCacheData["PDPS000000006450"] = {
-    size : "1000*90",
-    type : 'couplet',
-    content : [
-        {
-            pv : ['http://123.126.53.109/click?type=3&t=MjAxMy0wOC0xOSAwOToyOTo1Nwk2MS4xMzUuMTUyLjIxMQkJLQlQRFBTMDAwMDAwMDQ3MjExCTZlNjJhZWVlLTczZmYtNDNlZS04Y2U0LWQzMDBhODIyM2Q2NAlmMDlkZTAzNGJlYjgJZjA5ZGUwMzRiZWI4CV92X3pvbmU6MzAyMDAwLDMwMjAwMHx2X3pvbmU6MzAyMDAwLDMwMjAwMHxwb3M6UERQUzAwMDAwMDA0NzIxMSxQRFBTMDAwMDAwMDQyMTM1LFBEUFMwMDAwMDAwMDY0NTAsUERQUzAwMDAwMDA0MjEzNQkJMzAyMDA'],
-            type : ['image', 'image', 'image'],
-            src : [
-                'http://d1.sina.com.cn/201307/31/504121_100090news_tl04_0801.jpg', //中部大图
-                'http://d5.sina.com.cn/201307/31/504120_25300ls_kl_bt_0801.jpg',   //左边栏
-                'http://d5.sina.com.cn/201307/31/504120_25300ls_kl_bt_0801.jpg'    //右边栏
-            ],
-            monitor : ["http://stream.com"],
-            link : ['http://stream.com', 'http://stream.sina.com.cn']
-        }
-    ]
-};
+// //跨栏广告
+// _sinaadsCacheData["PDPS000000006450"] = {
+//     size : "1000*90",
+//     type : 'couplet',
+//     content : [
+//         {
+//             pv : ['http://123.126.53.109/click?type=3&t=MjAxMy0wOC0xOSAwOToyOTo1Nwk2MS4xMzUuMTUyLjIxMQkJLQlQRFBTMDAwMDAwMDQ3MjExCTZlNjJhZWVlLTczZmYtNDNlZS04Y2U0LWQzMDBhODIyM2Q2NAlmMDlkZTAzNGJlYjgJZjA5ZGUwMzRiZWI4CV92X3pvbmU6MzAyMDAwLDMwMjAwMHx2X3pvbmU6MzAyMDAwLDMwMjAwMHxwb3M6UERQUzAwMDAwMDA0NzIxMSxQRFBTMDAwMDAwMDQyMTM1LFBEUFMwMDAwMDAwMDY0NTAsUERQUzAwMDAwMDA0MjEzNQkJMzAyMDA'],
+//             type : ['image', 'image', 'image'],
+//             src : [
+//                 'http://d1.sina.com.cn/201307/31/504121_100090news_tl04_0801.jpg', //中部大图
+//                 'http://d5.sina.com.cn/201307/31/504120_25300ls_kl_bt_0801.jpg',   //左边栏
+//                 'http://d5.sina.com.cn/201307/31/504120_25300ls_kl_bt_0801.jpg'    //右边栏
+//             ],
+//             monitor : ["http://stream.com"],
+//             link : ['http://stream.com', 'http://stream.sina.com.cn']
+//         }
+//     ]
+// };
 
 // 流媒体广告
 _sinaadsCacheData["PDPS000000000066"] = {
