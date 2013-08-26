@@ -14,26 +14,28 @@ _sinaadsCacheData["PDPS000000006450"] = {
                 '\\x3c!-- 乐居广告js start--\\x3e',
                 '\\x3cscript charset="utf-8" src="http://d5.sina.com.cn/litong/zhitou/leju/leju.js"\\x3e\\x3c/script\\x3e',
                 '\\x3cscript\\x3e',
-                    'leju.conf.url = \'http://adm.leju.sina.com.cn/get_ad_\';',
+                    'window.onload = function () {', //乐居的代码一定要用onload嵌入
+                    'leju.conf.url = \'http://adm.leju.sina.com.cn/get_ad_list/PG_514AC47514A055\';',
                     'leju.conf.defaultUrl = \'http://staticadm.leju.sina.com.cn/get_ad_list/PG_514AC4246D2142.js\';',
                     'var position = \'couplet\';',
                     'var lejuMedia = leju.getData();',
                     'lejuMedia.then(function (data) {',
-                        'var data = data[position][0];',
-                        'console.log("xxx", data);',
-                        // 'if (!parent.sinaadToolkit.CoupletMedia) {',
-                        //     'parent.sinaadToolkit.sio.loadScript(\'.\/src\/plus\/CoupletMedia.js\', function () {',
-                        //         'new parent.sinaadToolkit.CoupletMedia({',
-                        //             'src         : content.src,',
-                        //             'type        : content.type,',
-                        //             'link        : content.link,',
-                        //             'top         : config.sinaads_couple_top || 0,',
-                        //             'monitor     : content.monitor || [],',
-                        //             'delay       : config.sinaads_ad_delay || 0',
-                        //         '});',
-                        //     '});',
-                        // '}',
+                        'var data = data[position][0],',
+                            'getType = parent.sinaadToolkit.ad.getTypeBySrc;',
+                        'if (!parent.sinaadToolkit.CoupletMedia) {',
+                            'data && (data = data.params) && parent.sinaadToolkit.sio.loadScript(\'.\/src\/plus\/CoupletMedia.js\', function () {',
+                                'new parent.sinaadToolkit.CoupletMedia({',
+                                    'src         : [data.bar, data.left, data.right],',
+                                    'type        : [getType(data.bar), getType(data.left), getType(data.right)],',
+                                    'link        : [data.link, data.link, data.link],',
+                                    'top         : 40,',
+                                    'monitor     : [],',
+                                    'delay       : window.sinaads_ad_delay || 0',
+                                '});',
+                            '});',
+                        '}',
                     '});',
+                    '};',
                 '\\x3c/script\\x3e',
                 '\\x3c!-- 乐居广告js end --\\x3e',
             ].join('\n')
@@ -79,6 +81,21 @@ _sinaadsCacheData["PDPS000000000300"] = {
             link : ['http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore&url=http://www.gjjy.org.cn/', 'http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore&url=http://www.gjjy.org.cn/']
         }
     ]
+};
+
+_sinaadsCacheData["PDPS000000000400"] = {
+    size : "150*140",
+    type : 'follow',
+    content : [{
+        pv : [],
+        type : ['image', 'image'],
+        src : [
+            'http://d3.sina.com.cn/201307/23/502937_sinaAPP_140x150.jpg',
+            'http://d3.sina.com.cn/201307/23/502938_sinaAPP_25x150.jpg'
+        ],
+        monitor : ["http://stream.com"],
+        link : ['http://stream.com', 'http://stream.sina.com.cn']
+    }]
 };
 // //跨栏广告
 // _sinaadsCacheData["PDPS000000006450"] = {

@@ -30,15 +30,17 @@
             var console = window.console || { 
                 log : function (msg) {
                     var consoleView = sinaadToolkit._consoleView;
-                    if (!consoleView) {
-                        consoleView = sinaadToolkit._consoleView = document.createElement('ul');
-                        consoleView.style.cssText = 'z-index:99999;overflow:auto;height:300px;position:absolute;right:0;top:0;opacity:.9;*filter:alpha(opacity=90);background:#fff;width:500px;';
-                        document.body.insertBefore(consoleView, document.body.firstChild);
-                    }
-                    var li = document.createElement('li');
-                    li.style.cssText = 'border-bottom:1px dotted #ccc;line-height:30px;font-size:12px;';
-                    li.innerHTML = msg + Array.prototype.slice.call(arguments, 1).join(' ');
-                    consoleView.appendChild(li);
+                    //if (document.body) {
+                        if (!consoleView) {
+                            consoleView = sinaadToolkit._consoleView = document.createElement('ul');
+                            consoleView.style.cssText = 'z-index:99999;overflow:auto;height:300px;position:absolute;right:0;top:0;opacity:.9;*filter:alpha(opacity=90);background:#fff;width:500px;';
+                            document.body.insertBefore(consoleView, document.body.firstChild);
+                        }
+                        var li = document.createElement('li');
+                        li.style.cssText = 'border-bottom:1px dotted #ccc;line-height:30px;font-size:12px;';
+                        li.innerHTML = msg + Array.prototype.slice.call(arguments, 1).join(' ');
+                        consoleView.appendChild(li)
+                    //}
                 }
             };
             if (sinaadToolkit.mode === 'debug') {
@@ -50,7 +52,7 @@
          */
         throwError : function (msg, e) {
             if (sinaadToolkit.mode === 'debug') {
-                throw new Error(msg + (e ? ':' + e.message : ''));
+                throw new Error(msg + ':' + e.message);
             }
         },
         /**
@@ -79,23 +81,6 @@
             return Math.floor(min + Math.random() * (max - min + 1));
         },
         /**
-         * 把一个字符串生成唯一hash
-         * @param  {String} s 要生成hash的字符串
-         * @return {String}   36进制字符串
-         */
-        hash : function (s) {
-            var hash = 0,
-                i = 0,
-                w;
-
-            for(; !isNaN(w = s.charCodeAt(i++));) {
-                hash = ((hash << 5) - hash) + w;
-                hash = hash & hash;
-            }
-
-            return Math.abs(hash).toString(36);
-        },
-        /**
          * 判断是否是函数
          * @param  {Any}        source      需要判断的对象
          * @return {Boolean}                是否是函数
@@ -120,18 +105,6 @@
          */
         isNull : function (source) {
             return ('undefined' === typeof source) || (source === null);
-        },
-        /**
-         * 判断是否是数组
-         */
-        isArray : function (source) {
-            return '[object Array]' == Object.prototype.toString.call(source);
-        },
-        /**
-         * 判断是否是数字
-         */
-        isNumber : function (source) {
-            return '[object Number]' == Object.prototype.toString.call(source) && isFinite(source);
         }
     };
 
@@ -142,24 +115,23 @@
      * @const
      */
     sinaadToolkit.RESOURCE_URL = sinaadToolkit.RESOURCE_URL || [
-        'http://d1.sina.com.cn/litong/zhitou/sinaads',
-        'http://d2.sina.com.cn/litong/zhitou/sinaads',
-        'http://d3.sina.com.cn/litong/zhitou/sinaads',
-        'http://d4.sina.com.cn/litong/zhitou/sinaads',
-        'http://d5.sina.com.cn/litong/zhitou/sinaads',
-        'http://d6.sina.com.cn/litong/zhitou/sinaads',
-        'http://d7.sina.com.cn/litong/zhitou/sinaads',
-        'http://d8.sina.com.cn/litong/zhitou/sinaads',
-        'http://d9.sina.com.cn/litong/zhitou/sinaads'
-        //'.'
-    ][sinaadToolkit.rand(0, 8)];
+       /* 'http://d1.sina.com.cn',
+        'http://d2.sina.com.cn',
+        'http://d3.sina.com.cn',
+        'http://d4.sina.com.cn',
+        'http://d5.sina.com.cn',
+        'http://d6.sina.com.cn',
+        'http://d7.sina.com.cn',
+        'http://d8.sina.com.cn',*/
+        'http://d.sina.com.cn'
+    ][sinaadToolkit.rand(0, 0)];
 
     /**
      * 工具包资源地址
      * @static
      * @const
      */
-    sinaadToolkit.TOOLKIT_URL = sinaadToolkit.RESOURCE_URL + '/src/sinaadToolkit.js';
+    sinaadToolkit.TOOLKIT_URL = sinaadToolkit.RESOURCE_URL + '/litong/zhitou/sinaads/src/sinaadToolkit.js';
 
     /**
      * @namespace sinaadToolkit.browser
@@ -340,7 +312,7 @@
          * @return {Array}      转换后的数组
          */
         ensureArray : function (source) {
-            return sinaadToolkit.isArray(source) ? source : sinaadToolkit.isNull(source) ? [] : [source];
+            return source instanceof Array ? source : sinaadToolkit.isNull(source) ? [] : [source];
         }
     };
 
@@ -488,7 +460,7 @@
         // http://www.w3.org/Protocols/rfc2109/rfc2109
         // Syntax:  General
         // The two state management headers, Set-Cookie and Cookie, have common
-        // syntactic properties involving attribute-value pairs.  The following
+        // syntac/tic properties involving attribute-value pairs.  The following
         // grammar uses the notation, and tokens DIGIT (decimal digits) and
         // token (informally, a sequence of non-special, non-white space
         // characters) from the HTTP/1.1 specification [RFC 2068] to describe
@@ -615,7 +587,6 @@
                         expires.setDate(expires.getDate() + 365);
                         userData.userData.expires = expires.toUTCString();
                     } catch (e) {
-                        sinaadToolkit.throwError('sinaadToolkit.storage:userData初始化失败，' + e.message);
                         return false;
                     }
                 }
@@ -701,7 +672,7 @@
                     }
                     return null;
                 } catch (e) {
-                    sinaadToolkit.throwError('sinaadToolkit.storage.get:' + e.message);
+                    sinaadToolkit.debug('sinaadToolkit.storage.get:' + e.message);
                     return null;
                 }
             },
@@ -716,7 +687,7 @@
                 try {
                     storage.setItem(key, value, expires);
                 } catch (e) {
-                    sinaadToolkit.throwError('sinaadToolkit.storage.set:' + e.message);
+                    sinaadToolkit.debug('sinaadToolkit.storage.set:' + e.message);
                 }
             },
             /**
@@ -727,7 +698,7 @@
                 try {
                     storage.removeItem(key);
                 } catch (e) {
-                    sinaadToolkit.throwError('sinaadToolkit.storage.remove:' + e.message);
+                    sinaadToolkit.debug('sinaadToolkit.storage.remove:' + e.message);
                 }
             }
         };
@@ -1079,7 +1050,7 @@
                         }
                     }
                     catch (e) {
-                        sinaadToolkit.throwError('sinaadToolkit.Deferred: _pipe内部方法出错-' + e.message);
+                        sinaadToolkit.debug('sinaadToolkit.Deferred: _pipe内部方法出错' + e.message);
                         deferred.reject(e);
                     }
                 }
@@ -1102,7 +1073,7 @@
                     try {
                         callback.apply(deferred, deferred._args);
                     } catch (e) {
-                        sinaadToolkit.throwError('sinaadToolkit.Deferred: _flush出错' + e.message)
+                        sinaadToolkit.debug('sinaadToolkit.Deferred: _flush出错' + e.message)
                     }
                 });
             }, 0);
@@ -1237,7 +1208,7 @@
                     }, timeOut);
                 }
                 
-                _createScriptTag(scr, url + (url.indexOf('?') !== -1 ? '&' : '?') + sinaadToolkit.rnd(), charset);
+                _createScriptTag(scr, url, charset);
             },
             /**
              * jsonp方式回调
@@ -1330,7 +1301,6 @@
      * @namespace sinaadToolkit.swf
      */
     sinaadToolkit.swf = sinaadToolkit.swf || /** @lends sinaadToolkit.swf */{
-        uid : 0,
         /**
          * flash版本号
          * @type {Number}
@@ -1415,7 +1385,6 @@
                 objProperties = ['classid', 'codebase', 'id', 'width', 'height', 'align'];
             
             // 初始化object标签需要的classid、codebase属性值
-            options['name'] = options['id'] = options['id'] || 'sinaadToolkit_swf_uid_' + (sinaadToolkit.swf.uid++);
             options['align'] = options['align'] || 'middle';
             options['classid'] = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000';
             options['codebase'] = 'http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0';
@@ -1472,6 +1441,7 @@
             
             // 使用embed时，flash地址的属性名是src，并且要指定embed的type和pluginspage属性
             options['src']  = options['movie'];
+            options['name'] = options['id'];
             delete options['id'];
             delete options['movie'];
             delete options['classid'];
@@ -1624,7 +1594,7 @@
                         iframe.src = 'javascript:\'<script type="text/javascript">' + content + "\x3c/script>'";
                     } catch(e) {
                         window[key] = null;
-                        sinaadToolkit.throwError("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
+                        sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
                     }
                 }
             //标准浏览器，标准方法
@@ -1636,7 +1606,7 @@
                        doc.write(content);
                        doc.close();
                 } catch(e) {
-                    sinaadToolkit.throwError("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
+                    sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
                 }
             }
         }
@@ -1735,42 +1705,6 @@
      */
     sinaadToolkit.ad = sinaadToolkit.ad || /** @lends sinaadToolkit.ad */{
         /**
-         * 通过src地址获取资源类型
-         * @param  {String} src 资源地址
-         * @return {String}     类型
-         */
-        getTypeBySrc : function (src, defaultType) {
-            var type = defaultType;
-            if (!type) {
-                type = src.substring(src.length - 3);
-                switch (type) {
-                    case 'swf' :
-                        type = 'flash';
-                        break;
-                    case 'tml' :
-                        type = 'url';
-                        break;
-                    case '.js' :
-                        type = 'js';
-                        break;
-                    case 'png':
-                    case 'jpg':
-                    case 'gif':
-                    case 'bmp':
-                        type = 'image';
-                        break;
-                    default:
-                        type = 'html';
-                        break;
-                }
-            }
-
-            if (type === 'url' && src.indexOf('adbox.sina.com.cn/ad/') >= 0) {
-                type = 'adbox';
-            }
-            return type;
-        },
-        /**
          * 创建广告展现html
          * @param  {String} type    广告类型，如图片等
          * @param  {String} src     广告资源地址
@@ -1786,8 +1720,8 @@
                 config,
                 monitorCode;
 
-            width += sinaadToolkit.isNumber(width) ? 'px' : '',
-            height += sinaadToolkit.isNumber(height) ? 'px' : '';
+            width += String(width).indexOf('%') !== -1 ? '' : 'px';
+            height += String(height).indexOf('%') !== -1 ? '' : 'px';
 
             monitorCode = sinaadToolkit.monitor.createClickMonitor(type, monitor);
 
@@ -1805,6 +1739,9 @@
             }
 
             switch (type) {
+                case 'js' :
+                    html = ['<', 'script src="', src, '"></','script>'].join('');
+                    break;
                 case 'url' : 
                     config = {};
                     sinaadToolkit.iframe.init(config, width, height, false);
@@ -1840,9 +1777,6 @@
                     config.src = src;
                     monitorCode && (config.name = monitorCode);
                     html = sinaadToolkit.iframe.createHTML(config);
-                    break;
-                case 'js' :
-                    html = ['<', 'script charset="utf-8" src="', src, '"></','script>'].join('');
                     break;
                 default : 
                     html = src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>');
@@ -1960,10 +1894,10 @@
              */
             create : function (container, width, height, content, context) {
                 var context = context || {},
-                    sandboxId =  '_sinaads_sandbox_id' + uid++;
+                    sandboxId =  context.sandboxId || (context.sandboxId = '_sinaads_sandbox_id' + (uid++));
 
-                width += sinaadToolkit.isNumber(width) ? 'px' : '';
-                height += sinaadToolkit.isNumber(height) ? 'px' : '';
+                width += String(width).indexOf('%') !== -1 ? '' : 'px';
+                height += String(height).indexOf('%') !== -1 ? '' : 'px';
 
                 var iframeConfig = {};
                 sinaadToolkit.iframe.init(iframeConfig, width, height, 0);
@@ -1971,7 +1905,13 @@
                 iframeConfig.id = sandboxId;
                 iframeConfig.style = 'float:left;';
 
-                container.innerHTML = sinaadToolkit.iframe.createHTML(iframeConfig);
+                container.innerHTML = [
+                    '<ins style="margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';">',
+                        sinaadToolkit.iframe.createHTML(iframeConfig),
+                    '</ins>'
+                ].join('');
+
+                container.style.cssText += ';display:block;overflow:hidden;';
 
                 //context转成js代码描述，用于注入到iframe中
                 context = _objToJsVarCode(context);
@@ -1980,6 +1920,7 @@
                 sinaadToolkit.iframe.fill(document.getElementById(sandboxId), [
                     '<!doctype html><html><body style="background:transparent">',
                         '<', 'script>', context, '</', 'script>',
+                        '<', 'script src="' + sinaadToolkit.TOOLKIT_URL + '" charset="utf-8"></', 'script>',
                         content,
                     '</body></html>'
                 ].join(""));
@@ -2093,737 +2034,6 @@
     };
     sinaadToolkit.Box = sinaadToolkit.Box || Box;
 
-    /**
-     * @todo 简单动画方法
-     */
-    
-
-    /**
-     * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
-     */
-    if (!sinaadToolkit.seed) {
-        var _pathname = window.location.pathname,
-            _host = window.location.host,
-            KEY = _host.split('.')[0] + _pathname.substring(0, _pathname.lastIndexOf('/'));
-
-        sinaadToolkit.debug('sinaadTookit: 当前页面种子key为:' + KEY);
-
-        KEY = 'SinaadTK_' + sinaadToolkit.hash(KEY); 
-
-        sinaadToolkit.seed = parseInt(sinaadToolkit.storage.get(KEY), 10) || sinaadToolkit.rand(0, 100);
-        //大于1000就从0开始，防止整数过大
-        sinaadToolkit.storage.set(KEY, sinaadToolkit.seed > 1000 ? 0 : ++sinaadToolkit.seed);
-    }
-
 })(window);
 
 
-
-
-
-/*!
- * sinaads
- * 新浪统一商业广告脚本
- * 负责使用pdps(新浪广告资源管理码)向广告引擎请求数据并处理广告渲染
- * @author acelan <xiaobin8[at]staff.sina.com.cn>
- * @version 1.0.0
- * @date 2013-08-08
- *
- * @useage
- *     window.sinaadsPerloadData = [pdps1, pdps2, pdps3, ..., pdpsn]; 批量加载的代码
- *     (window.sinaads = window.sinaads || []).push({}); 投放一个位置
- *     (window.sinaads = window.sinaads || []).push({
- *         element : HTMLDOMElement,
- *         params : {
- *             sinaads_ad_width : xx,
- *             sinaads_ad_height : xxx,
- *             sinaads_ad_pdps : xxxx,
- *             ...
- *         }
- *     });
- *
- *
- * @info
- *    _sinaadsTargeting : 保存本页中的定向信息
- */
-(function (window, core, undefined) {
-    var IMPRESS_URL = 'http://123.126.53.109/impress.php',
-        now = core.now();  //加载sinaads的时间
-
-    /**
-     * 判断是否为sina商业广告节点且为未完成状态
-     */
-    //1.class=sinaads 
-    //2.data-sinaads-status !== "done"
-    function _isPenddingSinaad(element) {
-        return /(^| )sinaads($| )/.test(element.className) && "done" !== element.getAttribute("data-ad-status");
-    }
-    /**
-     * 如果有id参数，则获取id为当前id的未渲染元素，如果没有提供id，则从现有的元素中获取一个待渲染广告元素
-     * @param  {[type]} id [description]
-     * @return {[type]}    [description]
-     */
-    function _getSinaAd(id) {
-        var inss = document.getElementsByTagName("ins"),
-            i = 0,
-            len = inss.length,
-            ins;
-        for (ins = inss[i]; i < len; ins = inss[++i]) {
-            if (_isPenddingSinaad(ins) && (!id || ins.id === id)) { 
-                return ins;
-            }
-        }
-        return null;
-    }
-
-
-    /**
-     * 获取定向关键词, 全局只获取一次
-     */
-    var targeting = window._sinaadsTargeting = window._sinaadsTargeting || (function () {
-        var metaNodes = document.getElementsByTagName('head')[0].getElementsByTagName('meta'),
-            targeting = {},
-            metas = [],
-            i = 0,
-            len = metaNodes.length;
-        //metas = Array.prototype.slice.call(metaNodes)在ie下报错’缺少 JScript 对象‘
-        for (; i < len; i++) {
-            metas.push(metaNodes[i]);
-        }
-        core.array.each(metas, function (meta, i) {
-            var entry = '';
-            if (meta.name.indexOf('sinaads_') === 0) {
-                targeting[meta.name.split('_')[1]] = meta.content;
-            }
-        });
-        if (entry = core.cookie.get('sinaads_entry') || core.storage.get('sinaads_entry')) {
-            targeting.entry = entry;
-            core.cookie.remove('sinaads_entry');
-            core.storage.remove('sinaads_entry');
-        }
-
-        core.debug('sinaads: 取得定向信息', targeting);
-
-        return targeting;
-    })();
-
-
-    /**
-     * 数据模块
-     * @return {[type]} [description]
-     */
-    var modelModule = (function () {
-        var _cache = window._sinaadsCacheData = window._sinaadsCacheData || {};
-        function _adapter(ad) {
-            var networkMap = {
-                    '1' : 'http://d3.sina.com.cn/litong/zhitou/union/tanx.html?pid=',
-                    '2' : 'http://d3.sina.com.cn/litong/zhitou/union/google.html?pid='
-                },
-                size = ad.size.split('*'),
-                engineType = ad.engineType;
-
-            if (!ad.content && ad.value) {
-                core.debug('sinaads: 老数据格式，需要进行数据适配(pdps)', ad.id);
-                ad.content = ad.value;
-                delete ad.value;
-            }
-
-            core.array.each(ad.content, function (content, i) {
-                var manageType = content.manageType,
-                    content = content.content,
-                    type = core.array.ensureArray(content.type),
-                    link = core.array.ensureArray(content.link);
-
-                if (engineType === 'network') {
-                    content = {
-                        src : [networkMap['' + manageType] + content + '&w=' + size[0] + '&h=' + size[1]],
-                        type : ['url']
-                    };
-                }
-                if (ad.engineType === 'dsp' && parseInt(manageType, 10) !== 17) {
-                    content = {
-                        src : [content],
-                        type : ['html']
-                    };
-                }
-
-                core.array.each(content.src, function (src, i) {
-                    type[i] = core.ad.getTypeBySrc(src, type[i]);
-                });
-                // 通栏  950*90 tl
-                // 画中画 300*250 hzh
-                // 矩形 250*230 jx
-                // 短通栏 640*90 dtl
-                // 大按钮 300*120 dan
-                // 小按钮 240*120 xan
-                // 跨栏 1000*90 kl
-                // 背投  750*450 bt
-                // 文字链 wzl
-                ad.type = ({
-                    'lmt' : 'stream',
-                    'kl' : 'couplet',
-                    'sc' : 'videoWindow',
-                    'hzh' : 'embed',
-                    'tl' : 'embed',
-                    'jx' : 'embed',
-                    'dtl' : 'embed',
-                    'an' : 'embed',
-                    'dan' : 'embed',
-                    'xan' : 'embed',
-                    'wzl' : 'textlink',
-                    'ztwzl' : 'zhitoutextlink',
-                    'fp' : 'turning',
-                    'dl' : 'float'
-                }[ad.type]) || ad.type || 'embed';
-
-                ad.content[i] = content;
-            });
-
-            return ad;
-        }
-
-        return {
-            /**
-             * 获取广告数据
-             * @param  {Array} pdps 广告pdps
-             * @return {Deferred}      promise调用对象
-             */
-            request : function (pdps) {
-                var start = core.now(),
-                    deferred = new core.Deferred(),
-                    params = [],
-                    isLoaded = false,
-                    _pdps = [];
-
-
-                //判断pdps相关数据是否存在，如果存在，直接返回，否则，请求后渲染
-                core.array.each(pdps, function (str, i) {
-                    isLoaded = !!_cache[str];
-                    if(isLoaded) {
-                        core.debug('sinaads: 当前pdps数据已加载，直接渲染（pdps, 数据）', str, _cache[str]);
-                    } else {
-                        _pdps.push(str);
-                    }
-                });
-
-                if (isLoaded) {
-                    deferred.resolve();
-                } else {
-                    core.debug('sinaads: 当前pdps数据未加载，立即加载数据（pdps, 全局缓存数据）' + _pdps.join(), _cache);
-                    params = [
-                        'adunitid=' + _pdps.join(','),                   //pdps数组
-                        'rotate_count=' + core.seed,                    //轮播数
-                        'TIMESTAMP=' + core.now().toString(36),         //时间戳
-                        'referral=' + encodeURIComponent(core.url.top)  //当前页面url
-                    ];
-
-
-                    for (var key in targeting) {
-                        params.push('tg' + key + '=' + encodeURIComponent(targeting[key]));
-                    }
-
-                    core.sio.jsonp(IMPRESS_URL + '?' + params.join('&'), function (data) {
-                        if (data === 'nodata') {
-                            core.debug('sinaads: ' + _pdps.join() + '-该广告位没有获取到可用的数据');
-                            deferred.reject();
-                        } else {
-                            core.debug('sinaads: 获取数据完成（参数，时间，耗时ms，结果数据）', params, core.now(), core.now() - start, data);
-                            //缓存数据到list中
-                            core.array.each(data.ad, function (ad, i) {
-                                var ad = _adapter ? _adapter(ad) : ad;
-                                if (ad.content instanceof Array && ad.content.length > 0) {
-                                    _cache[ad.id] = ad;
-                                }
-                            });
-                            /**
-                             * cookie mapping
-                             * 每次请求如果有mapping需要对应就发送请求
-                             * @type {Number}
-                             */
-                            core.array.each(data.mapUrl, function (url, i) {
-                                core.debug('sinaads: 取得数据，且需要mapping, 发送cookie mapping（url，参数，时间）' + url, params, core.now());
-                                url && core.sio.log(url);
-                            });
-                        }
-                        deferred.resolve();
-                    });
-                }
-
-                return deferred;
-            },
-            get : function (pdps) {
-                return _cache[pdps];
-            }
-        };
-    })();
-
-    /**
-     * 显示广告模块
-     */
-    var viewModule = (function () {
-        var handlerMap = window.sinaadsRenderHandler = window.sinaadsRenderHandler || {};
-
-        /**
-         * 注册渲染方法
-         * @param  {[type]} type    [description]
-         * @param  {[type]} handler [description]
-         * @return {[type]}         [description]
-         */
-        function _register(type, handler) {
-            handlerMap[type] = handler;
-        }
-
-        function _render(type, element, width, height, content, monitor, config) {
-            var handler = handlerMap[type],
-                _type = type;
-            if ('function' === typeof handler) {
-                _type = handler(element, width, height, content, monitor, config) || type;
-            }
-            //上面的处理将媒体类型改变，按照新类型再执行一边render方法
-            if (_type !== type) {
-                _render(_type, element, width, height, content, monitor, config);
-            }
-        }
-
-        /**
-         * 注册一批方法
-         */
-        
-        return {
-            render : _render, //渲染方法
-            register : _register,  //注册方法
-            handlerMap : handlerMap
-        };
-    })();
-
-    /** 注册一些常用的广告媒体类型显示方法 */
-    viewModule.register('couplet', function (element, width, height, content, monitor, config) {
-        var RESOURCE_URL = core.RESOURCE_URL + '/src/plus/CoupletMedia.js';
-        //是跨栏，隐藏掉改区块
-        element.style.cssText = 'position:absolute;top:-9999px';
-        //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
-        if (content.src.length === 1) {
-            switch (content.type[0]) {
-                case 'js' : 
-                    core.sio.loadScript(content.src[0]);
-                    break;
-                case 'html' :
-                    return 'embed'; //某dsp插入一轮，比如乐居
-            }
-        }
-        if (content.src.length > 1) {
-            //注入跨栏数据
-            var CoupletMediaData = {
-                src         : content.src,
-                type        : content.type,
-                link        : content.link,
-                top         : config.sinaads_couple_top || 0,
-                monitor     : content.monitor || [],
-                delay       : config.sinaads_ad_delay || 0
-            };
-            if (core.CoupletMediaData) {
-                new core.CoupletMedia(CoupletMediaData);
-            } else {
-                core.sio.loadScript(RESOURCE_URL, function () {
-                    new core.CoupletMedia(CoupletMediaData);
-                });
-            }
-        }
-    });
-
-    viewModule.register('videoWindow', function (element, width, height, content, monitor, config) {
-        var RESOURCE_URL = core.RESOURCE_URL + '/src/plus/VideoWindowMedia.js';
-        element.style.cssText = 'position:absolute;top:-9999px';
-        if (content.type[0] !== 'js') {
-            var VideoWindowMediaData = {
-                src     : content.src[0],
-                type    : content.type[0],
-                width   : width,
-                height  : height,
-                link    : content.link[0],
-                monitor : content.monitor,
-                delay   : config.sinaads_ad_delay || 0
-            };
-            if (core.VideoWindowMedia) {
-                new core.VideoWindowMedia(VideoWindowMediaData);
-            } else {
-                core.sio.loadScript(RESOURCE_URL, function () {
-                    new core.VideoWindowMedia(VideoWindowMediaData);
-                });
-            }
-        } else {
-            core.sio.loadScript(content.src[0]);
-        }
-    });
-
-    viewModule.register('stream', function (element, width, height, content, monitor, config) {
-        var RESOURCE_URL = core.RESOURCE_URL + '/src/plus/StreamMedia.js';
-        //流媒体，隐藏掉该区块
-        element.style.cssText = 'position:absolute;top:-9999px';
-        if(content.src.length === 1 && content.type[0] === 'js'){
-            //富媒体供应商提供的js
-            //生成一个用于渲染容器到页面中
-            var streamContainer = document.createElement('div');
-            streamContainer.id = 'SteamMediaWrap';
-            document.body.insertBefore(streamContainer, document.body.firstChild);
-                
-            core.sio.loadScript(content.src[0]);
-        }
-        //这里认为如果给的是素材的话，那么素材必须大于1个，否则为js类型
-        if (content.src.length > 1) {
-            //注入流媒体数据
-            var StreamMediaData = {
-                main : {
-                    type    : content.type[0] || 'flash',
-                    src     : content.src[0] || '',
-                    link    : 'http://sina.com.cn',
-                    width   : width,
-                    height  : height
-                },
-                mini : {
-                    src     : content.src[1] || '',
-                    type    : content.type[1] || 'flash',
-                    link    : 'http://sina.com.cn'
-                },
-                delay : config.sinaads_ad_delay || 0
-            };
-            if (core.StreamMedia) {
-                new core.StreamMedia(StreamMediaData);
-            } else {
-                core.sio.loadScript(RESOURCE_URL, function () {
-                    new core.StreamMedia(StreamMediaData);
-                });
-            }
-        }
-    });
-
-
-    viewModule.register('fullscreen', function (element, width, height, content, monitor, config) {
-        var RESOURCE_URL = core.RESOURCE_URL + '/src/plus/FullscreenMedia.js';
-        //是全屏广告，隐藏掉改区块
-        element.style.cssText = 'position:absolute;top:-9999px';
-        var FullScreenMediaData = {
-            type        : content.type[0] || '',
-            src         : content.src[0] || '',
-            link        : content.link[0] || '',
-            width       : width,
-            height      : height,
-            hasClose    : 1,
-            delay       : config.sinaads_ad_delay || 0
-        };
-        if (core.FullscreenMedia) {
-            new core.FullscreenMedia(element, FullScreenMediaData);
-        } else {
-            core.sio.loadScript(RESOURCE_URL, function () {
-                new core.FullscreenMedia(element, FullScreenMediaData);
-            });
-        }
-    });
-
-    viewModule.register('bp', function (element, width, height, content, monitor, config) {
-        //是背投广告，隐藏掉改区块
-        element.style.cssText = 'position:absolute;top:-9999px';
-        //这里规定背投的素材不能是js或者代码片段，而且只能有1个
-        window.open('http://d1.sina.com.cn/d1images/pb/pbv4.html?' + content.link[0] + '${}' + content.type[0] + '${}' + content.src[0]);
-        content.src = [];
-    });
-
-    viewModule.register('float', function (element, width, height, content, monitor, config) {
-        var RESOURCE_URL = core.RESOURCE_URL + '/src/plus/FloatMedia.js';
-        element.style.cssText = 'position:absolute;top:-99999px';
-        var FloatMediaData = {
-            type : content.type,
-            src : content.src,
-            top : config.sinaads_float_top || 0,
-            monitor : monitor,
-            link : content.link,
-            delay : config.sinaads_ad_delay || 0,
-            sideWidth : width,
-            sideHeight : height,
-            pdps : config.sinaads_ad_pdps
-        };
-        if (core.FloatMedia) {
-            new core.FloatMedia(FloatMediaData);
-        } else {
-            core.sio.loadScript(RESOURCE_URL, function () {
-                new core.FloatMedia(FloatMediaData);
-            });
-        }
-    });
-
-    viewModule.register('turning', function (element, width, height, content, monitor, config) {
-        content.src = [
-            core.swf.createHTML({
-                id : 'TurningMedia' + config.sinaads_uid,
-                url : 'http://d3.sina.com.cn/d1images/fanpai/picshow.swf',
-                width : width,
-                height : height,
-                vars : {
-                    ad_num : content.src.length,
-                    pics : content.src.join('§'),
-                    urls : content.link.join('§'),
-                    pic_width : width - 5,
-                    pic_height : height - 5,
-                    flip_time : config.sinaads_turning_flip_duration * 1000 || 300,
-                    pause_time : config.sinaads_turning_flip_delay * 1000 || 4000,
-                    wait_time : config.sinaads_turning_wait * 1000 || 1000
-                }
-            })
-        ];
-        content.type = ['html'];
-        return 'embed'; //使用embed来解析
-    });
-
-    viewModule.register('textlink', function (element, width, height, content, monitor, config) {
-        element.style.cssText = 'position:absolute;top:-9999px';
-        var fragmentNode = document.createElement('span');
-        fragmentNode.innerHTML = core.ad.createHTML('text', content.src[0], 0, 0, content.link[0], monitor, config.sinaads_ad_tpl || '');
-        element.parentNode.insertBefore(fragmentNode, element);
-    });
-
-    viewModule.register('zhitoutextlink', viewModule.handlerMap['textlink']);
-
-
-    viewModule.register('tip', function (element, width, height, content, monitor, config) {
-        var RESOURCE_URL = core.RESOURCE_URL + '/src/plus/TipsMedia.js';
-        var TipsMediaData = {
-                width : width,
-                height : height,
-                src : content.src,
-                type : content.type,
-                link : content.link,
-                monitor : monitor,
-                autoShow : 1,
-                top : config.sinaads_tip_top || 0,
-                zIndex : config.sinaads_ad_zindex || 0
-            };
-        if (core.TipsMedia) {
-            new core.TipsMedia(element, TipsMediaData);
-        } else {
-            core.sio.loadScript(RESOURCE_URL, function () {
-                new core.TipsMedia(element, TipsMediaData);
-            });
-        }
-    });
-    viewModule.register('follow', function (element, width, height, content, monitor, config) {
-        var RESOURCE_URL = core.RESOURCE_URL + '/src/plus/FollowMedia.js';
-        var FollowMediaData = {
-                main : {
-                    width : width,
-                    height : height,
-                    src : content.src[0] || '',
-                    type : content.type[0] || '',
-                    link : content.link[0] || '',
-                    top : config.sinaads_follow_top || 0
-                },
-                mini : {
-                    src : content.src[1] || '',
-                    type : content.type[1] || '',
-                    link : content.link[1] || content.link[0] || '',
-                    top : config.sinaads_follow_mini_top || 'bottom'
-                },
-                monitor : monitor,
-                delay : config.sinaads_ad_delay || 0,
-                duration : config.sinaads_ad_duration || 5
-            };
-        if (core.FollowMedia) {
-            new core.FollowMedia(FollowMediaData);
-        } else {
-            core.sio.loadScript(RESOURCE_URL, function () {
-                new core.FollowMedia(FollowMediaData);
-            });
-        }
-    });
-
-    /**
-     * 创建常规广告的曝光请求html
-     * @param  {[type]} element [description]
-     * @param  {[type]} config  [description]
-     * @return {[type]}         [description]
-     */
-    viewModule.register('embed', function (element, width, height, content, monitor, config) {
-        var uid         = config.sinaads_uid,
-            iframeId    = 'sinaads_iframe_' + uid,
-            type        = content.type[0] || '',
-            link        = content.link[0] || '',
-            src         = content.src[0] || '',
-            pdps        = config.sinaads_ad_pdps,
-            adContent;
-
-        /**
-         * 自适应宽度, 针对图片和flash
-         */
-        if (config.sinaads_ad_fullview && (type === 'flash' || type === 'image')) {
-            width = '100%';
-            height = 'auto';
-        } else {
-            width += 'px';
-            height += 'px';
-        }
-
-        element.style.cssText += ';display:block;overflow:hidden;';
-        element.innerHTML = '<ins style="margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';"></ins>';
-        element = element.getElementsByTagName('ins')[0];
-
-        adContent = src ? core.ad.createHTML(type, src, width, height, link, monitor) : ''; //广告内容， 如果没有src，则不渲染
-
-        switch (type) {
-            case 'text' :
-            case 'image' : 
-            case 'url' :
-            case 'adbox' :
-            case 'flash' :
-                element.innerHTML = adContent;
-                break;
-            default : 
-                //创建广告渲染的沙箱环境，并传递部分广告参数到沙箱中
-                core.sandbox.create(element, width, height, adContent, {
-                    sinaads_uid             : uid,
-                    sinaads_async_iframe_id : iframeId,
-                    sinaads_ad_pdps         : pdps,
-                    sinaads_ad_width        : width,
-                    sinaads_ad_height       : height
-                });
-                break;
-        }
-    });
-
-
-
-    /**
-     * 初始化广告对象
-     * @param  {object} config 配置项
-     */
-    function _init(config) {
-        var element = config.element,       //广告容器
-            config = config.params || {};   //广告配置
-
-        //从config.element中得到需要渲染的ins元素，如果没有，则获取页面上未完成状态的广告节点
-        if (element) {
-            if (!_isPenddingSinaad(element) && (element = element.id && _getSinaAd(element.id), !element)) {
-                core.debug("sinaads: 该元素已经被渲染完成，无需渲染", element);
-            }
-            if (!("innerHTML" in element)) {
-                core.debug("sinaads: 无法渲染该元素", element);
-            }
-        //没有对应的ins元素, 获取一个待初始化的ins, 如果没有，抛出异常
-        } else if (element = _getSinaAd(), !element) {
-            core.debug("sinaads: 所有待渲染的元素都已经被渲染完成");
-        }
-
-        //置成完成状态，下面开始渲染
-        element.setAttribute("data-ad-status", "done"); 
-
-        //记录所在位置，留用
-        var pos = core.dom.getPosition(element);
-        element.setAttribute('data-ad-offset-left', pos.left);
-        element.setAttribute('data-ad-offset-top', pos.top)
-
-        //全局唯一id标识，用于后面为容器命名
-        config.sinaads_uid = (window.sinaads_uid ? ++window.sinaads_uid : window.sinaads_uid = 1);
-
-        //将data-xxx-xxxx,转换成sinaads_xxx_xxxx，并把值写入config
-        //这里因为上面设置了data-ad-status属性, 所以sinaads-ad-status的状态也会被写入conf
-        for (var attrs = element.attributes, len = attrs.length, i = 0; i < len; i++) {
-            var attr = attrs[i];
-            if (/data-/.test(attr.nodeName)) {
-                var key = attr.nodeName.replace("data", "sinaads").replace(/-/g, "_");
-                config.hasOwnProperty(key) || (config[key] = attr.nodeValue);
-            }
-        }
-        //获取page_url 广告所在页面url
-        config.sinaads_page_url = core.url.top;
-
-        modelModule.request(config.sinaads_ad_pdps).done(function () {
-            render(element, modelModule.get(config.sinaads_ad_pdps), config);
-            core.isFunction(config.sinaads_success_handler) && config.sinaads_success_handler();
-        }).fail(function () {
-            core.isFunction(config.sinaads_fail_handler) && config.sinaads_fail_handler();
-        });
-    }
-
-
-    /**
-     * 根据广告媒体类型渲染广告
-     */
-    function render(element, data, config) {
-        if (!data) {
-            core.debug('sinaads: ' + config.sinaads_ad_pdps + '数据没有获取到, 无法渲染');
-            return;
-        }
-        var start = core.now();
-
-        var size    = data.size.split('*'),
-            width   = config.sinaads_ad_width || (config.sinaads_ad_width = Number(size[0])) || 0,
-            height  = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])) || 0;
-
-        core.array.each(data.content, function(content, i) {
-            core.debug('sinaads: 处理' + config.sinaads_ad_pdps + '第' + (i + 1) + '个内容的广告展现');
-
-            content.src    = core.array.ensureArray(content.src);
-            content.link   = core.array.ensureArray(content.link);
-            content.type   = core.array.ensureArray(content.type);
-            
-            var monitor = content.monitor,
-                pv = content.pv;
-
-            /* 解析曝光，并注入模版值，发送曝光 */
-            core.array.each(pv, function (url, i) {
-                pv[i] = core.monitor.parseTpl(url, config);
-                core.debug('sinaads: ' + config.sinaads_ad_pdps + '发送曝光' + url);
-                pv[i] && core.sio.log(pv[i]);
-            });
-            /* 解析监控链接，注入模版， 后续使用*/
-            core.array.each(monitor, function (url, i) {
-                monitor[i] = core.monitor.parseTpl(url, config);
-                core.debug('sinaads: ' + config.sinaads_ad_pdps + '处理监测链接' + url);
-            });
-
-            /** 
-             * 按照媒体类型渲染广告
-             */
-            viewModule.render(
-                config.sinaads_ad_type || data.type, 
-                element, 
-                width, 
-                height, 
-                content, 
-                monitor,
-                config
-            );
-        });
-
-        core.debug('sinaads: 渲染广告完毕(耗时ms)', core.now() - start);
-    };
-
-
-    /**
-     * 初始化方法，处理js加载成功之前压入延迟触发的广告位，
-     * 并将后续广告压入方法置成内部初始化方法
-     */
-    function init() {
-        core.debug('sinaads: 进入扫描渲染广告流程' + core.now());
-        /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
-        var perloadAds = window.sinaads;
-        if (perloadAds && perloadAds.shift) {
-            for (var ad, len = 100; (ad = perloadAds.shift()) && 0 < len--;) {
-                _init(ad);
-            }
-        }
-        //在脚本加载之后，sinaad重新定义，并赋予push方法为初始化方法
-        window.sinaads = {push : _init};
-    }
-
-    /* 判断是否有需要预加载的数据，加载完成后执行初始化操作，否则执行初始化操作 */
-    var perloadData = window.sinaadsPerloadData = window.sinaadsPerloadData || [];
-    if (!perloadData.done) {
-        if (perloadData instanceof Array && perloadData.length > 0) {
-            core.debug('sinaads: 预加载批量请求数据（预加载pdps列表）' + perloadData.join(','));
-            modelModule.request(perloadData).done(init).fail(init);
-        } else {
-            init();
-        }
-    }
-    window.sinaadsPerloadData.done = 1; //处理过
-
-})(window, window.sinaadToolkit);

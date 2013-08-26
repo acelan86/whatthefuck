@@ -27,7 +27,7 @@
         config.sideWidth = SIDE_SIZE[0];
         config.sideHeight = SIDE_SIZE[1];
 
-        
+
         config.src = sinaadToolkit.array.ensureArray(config.src);
         config.type = sinaadToolkit.array.ensureArray(config.type);
         config.link = sinaadToolkit.array.ensureArray(config.link);

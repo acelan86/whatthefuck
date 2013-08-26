@@ -122,6 +122,12 @@
          */
         isNull : function (source) {
             return ('undefined' === typeof source) || (source === null);
+        },
+        /**
+         * 判断是否是数组
+         */
+        isArray : function (source) {
+            return '[object Array]' == Object.prototype.toString.call(source);
         }
     };
 
@@ -132,16 +138,16 @@
      * @const
      */
     sinaadToolkit.RESOURCE_URL = sinaadToolkit.RESOURCE_URL || [
-        // 'http://d1.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d2.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d3.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d4.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d5.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d6.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d7.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d8.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d9.sina.com.cn/litong/zhitou/sinaads'
-        '.'
+        'http://d1.sina.com.cn/litong/zhitou/sinaads',
+        'http://d2.sina.com.cn/litong/zhitou/sinaads',
+        'http://d3.sina.com.cn/litong/zhitou/sinaads',
+        'http://d4.sina.com.cn/litong/zhitou/sinaads',
+        'http://d5.sina.com.cn/litong/zhitou/sinaads',
+        'http://d6.sina.com.cn/litong/zhitou/sinaads',
+        'http://d7.sina.com.cn/litong/zhitou/sinaads',
+        'http://d8.sina.com.cn/litong/zhitou/sinaads',
+        'http://d9.sina.com.cn/litong/zhitou/sinaads'
+        //'.'
     ][sinaadToolkit.rand(0, 0)];
 
     /**
@@ -330,7 +336,7 @@
          * @return {Array}      转换后的数组
          */
         ensureArray : function (source) {
-            return source instanceof Array ? source : sinaadToolkit.isNull(source) ? [] : [source];
+            return sinaadToolkit.isArray(source) ? source : sinaadToolkit.isNull(source) ? [] : [source];
         }
     };
 
@@ -1320,6 +1326,7 @@
      * @namespace sinaadToolkit.swf
      */
     sinaadToolkit.swf = sinaadToolkit.swf || /** @lends sinaadToolkit.swf */{
+        uid : 0,
         /**
          * flash版本号
          * @type {Number}
@@ -1404,6 +1411,7 @@
                 objProperties = ['classid', 'codebase', 'id', 'width', 'height', 'align'];
             
             // 初始化object标签需要的classid、codebase属性值
+            options['name'] = options['id'] = options['id'] || 'sinaadToolkit_swf_uid_' + (sinaadToolkit.swf.uid++);
             options['align'] = options['align'] || 'middle';
             options['classid'] = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000';
             options['codebase'] = 'http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0';
@@ -1460,7 +1468,6 @@
             
             // 使用embed时，flash地址的属性名是src，并且要指定embed的type和pluginspage属性
             options['src']  = options['movie'];
-            options['name'] = options['id'];
             delete options['id'];
             delete options['movie'];
             delete options['classid'];
@@ -1723,6 +1730,42 @@
      * @namespace sinaadToolkit.ad
      */
     sinaadToolkit.ad = sinaadToolkit.ad || /** @lends sinaadToolkit.ad */{
+        /**
+         * 通过src地址获取资源类型
+         * @param  {String} src 资源地址
+         * @return {String}     类型
+         */
+        getTypeBySrc : function (src, defaultType) {
+            var type = defaultType;
+            if (!type) {
+                type = src.substring(src.length - 3);
+                switch (type) {
+                    case 'swf' :
+                        type = 'flash';
+                        break;
+                    case 'tml' :
+                        type = 'url';
+                        break;
+                    case '.js' :
+                        type = 'js';
+                        break;
+                    case 'png':
+                    case 'jpg':
+                    case 'gif':
+                    case 'bmp':
+                        type = 'image';
+                        break;
+                    default:
+                        type = 'html';
+                        break;
+                }
+            }
+
+            if (type === 'url' && src.indexOf('adbox.sina.com.cn/ad/') >= 0) {
+                type = 'adbox';
+            }
+            return type;
+        },
         /**
          * 创建广告展现html
          * @param  {String} type    广告类型，如图片等
@@ -2052,6 +2095,28 @@
         }
     };
     sinaadToolkit.Box = sinaadToolkit.Box || Box;
+
+    /**
+     * @todo 简单动画方法
+     */
+    
+
+    /**
+     * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
+     */
+    if (!sinaadToolkit.seed) {
+        var _pathname = window.location.pathname,
+            _host = window.location.host,
+            KEY = _host.split('.')[0] + _pathname.substring(0, _pathname.lastIndexOf('/'));
+
+        sinaadToolkit.debug('sinaadTookit: 当前页面种子key为:' + KEY);
+
+        KEY = 'SinaadTK_' + sinaadToolkit.hash(KEY); 
+
+        sinaadToolkit.seed = parseInt(sinaadToolkit.storage.get(KEY), 10) || sinaadToolkit.rand(0, 100);
+        //大于1000就从0开始，防止整数过大
+        sinaadToolkit.storage.set(KEY, sinaadToolkit.seed > 1000 ? 0 : ++sinaadToolkit.seed);
+    }
 
 })(window);
 
