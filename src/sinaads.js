@@ -48,7 +48,7 @@
         /**
          * 错误信息
          */
-        throwError : function (msg, e) {
+        error : function (msg, e) {
             if (sinaadToolkit.mode === 'debug') {
                 throw new Error(msg + (e ? ':' + e.message : ''));
             }
@@ -442,7 +442,7 @@
                 return source;
             },
             toCamelCase : function (source) {
-                //提前判断，提高getStyle等的效率
+                //提前判断，提高效率
                 if (source.indexOf('-') < 0 && source.indexOf('_') < 0) {
                     return source;
                 }
@@ -615,7 +615,7 @@
                         expires.setDate(expires.getDate() + 365);
                         userData.userData.expires = expires.toUTCString();
                     } catch (e) {
-                        sinaadToolkit.throwError('sinaadToolkit.storage:userData初始化失败，' + e.message);
+                        sinaadToolkit.error('sinaadToolkit.storage:userData初始化失败，' + e.message);
                         return false;
                     }
                 }
@@ -701,7 +701,7 @@
                     }
                     return null;
                 } catch (e) {
-                    sinaadToolkit.throwError('sinaadToolkit.storage.get:' + e.message);
+                    sinaadToolkit.error('sinaadToolkit.storage.get:' + e.message);
                     return null;
                 }
             },
@@ -716,7 +716,7 @@
                 try {
                     storage.setItem(key, value, expires);
                 } catch (e) {
-                    sinaadToolkit.throwError('sinaadToolkit.storage.set:' + e.message);
+                    sinaadToolkit.error('sinaadToolkit.storage.set:' + e.message);
                 }
             },
             /**
@@ -727,7 +727,7 @@
                 try {
                     storage.removeItem(key);
                 } catch (e) {
-                    sinaadToolkit.throwError('sinaadToolkit.storage.remove:' + e.message);
+                    sinaadToolkit.error('sinaadToolkit.storage.remove:' + e.message);
                 }
             }
         };
@@ -1079,7 +1079,7 @@
                         }
                     }
                     catch (e) {
-                        sinaadToolkit.throwError('sinaadToolkit.Deferred: _pipe内部方法出错-' + e.message);
+                        sinaadToolkit.error('sinaadToolkit.Deferred: _pipe内部方法出错-' + e.message);
                         deferred.reject(e);
                     }
                 }
@@ -1102,7 +1102,7 @@
                     try {
                         callback.apply(deferred, deferred._args);
                     } catch (e) {
-                        sinaadToolkit.throwError('sinaadToolkit.Deferred: _flush出错' + e.message)
+                        sinaadToolkit.error('sinaadToolkit.Deferred: _flush出错' + e.message)
                     }
                 });
             }, 0);
@@ -1600,7 +1600,7 @@
                             iframe.src = 'javascript:document.write(window["contents"]);/* document.close(); */';
                         }
                     } catch(e) {
-                        sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法往ie的iframe中写入内容, ", e);
+                        sinaadToolkit.error("sinaadToolkit.iframe.fill: 无法往ie的iframe中写入内容, ", e);
                     }
                 } else {
                     /**
@@ -1624,7 +1624,7 @@
                         iframe.src = 'javascript:\'<script type="text/javascript">' + content + "\x3c/script>'";
                     } catch(e) {
                         window[key] = null;
-                        sinaadToolkit.throwError("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
+                        sinaadToolkit.error("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
                     }
                 }
             //标准浏览器，标准方法
@@ -1636,7 +1636,7 @@
                        doc.write(content);
                        doc.close();
                 } catch(e) {
-                    sinaadToolkit.throwError("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
+                    sinaadToolkit.error("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
                 }
             }
         }
