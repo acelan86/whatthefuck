@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="sinaads_kw" content="新浪,测试,统一脚本,关键词定向">
+        <meta name="sinaads_tpl" content="模版定向">
+        <style>
+            html, body{
+                padding:0px;
+                margin:0px;
+            }
+        </style>
+        <script async charset="utf-8" src="./release/sinaads.js"></script>
+        <script>
+        _sinaadsCacheData = window._sinaadsCacheData || {};
+
+        /**
+         *  测试数据填充区域
+         */
+        _sinaadsCacheData["PDPS000000006450"] = {
+            size : "1000*90",
+            type : 'couplet',
+            content : {
+                pv : ["http://baidu.com/?leju", "http://baidu.com/?leju2"],
+                type : ['html'],
+                src : [
+                    [   
+                        '\\x3cscript src="http://d3.sina.com.cn/litong/zhitou/sinaads/release/sinaadToolkit.js" charset="utf-8" \\x3e\\x3c/script\\x3e',
+                        '\\x3cscript\\x3e',
+                            'function lejuDataCallback(data) {',
+                                'data = (data ? data.couplet || [] : [])[0];',
+                                'if (data && (data = data.params)) {',
+                                    'if (top.window.sinaadToolkit && top.window.sinaadToolkit.CoupletMedia) {',
+                                        'new top.window.sinaadToolkit.CoupletMedia({',
+                                            'src         : [data.bar, data.left, data.right],',
+                                            'type        : [sinaadToolkit.ad.getTypeBySrc(data.bar), sinaadToolkit.ad.getTypeBySrc(data.left), sinaadToolkit.ad.getTypeBySrc(data.right)],',
+                                            'link        : [data.link, data.link, data.link],',
+                                            'top         : 40,',
+                                            'monitor     : []',
+                                            //'delay       : window.sinaads_ad_delay || 0',
+                                        '});', 
+                                    '} else {',
+                                        'top.window.sinaadToolkit && top.window.sinaadToolkit.sio.loadScript && top.window.sinaadToolkit.sio.loadScript(\'.\/release\/plus\/Media.js\', function () {',
+                                            'new top.window.sinaadToolkit.CoupletMedia({',
+                                                'src         : [data.bar, data.left, data.right],',
+                                                'type        : [sinaadToolkit.ad.getType(data.bar), sinaadToolkit.ad.getType(data.left), sinaadToolkit.ad.getType(data.right)],',
+                                                'link        : [data.link, data.link, data.link],',
+                                                'top         : 40,',
+                                                'monitor     : []',
+                                                //'delay       : window.sinaads_ad_delay || 0',
+                                            '});', 
+                                        '});',
+                                    '}',
+                                '}',
+                            '}',
+                            'window.onload = function () {',
+                                'sinaadToolkit.sio.loadScript("http://adm.leju.sina.com.cn/get_ad_list/PG_514AC4246D2142?callback=lejuDataCallback");',
+                            '};',
+                        '\\x3c/script\\x3e'
+                    ].join('\n')
+                ],
+                monitor : ["http://leju.com"],
+                link : ['http://leju.com']
+            }
+        };
+        _sinaadsCacheData["PDPS000000047200"] = {
+            size : "1000*90",
+            type : 'embed',
+            content : {
+                pv : ["http://baidu.com/?leju", "http://baidu.com/?leju2"],
+                type : ['html'],
+                src :  [
+                    [
+                        '\\x3cscript src="http://d3.sina.com.cn/litong/zhitou/sinaads/release/sinaadToolkit.js" charset="utf-8" \\x3e\\x3c/script\\x3e',
+                        '\\x3cscript\\x3e',
+                            'var pdpsid = "PDPS_514AD44785ED12";',
+                            'function lejuDataCallback(data) {',
+                                'data = data ? data.data || {} : {};',
+                                'if (data && (data = data.params)) {',
+                                    'var el = document.createElement("div");',
+                                    'el.innerHTML = sinaadToolkit.ad.createHTML(',
+                                        'sinaadToolkit.ad.getTypeBySrc(data.src),',
+                                        'data.src,',
+                                        'window.sinaads_ad_width,',
+                                        'window.sinaads_ad_height,',
+                                        'data.link',
+                                    ');',
+                                    'document.body.appendChild(el);',
+                                '}',
+                            '}',
+                            'window.onload = function () {',
+                                'sinaadToolkit.sio.loadScript("http://adm.leju.sina.com.cn/get_one_ad/" + pdpsid + "?callback=lejuDataCallback");',
+                            '};',
+                        '\\x3c/script\\x3e'
+                    ].join('\n')
+                ],
+                monitor : ["http://leju.com"],
+                link : ['http://leju.com']
+            }
+        };
+        </script>
+    </head>
+    <body>
+            <h2>乐居跨栏1000*90</h2>
+            <div>
+                <ins class="sinaads" data-ad-pdps="PDPS000000006450"></ins>
+                <script>
+                    (sinaads = window.sinaads || []).push({});
+                </script>
+            </div>
+            <h2>乐居通栏1000*90</h2>
+            <div>
+                <ins class="sinaads" data-ad-pdps="PDPS000000047200"></ins>
+                <script>
+                    (sinaads = window.sinaads || []).push({});
+                </script>
+            </div>
+        <script>
+            document.domain = 'sina.com.cn';
+        </script>
+        
+        <!--新闻中心轮播新浪视窗广告结束-->
+    </body>
+</html>

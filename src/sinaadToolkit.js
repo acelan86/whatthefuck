@@ -6,6 +6,8 @@
  */
 (function (window, undefined) {
 
+    "use strict";
+
     var sinaadToolkit = window.sinaadToolkit = window.sinaadToolkit || {
         /**
          * 工具包版本号
@@ -21,26 +23,25 @@
         /**
          * @private
          */
-        _consoleView : null,
+        _consoleViewId : 'sinaadToolkitDebugContainer',
         /**
          * 调试方法，用于方便线上调试问题
          * @param  {String} msg 输出的信息
          */
         debug : function (msg) {
-            var console = window.console || { 
+            var console = window.console || {
                 log : function (msg) {
-                    var consoleView = sinaadToolkit._consoleView;
-                    //if (document.body) {
-                        if (!consoleView) {
-                            consoleView = sinaadToolkit._consoleView = document.createElement('ul');
-                            consoleView.style.cssText = 'z-index:99999;overflow:auto;height:300px;position:absolute;right:0;top:0;opacity:.9;*filter:alpha(opacity=90);background:#fff;width:500px;';
-                            document.body.insertBefore(consoleView, document.body.firstChild);
-                        }
-                        var li = document.createElement('li');
-                        li.style.cssText = 'border-bottom:1px dotted #ccc;line-height:30px;font-size:12px;';
-                        li.innerHTML = msg + Array.prototype.slice.call(arguments, 1).join(' ');
-                        consoleView.appendChild(li)
-                    //}
+                    var consoleView = document.getElementById(sinaadToolkit._consoleViewId);
+                    if (!consoleView) {
+                        consoleView = document.createElement('ul');
+                        consoleView.id = sinaadToolkit._consoleViewId;
+                        consoleView.style.cssText = 'z-index:99999;overflow:auto;height:300px;position:absolute;right:0;top:0;opacity:.9;*filter:alpha(opacity=90);background:#fff;width:500px;';
+                        document.body.insertBefore(consoleView, document.body.firstChild);
+                    }
+                    var li = document.createElement('li');
+                    li.style.cssText = 'border-bottom:1px dotted #ccc;line-height:30px;font-size:12px;';
+                    li.innerHTML = msg + Array.prototype.slice.call(arguments, 1).join(' ');
+                    consoleView.appendChild(li);
                 }
             };
             if (sinaadToolkit.mode === 'debug') {
@@ -50,9 +51,9 @@
         /**
          * 错误信息
          */
-        throwError : function (msg, e) {
+        error : function (msg, e) {
             if (sinaadToolkit.mode === 'debug') {
-                throw new Error(msg + ':' + e.message);
+                throw new Error(msg + (e ? ':' + e.message : ''));
             }
         },
         /**
@@ -90,7 +91,7 @@
                 i = 0,
                 w;
 
-            for(; !isNaN(w = s.charCodeAt(i++));) {
+            for (; !isNaN(w = s.charCodeAt(i++));) {
                 hash = ((hash << 5) - hash) + w;
                 hash = hash & hash;
             }
@@ -104,7 +105,7 @@
          * @staitc
          */
         isFunction : function (source) {
-            return '[object Function]' == Object.prototype.toString.call(source);
+            return '[object Function]' === Object.prototype.toString.call(source);
         },
         /**
          * 判断是否是字符串
@@ -113,7 +114,7 @@
          * @static
          */
         isString : function (source) {
-           return '[object String]' == Object.prototype.toString.call(source);
+            return '[object String]' === Object.prototype.toString.call(source);
         },
         /**
          * 判断是否是null或者未定义
@@ -127,7 +128,13 @@
          * 判断是否是数组
          */
         isArray : function (source) {
-            return '[object Array]' == Object.prototype.toString.call(source);
+            return '[object Array]' === Object.prototype.toString.call(source);
+        },
+        /**
+         * 判断是否是数字
+         */
+        isNumber : function (source) {
+            return '[object Number]' === Object.prototype.toString.call(source) && isFinite(source);
         }
     };
 
@@ -138,16 +145,16 @@
      * @const
      */
     sinaadToolkit.RESOURCE_URL = sinaadToolkit.RESOURCE_URL || [
-        'http://d1.sina.com.cn/litong/zhitou/sinaads',
-        'http://d2.sina.com.cn/litong/zhitou/sinaads',
-        'http://d3.sina.com.cn/litong/zhitou/sinaads',
-        'http://d4.sina.com.cn/litong/zhitou/sinaads',
-        'http://d5.sina.com.cn/litong/zhitou/sinaads',
-        'http://d6.sina.com.cn/litong/zhitou/sinaads',
-        'http://d7.sina.com.cn/litong/zhitou/sinaads',
-        'http://d8.sina.com.cn/litong/zhitou/sinaads',
-        'http://d9.sina.com.cn/litong/zhitou/sinaads'
-        //'.'
+        // 'http://d1.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d2.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d3.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d4.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d5.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d6.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d7.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d8.sina.com.cn/litong/zhitou/sinaads',
+        // 'http://d9.sina.com.cn/litong/zhitou/sinaads'
+        '.'
     ][sinaadToolkit.rand(0, 0)];
 
     /**
@@ -206,17 +213,17 @@
              * 如果是chrome浏览器，返回浏览器当前版本号
              * @type {Number}
              */
-            chrome : /chrome\/(\d+\.\d+)/i.test(ua) ? + RegExp['\x241'] : undefined,
+            chrome : /chrome\/(\d+\.\d+)/i.test(ua) ? + RegExp.$1 : undefined,
             /**
              * 如果是firefox浏览器，返回浏览器当前版本号
              * @type {Number}
              */
-            firefox : /firefox\/(\d+\.\d+)/i.test(ua) ? + RegExp['\x241'] : undefined,
+            firefox : /firefox\/(\d+\.\d+)/i.test(ua) ? + RegExp.$1 : undefined,
             /**
              * 如果是ie返回ie当前版本号
              * @type {Number}
              */
-            ie : /msie (\d+\.\d+)/i.test(ua) ? (document.documentMode || + RegExp['\x241']) : undefined,
+            ie : /msie (\d+\.\d+)/i.test(ua) ? (document.documentMode || + RegExp.$1) : undefined,
             /**
              * @type {Boolean}
              */
@@ -224,7 +231,7 @@
             /**
              * @type {Boolean}
              */
-            isStrict : document.compatMode == "CSS1Compat",
+            isStrict : document.compatMode === "CSS1Compat",
             /**
              * @type {Boolean}
              */
@@ -233,7 +240,7 @@
              * 如果是opera,返回opera当前版本号
              * @type {Number}
              */
-            opera : /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.test(ua) ?  + ( RegExp["\x246"] || RegExp["\x242"] ) : undefined
+            opera : /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.test(ua) ?  + (RegExp.$6 || RegExp.$2) : undefined
         };
 
         /**
@@ -254,12 +261,12 @@
         browser.phone  = !!(!browser.tablet && (browser.android || browser.iphone || browser.webos || browser.blackberry || browser.bb10 || (browser.chrome && /Android/.test(ua)) || (browser.chrome && /CriOS\/([\d.]+)/.test(ua)) || (browser.firefox && /Mobile/.test(ua))));
 
         try {
-            if (/(\d+\.\d+)/.test(external.max_version)) {
+            if (/(\d+\.\d+)/.test(window.external.max_version)) {
                 /**
                  * 如果是遨游浏览器，返回遨游版本号
                  * @type {Number}
                  */
-                browser.maxthon = + RegExp['\x241'];
+                browser.maxthon = + RegExp.$1;
             }
         } catch (e) {}
 
@@ -267,12 +274,12 @@
          * 如果是safari浏览器，返回safari版本号
          * @type {Number}
          */
-        browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp['\x241'] || RegExp['\x242']) : undefined;
+        browser.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp.$1 || RegExp.$2) : undefined;
         /**
          * 是否支持position:fixed属性
          * @type {Boolean}
          */
-        browser.isSupportFixed = !browser.ie || browser.ie >=7;
+        browser.isSupportFixed = !browser.ie || browser.ie >= 7;
 
         return browser;
 
@@ -310,12 +317,12 @@
 
             source = sinaadToolkit.array.ensureArray(source);
 
-            var returnValue, 
-                item, 
-                i, 
+            var returnValue,
+                item,
+                i,
                 len = source.length;
             
-            if ('function' == typeof iterator) {
+            if ('function' === typeof iterator) {
                 for (i = 0; i < len; i++) {
                     item = source[i];
                     //TODO
@@ -347,7 +354,7 @@
     sinaadToolkit.string = sinaadToolkit.string || (function () {
         var ESCAPE_MAP = {
                 '"'     : '\\"',
-                "\\"    : "\\\\", 
+                "\\"    : "\\\\",
                 "/"     : "\\/",
                 "\b"    : "\\b",
                 "\f"    : "\\f",
@@ -367,12 +374,12 @@
              */
             encodeHTML : function (source) {
                 return String(source)
-                            .replace(/&/g,'&amp;')
-                            .replace(/</g,'&lt;')
-                            .replace(/>/g,'&gt;')
+                            .replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
                             .replace(/"/g, "&quot;")
                             .replace(/'/g, "&#39;");
-            },      
+            },
             /**
              * 反转义html
              * @param  {String} source 要转义的源字符串
@@ -380,12 +387,12 @@
              */
             decodeHTML : function (source) {
                 var str = String(source)
-                            .replace(/&quot;/g,'"')
-                            .replace(/&lt;/g,'<')
-                            .replace(/&gt;/g,'>')
+                            .replace(/&quot;/g, '"')
+                            .replace(/&lt;/g, '<')
+                            .replace(/&gt;/g, '>')
                             .replace(/&amp;/g, "&");
                 //处理转义的中文和实体字符
-                return str.replace(/&#([\d]+);/g, function(_0, _1){
+                return str.replace(/&#([\d]+);/g, function (_0, _1) {
                     return String.fromCharCode(parseInt(_1, 10));
                 });
             },
@@ -396,19 +403,21 @@
              */
             formalString : function (source) {
                 var ret = [];
-                ret.push(source.replace(STR_REG, function(str) {
+                ret.push(source.replace(STR_REG, function (str) {
                     //如果再需要转义的字符表中，替换成转移字符对应的值
                     if (str in ESCAPE_MAP) {
                         return ESCAPE_MAP[str];
                     }
                     //否则转成对应的unicode码
-                    var alphaCode = str.charCodeAt(0), 
+                    var alphaCode = str.charCodeAt(0),
                         unicodePerfix = "\\u";
                     //需要增加几位0来补位
                     16 > alphaCode ? unicodePerfix += "000" : 256 > alphaCode ? unicodePerfix += "00" : 4096 > alphaCode && (unicodePerfix += "0");
 
                     //保存转移过的值到ESCAPE_MAP提高转义效率，同时返回进行替换
-                    return ESCAPE_MAP[str] = unicodePerfix + alphaCode.toString(16);
+                    ESCAPE_MAP[str] = unicodePerfix + alphaCode.toString(16);
+
+                    return ESCAPE_MAP[str];
                 }));
                 return '"' + ret.join('') + '"';
             },
@@ -420,25 +429,25 @@
              */
             format : function (source, opts) {
                 source = String(source);
-                var data = Array.prototype.slice.call(arguments, 1), 
+                var data = Array.prototype.slice.call(arguments, 1),
                     toString = Object.prototype.toString;
-                if(data.length){
-                    data = data.length == 1 ? 
+                if (data.length) {
+                    data = data.length === 1 ?
                         /* ie 下 Object.prototype.toString.call(null) == '[object Object]' */
                         (opts !== null && (/\[object Array\]|\[object Object\]/.test(toString.call(opts))) ? opts : data) : data;
-                    return source.replace(/#\{(.+?)\}/g, function (match, key){
+                    return source.replace(/#\{(.+?)\}/g, function (match, key) {
                         var replacer = data[key];
                         // chrome 下 typeof /a/ == 'function'
-                        if('[object Function]' == toString.call(replacer)){
+                        if ('[object Function]' === toString.call(replacer)) {
                             replacer = replacer(key);
                         }
-                        return ('undefined' == typeof replacer ? '' : replacer);
+                        return ('undefined' === typeof replacer ? '' : replacer);
                     });
                 }
                 return source;
             },
             toCamelCase : function (source) {
-                //提前判断，提高getStyle等的效率
+                //提前判断，提高效率
                 if (source.indexOf('-') < 0 && source.indexOf('_') < 0) {
                     return source;
                 }
@@ -469,6 +478,25 @@
                 }
             }
             return results;
+        }
+    };
+
+        /**
+     * @namespace sinaadToolkit.event
+     */
+    sinaadToolkit.event = sinaadToolkit.event || /** @lends sinaadToolkit.event */{
+        /**
+         * 注册事件
+         * @param  {HTMLNodeElement}   dom      事件监听节点
+         * @param  {String}   type     事件类型
+         * @param  {Function} callback 回调方法
+         */
+        on : function (dom, type, callback) {
+            if (dom.attachEvent) {
+                dom.attachEvent('on' + type, callback);
+            } else if (dom.addEventListener) {
+                dom.addEventListener(type, callback, false);
+            }
         }
     };
 
@@ -542,17 +570,17 @@
 
             // 计算cookie过期时间
             var expires = options.expires;
-            if ('number' == typeof options.expires) {
+            if ('number' === typeof options.expires) {
                 expires = new Date();
                 expires.setTime(expires.getTime() + options.expires);
             }
              
             document.cookie =
-                key + "=" + value
-                + (options.path ? "; path=" + options.path : "")
-                + (expires ? "; expires=" + expires.toGMTString() : "")
-                + (options.domain ? "; domain=" + options.domain : "")
-                + (options.secure ? "; secure" : ''); 
+                key + "=" + value +
+                (options.path ? "; path=" + options.path : "") +
+                (expires ? "; expires=" + expires.toGMTString() : "") +
+                (options.domain ? "; domain=" + options.domain : "") +
+                (options.secure ? "; secure" : '');
 
         },
         /**
@@ -562,7 +590,7 @@
          */
         get : function (key) {
             var value = sinaadToolkit.cookie._getRaw(key);
-            if ('string' == typeof value) {
+            if ('string' === typeof value) {
                 value = decodeURIComponent(value);
                 return value;
             }
@@ -593,48 +621,67 @@
      * @namespace sinaadToolkit.storage
      */
     sinaadToolkit.storage = sinaadToolkit.storage || (function () {
+        //关闭浏览器后过期的key
+        var _sessionStorageMap = {};
+        //刷新浏览器清空没有设置expires的存储
+        sinaadToolkit.event.on(window, 'beforeunload', function () {
+            for (var key in _sessionStorageMap) {
+                try {
+                    sinaadToolkit.storage.remove(key);
+                    delete _sessionStorageMap[key];
+                } catch (e) {}
+            }
+        });
+
         /**
          * userData相关方法
          */
         var userData = {
-            userData : null,
+            id : 'sinaadToolkitUserDataContainer',
             name : location.hostname,
             init : function () {
-                if (!userData.userData) {
+                var dom = document.getElementById(userData.id);
+                if (!dom) {
                     try {
-                        userData.userData = document.createElement('INPUT');
-                        userData.userData.type = "hidden";
-                        userData.userData.style.display = "none";
-                        userData.userData.addBehavior ("#default#userData");
-                        document.body.appendChild(userData.userData);
+                        dom = document.createElement('input');
+                        dom.type = "hidden";
+                        dom.style.display = "none";
+                        dom.addBehavior("#default#userData");
+                        document.body.insertBefore(dom, document.body.firstChild);
                         var expires = new Date();
                         expires.setDate(expires.getDate() + 365);
-                        userData.userData.expires = expires.toUTCString();
+                        dom.expires = expires.toUTCString();
                     } catch (e) {
-                        sinaadToolkit.throwError('sinaadToolkit.storage:userData初始化失败，' + e.message);
-                        return false;
+                        sinaadToolkit.error('sinaadToolkit.storage:userData初始化失败，' + e.message);
+                        return null;
                     }
                 }
-                return true;
+                return dom;
             },
             setItem : function (key, value, expires) {
-                if (userData.init()) {
-                    userData.userData.load(userData.name);
-                    userData.userData.setAttribute(key, value);
-                    userData.userData.save(userData.name);
+                var dom = userData.init();
+                if (dom) {
+                    dom.load(userData.name);
+                    dom.setAttribute(key, value + (expires ? ';expires=' + (sinaadToolkit.now() + expires) : ''));
+                    dom.save(userData.name);
+                }
+                if (!expires) {
+                    _sessionStorageMap[key] = 1;
                 }
             },
             getItem : function (key) {
-                if (userData.init()) {
-                    userData.userData.load(userData.name);
-                    return userData.userData.getAttribute(key);
+                var dom = userData.init();
+                if (dom) {
+                    dom.load(userData.name);
+                    return dom.getAttribute(key);
                 }
             },
             removeItem : function (key) {
-                if (userData.init()) {
-                    userData.userData.load(userData.name);
-                    userData.userData.removeAttribute(key);
-                    userData.userData.save(userData.name);
+                var dom = userData.init();
+                if (dom) {
+                    dom.load(userData.name);
+                    dom.removeAttribute(key);
+                    dom.save(userData.name);
                 }
             }
         };
@@ -648,11 +695,15 @@
             },
             setItem : function (key, value, expires) {
                 window.localStorage.setItem(key, value + (expires ? ';expires=' + (sinaadToolkit.now() + expires) : ''));
+                if (!expires) {
+                    _sessionStorageMap[key] = 1;
+                }
             },
             removeItem : function (key) {
                 window.localStorage.removeItem(key);
             }
         };
+
         /**
          * cookie相关方法
          * @type {Object}
@@ -674,7 +725,7 @@
          * 当ie且ie<8时使用userData方案，否则使用localStorage方案，否则使用cookie方案
          */
         var storage = window.localStorage ? ls : sinaadToolkit.browser.ie && sinaadToolkit.browser.ie < 8 ? userData : cookie;
-        
+
         return /** @lends sinaadToolkit.storage */{
             /**
              * 获取本地存储的key的值
@@ -697,7 +748,7 @@
                     }
                     return null;
                 } catch (e) {
-                    sinaadToolkit.throwError('sinaadToolkit.storage.get:' + e.message);
+                    sinaadToolkit.error('sinaadToolkit.storage.get:' + e.message);
                     return null;
                 }
             },
@@ -712,7 +763,7 @@
                 try {
                     storage.setItem(key, value, expires);
                 } catch (e) {
-                    sinaadToolkit.debug('sinaadToolkit.storage.set:' + e.message);
+                    sinaadToolkit.error('sinaadToolkit.storage.set:' + e.message);
                 }
             },
             /**
@@ -723,13 +774,16 @@
                 try {
                     storage.removeItem(key);
                 } catch (e) {
-                    sinaadToolkit.debug('sinaadToolkit.storage.remove:' + e.message);
+                    sinaadToolkit.error('sinaadToolkit.storage.remove:' + e.message);
                 }
             }
         };
     })();
 
 
+    /* 测试移除没有设置过期时间的存储 */
+    // sinaadToolkit.storage.set('noexpireskey', 1);
+    // sinaadToolkit.storage.set('noexpireskey2', 2);
 
     /**
      * @namespace sinaadToolkit.url
@@ -769,10 +823,12 @@
          * 
          */
         get : function (id) {
-            if (!id) return null;
-            if ('string' == typeof id || id instanceof String) {
+            if (!id) {
+                return null;
+            }
+            if ('string' === typeof id || id instanceof String) {
                 return document.getElementById(id);
-            } else if (id.nodeName && (id.nodeType == 1 || id.nodeType == 9)) {
+            } else if (id.nodeName && (id.nodeType === 1 || id.nodeType === 9)) {
                 return id;
             }
             return null;
@@ -783,7 +839,7 @@
          * @return {DocumentElement}         所属的document节点
          */
         getDocument : function (element) {
-            return element.nodeType == 9 ? element : element.ownerDocument || element.document;
+            return element.nodeType === 9 ? element : element.ownerDocument || element.document;
         },
         /**
          * 获取某个dom节点的某个计算后样式
@@ -791,7 +847,7 @@
          * @param  {String} key     样式名
          * @return {String}         样式值
          */
-        getComputedStyle : function(element, key){
+        getComputedStyle : function (element, key) {
             var doc = sinaadToolkit.dom.getDocument(element),
                 styles;
             if (doc.defaultView && doc.defaultView.getComputedStyle) {
@@ -800,7 +856,7 @@
                     return styles[key] || styles.getPropertyValue(key);
                 }
             }
-            return ''; 
+            return '';
         },
         /**
          * 获取某个dom节点的某个当前样式
@@ -808,7 +864,7 @@
          * @param  {String} key     样式名
          * @return {String}         样式值
          */
-        getCurrentStyle : function(element, key){
+        getCurrentStyle : function (element, key) {
             return element.style[key] || (element.currentStyle ? element.currentStyle[key] : "") || sinaadToolkit.dom.getComputedStyle(element, key);
         },
 
@@ -835,25 +891,26 @@
         // 1. 无法解决px/em单位统一的问题（IE）
         // 2. 无法解决样式值为非数字值的情况（medium等 IE）
         getStyle : function (element, key) {
-            var dom = sinaadToolkit.dom;
+            var dom = sinaadToolkit.dom,
+                fixer;
 
             element = dom.get(element);
             key = sinaadToolkit.string.toCamelCase(key);
             //computed style, then cascaded style, then explicitly set style.
             var value = element.style[key] ||
-                        (element.currentStyle ? element.currentStyle[key] : "") || 
+                        (element.currentStyle ? element.currentStyle[key] : "") ||
                         dom.getComputedStyle(element, key);
 
             // 在取不到值的时候，用fixer进行修正
-            if (!value || value == 'auto') {
-                var fixer = dom._styleFixer[key];
-                if(fixer){
+            if (!value || value === 'auto') {
+                fixer = dom._styleFixer[key];
+                if (fixer) {
                     value = fixer.get ? fixer.get(element, key, value) : sinaadToolkit.dom.getStyle(element, fixer);
                 }
             }
             
             /* 检查结果过滤器 */
-            if (fixer = dom._styleFilter) {
+            if ((fixer = dom._styleFilter)) {
                 value = fixer.filter(key, value, 'get');
             }
             return value;
@@ -870,28 +927,28 @@
          */
         getPosition : function (element) {
             element = sinaadToolkit.dom.get(element);
-            var doc = sinaadToolkit.dom.getDocument(element), 
+            var doc = sinaadToolkit.dom.getDocument(element),
                 browser = sinaadToolkit.browser,
                 getStyle = sinaadToolkit.dom.getStyle,
                 // Gecko 1.9版本以下用getBoxObjectFor计算位置
                 // 但是某些情况下是有bug的
                 // 对于这些有bug的情况
                 // 使用递归查找的方式
-                BUGGY_GECKO_BOX_OBJECT = browser.isGecko > 0 && 
-                                         doc.getBoxObjectFor &&
-                                         getStyle(element, 'position') == 'absolute' &&
-                                         (element.style.top === '' || element.style.left === ''),
-                pos = {"left":0,"top":0},
+                // BUGGY_GECKO_BOX_OBJECT = browser.isGecko > 0 &&
+                //                          doc.getBoxObjectFor &&
+                //                          getStyle(element, 'position') === 'absolute' &&
+                //                          (element.style.top === '' || element.style.left === ''),
+                pos = {"left": 0, "top": 0},
                 viewport = (browser.ie && !browser.isStrict) ? doc.body : doc.documentElement,
                 parent,
                 box;
             
-            if(element == viewport){
+            if (element === viewport) {
                 return pos;
             }
 
 
-            if(element.getBoundingClientRect){ // IE and Gecko 1.9+
+            if (element.getBoundingClientRect) { // IE and Gecko 1.9+
                 
                 //当HTML或者BODY有border width时, 原生的getBoundingClientRect返回值是不符合预期的
                 //考虑到通常情况下 HTML和BODY的border只会设成0px,所以忽略该问题.
@@ -910,9 +967,9 @@
                 
                 var htmlDom = doc.body,
                     // 在这里，不使用element.style.borderLeftWidth，只有computedStyle是可信的
-                    htmlBorderLeftWidth = parseInt(getStyle(htmlDom, 'borderLeftWidth')),
-                    htmlBorderTopWidth = parseInt(getStyle(htmlDom, 'borderTopWidth'));
-                if(browser.ie && !browser.isStrict){
+                    htmlBorderLeftWidth = parseInt(getStyle(htmlDom, 'borderLeftWidth'), 10),
+                    htmlBorderTopWidth = parseInt(getStyle(htmlDom, 'borderTopWidth'), 10);
+                if (browser.ie && !browser.isStrict) {
                     pos.left -= isNaN(htmlBorderLeftWidth) ? 2 : htmlBorderLeftWidth;
                     pos.top  -= isNaN(htmlBorderTopWidth) ? 2 : htmlBorderTopWidth;
                 }
@@ -938,27 +995,27 @@
                     pos.top  += parent.offsetTop;
               
                     // safari里面，如果遍历到了一个fixed的元素，后面的offset都不准了
-                    if (browser.isWebkit > 0 && getStyle(parent, 'position') == 'fixed') {
+                    if (browser.isWebkit > 0 && getStyle(parent, 'position') === 'fixed') {
                         pos.left += doc.body.scrollLeft;
                         pos.top  += doc.body.scrollTop;
                         break;
                     }
                     
                     parent = parent.offsetParent;
-                } while (parent && parent != element);
+                } while (parent && parent !== element);
 
                 // 对body offsetTop的修正
-                if(browser.opera > 0 || (browser.isWebkit > 0 && getStyle(element, 'position') == 'absolute')){
+                if (browser.opera > 0 || (browser.isWebkit > 0 && getStyle(element, 'position') === 'absolute')) {
                     pos.top  -= doc.body.offsetTop;
                 }
 
                 // 计算除了body的scroll
                 parent = element.offsetParent;
-                while (parent && parent != doc.body) {
+                while (parent && parent !== doc.body) {
                     pos.left -= parent.scrollLeft;
                     // see https://bugs.opera.com/show_bug.cgi?id=249965
                     // if (!b.opera || parent.tagName != 'TR') {
-                    if (!browser.opera || parent.tagName != 'TR') {
+                    if (!browser.opera || parent.tagName !== 'TR') {
                         pos.top -= parent.scrollTop;
                     }
                     parent = parent.offsetParent;
@@ -975,8 +1032,8 @@
      * @meta standard
      */
     sinaadToolkit.dom._styleFilter.filter = function (key, value, method) {
-        for (var i = 0, filters = sinaadToolkit.dom._styleFilter, filter; filter = filters[i]; i++) {
-            if (filter = filter[method]) {
+        for (var i = 0, filters = sinaadToolkit.dom._styleFilter, filter; (filter = filters[i]); i++) {
+            if ((filter = filter[method])) {
                 value = filter(key, value);
             }
         }
@@ -1010,7 +1067,7 @@
          */
         getViewHeight : function () {
             var doc = document,
-                client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+                client = doc.compatMode === 'BackCompat' ? doc.body : doc.documentElement;
             return client.clientHeight;
         },
         /**
@@ -1019,32 +1076,8 @@
          */
         getViewWidth : function () {
             var doc = document,
-                client = doc.compatMode == 'BackCompat' ? doc.body : doc.documentElement;
+                client = doc.compatMode === 'BackCompat' ? doc.body : doc.documentElement;
             return client.clientWidth;
-        }
-    };
-
-    
-    /**
-     * @namespace sinaadToolkit.event
-     */
-    sinaadToolkit.event = sinaadToolkit.event || /** @lends sinaadToolkit.event */{
-        /**
-         * 注册事件
-         * @param  {HTMLNodeElement}   dom      事件监听节点
-         * @param  {String}   type     事件类型
-         * @param  {Function} callback 回调方法
-         */
-        on : function (dom, type, callback) {
-            if (dom.attachEvent) {
-                dom.attachEvent('on' + type, function (e) {
-                    callback.call(dom, e);
-                });
-            } else {
-                dom.addEventListener(type, function (e) {
-                    callback.call(dom, e);
-                }, false);
-            }
         }
     };
 
@@ -1057,8 +1090,7 @@
             return function () {
                 if (typeof callback === 'function') {
                     try {
-                        var returnValue = 
-                            callback.apply(original, arguments);
+                        var returnValue = callback.apply(original, arguments);
 
                         if (Deferred.isPromise(returnValue)) {
                             returnValue.then(
@@ -1075,7 +1107,7 @@
                         }
                     }
                     catch (e) {
-                        sinaadToolkit.debug('sinaadToolkit.Deferred: _pipe内部方法出错' + e.message);
+                        sinaadToolkit.error('sinaadToolkit.Deferred: _pipe内部方法出错-' + e.message);
                         deferred.reject(e);
                     }
                 }
@@ -1094,11 +1126,11 @@
             var callbacks = deferred._state === 'resolved' ? deferred._resolves.slice() : deferred._rejects.slice();
 
             setTimeout(function () {
-                core.array.each(callbacks, function (callback, i) {
+                core.array.each(callbacks, function (callback) {
                     try {
                         callback.apply(deferred, deferred._args);
                     } catch (e) {
-                        sinaadToolkit.debug('sinaadToolkit.Deferred: _flush出错' + e.message)
+                        sinaadToolkit.error('sinaadToolkit.Deferred: _flush出错' + e.message);
                     }
                 });
             }, 0);
@@ -1115,7 +1147,7 @@
         }
         
         Deferred.prototype = {
-            resolve : function (args) {
+            resolve : function () {
                 if (this._state !== "pending") {
                     return;
                 }
@@ -1181,7 +1213,7 @@
          * @param  {HTMLScriptElement} scr script节点
          */
         function _removeScriptTag(scr) {
-            if(scr && scr.parentNode){
+            if (scr && scr.parentNode) {
                 scr.parentNode.removeChild(scr);
             }
             scr = null;
@@ -1193,13 +1225,13 @@
              * @param  {Function} opt_callback 成功后回调方法
              * @param  {Object} opt_options  选项
              */
-            loadScript : function (url, opt_callback, opt_options) {
+            loadScript : function (url, optCallback, optOptions) {
                 var scr = document.createElement("SCRIPT"),
                     scriptLoaded = 0,
-                    options = opt_options || {},
-                    charset = options['charset'] || 'utf-8',
-                    callback = opt_callback || function(){},
-                    timeOut = options['timeOut'] || 0,
+                    options = optOptions || {},
+                    charset = options.charset || 'utf-8',
+                    callback = optCallback || function () {},
+                    timeOut = options.timeout || 0,
                     timer;
                 
                 // IE和opera支持onreadystatechange
@@ -1211,9 +1243,9 @@
                     }
                     
                     var readyState = scr.readyState;
-                    if ('undefined' == typeof readyState
-                        || readyState == "loaded"
-                        || readyState == "complete") {
+                    if ('undefined' === typeof readyState ||
+                         readyState === "loaded" ||
+                         readyState === "complete") {
                         scriptLoaded = 1;
                         try {
                             callback();
@@ -1225,8 +1257,8 @@
                     }
                 };
 
-                if( timeOut ){
-                    timer = setTimeout(function(){
+                if (timeOut) {
+                    timer = setTimeout(function () {
                         scr.onload = scr.onreadystatechange = null;
                         _removeScriptTag(scr);
                         options.onfailure && options.onfailure();
@@ -1241,47 +1273,22 @@
              * @param  {Function} callback    回调方法
              * @param  {Object}   opt_options 选项
              */
-            jsonp : function(url, callback, opt_options) {
+            jsonp : function (url, callback, optOptions) {
                 var scr = document.createElement('SCRIPT'),
                     prefix = '_sinaads_cbs_',
                     callbackName,
-                    callbackImpl,
-                    options = opt_options || {},
-                    charset = options['charset'] || 'utf-8',
-                    queryField = options['queryField'] || 'callback',
-                    timeOut = options['timeOut'] || 0,
+                    // callbackImpl,
+                    options = optOptions || {},
+                    charset = options.charset || 'utf-8',
+                    queryField = options.queryField || 'callback',
+                    timeOut = options.timeout || 0,
                     timer,
                     reg = new RegExp('(\\?|&)' + queryField + '=([^&]*)'),
                     matches;
-         
-                if (sinaadToolkit.isFunction(callback)) {
-                    callbackName = prefix + Math.floor(Math.random() * 2147483648).toString(36);
-                    window[callbackName] = getCallBack(0);
-                } else if(sinaadToolkit.isString(callback)){
-                    // 如果callback是一个字符串的话，就需要保证url是唯一的，不要去改变它
-                    // TODO 当调用了callback之后，无法删除动态创建的script标签
-                    callbackName = callback;
-                } else {
-                    if (matches = reg.exec(url)) {
-                        callbackName = matches[2];
-                    }
-                }
-         
-                if(timeOut){
-                    timer = setTimeout(getCallBack(1), timeOut);
-                }
-         
-                //如果用户在URL中已有callback，用参数传入的callback替换之
-                url = url.replace(reg, '\x241' + queryField + '=' + callbackName);
-                 
-                if (url.search(reg) < 0) {
-                    url += (url.indexOf('?') < 0 ? '?' : '&') + queryField + '=' + callbackName;
-                }
-                _createScriptTag(scr, url, charset);
-         
-                function getCallBack(onTimeOut){
+
+                function getCallBack(onTimeOut) {
                      
-                    return function(){
+                    return function () {
                         try {
                             if (onTimeOut) {
                                 options.onfailure && options.onfailure();
@@ -1296,24 +1303,49 @@
                         } finally {
                             _removeScriptTag(scr);
                         }
+                    };
+                }
+         
+                if (sinaadToolkit.isFunction(callback)) {
+                    callbackName = prefix + Math.floor(Math.random() * 2147483648).toString(36);
+                    window[callbackName] = getCallBack(0);
+                } else if (sinaadToolkit.isString(callback)) {
+                    // 如果callback是一个字符串的话，就需要保证url是唯一的，不要去改变它
+                    // TODO 当调用了callback之后，无法删除动态创建的script标签
+                    callbackName = callback;
+                } else {
+                    if ((matches = reg.exec(url))) {
+                        callbackName = matches[2];
                     }
                 }
+         
+                if (timeOut) {
+                    timer = setTimeout(getCallBack(1), timeOut);
+                }
+         
+                //如果用户在URL中已有callback，用参数传入的callback替换之
+                url = url.replace(reg, '\x241' + queryField + '=' + callbackName);
+                 
+                if (url.search(reg) < 0) {
+                    url += (url.indexOf('?') < 0 ? '?' : '&') + queryField + '=' + callbackName;
+                }
+                _createScriptTag(scr, url, charset);
             },
             /**
              * 日志方法
              * @param  {String} url 发送日志地址
              */
-            log : function(url) {
+            log : function (url) {
                 var img = new Image(),
                     key = '_sinaads_sio_log_' + sinaadToolkit.rnd();
 
                 window[key] = img;
              
-                img.onload = img.onerror = img.onabort = function() {
-                  img.onload = img.onerror = img.onabort = null;
+                img.onload = img.onerror = img.onabort = function () {
+                    img.onload = img.onerror = img.onabort = null;
              
-                  window[key] = null;
-                  img = null;
+                    window[key] = null;
+                    img = null;
                 };
          
                 img.src = url + (url.indexOf('?') > 0 ? '&' : '?') + key;
@@ -1343,12 +1375,12 @@
             } else if (window.ActiveXObject && !window.opera) {
                 for (var i = 12; i >= 2; i--) {
                     try {
-                        var c = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + i);
+                        var c = new window.ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + i);
                         if (c) {
                             var version = c.GetVariable("$version");
-                            return version.replace(/WIN/g,'').replace(/,/g,'.');
+                            return version.replace(/WIN/g, '').replace(/,/g, '.');
                         }
-                    } catch(e) {}
+                    } catch (e) {}
                 }
             }
         })(),
@@ -1364,11 +1396,11 @@
             //会导致document[name]多返回一个Object元素,而起作用的只有embed标签
             var movie = context.document[name],
                 ret;
-            return sinaadToolkit.browser.ie == 9 ?
-                movie && movie.length ? 
-                    (ret = sinaadToolkit.array.remove(sinaadToolkit.toArray(movie), function(item){
-                        return item.tagName.toLowerCase() != "embed";
-                    })).length == 1 ? ret[0] : ret
+            return sinaadToolkit.browser.ie === 9 ?
+                movie && movie.length ?
+                    (ret = sinaadToolkit.array.remove(sinaadToolkit.toArray(movie), function (item) {
+                        return item.tagName.toLowerCase() !== "embed";
+                    })).length === 1 ? ret[0] : ret
                     : movie
                 : movie || context[name];
         },
@@ -1379,8 +1411,8 @@
          */
         createHTML : function (options) {
             options = options || {};
-            var version = sinaadToolkit.swf.version, 
-                needVersion = options['ver'] || '6.0.0', 
+            var version = sinaadToolkit.swf.version,
+                needVersion = options.ver || '6.0.0',
                 vUnit1, vUnit2, i, k, len, item, tmpOpt = {},
                 encodeHTML = sinaadToolkit.string.encodeHTML;
             
@@ -1407,28 +1439,28 @@
                 return ''; // 未安装flash插件
             }
             
-            var vars = options['vars'],
+            var vars = options.vars,
                 objProperties = ['classid', 'codebase', 'id', 'width', 'height', 'align'];
             
             // 初始化object标签需要的classid、codebase属性值
-            options['name'] = options['id'] = options['id'] || 'sinaadToolkit_swf_uid_' + (sinaadToolkit.swf.uid++);
-            options['align'] = options['align'] || 'middle';
-            options['classid'] = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000';
-            options['codebase'] = 'http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0';
-            options['movie'] = options['url'] || '';
-            delete options['vars'];
-            delete options['url'];
+            options.name = options.id = options.id || 'sinaadtk_swf_uid_' + (sinaadToolkit.swf.uid++);
+            options.align = options.align || 'middle';
+            options.classid = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000';
+            options.codebase = 'http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0';
+            options.movie = options.url || '';
+            delete options.vars;
+            delete options.url;
             
             // 初始化flashvars参数的值
-            if ('string' == typeof vars) {
-                options['flashvars'] = vars;
+            if ('string' === typeof vars) {
+                options.flashvars = vars;
             } else {
                 var fvars = [];
                 for (k in vars) {
                     item = vars[k];
                     fvars.push(k + "=" + encodeURIComponent(item));
                 }
-                options['flashvars'] = fvars.join('&');
+                options.flashvars = fvars.join('&');
             }
             
             // 构建IE下支持的object字符串，包括属性和参数列表
@@ -1467,13 +1499,13 @@
             }
             
             // 使用embed时，flash地址的属性名是src，并且要指定embed的type和pluginspage属性
-            options['src']  = options['movie'];
-            delete options['id'];
-            delete options['movie'];
-            delete options['classid'];
-            delete options['codebase'];
-            options['type'] = 'application/x-shockwave-flash';
-            options['pluginspage'] = 'http://www.macromedia.com/go/getflashplayer';
+            options.src  = options.movie;
+            delete options.id;
+            delete options.movie;
+            delete options.classid;
+            delete options.codebase;
+            options.type = 'application/x-shockwave-flash';
+            options.pluginspage = 'http://www.macromedia.com/go/getflashplayer';
             
             
             // 构建embed标签的字符串
@@ -1508,6 +1540,7 @@
      * @namespace sinaadToolkit.iframe
      */
     sinaadToolkit.iframe = sinaadToolkit.iframe || /** @lends sinaadToolkit.iframe */{
+        uid : 0,
         /**
          * 往一个对象中填充iframe的初始属性，返回一个用于生成iframe的对象
          * @param  {Object} config   需要填充的对象
@@ -1538,10 +1571,10 @@
             var html = [];
 
             //将iframe的name设置成跟id一样，如果没有的配置name的话
-            config.name = config.name || config.id;
+            config.name = config.name || config.id || ('sinaadtk_iframe_uid_' + sinaadToolkit.iframe.uid++);
 
-            sinaadToolkit.object.map(config, function(value, key) {
-                html.push(" " + key + '="' + (null == value ? "" : value) + '"')
+            sinaadToolkit.object.map(config, function (value, key) {
+                html.push(" " + key + '="' + (null === value ? "" : value) + '"');
             });
             return "<iframe" + html.join("") + "></iframe>";
         },
@@ -1557,8 +1590,8 @@
             if (ie) {
                 //是否可以获取到iframe的document
                 try {
-                    doc = !!iframe.contentWindow.document
-                } catch(e) {
+                    doc = !!iframe.contentWindow.document;
+                } catch (e) {
                     doc = false;
                 }
                 if (doc) {
@@ -1595,8 +1628,8 @@
                             window.frames[iframe.name].contents = content;
                             iframe.src = 'javascript:document.write(window["contents"]);/* document.close(); */';
                         }
-                    } catch(e) {
-                        sinaadToolkitthrowError("sinaadToolkit.iframe.fill: 无法往ie的iframe中写入内容, ", e);
+                    } catch (e) {
+                        sinaadToolkit.error("sinaadToolkit.iframe.fill: 无法往ie的iframe中写入内容, ", e);
                     }
                 } else {
                     /**
@@ -1608,31 +1641,31 @@
                         var key = "sinaads-ad-iframecontent-" + sinaadToolkit.rnd();
                         window[key] = content;
                         content = 'var adContent = window.parent["' + key + '"];window.parent["' + key + '"] = null;document.write(adContent);';
-                        content = sinaadToolkit.browser.ie && sinaadToolkit.browser.ie <= 6 ? 
-                             "window.onload = function() {"
-                                + "document.write(\\'<sc\\' + \\'ript type=\"text/javascript\">document.domain = \"" + document.domain + '";' + content + "<\\/scr\\' + \\'ipt>\\');"
-                                + "document.close();"
-                            + "};" :
-                             'document.domain = "' + document.domain + '";'
-                            + content
-                            + "document.close();";
+                        content = sinaadToolkit.browser.ie && sinaadToolkit.browser.ie <= 6 ?
+                             "window.onload = function() {" +
+                                "document.write(\\'<sc\\' + \\'ript type=\"text/javascript\">document.domain = \"" + document.domain + '";' + content + "<\\/scr\\' + \\'ipt>\\');" +
+                                "document.close();" +
+                            "};" :
+                            'document.domain = "' + document.domain + '";' +
+                            content +
+                            "document.close();";
 
                         iframe.src = 'javascript:\'<script type="text/javascript">' + content + "\x3c/script>'";
-                    } catch(e) {
+                    } catch (e) {
                         window[key] = null;
-                        sinaadToolkit.throwError("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
+                        sinaadToolkit.error("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
                     }
                 }
             //标准浏览器，标准方法
             } else {
                 try {
-                    doc = iframe.contentWindow ? iframe.contentWindow.document : iframe.contentDocument, 
-                    sinaadToolkit.browser.firefox 
-                    && doc.open("text/html", "replace");
-                       doc.write(content);
-                       doc.close();
-                } catch(e) {
-                    sinaadToolkit.throwError("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
+                    doc = iframe.contentWindow ? iframe.contentWindow.document : iframe.contentDocument,
+                    sinaadToolkit.browser.firefox &&
+                    doc.open("text/html", "replace");
+                    doc.write(content);
+                    doc.close();
+                } catch (e) {
+                    sinaadToolkit.error("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
                 }
             }
         }
@@ -1650,11 +1683,13 @@
          * @param  {Object} data       用于替换的值对象
          * @return {String}            返回替换后的url
          */
-        parseTpl : (function (monitorUrl, data) {
+        parseTpl : (function () {
             var reg = /\{__([a-zA-Z0-9]+(_*[a-zA-Z0-9])*)__\}/g;
 
             return function (monitorUrl, data) {
-                if (!monitorUrl) return '';
+                if (!monitorUrl) {
+                    return '';
+                }
                 return monitorUrl.replace(reg, function (s1, s2) {
                     //插入adbox能支持的模版变量
                     //见adbox监控接口文档，
@@ -1676,7 +1711,7 @@
         createImpressMonitor : function (pvs) {
             var html = [];
 
-            sinaadToolkit.array.each(pvs, function (pv, i) {
+            sinaadToolkit.array.each(pvs, function (pv) {
                 var config = {};
                 sinaadToolkit.iframe.init(config, 1, 1, false);
                 config.src = pv;
@@ -1695,30 +1730,30 @@
             if (!monitor) {
                 return;
             }
-            var monitor = 'string' === typeof monitor ? [monitor] : monitor,
-                ret = [],
+
+            var ret = [],
                 comma = '';
 
-            sinaadToolkit.array.each(monitor, function(url, i) {
+            sinaadToolkit.array.each(monitor, function (url) {
                 var code = '';
 
                 if (url) {
                     switch (type) {
-                        case 'image' :
-                        case 'flash' :
-                        case 'text'  :
-                            code = 'sinaadToolkit.sio.log(\'' + url + '\')';
-                            comma = ';'
-                            break;
-                        case 'adbox' :
-                            code = 'api_exu=' + encodeURIComponent(url);
-                            comma = '&';
-                            break;
-                        default :
-                            break;
+                    case 'image':
+                    case 'flash':
+                    case 'text':
+                        code = 'sinaadToolkit.sio.log(\'' + url + '\')';
+                        comma = ';';
+                        break;
+                    case 'adbox':
+                        code = 'api_exu=' + encodeURIComponent(url);
+                        comma = '&';
+                        break;
+                    default:
+                        break;
                     }
                     code && ret.push(code);
-                } 
+                }
             });
             return ret.join(comma);
         }
@@ -1740,10 +1775,10 @@
             if (!type) {
                 type = src.substring(src.length - 3);
                 switch (type) {
-                    case 'swf' :
+                    case 'swf':
                         type = 'flash';
                         break;
-                    case 'tml' :
+                    case 'tml':
                         type = 'url';
                         break;
                     case '.js' :
@@ -1782,8 +1817,10 @@
                 config,
                 monitorCode;
 
-            width += String(width).indexOf('%') !== -1 ? '' : 'px';
-            height += String(height).indexOf('%') !== -1 ? '' : 'px';
+            type = type || sinaadToolkit.ad.getTypeBySrc(src, type);
+
+            width += sinaadToolkit.isNumber(width) ? 'px' : '',
+            height += sinaadToolkit.isNumber(height) ? 'px' : '';
 
             monitorCode = sinaadToolkit.monitor.createClickMonitor(type, monitor);
 
@@ -1801,23 +1838,20 @@
             }
 
             switch (type) {
-                case 'js' :
-                    html = ['<', 'script src="', src, '"></','script>'].join('');
-                    break;
-                case 'url' : 
+                case 'url' :
                     config = {};
                     sinaadToolkit.iframe.init(config, width, height, false);
                     config.src = src;
                     html = sinaadToolkit.iframe.createHTML(config);
                     break;
-                case 'image' : 
-                    html = '<img border="0" src="' + src + '" style="width:' + width + ';height:' + height +';border:0" alt="' + src + '"/>';
+                case 'image' :
+                    html = '<img border="0" src="' + src + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
                     html = link ? '<a href="' + link + '" target="' + (sinaadToolkit.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + html + '</a>' : html;
                     break;
-                case 'text' : 
+                case 'text' :
                     html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + src + '</a>' : src;
                     break;
-                case 'flash' : 
+                case 'flash' :
                     html = sinaadToolkit.swf.createHTML({
                         url : src,
                         width : width,
@@ -1840,7 +1874,10 @@
                     monitorCode && (config.name = monitorCode);
                     html = sinaadToolkit.iframe.createHTML(config);
                     break;
-                default : 
+                case 'js' :
+                    html = ['<', 'script charset="utf-8" src="', src, '"></', 'script>'].join('');
+                    break;
+                default :
                     html = src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>');
                     break;
             }
@@ -1865,6 +1902,9 @@
          * @private
          */
         function _stringify(value, arr) {
+            var comma = "",
+                i;
+
             switch (typeof value) {
                 case "string":
                     arr.push(sinaadToolkit.string.formalString(value));
@@ -1880,14 +1920,14 @@
                     break;
                 case "object":
                     //is Null
-                    if (null == value) {
+                    if (null === value) {
                         arr.push("null");
                         break;
                     }
                     //is Array
                     if (value instanceof Array) {
-                        var len = value.length,
-                            comma;
+                        var len = value.length;
+
                         arr.push("[");
                         for (comma = "", i = 0; i < len; i++) {
                             arr.push(comma);
@@ -1900,14 +1940,14 @@
 
                     //is Object
                     arr.push("{");
-                    var comma = "",
-                        v;
+                    var v;
+                    comma = "";
                     for (var key in value) {
                         if (value.hasOwnProperty(key)) {
                             v = value[key];
-                            if ("function" != typeof v) { 
+                            if ("function" !== typeof v) {
                                 arr.push(comma);
-                                arr.push(key); 
+                                arr.push(key);
                                 arr.push(":");
                                 _stringify(v, arr);
                                 comma = ",";
@@ -1931,8 +1971,8 @@
         function _objToJsVarCode(obj) {
             var code = [];
 
-            sinaadToolkit.object.map(obj, function(value, key) {
-                if (null != value) {
+            sinaadToolkit.object.map(obj, function (value, key) {
+                if (null !== value) {
                     var tmp = [];
                     try {
                         _stringify(value, tmp);
@@ -1955,11 +1995,12 @@
              * @param  {Object} context   沙箱中传入的外部属性值
              */
             create : function (container, width, height, content, context) {
-                var context = context || {},
-                    sandboxId =  context.sandboxId || (context.sandboxId = '_sinaads_sandbox_id' + (uid++));
+                var sandboxId =  'sinaadtk_sandbox_id_' + uid++;
 
-                width += String(width).indexOf('%') !== -1 ? '' : 'px';
-                height += String(height).indexOf('%') !== -1 ? '' : 'px';
+                context = context || {};
+
+                width += sinaadToolkit.isNumber(width) ? 'px' : '';
+                height += sinaadToolkit.isNumber(height) ? 'px' : '';
 
                 var iframeConfig = {};
                 sinaadToolkit.iframe.init(iframeConfig, width, height, 0);
@@ -1967,13 +2008,7 @@
                 iframeConfig.id = sandboxId;
                 iframeConfig.style = 'float:left;';
 
-                container.innerHTML = [
-                    '<ins style="margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';">',
-                        sinaadToolkit.iframe.createHTML(iframeConfig),
-                    '</ins>'
-                ].join('');
-
-                container.style.cssText += ';display:block;overflow:hidden;';
+                container.innerHTML = sinaadToolkit.iframe.createHTML(iframeConfig);
 
                 //context转成js代码描述，用于注入到iframe中
                 context = _objToJsVarCode(context);
@@ -1982,7 +2017,6 @@
                 sinaadToolkit.iframe.fill(document.getElementById(sandboxId), [
                     '<!doctype html><html><body style="background:transparent">',
                         '<', 'script>', context, '</', 'script>',
-                        //'<', 'script src="' + sinaadToolkit.TOOLKIT_URL + '" charset="utf-8"></', 'script>',
                         content,
                     '</body></html>'
                 ].join(""));
@@ -1998,8 +2032,7 @@
      * @constructor
      */
     function Box(config) {
-        var THIS = this;
-
+        this.uid = 'sinaadToolkitBox' + Box.uid++;
         this.width = config.width || 0;
         this.height = config.height || 'auto';
         this.position = config.position || "center center";
@@ -2008,36 +2041,40 @@
 
         this.positionStyle = this.follow ? (sinaadToolkit.browser.isSupportFixed ? 'fixed' : 'absolute') : 'absolute';
 
-        this.element = document.createElement('div');
-        this.element.style.cssText += 'position:' + this.positionStyle + ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:9999;display:' + (config.autoShow ? 'block' : 'none');
+        var element = document.createElement('div');
+        element.id = this.uid;
+        element.style.cssText += 'position:' + this.positionStyle + ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:9999;display:' + (config.autoShow ? 'block' : 'none');
+        document.body.insertBefore(element, document.body.firstChild);
 
         this.setPosition();
-
-        sinaadToolkit.event.on(window, 'resize', function () {
-            THIS.setPosition();
-        });
-
+        sinaadToolkit.event.on(window, 'resize', this.getResetPositionHandler());
         if (this.follow && !sinaadToolkit.browser.isSupportFixed) {
-            sinaadToolkit.event.on(window, 'scroll', function () {
-                THIS.setPosition();
-            });
+            sinaadToolkit.event.on(window, 'scroll', this.getResetPositionHandler());
         }
-
-        document.body.insertBefore(this.element, document.body.firstChild);
     }
+    Box.uid = 0;
 
     Box.prototype = /** @lends Box.prototype */{
+        getMain : function () {
+            return document.getElementById(this.uid);
+        },
+        getResetPositionHandler : function () {
+            var THIS = this;
+            return function () {
+                THIS.setPosition();
+            };
+        },
         /**
          * 设置盒子的位置
          */
         setPosition : function () {
-            var position = this.position.split(' '),
+            var element = this.getMain(),
+                position = this.position.split(' '),
                 viewWidth = sinaadToolkit.page.getViewWidth(),
                 viewHeight = sinaadToolkit.page.getViewHeight(),
                 offsetTop = 0,
                 offsetLeft = 0,
-                hOffset = Math.min(this.minViewportWidth ? (viewWidth / 2 - this.minViewportWidth / 2) : 0, 0),
-                vOffset = 0;
+                hOffset = Math.min(this.minViewportWidth ? (viewWidth / 2 - this.minViewportWidth / 2) : 0, 0);
 
             if (this.follow) {
                 offsetTop = sinaadToolkit.browser.isSupportFixed ? 0 : sinaadToolkit.page.getScrollTop() || 0;
@@ -2046,38 +2083,38 @@
 
             switch (position[0]) {
                 case 'center' :
-                    this.element.style.left = offsetLeft + (viewWidth - this.width) / 2 + offsetLeft + 'px';
+                    element.style.left = offsetLeft + (viewWidth - this.width) / 2 + offsetLeft + 'px';
                     break;
                 case 'left' :
-                    this.element.style.left = offsetLeft + hOffset + 'px';
+                    element.style.left = offsetLeft + hOffset + 'px';
                     break;
                 case 'right' :
                     if (this.follow) {
-                        this.element.style.left = offsetLeft + (viewWidth - this.width) - hOffset + 'px'; 
+                        element.style.left = offsetLeft + (viewWidth - this.width) - hOffset + 'px';
                     } else {
-                        this.element.style.right = hOffset + 'px';
+                        element.style.right = hOffset + 'px';
                     }
                     break;
                 default :
-                    this.element.style.left = offsetLeft + (parseInt(position[0], 10) || 0) + 'px';
+                    element.style.left = offsetLeft + (parseInt(position[0], 10) || 0) + 'px';
                     break;
             }
             switch (position[1]) {
                 case 'center' :
-                    this.element.style.top = (viewHeight - this.height) / 2 + offsetTop + 'px';
+                    element.style.top = (viewHeight - this.height) / 2 + offsetTop + 'px';
                     break;
                 case 'top' :
-                    this.element.style.top = offsetTop + 'px';
+                    element.style.top = offsetTop + 'px';
                     break;
                 case 'bottom' :
                     if (this.follow) {
-                        this.element.style.top = offsetTop + (viewHeight - this.height) + 'px'; 
+                        element.style.top = offsetTop + (viewHeight - this.height) + 'px';
                     } else {
-                        this.element.style.bottom = '0px';
+                        element.style.bottom = '0px';
                     }
                     break;
                 default :
-                    this.element.style.top = offsetTop + (parseInt(position[1], 10) || 0) + 'px';
+                    element.style.top = offsetTop + (parseInt(position[1], 10) || 0) + 'px';
                     break;
             }
         },
@@ -2085,13 +2122,13 @@
          * 显示盒子
          */
         show : function () {
-            this.element.style.display = 'block';
+            this.getMain().style.display = 'block';
         },
         /**
          * 隐藏盒子
          */
         hide : function () {
-            this.element.style.display = 'none';
+            this.getMain().style.display = 'none';
         }
     };
     sinaadToolkit.Box = sinaadToolkit.Box || Box;
@@ -2099,25 +2136,5 @@
     /**
      * @todo 简单动画方法
      */
-    
-
-    /**
-     * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
-     */
-    if (!sinaadToolkit.seed) {
-        var _pathname = window.location.pathname,
-            _host = window.location.host,
-            KEY = _host.split('.')[0] + _pathname.substring(0, _pathname.lastIndexOf('/'));
-
-        sinaadToolkit.debug('sinaadTookit: 当前页面种子key为:' + KEY);
-
-        KEY = 'SinaadTK_' + sinaadToolkit.hash(KEY); 
-
-        sinaadToolkit.seed = parseInt(sinaadToolkit.storage.get(KEY), 10) || sinaadToolkit.rand(0, 100);
-        //大于1000就从0开始，防止整数过大
-        sinaadToolkit.storage.set(KEY, sinaadToolkit.seed > 1000 ? 0 : ++sinaadToolkit.seed);
-    }
 
 })(window);
-
-

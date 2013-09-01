@@ -3,48 +3,42 @@ _sinaadsCacheData = window._sinaadsCacheData || {};
 /**
  *  测试数据填充区域
  */
-_sinaadsCacheData["PDPS000000006450"] = {
+//乐居顶通
+_sinaadsCacheData["PDPS000000047211"] = {
     size : "1000*90",
-    type : 'couplet',
+    type : 'embed',
     content : {
         pv : ["http://baidu.com/?leju", "http://baidu.com/?leju2"],
-        type : 'html',
-        src : [
+        type : ['html'],
+        src :  [
             [
-                '\\x3c!-- 乐居广告js start--\\x3e',
-                '\\x3cscript charset="utf-8" src="http://d5.sina.com.cn/litong/zhitou/leju/leju.js"\\x3e\\x3c/script\\x3e',
+                '\\x3cscript src="http://d3.sina.com.cn/litong/zhitou/sinaads/release/sinaadToolkit.js" charset="utf-8" \\x3e\\x3c/script\\x3e',
                 '\\x3cscript\\x3e',
-                    'window.onload = function () {', //乐居的代码一定要用onload嵌入
-                    'leju.conf.url = \'http://adm.leju.sina.com.cn/get_ad_list/PG_514AC47514A055\';',
-                    'leju.conf.defaultUrl = \'http://staticadm.leju.sina.com.cn/get_ad_list/PG_514AC4246D2142.js\';',
-                    'var position = \'couplet\';',
-                    'var lejuMedia = leju.getData();',
-                    'lejuMedia.then(function (data) {',
-                        'var data = data[position][0],',
-                            'getType = parent.sinaadToolkit.ad.getTypeBySrc;',
-                        'if (!parent.sinaadToolkit.CoupletMedia) {',
-                            'data && (data = data.params) && parent.sinaadToolkit.sio.loadScript(\'.\/src\/plus\/CoupletMedia.js\', function () {',
-                                'new parent.sinaadToolkit.CoupletMedia({',
-                                    'src         : [data.bar, data.left, data.right],',
-                                    'type        : [getType(data.bar), getType(data.left), getType(data.right)],',
-                                    'link        : [data.link, data.link, data.link],',
-                                    'top         : 40,',
-                                    'monitor     : [],',
-                                    'delay       : window.sinaads_ad_delay || 0',
-                                '});',
-                            '});',
+                    'var pdpsid = "PDPS_514AD44785ED12";',
+                    'function lejuDataCallback(data) {',
+                        'data = data ? data.data || {} : {};',
+                        'if (data && (data = data.params)) {',
+                            'var el = document.createElement("div");',
+                            'el.innerHTML = sinaadToolkit.ad.createHTML(',
+                                'sinaadToolkit.ad.getTypeBySrc(data.src),',
+                                'data.src,',
+                                'window.sinaads_ad_width,',
+                                'window.sinaads_ad_height,',
+                                'data.link',
+                            ');',
+                            'document.body.appendChild(el);',
                         '}',
-                    '});',
+                    '}',
+                    'window.onload = function () {',
+                        'sinaadToolkit.sio.loadScript("http://adm.leju.sina.com.cn/get_one_ad/" + pdpsid + "?callback=lejuDataCallback");',
                     '};',
-                '\\x3c/script\\x3e',
-                '\\x3c!-- 乐居广告js end --\\x3e',
+                '\\x3c/script\\x3e'
             ].join('\n')
         ],
         monitor : ["http://leju.com"],
         link : ['http://leju.com']
     }
 };
-
 
 //翻牌广告
 _sinaadsCacheData["PDPS000000000100"] = {

@@ -1,15 +1,12 @@
-(function (window, undefind) {
+(function (window, sinaadToolkit, undefined) {
+    "use strict";
     //常量定义
-    var //SIDE_CLOSE_BTN = "http://d1.sina.com.cn/d1images/lmt/close2.gif",
-        SIDE_CLOSE_BTN = 'http://d9.sina.com.cn/litong/zhitou/test/images/close-h.jpg',
+    var SIDE_CLOSE_BTN = 'http://d9.sina.com.cn/litong/zhitou/test/images/close-h.jpg',
         MAIN_CLOSE_BTN = "http://d2.sina.com.cn/d1images/lmt/cls_66x22.gif",
-        //SIDE_CLOSE_BTN_SIZE = [25, 48],
         SIDE_CLOSE_BTN_SIZE = [120, 18],
         MAIN_CLOSE_BTN_SIZE = [66, 22],
         MAIN_SIZE = [1000, 90],
-        //SIDE_SIZE = [25, 300],
         SIDE_SIZE = [120, 270];
-        
     /**
      * 跨栏广告
      * @param  {[type]} config   [description]
@@ -18,8 +15,6 @@
      * @return {[type]}          [description]
      */
     function CoupletMedia(config) {
-        var THIS = this;
-
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
         config.mainWidth = config.mainWidth || MAIN_SIZE[0];
@@ -94,13 +89,13 @@
         rightCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat left center #ebebeb;cursor:pointer';
 
 
-        main.element.appendChild(mainContent);
-        main.element.appendChild(mainCloseBtn);
+        main.getMain().appendChild(mainContent);
+        main.getMain().appendChild(mainCloseBtn);
 
-        left.element.appendChild(leftContent);
-        left.element.appendChild(leftCloseBtn);
-        right.element.appendChild(rightContent);
-        right.element.appendChild(rightCloseBtn);
+        left.getMain().appendChild(leftContent);
+        left.getMain().appendChild(leftCloseBtn);
+        right.getMain().appendChild(rightContent);
+        right.getMain().appendChild(rightCloseBtn);
 
 
         sinaadToolkit.event.on(mainCloseBtn, 'click', this.getCloseMainHandler());
@@ -174,7 +169,7 @@
                 if (!THIS.mainIsClose) {
                     THIS.show();
                 }
-            }
+            };
         },
         getCloseSideHandler : function () {
             var THIS = this;
@@ -182,10 +177,10 @@
                 THIS.hide();
                 THIS.left.hide();
                 THIS.right.hide();
-            }
+            };
         }
     };
 
     sinaadToolkit.CoupletMedia = sinaadToolkit.CoupletMedia || CoupletMedia;
 
-})(window);
+})(window, window.sinaadToolkit);

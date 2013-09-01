@@ -10,59 +10,55 @@
                 margin:0px;
             }
         </style>
-        <script async charset="utf-8" src="./src/sinaads.js" defer></script>
+        <script async charset="utf-8" src="./release/sinaads.js" defer></script>
     <script>
         var sinaadsPerloadData = [
-            'PDPS000000047211', 
-            'PDPS000000042135', 
-            //'PDPS000000006450',
-            // 'PDPS000000037694',
-            // 'PDPS000000003271'
+            'PDPS000000042135'
         ];
     </script>
     <!-- 配置特殊格式的广告媒体类型 -->
     <script>
-        var sinaadsRenderHandler = {
-            'tip' : function (element, width, height, content, monitor, config) {
-                var RESOURCE_URL = './src/plus/TipsMedia.js';
-                sinaadToolkit.sio.loadScript(RESOURCE_URL, function () {
-                    new sinaadToolkit.TipsMedia(element, {
-                        width : width,
-                        height : height,
-                        src : content.src,
-                        type : content.type,
-                        link : content.link,
-                        monitor : monitor,
-                        autoShow : 1,
-                        top : config.sinaads_tip_top || 0
-                    });
-                });
-            },
-            'follow' : function (element, width, height, content, monitor, config) {
-                var RESOURCE_URL = sinaadToolkit.RESOURCE_URL + '/src/plus/FollowMedia.js';
-                sinaadToolkit.sio.loadScript(RESOURCE_URL, function () {
-                    new sinaadToolkit.FollowMedia({
-                        main : {
-                            width : width,
-                            height : height,
-                            src : content.src[0] || '',
-                            type : content.type[0] || '',
-                            link : content.link[0] || '',
-                            top : config.sinaads_follow_top || 0
-                        },
-                        mini : {
-                            src : content.src[1] || '',
-                            type : content.type[1] || '',
-                            link : content.link[1] || content.link[0] || '',
-                            top : config.sinaads_follow_mini_top || 'bottom'
-                        },
-                        monitor : monitor,
-                        delay : config.sinaads_ad_delay || 0,
-                        duration : config.sinaads_ad_duration || 5
-                    });
-                });
-            }
-        };
+        // var sinaadsRenderHandler = {
+        //     'tip' : function (element, width, height, content, monitor, config) {
+        //         var RESOURCE_URL = './src/plus/TipsMedia.js';
+        //         sinaadToolkit.sio.loadScript(RESOURCE_URL, function () {
+        //             new sinaadToolkit.TipsMedia(element, {
+        //                 width : width,
+        //                 height : height,
+        //                 src : content.src,
+        //                 type : content.type,
+        //                 link : content.link,
+        //                 monitor : monitor,
+        //                 autoShow : 1,
+        //                 top : config.sinaads_tip_top || 0
+        //             });
+        //         });
+        //     },
+        //     'follow' : function (element, width, height, content, monitor, config) {
+        //         var RESOURCE_URL = sinaadToolkit.RESOURCE_URL + '/src/plus/FollowMedia.js';
+        //         sinaadToolkit.sio.loadScript(RESOURCE_URL, function () {
+        //             new sinaadToolkit.FollowMedia({
+        //                 main : {
+        //                     width : width,
+        //                     height : height,
+        //                     src : content.src[0] || '',
+        //                     type : content.type[0] || '',
+        //                     link : content.link[0] || '',
+        //                     top : config.sinaads_follow_top || 0
+        //                 },
+        //                 mini : {
+        //                     src : content.src[1] || '',
+        //                     type : content.type[1] || '',
+        //                     link : content.link[1] || content.link[0] || '',
+        //                     top : config.sinaads_follow_mini_top || 'bottom'
+        //                 },
+        //                 monitor : monitor,
+        //                 delay : config.sinaads_ad_delay || 0,
+        //                 duration : config.sinaads_ad_duration || 5
+        //             });
+        //         });
+        //     }
+        // };
     </script>
     <script src="./data/testdata.js"></script>
     </head>
@@ -103,7 +99,7 @@
             </style>
             <h2>翻牌广告</h2>
             <div>
-                <script async defer charset="utf-8" src="./src/sinaads.js"></script>
+                <script async defer charset="utf-8" src="./release/sinaads.js"></script>
                 <ins class="sinaads" data-ad-pdps="PDPS000000000100"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({});
@@ -112,7 +108,7 @@
             <h2>blog-tip广告</h2>
             <div>
                 <div style="width:120px;height:50px;overflow:hidden;float:left;">
-                    <script async defer charset="utf-8" src="./src/sinaads.js"></script>
+                    <script async defer charset="utf-8" src="./release/sinaads.js"></script>
                     <ins class="sinaads" data-ad-pdps="PDPS000000033238"></ins>
                     <script>
                         (sinaads = window.sinaads || []).push({
@@ -126,7 +122,7 @@
 
             <h2>blog-随行广告</h2>
             <div>
-                <script async defer charset="utf-8" src="./src/sinaads.js"></script>
+                <script async defer charset="utf-8" src="./release/sinaads.js"></script>
                 <ins class="sinaads" data-ad-pdps="PDPS000000025949"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({
@@ -141,7 +137,7 @@
             <h2>文字链</h2>
             <ul class="textlink">
                 <li>
-                    <script async defer charset="utf-8" src="./src/sinaads.js"></script>
+                    <script async defer charset="utf-8" src="./release/sinaads.js"></script>
                     <ins class="sinaads" data-ad-pdps="PDPS000000000081"></ins>
                     <script>
                         (sinaads = window.sinaads || []).push({});
@@ -204,7 +200,6 @@
                 </script>
             </div>
 
-
             <h2>全屏</h2>
             <div>
                 <ins class="sinaads" data-ad-pdps="PDPS000000000067" data-ad-delay="6"></ins>
@@ -222,13 +217,13 @@
                 </script>
             </div>
 
-            <h2>乐居/普通-2轮播跨栏1000*90</h2>
+            <!-- <h2>乐居/普通-2轮播跨栏1000*90</h2>
             <div>
                 <ins class="sinaads" data-ad-pdps="PDPS000000006450"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({});
                 </script>
-            </div>
+            </div> -->
 
 
             <h2>画中画300*500</h2>
@@ -268,7 +263,6 @@
                 </script>
             </div>
 
-
             <h2>视窗</h2>
             <div>
                 <ins class="sinaads" data-ad-pdps="PDPS000000000068" data-ad-delay="4"></ins>
@@ -277,14 +271,18 @@
                 </script>
             </div>
 
-
-            <h2>300*250 adbox，url, image, flash  4轮播</h2>
+            <!-- 脚本发生未指明的错误 -->
+            <!-- <h2>300*250 adbox，url, image, flash  4轮播</h2>
             <div>
                 <ins class="sinaads" data-ad-pdps="PDPS000000004452"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({});
                 </script>
             </div>
+ -->
+            <!-- http://m.kejet.net/ms/13618/2a8780b45.swf
+
+            http://aw.kejet.net/u/sn/r?f=sina&p=tjLHPGUBTUej0L9gg6Ri0DeSdAvSvUDpjicfxQ%%E2%80%A6&d=mcf&t=GhoVEHOxOsnxQY/SDfWm2Q==&v=1377150963&m=Quf&y=8S-PDPS000000005486 -->
 
             <!-- html 片段 -->
             <h2>html</h2>
@@ -295,15 +293,18 @@
                 </script>
             </div>
 
+            <!-- 崩溃 -->
             <!-- taobao network 广告 -->
-            <h2>network taobao</h2>
+            <!-- <h2>network taobao</h2>
             <div>
                 <ins class="sinaads" data-ad-pdps="PDPS000000037694"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({});
                 </script>
-            </div>
+            </div> -->
 
+            <!-- http://d3.sina.com.cn/litong/zhitou/union/tanx.html?pid=mm_15890324_3509534_11501995&w=186&h=275
+ -->
             <!-- google network 广告 -->
             <h2>network google</h2>
             <div>
@@ -314,7 +315,7 @@
             </div>
         </div>
 
-        <script async charset="utf-8" src="./src/sinaads.js" defer></script>
+        <script async charset="utf-8" src="./release/sinaads.js" defer></script>
         <script>
             document.domain = 'sina.com.cn';
         </script>

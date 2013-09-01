@@ -1,7 +1,9 @@
 /**
  * 对联
  */
-(function (window, undefind) {
+(function (window, sinaadToolkit, undefined) {
+    "use strict";
+
     //常量定义
     var //SIDE_CLOSE_BTN = "http://d1.sina.com.cn/d1images/lmt/close2.gif",
         SIDE_CLOSE_BTN = 'http://d9.sina.com.cn/litong/zhitou/test/images/close-h.jpg',
@@ -17,10 +19,9 @@
      */
     function FloatMedia(config) {
         if (sinaadToolkit.storage.get('FloatMedia' + config.pdps)) {
-          return;
+            sinaadToolkit.debug('sinaadToolkit.FloatMedia:对联广告已经关闭过，' + sinaadToolkit.storage.get('FloatMedia' + config.pdps));
+            return;
         }
-
-        var THIS = this;
 
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
@@ -78,10 +79,10 @@
         var rightCloseBtn = this.rightCloseBtn = document.createElement('div');
         rightCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:0px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat left center #ebebeb;cursor:pointer';
 
-        left.element.appendChild(leftContent);
-        left.element.appendChild(leftCloseBtn);
-        right.element.appendChild(rightContent);
-        right.element.appendChild(rightCloseBtn);
+        left.getMain().appendChild(leftContent);
+        left.getMain().appendChild(leftCloseBtn);
+        right.getMain().appendChild(rightContent);
+        right.getMain().appendChild(rightCloseBtn);
 
         sinaadToolkit.event.on(leftCloseBtn, 'click', this.getCloseSideHandler());
         sinaadToolkit.event.on(rightCloseBtn, 'click', this.getCloseSideHandler());
@@ -99,10 +100,10 @@
                 sinaadToolkit.storage.set('FloatMedia' + THIS.config.pdps, '1', 24 * 60 * 60 * 1000);
                 THIS.left.hide();
                 THIS.right.hide();
-            }
+            };
         }
     };
 
     sinaadToolkit.FloatMedia = sinaadToolkit.FloatMedia || FloatMedia;
 
-})(window);
+})(window, window.sinaadToolkit);

@@ -1,4 +1,6 @@
-(function (window, undefined) {
+(function (window, sinaadToolkit, undefined) {
+    "use strict";
+
     //常量定义
     var CLOSE_NORMAL_BTN = "http://d1.sina.com.cn/shh/ws/2012/09/29/1/close1.gif",
         CLOSE_HOVER_BTN = "http://d1.sina.com.cn/shh/ws/2012/09/29/1/close2.gif";
@@ -30,7 +32,7 @@
         
         mainWrap.appendChild(closeBtn);
         mainWrap.appendChild(mainContent);
-        main.element.appendChild(mainWrap);
+        main.getMain().appendChild(mainWrap);
 
         sinaadToolkit.event.on(closeBtn, 'click', this.getCloseHandler());
         sinaadToolkit.event.on(closeBtn, 'mouseover', function () {
@@ -85,9 +87,9 @@
             var THIS = this;
             return function () {
                 THIS.hide();
-            }
+            };
         }
     };
 
     sinaadToolkit.VideoWindowMedia = sinaadToolkit.VideoWindowMedia || VideoWindowMedia;
-})(window);
+})(window, window.sinaadToolkit);

@@ -4,9 +4,11 @@
  * @param  {[type]} undefined [description]
  * @return {[type]}           [description]
  */
-(function (window, undefined) {
+(function (window, sinaadToolkit, undefined) {
+    "use strict";
+
     var MAIN_CLOSE_BTN = 'http://d1.sina.com.cn/d1images/fullscreen/cls_77x31.gif',
-        MINI_CLOSE_BTN = 'http://d3.sina.com.cn/d1images/fullscreen/close.gif';
+        MINI_CLOSE_BTN = 'http://d3.sina.com.cn/d1images/fullscreen/close.gif',
         REPLAY_BTN = 'http://d1.sina.com.cn/shh/tianyi/fs/rplBtn_25x100.swf',
         height = 0;
 
@@ -60,7 +62,7 @@
             miniContent.innerHTML = sinaadToolkit.ad.createHTML(
                 this.replaySrcType,
                 this.replaySrc,
-                25, 
+                25,
                 100
             );
             
@@ -96,7 +98,7 @@
             clearTimeout(this.timer);
 
             this.mainContent.innerHTML = sinaadToolkit.ad.createHTML(
-                this.type, 
+                this.type,
                 this.src,
                 this.width,
                 this.height,
@@ -117,12 +119,11 @@
             });
         },
         hide : function () {
-            var THIS = this,
-                config = this.config;
+            var THIS = this;
 
             clearTimeout(this.timer);
             this.fold(this.transitionStep, function () {
-                THIS.main.style.display = 'none';  
+                THIS.main.style.display = 'none';
                 THIS.mini && (THIS.mini.style.display = 'block');
             });
         },
@@ -156,22 +157,22 @@
             var THIS = this;
             return function () {
                 THIS.show();
-            }
+            };
         },
         getCloseMainHandler : function () {
             var THIS = this;
             return function () {
                 THIS.hide();
-            }
+            };
         },
         getCloseMiniHandler : function () {
             var THIS = this;
             return function () {
                 clearTimeout(this.timer);
                 THIS.mini.style.display = 'none';
-            }
+            };
         }
     };
 
     sinaadToolkit.FullscreenMedia = sinaadToolkit.FullscreenMedia || FullscreenMedia;
-})(window);
+})(window, window.sinaadToolkit);

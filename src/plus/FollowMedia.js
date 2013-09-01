@@ -1,9 +1,10 @@
 /**
  * 随行广告，首次改版出现在博客
  */
-(function (window, undefined) {
-    var uid = 0,
-        MINI_REPLAY_BTN = 'http://d5.sina.com.cn/d1images/lmt/play.gif',
+(function (window, sinaadToolkit, undefined) {
+    "use strict";
+
+    var MINI_REPLAY_BTN = 'http://d5.sina.com.cn/d1images/lmt/play.gif',
         MINI_CLOSE_BTN = 'http://d1.sina.com.cn/d1images/lmt/close1.jpg',
         MAIN_CLOSE_BTN = 'http://simg.sinajs.cn/blog7style/images/common/ad/closenew.jpg',
         MAIN_CLOSE_BTN_SIZE = [40, 18],
@@ -73,7 +74,7 @@
         var miniCloseBtn = this.miniCloseBtn = document.createElement('div');
         miniCloseBtn.style.cssText = 'margin:0px;padding:0px;display:block;cursor:pointer;width:' + MINI_CLOSE_BTN_SIZE[0] + 'px;height:' + MINI_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + (MINI_CONTENT_SIZE[1] + MINI_REPLAY_BTN_SIZE[1]) + 'px;background:url(' + MINI_CLOSE_BTN + ') no-repeat center;';
         var miniReplayBtn = this.miniReplayBtn = document.createElement("div");
-        miniReplayBtn.style.cssText = 'width:' + MINI_REPLAY_BTN_SIZE[0] + 'px;height:' + MINI_REPLAY_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + MINI_CONTENT_SIZE[1] +'px;background:url(' + MINI_REPLAY_BTN + ') no-repeat center;margin:0px;padding:0px;display:block;cursor:pointer;';
+        miniReplayBtn.style.cssText = 'width:' + MINI_REPLAY_BTN_SIZE[0] + 'px;height:' + MINI_REPLAY_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + MINI_CONTENT_SIZE[1] + 'px;background:url(' + MINI_REPLAY_BTN + ') no-repeat center;margin:0px;padding:0px;display:block;cursor:pointer;';
 
 
         sinaadToolkit.event.on(miniCloseBtn, 'click', this.getCloseMiniHandler());
@@ -83,15 +84,15 @@
         var mainContent = this.mainContent = document.createElement('div');
         var miniContent = this.miniContent = document.createElement('div');
 
-        main.element.appendChild(mainContent);
-        main.element.appendChild(mainCloseBtn);
+        main.getMain().appendChild(mainContent);
+        main.getMain().appendChild(mainCloseBtn);
 
-        mini.element.appendChild(miniContent);
-        mini.element.appendChild(miniReplayBtn);
-        mini.element.appendChild(miniCloseBtn);
+        mini.getMain().appendChild(miniContent);
+        mini.getMain().appendChild(miniReplayBtn);
+        mini.getMain().appendChild(miniCloseBtn);
 
-        document.body.insertBefore(main.element, document.body.firstChild);
-        document.body.insertBefore(mini.element, document.body.firstChild);
+        // document.body.insertBefore(main.getMain(), document.body.firstChild);
+        // document.body.insertBefore(mini.getMain(), document.body.firstChild);
 
         if (this.delay) {
             setTimeout(function () {
@@ -162,10 +163,10 @@
             var THIS = this;
             return function () {
                 THIS.hide();
-            }
+            };
         }
     };
 
     sinaadToolkit.FollowMedia = sinaadToolkit.FollowMedia || FollowMedia;
 
-})(window);
+})(window, window.sinaadToolkit);

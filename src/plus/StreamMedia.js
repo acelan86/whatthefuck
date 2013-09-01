@@ -4,9 +4,10 @@
  * @param  {[type]} undefined [description]
  * @return {[type]}           [description]
  */
-(function (window, undefined) {
-    var uid = 0,
-        MAIN_CLOSE_ICON1 = 'http://d4.sina.com.cn/d1images/lmt/cls_77x31.gif',
+(function (window, sinaadToolkit, undefined) {
+    "use strict";
+
+    var MAIN_CLOSE_ICON1 = 'http://d4.sina.com.cn/d1images/lmt/cls_77x31.gif',
         MAIN_CLOSE_ICON2 = 'http://d2.sina.com.cn/d1images/lmt/cls_66x22.gif',
         REPLAY_ICON = 'http://d5.sina.com.cn/d1images/lmt/play.gif',
         MINI_CLOSE_ICON = 'http://d1.sina.com.cn/d1images/lmt/close1.jpg';
@@ -42,7 +43,7 @@
             'position:absolute',
             'right:0px',
             'bottom:' + (width > 375 ? -31 : -22) + 'px',
-            'z-index:9999',
+            'z-index:99999',
             'background:url(' + (width > 375 ? MAIN_CLOSE_ICON1 : MAIN_CLOSE_ICON2) + ') no-repeat',
             'margin:0',
             'padding:0',
@@ -61,15 +62,16 @@
         var mainContent = this.mainContent = document.createElement('div');
         var miniContent = this.miniContent = document.createElement('div');
 
-        main.element.appendChild(mainContent);
-        main.element.appendChild(mainCloseBtn);
+        main.getMain().appendChild(mainContent);
+        main.getMain().appendChild(mainCloseBtn);
 
-        mini.element.appendChild(miniContent);
-        mini.element.appendChild(miniReplayBtn);
-        mini.element.appendChild(miniCloseBtn);
+        mini.getMain().appendChild(miniContent);
+        mini.getMain().appendChild(miniReplayBtn);
+        mini.getMain().appendChild(miniCloseBtn);
 
-        document.body.insertBefore(main.element, document.body.firstChild);
-        document.body.insertBefore(mini.element, document.body.firstChild);
+        //bug
+        // document.body.insertBefore(main.getMain(), document.body.firstChild);
+        // document.body.insertBefore(mini.getMain(), document.body.firstChild);
 
         if (this.delay) {
             setTimeout(function () {
@@ -140,10 +142,10 @@
             var THIS = this;
             return function () {
                 THIS.hide();
-            }
+            };
         }
     };
 
     sinaadToolkit.StreamMedia = sinaadToolkit.StreamMedia || StreamMedia;
 
-})(window);
+})(window, window.sinaadToolkit);

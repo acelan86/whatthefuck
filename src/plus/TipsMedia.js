@@ -1,7 +1,8 @@
 /**
  * 博客tips
  */
-(function (window, undefined) {
+(function (window, sinaadToolkit, undefined) {
+    "use strict";
 
     sinaadToolkit.Tip = function (element, config) {
         this.relateElement = element;
@@ -11,7 +12,7 @@
         this.setPosition();
         document.body.insertBefore(this.element, document.body.firstChild);
         sinaadToolkit.event.on(window, 'resize', this.getResizeHandler());
-    }
+    };
     sinaadToolkit.Tip.prototype = {
         show : function () {
             this.element.style.display = 'block';
@@ -29,8 +30,8 @@
             var THIS = this;
             return function () {
                 THIS.setPosition();
-            }
-        } 
+            };
+        }
     };
 
     function TipsMedia(element, config) {
@@ -64,7 +65,7 @@
             });
             this.tip.element.appendChild(tipContent);
             this.tip.element.appendChild(closeBtn);
-            tipContent.innerHTML= sinaadToolkit.ad.createHTML(
+            tipContent.innerHTML = sinaadToolkit.ad.createHTML(
                 config.type[1],
                 config.src[1],
                 config.width,
@@ -83,10 +84,10 @@
             var THIS = this;
             return function () {
                 THIS.tip.hide();
-            }
+            };
         }
     };
 
     sinaadToolkit.TipsMedia = sinaadToolkit.TipsMedia || TipsMedia;
 
-})(window);
+})(window, window.sinaadToolkit);

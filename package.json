@@ -1,0 +1,27 @@
+{
+  "name": "sinaads",
+  "title": "新浪商业广告统一脚本",
+  "description": "新浪商业广告统一脚本",
+  "version": "1.0.0",
+  "homepage": "http://github.com/acelan86/sinaads",
+  "author": {
+    "name": "acelan",
+    "mail": "xiaobin8[at]staff.sina.com.cn"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url" : "http://github.com/acelan86/sinaads"
+    }
+  ],
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-concat": "~0.1.2",
+    "grunt-contrib-uglify": "~0.2.1",
+    "grunt-contrib-watch": "~0.2.0",
+    "grunt-contrib-connect": "~0.3.0"
+  },
+  "sourceRoot" : "http://cross.sina.com.cn/github/sinaads",
+  "keywords": []
+}
