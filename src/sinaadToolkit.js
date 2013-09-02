@@ -145,24 +145,24 @@
      * @const
      */
     sinaadToolkit.RESOURCE_URL = sinaadToolkit.RESOURCE_URL || [
-        // 'http://d1.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d2.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d3.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d4.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d5.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d6.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d7.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d8.sina.com.cn/litong/zhitou/sinaads',
-        // 'http://d9.sina.com.cn/litong/zhitou/sinaads'
-        '.'
-    ][sinaadToolkit.rand(0, 0)];
+        'http://d1.sina.com.cn/litong/zhitou/sinaads',
+        'http://d2.sina.com.cn/litong/zhitou/sinaads',
+        'http://d3.sina.com.cn/litong/zhitou/sinaads',
+        'http://d4.sina.com.cn/litong/zhitou/sinaads',
+        'http://d5.sina.com.cn/litong/zhitou/sinaads',
+        'http://d6.sina.com.cn/litong/zhitou/sinaads',
+        'http://d7.sina.com.cn/litong/zhitou/sinaads',
+        'http://d8.sina.com.cn/litong/zhitou/sinaads',
+        'http://d9.sina.com.cn/litong/zhitou/sinaads'
+        // '.'
+    ][sinaadToolkit.rand(0, 8)];
 
     /**
      * 工具包资源地址
      * @static
      * @const
      */
-    sinaadToolkit.TOOLKIT_URL = sinaadToolkit.RESOURCE_URL + '/src/sinaadToolkit.js';
+    sinaadToolkit.TOOLKIT_URL = sinaadToolkit.RESOURCE_URL + '/release/sinaadToolkit.js';
 
     /**
      * @namespace sinaadToolkit.browser

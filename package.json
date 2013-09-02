@@ -22,6 +22,6 @@
     "grunt-contrib-watch": "~0.2.0",
     "grunt-contrib-connect": "~0.3.0"
   },
-  "sourceRoot" : "http://cross.sina.com.cn/github/sinaads",
+  "sourceRoot" : "http://d8.sina.com.cn/litong/zhitou/sinaads",
   "keywords": []
 }

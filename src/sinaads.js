@@ -45,9 +45,9 @@
         core.storage.set(KEY, core.seed > 1000 ? 0 : ++core.seed, 30 * 24 * 60 * 60 * 1000); //默认一个月过期
     }
 
-    var IMPRESS_URL = 'http://123.126.53.109/impress.php';
+    //var IMPRESS_URL = 'http://123.126.53.109/impress.php';
     //var IMPRESS_URL =  'http://123.126.53.109:8527/impress.php';
-    //var IMPRESS_URL = 'http://sax.sina.com.cn/impress.php';
+    var IMPRESS_URL = 'http://sax.sina.com.cn/impress.php';
 
     core.PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
 
@@ -383,14 +383,14 @@
                 main : {
                     type    : content.type[0] || 'flash',
                     src     : content.src[0] || '',
-                    link    : 'http://sina.com.cn',
+                    link    : content.link[0] || '',
                     width   : width,
                     height  : height
                 },
                 mini : {
                     src     : content.src[1] || '',
                     type    : content.type[1] || 'flash',
-                    link    : 'http://sina.com.cn'
+                    link    : content.link[1] || content.link[0] || ''
                 },
                 delay : config.sinaads_ad_delay || 0
             };
@@ -415,7 +415,7 @@
             link        : content.link[0] || '',
             width       : width,
             height      : height,
-            hasClose    : 1,
+            hasClose    : config.sinaads_fullscreen_close || 0,
             delay       : config.sinaads_ad_delay || 0
         };
         if (core.FullscreenMedia) {
