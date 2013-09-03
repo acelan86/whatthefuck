@@ -13,13 +13,17 @@
         height = 0;
 
 
-    function FullscreenMedia(element, config) {
+    function FullscreenMedia(config) {
+        var element = document.getElementById('FullScreenWrap');
+        if (!element) {
+            return;
+        }
         var THIS = this;
 
         this.deferred = new sinaadToolkit.Deferred();
 
         this.width = config.width;
-        this.height = config.hasClose ? 450 : 490;
+        this.height = config.height + (config.hasClose ? 40 : 0);
         this.src = config.src;
         this.link = config.link;
         this.type = config.type;
@@ -33,7 +37,7 @@
 
         var container = this.container = document.createElement('div');
         container.style.cssText = 'width:' + this.width + 'px;margin:0px auto;position:relative;';
-        element.parentNode.insertBefore(container, element);
+        element.appendChild(container);
 
         var main = this.main = document.createElement('div');
         main.style.cssText = 'display:none;';
@@ -131,7 +135,7 @@
             var THIS = this;
             if (height < end) {
                 height += step;
-                this.mainContent.style.height = height + "px";
+                this.mainContent.style.height = Math.min(end, height) + "px";
                 this.aniTimer = setTimeout(function () {
                     THIS.expand(end, step, onexpandend);
                 }, 1);

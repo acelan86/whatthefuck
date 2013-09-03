@@ -1335,7 +1335,7 @@
              * 日志方法
              * @param  {String} url 发送日志地址
              */
-            log : function (url) {
+            log : function (url, useCache) {
                 var img = new Image(),
                     key = '_sinaads_sio_log_' + sinaadToolkit.rnd();
 
@@ -1348,7 +1348,7 @@
                     img = null;
                 };
          
-                img.src = url + (url.indexOf('?') > 0 ? '&' : '?') + key;
+                img.src = url + (useCache ? '' : (url.indexOf('?') > 0 ? '&' : '?') + key);
             }
         };
     })();
@@ -1361,7 +1361,7 @@
         uid : 0,
         /**
          * flash版本号
-         * @type {Number}
+         * @type {String}
          */
         version : (function () {
             var n = navigator;
@@ -1773,7 +1773,7 @@
         getTypeBySrc : function (src, defaultType) {
             var type = defaultType;
             if (!type) {
-                type = src.substring(src.length - 3);
+                type = src.substring(src.length - 3).toLowerCase();
                 switch (type) {
                     case 'swf':
                         type = 'flash';

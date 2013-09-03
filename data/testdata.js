@@ -133,9 +133,10 @@ _sinaadsCacheData["PDPS000000000067"] = {
     type : 'fullscreen',
     content : [{
         pv : [],
-        type : ['image'],
+        type : ['js'],
         src : [
-            'http://d1.sina.com.cn/201308/06/504904_sina-fulls-1000X450-0806-CC.jpg'
+            //'http://d1.sina.com.cn/201308/06/504904_sina-fulls-1000X450-0806-CC.jpg'
+            'http://d1.sina.com.cn/litong/zhitou/sinaads/data/134753.js'
         ],
         monitor : ["http://stream.com"],
         link : ['http://stream.com', 'http://stream.sina.com.cn']

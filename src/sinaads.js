@@ -118,7 +118,10 @@
         function _adapter(ad) {
             var networkMap = {
                     '1' : 'http://d3.sina.com.cn/litong/zhitou/union/tanx.html?pid=',
-                    '2' : 'http://d3.sina.com.cn/litong/zhitou/union/google.html?pid='
+                    '2' : 'http://d3.sina.com.cn/litong/zhitou/union/google.html?pid=',
+                    '3' : 'http://d3.sina.com.cn/litong/zhitou/union/yihaodian.html?pid=',
+                    '4' : 'http://d3.sina.com.cn/litong/zhitou/union/baidu.html?pid=',
+                    '5' : 'http://js.miaozhen.com/mzad_iframe.html?_srv=MZHKY&l='
                 },
                 size = ad.size.split('*'),
                 engineType = ad.engineType;
@@ -176,8 +179,12 @@
                     'xan' : 'embed',
                     'wzl' : 'textlink',
                     'ztwzl' : 'zhitoutextlink',
+                    'qp' : 'fullscreen',
                     'fp' : 'turning',
-                    'dl' : 'float'
+                    'dl' : 'float',
+                    'tip' : 'tip',
+                    'bt' : 'bp',
+                    'sx' : 'follow'
                 }[ad.type]) || ad.type || 'embed';
 
                 ad.content[i] = content;
@@ -246,7 +253,7 @@
                              */
                             core.array.each(data.mapUrl, function (url) {
                                 core.debug('sinaads: 取得数据，且需要mapping, 发送cookie mapping（url，参数，时间）' + url, params, core.now());
-                                url && core.sio.log(url);
+                                url && core.sio.log(url, 1);
                             });
                         }
                         deferred.resolve();
@@ -407,23 +414,28 @@
 
     viewModule.register('fullscreen', function (element, width, height, content, monitor, config) {
         var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/FullscreenMedia.js';
-        //是全屏广告，隐藏掉改区块
         element.style.cssText = 'position:absolute;top:-9999px';
-        var FullScreenMediaData = {
-            type        : content.type[0] || '',
-            src         : content.src[0] || '',
-            link        : content.link[0] || '',
-            width       : width,
-            height      : height,
-            hasClose    : config.sinaads_fullscreen_close || 0,
-            delay       : config.sinaads_ad_delay || 0
-        };
-        if (core.FullscreenMedia) {
-            new core.FullscreenMedia(element, FullScreenMediaData);
+        if (content.src.length === 1 && content.type[0] === 'js') {
+            //富媒体供应商提供的js
+            core.sio.loadScript(content.src[0]);
         } else {
-            core.sio.loadScript(RESOURCE_URL, function () {
-                new core.FullscreenMedia(element, FullScreenMediaData);
-            });
+            //是全屏广告，隐藏掉改区块
+            var FullScreenMediaData = {
+                type        : content.type[0] || '',
+                src         : content.src[0] || '',
+                link        : content.link[0] || '',
+                width       : width,
+                height      : height,
+                hasClose    : config.sinaads_fullscreen_close || 0,
+                delay       : config.sinaads_ad_delay || 0
+            };
+            if (core.FullscreenMedia) {
+                new core.FullscreenMedia(FullScreenMediaData);
+            } else {
+                core.sio.loadScript(RESOURCE_URL, function () {
+                    new core.FullscreenMedia(FullScreenMediaData);
+                });
+            }
         }
     });
 
@@ -482,10 +494,11 @@
     });
 
     viewModule.register('textlink', function (element, width, height, content, monitor, config) {
-        element.style.cssText = 'position:absolute;top:-9999px';
         var fragmentNode = document.createElement('span');
         fragmentNode.innerHTML = core.ad.createHTML('text', content.src[0], 0, 0, content.link[0], monitor, config.sinaads_ad_tpl || '');
-        element.parentNode.insertBefore(fragmentNode, element);
+        element.style.cssText += ';text-decoration:none';
+        element.appendChild(fragmentNode);
+        //element.innerHTML = core.ad.createHTML('text', content.src[0], 0, 0, content.link[0], monitor, config.sinaads_ad_tpl || '');
     });
 
     viewModule.register('zhitoutextlink', viewModule.handlerMap.textlink);
