@@ -66,7 +66,7 @@
         },
         /**
          * 随机数生成，生成一个随机数的36进制表示方法
-         * @return {String} 生成一个随机的36进制字符串（包含0-9a-zA-Z）
+         * @return {String} 生成一个随机的36进制字符串（包含0-9a-z）
          * @static
          */
         rnd : function () {
