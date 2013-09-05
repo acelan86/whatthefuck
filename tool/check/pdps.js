@@ -1,3 +1,6 @@
+if ('undefined' === typeof exports) {
+    exports = {};
+}
 exports.list = {
     'PDPS000000005574':1,
     'PDPS000000044919':1,
