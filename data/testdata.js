@@ -3,6 +3,26 @@ _sinaadsCacheData = window._sinaadsCacheData || {};
 /**
  *  测试数据填充区域
  */
+_sinaadsCacheData["ZD1199"] = {
+    size : "1000*90",
+    type : 'textlink',
+    content : [
+        {
+            pv : ["http://baidu.com/?leju", "http://baidu.com/?leju2"],
+            type : ['text'],
+            src :  ['早教经:0-6岁亲子教育必看1'],
+            monitor : ["http://leju.com"],
+            link : ['http://leju.com']
+        },
+        {
+            pv : ["http://baidu.com/?leju", "http://baidu.com/?leju2"],
+            type : ['text'],
+            src :  ['早教经:0-6岁亲子教育必看2'],
+            monitor : ["http://leju.com"],
+            link : ['http://leju.com']
+        }
+    ]
+};
 //乐居顶通
 _sinaadsCacheData["PDPS000000047211"] = {
     size : "1000*90",

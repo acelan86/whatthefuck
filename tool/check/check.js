@@ -22,7 +22,7 @@ var succ = {
     dump : function () {
         console.log('检查通过的pdps, 总计' + succ.list.length + '个');
         succ.list.forEach(function (item, i) {
-            console.log('\t' + item.pdps + '\t' + (pdpsinfo[item.pdps] || '未录入') + '\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\t' + JSON.stringify(item.src));
+            console.log('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + JSON.stringify(item.src) + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps);
         });
     }
 };
@@ -34,7 +34,7 @@ var warn = {
     dump : function () {
         console.log('需要注意的pdps, 总计' + warn.list.length + '个');
         warn.list.forEach(function (item, i) {
-            console.warn('\t' + item.pdps + '\t' + (pdpsinfo[item.pdps] || '未录入') + '\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\t' + item.reason);
+            console.warn('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + item.reason + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps);
         });
     }
 };
@@ -46,7 +46,7 @@ var fail = {
     dump : function () {
         console.log('检查失败的pdps, 总计' + fail.list.length + '个');
         fail.list.forEach(function (item, i) {
-            console.error('\t' + item.pdps + '\t' + (pdpsinfo[item.pdps] || '未录入') + '\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\t' + item.reason);
+            console.error('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + item.reason + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps);
         });
     }
 }
