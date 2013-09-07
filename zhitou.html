@@ -11,7 +11,8 @@
             }
         </style>
         <script src="./data/testdata.js"></script>
-        <script async charset="utf-8" src="./release/sinaads.js" defer></script>
+        <script charset="utf-8" src="./src/sinaadToolkit.js"></script>
+        <script async charset="utf-8" src="./src/sinaads.js"></script>
         <style>
          /*1199 正文评论通发页评论上8条文字链*/
 
@@ -31,7 +32,7 @@
             <ins class="sinaads" data-ad-pdps="ZD1199"></ins>
             <script>(sinaads = window.sinaads || []).push({
                 params : {
-                    tpl : '<li><a onclick="#{monitorCode}" name="res1199" href="#{link}" target="_blank" webtype="C">#{src}</a></li>'
+                    sinaads_ad_tpl : '<li><a onclick="#{monitorCode}" name="res1199" href="#{link}" target="_blank" webtype="C">#{src}</a><a onclick="#{monitorCode}" href="#{link1}">#{src1}</a></li>'
                 }
             });</script>
         </ul>

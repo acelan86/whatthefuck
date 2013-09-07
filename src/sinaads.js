@@ -399,6 +399,7 @@
                     type    : content.type[1] || 'flash',
                     link    : content.link[1] || content.link[0] || ''
                 },
+                monitor : monitor,
                 delay : config.sinaads_ad_delay || 0
             };
             if (core.StreamMedia) {
@@ -424,6 +425,7 @@
                 type        : content.type[0] || '',
                 src         : content.src[0] || '',
                 link        : content.link[0] || '',
+                monitor     : monitor,
                 width       : width,
                 height      : height,
                 hasClose    : config.sinaads_fullscreen_close || 0,
@@ -439,12 +441,12 @@
         }
     });
 
-    viewModule.register('bp', function (element, width, height, content) {
+    viewModule.register('bp', function (element, width, height, content, monitor, config) {
         //是背投广告，隐藏掉改区块
         element.style.cssText = 'position:absolute;top:-9999px';
         //这里规定背投的素材不能是js或者代码片段，而且只能有1个
-        window.open('http://d1.sina.com.cn/d1images/pb/pbv4.html?' + content.link[0] + '${}' + content.type[0] + '${}' + content.src[0]);
-        content.src = [];
+        //window.open('http://d1.sina.com.cn/d1images/pb/pbv4.html?' + content.link[0] + '${}' + (content.type[0] === 'flash' ? 'swf' : content.type[0])  + '${}' + content.src[0], 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
+        window.open('http://d1.sina.com.cn/litong/zhitou/sinaads/release/plus/pbv4.html?' + content.link[0] + '${}' + (content.type[0] === 'flash' ? 'swf' : content.type[0])  + '${}' + content.src[0], 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
     });
 
     viewModule.register('float', function (element, width, height, content, monitor, config) {
@@ -495,7 +497,8 @@
 
     viewModule.register('textlink', function (element, width, height, content, monitor, config) {
         var fragmentNode = document.createElement('span');
-        fragmentNode.innerHTML = core.ad.createHTML('text', content.src[0], 0, 0, content.link[0], monitor, config.sinaads_ad_tpl || '');
+
+        fragmentNode.innerHTML = core.ad.createHTML(content.type, content.src, 0, 0, content.link, monitor, config.sinaads_ad_tpl || '');
         element.style.cssText += ';text-decoration:none';
         element.appendChild(fragmentNode);
         //element.innerHTML = core.ad.createHTML('text', content.src[0], 0, 0, content.link[0], monitor, config.sinaads_ad_tpl || '');

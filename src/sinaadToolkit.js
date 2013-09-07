@@ -1817,7 +1817,9 @@
                 config,
                 monitorCode;
 
-            type = type || sinaadToolkit.ad.getTypeBySrc(src, type);
+            src = sinaadToolkit.array.ensureArray(src),
+            type = sinaadToolkit.array.ensureArray(type),
+            link = sinaadToolkit.array.ensureArray(link);
 
             width += sinaadToolkit.isNumber(width) ? 'px' : '',
             height += sinaadToolkit.isNumber(height) ? 'px' : '';
@@ -1828,14 +1830,26 @@
             //模版中可以含有参数type, src, width, height, monitor, link
             //现在主要用在智投文字链和图文方式
             if (tpl && 'string' === typeof tpl) {
-                return sinaadToolkit.string.format(tpl, {
-                    type    : type,
-                    src     : src,
-                    width   : width,
-                    monitor : monitorCode,
-                    link    : link
+                var tplData = {
+                    width : width,
+                    height : height,
+                    monitor : monitorCode
+                };
+                sinaadToolkit.array.each(src, function (_src, i) {
+                    tplData['src' + i] = _src;
+                    tplData['type' + i] = type[i] || sinaadToolkit.ad.getTypeBySrc(_src, type[i]);
+                    tplData['link' + i] = link[i] || '';
                 });
+                tplData.src = tplData.src0 || '';
+                tplData.type = tplData.type0 || '';
+                tplData.link = tplData.link0 || '';
+                return sinaadToolkit.string.format(tpl, tplData);
             }
+
+            //如果没有自定模版
+            src = src[0];
+            type = type[0] || sinaadToolkit.ad.getTypeBySrc(src, type[0]);
+            link = link[0];
 
             switch (type) {
                 case 'url' :

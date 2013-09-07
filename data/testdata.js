@@ -10,7 +10,7 @@ _sinaadsCacheData["ZD1199"] = {
         {
             pv : ["http://baidu.com/?leju", "http://baidu.com/?leju2"],
             type : ['text'],
-            src :  ['早教经:0-6岁亲子教育必看1'],
+            src :  ['早教经:0-6岁亲子教育必看1', '我是子标题'],
             monitor : ["http://leju.com"],
             link : ['http://leju.com']
         },

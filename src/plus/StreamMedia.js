@@ -95,7 +95,7 @@
                 config.main.src,
                 config.main.width,
                 config.main.height,
-                config.link,
+                config.main.link || config.link,
                 config.monitor
             );
             this.main.show();
@@ -119,7 +119,7 @@
                 config.mini.src,
                 25,
                 150,
-                config.link,
+                config.mini.link || config.link,
                 config.monitor
             );
         },

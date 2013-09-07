@@ -1,4 +1,5 @@
 var http = require('http');
+var fs = require('fs');
 var readylist = require('./pdps.js').list;
 var pdpsinfo = require('./pdpsinfo.js').pdpsinfo;
 var count = 0;
@@ -20,10 +21,11 @@ var succ = {
         succ.list.push({ pdps: pdps, src: src });
     },
     dump : function () {
-        console.log('检查通过的pdps, 总计' + succ.list.length + '个');
+        var info = ['检查通过的pdps, 总计' + succ.list.length + '个'];
         succ.list.forEach(function (item, i) {
-            console.log('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + JSON.stringify(item.src) + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps);
+            info.push('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + JSON.stringify(item.src) + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps + '\n');
         });
+        return info.join('');
     }
 };
 var warn = {
@@ -32,10 +34,11 @@ var warn = {
         warn.list.push ({ pdps: pdps, reason: reason });
     },
     dump : function () {
-        console.log('需要注意的pdps, 总计' + warn.list.length + '个');
+        var info = ['可能是天窗的pdps, 总计' + warn.list.length + '个'];
         warn.list.forEach(function (item, i) {
-            console.warn('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + item.reason + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps);
+            info.push('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + item.reason + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps + '\n');
         });
+        return info.join('');
     }
 };
 var fail = {
@@ -44,10 +47,11 @@ var fail = {
         fail.list.push ({ pdps: pdps, reason: reason });
     },
     dump : function () {
-        console.log('检查失败的pdps, 总计' + fail.list.length + '个');
+        var info = ['检查失败的pdps, 总计' + fail.list.length + '个'];
         fail.list.forEach(function (item, i) {
-            console.error('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + item.reason + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps);
+            info.push('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + item.reason + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps + '\n');
         });
+        return info.join('');
     }
 }
 
@@ -114,10 +118,16 @@ checklist.forEach(function (pdps, i) {
                 fail.add(pdps, '返回数据为空字符串');
             }
             if (count === checklist.length) {
-                succ.dump();
-                warn.dump();
-                fail.dump();
-                console.log('共' + checklist.length + '个\n\t正常' + succ.list.length + '个\n\t警告' + warn.list.length + '个\n\t失败' + fail.list.length + '个');
+                var time = new Date();
+                var logStr = '';
+                logStr += '下面为' + new Date() + '线上所有接管广告位的数据检查情况(请重点关注天窗和失败的位置)：\n\n';
+                logStr +='共' + checklist.length + '个\n\t正常' + succ.list.length + '个\n\t警告' + warn.list.length + '个\n\t失败' + fail.list.length + '个\n\n============================\n';
+                logStr += [
+                    warn.dump(),
+                    fail.dump()
+                    //succ.dump()
+                ].join('\n\n============================\n');
+                fs.writeFileSync('result' + /*time.getFullYear() + time.getMonth() + time.getDate() + time.getHours() +*/ '.log', logStr);
             }
         });
     });
