@@ -1,84 +1,12 @@
-下面为Sat Sep 07 2013 10:30:46 GMT+0800 (CST)线上所有接管广告位的数据检查情况(请重点关注天窗和失败的位置)：
+下面为Mon Sep 09 2013 09:27:47 GMT+0800 (CST)线上所有接管广告位的数据检查情况(请重点关注天窗和失败的位置)：
 
-共73个
-	正常61个
-	警告12个
+共1个
+	正常1个
+	警告0个
 	失败0个
 
 ============================
-可能是天窗的pdps, 总计12个
-	PDPS000000005341
-	女性首页右侧260*200流媒体
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000005341
-
-	PDPS000000047289
-	女性首页1000*300二维码互动流媒体(小时)
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047289
-
-	PDPS000000047287
-	女性首页与八卦情感图库二级栏目页打通顶部两轮播1000*90通栏
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047287
-
-	PDPS000000004934
-	未录入
-	已接管
-	广告位为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000004934
-
-	PDPS000000047286
-	星座首页顶部两轮播950*90通栏
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047286
-
-	PDPS000000003929
-	育儿首页950*90通栏01
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000003929
-
-	PDPS000000047323
-	时尚首页两轮播1000*90通栏02
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047323
-
-	PDPS000000003468
-	博客首页两轮播950*90通栏01
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000003468
-
-	PDPS000000023468
-	健康首页950*90通栏02
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000023468
-
-	PDPS000000047461
-	婚嫁首页顶部两轮播1000*90通栏
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047461
-
-	PDPS000000028555
-	数码首页顶部两轮播950*90通栏
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000028555
-
-	PDPS000000047322
-	时尚首页两轮播1000*90通栏01
-	已接管
-	广告位数据为空
-	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047322
-
+可能是天窗的pdps, 总计0个
 
 ============================
 检查失败的pdps, 总计0个

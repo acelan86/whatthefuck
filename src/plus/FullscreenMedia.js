@@ -138,7 +138,7 @@
                 this.mainContent.style.height = Math.min(end, height) + "px";
                 this.aniTimer = setTimeout(function () {
                     THIS.expand(end, step, onexpandend);
-                }, 1);
+                }, 100);
             } else {
                 clearTimeout(this.aniTimer);
                 onexpandend();
@@ -151,7 +151,7 @@
                 this.mainContent.style.height = height + 'px';
                 this.aniTimer = setTimeout(function () {
                     THIS.fold(step, onfold);
-                }, 1);
+                }, 100);
             } else {
                 clearTimeout(this.aniTimer);
                 onfold();

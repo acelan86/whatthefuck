@@ -32,7 +32,7 @@
             var console = window.console || {
                 log : function (msg) {
                     var consoleView = document.getElementById(sinaadToolkit._consoleViewId);
-                    if (!consoleView) {
+                    if (!consoleView && document.body) {
                         consoleView = document.createElement('ul');
                         consoleView.id = sinaadToolkit._consoleViewId;
                         consoleView.style.cssText = 'z-index:99999;overflow:auto;height:300px;position:absolute;right:0;top:0;opacity:.9;*filter:alpha(opacity=90);background:#fff;width:500px;';
@@ -1824,7 +1824,7 @@
             width += sinaadToolkit.isNumber(width) ? 'px' : '',
             height += sinaadToolkit.isNumber(height) ? 'px' : '';
 
-            monitorCode = sinaadToolkit.monitor.createClickMonitor(type, monitor);
+            
 
             //如果提供了模版，则使用模版来渲染广告
             //模版中可以含有参数type, src, width, height, monitor, link
@@ -1839,10 +1839,12 @@
                     tplData['src' + i] = _src;
                     tplData['type' + i] = type[i] || sinaadToolkit.ad.getTypeBySrc(_src, type[i]);
                     tplData['link' + i] = link[i] || '';
+                    tplData['monitor' + i] = sinaadToolkit.monitor.createClickMonitor(tplData['type' + i], monitor);
                 });
                 tplData.src = tplData.src0 || '';
                 tplData.type = tplData.type0 || '';
                 tplData.link = tplData.link0 || '';
+                tplData.monitor = tplData.monitor0 || '';
                 return sinaadToolkit.string.format(tpl, tplData);
             }
 
@@ -1850,6 +1852,7 @@
             src = src[0];
             type = type[0] || sinaadToolkit.ad.getTypeBySrc(src, type[0]);
             link = link[0];
+            monitorCode = sinaadToolkit.monitor.createClickMonitor(type, monitor);
 
             switch (type) {
                 case 'url' :

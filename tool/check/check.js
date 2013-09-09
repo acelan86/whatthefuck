@@ -128,6 +128,8 @@ checklist.forEach(function (pdps, i) {
                     //succ.dump()
                 ].join('\n\n============================\n');
                 fs.writeFileSync('result' + /*time.getFullYear() + time.getMonth() + time.getDate() + time.getHours() +*/ '.log', logStr);
+		logStr += '\n\n==================\n' + succ.dump();
+                console.log(logStr);
             }
         });
     });

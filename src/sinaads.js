@@ -45,6 +45,10 @@
         core.storage.set(KEY, core.seed > 1000 ? 0 : ++core.seed, 30 * 24 * 60 * 60 * 1000); //默认一个月过期
     }
 
+    if (!core.enterTime) {
+        core.enterTime = core.now();
+    }
+
     //var IMPRESS_URL = 'http://123.126.53.109/impress.php';
     //var IMPRESS_URL =  'http://123.126.53.109:8527/impress.php';
     var IMPRESS_URL = 'http://sax.sina.com.cn/impress.php';
@@ -224,7 +228,7 @@
                     params = [
                         'adunitid=' + _pdps.join(','),                   //pdps数组
                         'rotate_count=' + core.seed,                    //轮播数
-                        'TIMESTAMP=' + core.now().toString(36),         //时间戳
+                        'TIMESTAMP=' + core.enterTime.toString(36),         //时间戳
                         'referral=' + encodeURIComponent(core.url.top)  //当前页面url
                     ];
 
@@ -446,7 +450,32 @@
         element.style.cssText = 'position:absolute;top:-9999px';
         //这里规定背投的素材不能是js或者代码片段，而且只能有1个
         //window.open('http://d1.sina.com.cn/d1images/pb/pbv4.html?' + content.link[0] + '${}' + (content.type[0] === 'flash' ? 'swf' : content.type[0])  + '${}' + content.src[0], 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
-        window.open('http://d1.sina.com.cn/litong/zhitou/sinaads/release/plus/pbv4.html?' + content.link[0] + '${}' + (content.type[0] === 'flash' ? 'swf' : content.type[0])  + '${}' + content.src[0], 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
+        try {
+            var bpWindow = window.open('', 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
+            bpWindow.document.write([
+                '<!doctype html>',
+                '<html>',
+                    '<head>',
+                        '<meta charset="utf-8">',
+                        '<title>新浪广告</title>',
+                        '<', 'script src="' + core.TOOLKIT_URL + '"></', 'script>',
+                    '</head>',
+                    '<body style="margin:0;padding:0;">',
+                        core.ad.createHTML(
+                            content.type[0],
+                            content.src[0],
+                            width,
+                            height,
+                            content.link[0],
+                            monitor
+                        ),
+                    '</body>',
+                '</html>'
+            ].join(''));
+        } catch (e) {
+            core.error('sinaads: 打开背投并填写内容失败，用普通方法处理');
+            window.open('http://d1.sina.com.cn/litong/zhitou/sinaads/release/plus/pbv4.html?' + content.link[0] + '${}' + (content.type[0] === 'flash' ? 'swf' : content.type[0])  + '${}' + content.src[0], 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
+        }
     });
 
     viewModule.register('float', function (element, width, height, content, monitor, config) {
@@ -716,6 +745,12 @@
                 monitor,
                 config
             );
+
+
+            //如果需要高亮广告位，则在广告位外部加上高亮标记
+            if (data.highlight && (config.sinaads_ad_type || data.type) === 'embed') {
+                element.style.outline = '2px solid #f00';
+            }
         });
 
         core.debug('sinaads: 渲染广告完毕(耗时ms)', core.now() - start);
@@ -765,7 +800,7 @@
                 }
             }
         }
-        //只有满足四个参数齐全才进行预览数据填充
+        //只有满足三个参数齐全才进行预览数据填充
         if (keys.length === 0) {
             core.debug('sinaads: 广告位' + preview.pdps + '为预览广告位（预览数据）', preview);
             //构造一个符合展现格式的数据放入到初始化数据缓存中
@@ -781,7 +816,8 @@
                 ],
                 size : preview.size,
                 id : preview.pdps,
-                type : 'embed'
+                type : 'embed',
+                highlight : preview.highlight || false
             });
         }
     })();
