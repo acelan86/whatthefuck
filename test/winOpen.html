@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title> 测试window.open </title>
+	</head>
+	<body>
+		<script src='http://d1.sina.com.cn/litong/zhitou/sinaads/release/sinaadToolkit.js'></script>
+		<script>
+			window.content = sinaadToolkit.ad.createHTML(
+				'image',
+				'http://d1.sina.com.cn/201105/04/303380_750450.JPG',
+				750,
+				450,
+				'http://sina.com',
+				[
+					'http://baidu.com',
+				'http:\/\/sax.sina.com.cn\/dsp\/click?t=MjAxMy0wOS0xMCAxNjoxNDoxNQk2MS4xMzUuMTUyLjIxMQk2MS4xMzUuMTUyLjIxMV8xMzcxNjEyMDI0Ljk1NTMzNAlodHRwOi8vY3Jvc3Muc2luYS5jb20uY24vZ2l0aHViL3NpbmFhZHMvc2FtcGxlLmh0bWwJUERQUzAwMDAwMDAwNTQ4NglkMjUzZGM5NS05YmFhLTQ3MzYtOTJiNy02MzE5NDk2Njk4YzcJMzI5CTE2NjgJdXNlcl9nZW5kZXI6NTAxOjAuMHx2X3pvbmU6MzAyMDAwOjAuMCwzMDIwMDA6MC4wfHVzZXJfdGFnOjIwOTU3OjEuMDMzOTY1MSwyMTM3OTowLjM1NjU2MTI3LDIwNjM0OjAuMTYwNjU4NDIsMjA0MjQ6MC4xMTEwNjYyNDUsMjEzNzg6MC4wOTE0NDc2OCwyMDg0OTowLjA5MDkxMzczLDIwMzIzOjAuMDc5NTY3MTk0LDIxMjcwOjAuMDc2NjIxMjY0LDIwNzQyOjAuMDY4NDY1NjIsMjA5NTk6MC4wMzE1NzcyNzh8dXNlcl9hZ2U6NjAxOjEuMAl1c2VyX2dlbmRlcjo1MDE6MC4wfHZfem9uZTozMDIwMDA6MC4wLDMwMjAwMDowLjB8dXNlcl90YWc6MjA5NTc6MS4wMzM5NjUxLDIxMzc5OjAuMzU2NTYxMjcsMjA2MzQ6MC4xNjA2NTg0MiwyMDQyNDowLjExMTA2NjI0NSwyMTM3ODowLjA5MTQ0NzY4LDIwODQ5OjAuMDkwOTEzNzMsMjAzMjM6MC4wNzk1NjcxOTQsMjEyNzA6MC4wNzY2MjEyNjQsMjA3NDI6MC4wNjg0NjU2MiwyMDk1OTowLjAzMTU3NzI3OHx1c2VyX2FnZTo2MDE6MS4wCTI4MTUyNzk5MzdfUElOUEFJLUNQQwkyODE1Mjc5OTM3X1BJTlBBSS1DUEMJNDUJNTAJNzI3MTEJNS44MTM5NTM1RS00CTEJMzAyMDAwfDMwMjAwMAlNb3ppbGxhLzUuMCAoTWFjaW50b3NoOyBJbnRlbCBNYWMgT1MgWCAxMF84XzQpIEFwcGxlV2ViS2l0LzUzNy4zNiAoS0hUTUwsIGxpa2UgR2Vja28pIENocm9tZS8yOC4wLjE1MDAuOTUgU2FmYXJpLzUzNy4zNgl0cnVlCS0JLQ==&p=jFZACB1uSKmr7FepQ7OzZA%2buq8O%2bgFuXPJ%2bpMw%3d%3d',
+
+				'http:\/\/sax.sina.com.cn\/dsp\/click?t=MjAxMy0wOS0xMCAxNjoxNDoxNQk2MS4xMzUuMTUyLjIxMQk2MS4xMzUuMTUyLjIxMV8xMzcxNjEyMDI0Ljk1NTMzNAlodHRwOi8vY3Jvc3Muc2luYS5jb20uY24vZ2l0aHViL3NpbmFhZHMvc2FtcGxlLmh0bWwJUERQUzAwMDAwMDAwNTQ4NglkMjUzZGM5NS05YmFhLTQ3MzYtOTJiNy02MzE5NDk2Njk4YzcJMzI5CTE2NjgJdXNlcl9nZW5kZXI6NTAxOjAuMHx2X3pvbmU6MzAyMDAwOjAuMCwzMDIwMDA6MC4wfHVzZXJfdGFnOjIwOTU3OjEuMDMzOTY1MSwyMTM3OdddddddddddddddddddddddddddddddddddddddddddddddddddddU2dddddddd'
+				
+				]
+			);
+			//.replace(/\'/g, '\\\'');
+			//document.domain = 'sina.com.cn';
+			window.open("javascript:document.write(window.opener.content);");
+		</script>
+	</body>
+</html>

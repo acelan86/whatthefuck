@@ -1623,7 +1623,7 @@
                             // }
                             window.frames[iframe.name].contents = content;
                             iframe.src = 'javascript:window["contents"]';
-                        // ie < 6
+                        // ie <= 6
                         } else {
                             window.frames[iframe.name].contents = content;
                             iframe.src = 'javascript:document.write(window["contents"]);/* document.close(); */';

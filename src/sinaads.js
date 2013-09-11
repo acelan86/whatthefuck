@@ -446,36 +446,82 @@
     });
 
     viewModule.register('bp', function (element, width, height, content, monitor, config) {
+        /**
+         * ie(null), firefox(null), safari(undefined)窗口拦截情况下window句柄
+         * opera, chrome拦截情况下有window句柄
+         * 当参数长度小于2083时，ie, chrome, firefox可以直接使用javascript:'html'方式打开窗口
+         * 当参数长度大于2083时，使用拿到窗口句柄然后document.write方式写入
+         * ie下拿到窗口句柄的情况下，设置了document.domain的主页面打开的空白页面会报没有权限错误
+         * 其他浏览器不会
+         * 最终放弃，使用原始方法进行背投处理
+         *
+         * 如果参数长度大于2000，从后面依此放弃monitor或者link内容，直到合适，无奈之举
+         */
         //是背投广告，隐藏掉改区块
         element.style.cssText = 'position:absolute;top:-9999px';
-        //这里规定背投的素材不能是js或者代码片段，而且只能有1个
-        //window.open('http://d1.sina.com.cn/d1images/pb/pbv4.html?' + content.link[0] + '${}' + (content.type[0] === 'flash' ? 'swf' : content.type[0])  + '${}' + content.src[0], 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
-        try {
-            var bpWindow = window.open('', 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
-            bpWindow.document.write([
-                '<!doctype html>',
-                '<html>',
-                    '<head>',
-                        '<meta charset="utf-8">',
-                        '<title>新浪广告</title>',
-                        '<', 'script src="' + core.TOOLKIT_URL + '"></', 'script>',
-                    '</head>',
-                    '<body style="margin:0;padding:0;">',
-                        core.ad.createHTML(
-                            content.type[0],
-                            content.src[0],
-                            width,
-                            height,
-                            content.link[0],
-                            monitor
-                        ),
-                    '</body>',
-                '</html>'
-            ].join(''));
-        } catch (e) {
-            core.error('sinaads: 打开背投并填写内容失败，用普通方法处理');
-            window.open('http://d1.sina.com.cn/litong/zhitou/sinaads/release/plus/pbv4.html?' + content.link[0] + '${}' + (content.type[0] === 'flash' ? 'swf' : content.type[0])  + '${}' + content.src[0], 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
+        var par = [
+            content.type[0],
+            content.src[0],
+            content.link[0],
+            width,
+            height
+        ];
+        core.array.each(monitor, function (url) {
+            if (url) {
+                par.push(url);
+            }
+        });
+        while (par.join('${}').length > 2000) {
+            par.pop();
         }
+
+        window.open(
+            'http://d1.sina.com.cn/litong/zhitou/sinaads/release/pbv5.html?' + par.join('${}'),
+            'sinaads_bp_' + config.sinaads_ad_pdps,
+            'width=' + width + ',height=' + height
+        );
+        // var key = 'sinaads_bp_content_' + core.rnd();
+        // window[key] = [
+        //     '<!doctype html>',
+        //     '<html>',
+        //         '<head>',
+        //             '<meta charset="utf-8">',
+        //             '<title>新浪广告</title>',
+        //             '<', 'script src="' + core.TOOLKIT_URL + '"></', 'script>',
+        //         '</head>',
+        //         '<body style="margin:0;padding:0;">',
+        //             core.ad.createHTML(
+        //                 content.type[0],
+        //                 content.src[0],
+        //                 width,
+        //                 height,
+        //                 content.link[0],
+        //                 monitor
+        //             ),
+        //         '</body>',
+        //     '</html>'
+        // ].join('');
+
+        // var contentEncode = content.replace('\'', '\\\''),
+        //     win, doc;
+        // //如果内容在2000个字节以下
+        // if (contentEncode.length <= 2000) {
+        //     core.debug('sinaads:资源长度小于2000, 直接渲染');
+        //     window.open("javascript:'" + contentEncode + "'", 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
+        // } else {
+        //     win = window.open('about:blank', 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
+        //     try {
+        //         doc = win.document;
+        //         if (doc) {
+        //             core.debug('sinaads:采用document.write方式渲染');
+        //             doc.write(content);
+        //         } else {
+        //             window.alert('xxxx');
+        //         }
+        //     } catch (e) {
+        //         window.alert('catch' + e.message);
+        //     }
+        // }
     });
 
     viewModule.register('float', function (element, width, height, content, monitor, config) {
@@ -525,9 +571,12 @@
     });
 
     viewModule.register('textlink', function (element, width, height, content, monitor, config) {
-        var fragmentNode = document.createElement('span');
-
-        fragmentNode.innerHTML = core.ad.createHTML(content.type, content.src, 0, 0, content.link, monitor, config.sinaads_ad_tpl || '');
+        var fragmentNode = document.createElement('span'),
+            tpl = config.sinaads_ad_tpl || '';
+        if (core.isFunction(tpl)) {
+            tpl = tpl(content.sinaads_content_index); //传入当前内容是第几条广告内容，返回该条广告内容对应的模版
+        }
+        fragmentNode.innerHTML = core.ad.createHTML(content.type, content.src, 0, 0, content.link, monitor, tpl);
         element.style.cssText += ';text-decoration:none';
         element.appendChild(fragmentNode);
         //element.innerHTML = core.ad.createHTML('text', content.src[0], 0, 0, content.link[0], monitor, config.sinaads_ad_tpl || '');
@@ -717,6 +766,7 @@
             content.src    = core.array.ensureArray(content.src);
             content.link   = core.array.ensureArray(content.link);
             content.type   = core.array.ensureArray(content.type);
+            content.sinaads_content_index = i;  //带入该内容在广告中的序号
             
             var monitor = content.monitor,
                 pv = content.pv;
