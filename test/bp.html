@@ -4,5 +4,24 @@
 		<meta charset="utf-8">
 		<title> 新浪广告 </title>
 	</head>
-	<body></body>
+	<body>
+	<script>
+		function findSecond(arr) {
+		    var first = 0,
+		        second = 0;
+		    arr.forEach(function (num, i) {
+		        if (num > first) {
+		            second = first;
+		            first = num;
+		        } else if (num > second) {
+		            second = num;
+		        }
+		    });
+		    return {
+		        first : first,
+		        second : second
+		    };
+		}
+	</script>
+	</body>
 </html>

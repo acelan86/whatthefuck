@@ -458,6 +458,28 @@
         };
     })();
 
+    /**
+     * 删除目标字符串两端的空白字符
+     * @name sinaadToolkit.string.trim
+     * @function
+     * @grammar sinaadToolkit.string.trim(source)
+     * @param {string} source 目标字符串
+     * @remark
+     * 不支持删除单侧空白字符
+     * @shortcut trim
+     * @meta standard
+     *             
+     * @returns {string} 删除两端空白字符后的字符串
+     */
+
+    sinaadToolkit.string.trim = sinaadToolkit.string.trim || (function () {
+        var trimer = new RegExp("(^[\\s\\t\\xa0\\u3000]+)|([\\u3000\\xa0\\s\\t]+\x24)", "g");
+        
+        return function (source) {
+            return String(source).replace(trimer, "");
+        };
+    })();
+
 
 
     /**
@@ -652,7 +674,7 @@
                         expires.setDate(expires.getDate() + 365);
                         dom.expires = expires.toUTCString();
                     } catch (e) {
-                        sinaadToolkit.error('sinaadToolkit.storage:userData初始化失败，' + e.message);
+                        sinaadToolkit.error('sinaadToolkit.storage:userData init fail, ' + e.message);
                         return null;
                     }
                 }
@@ -736,7 +758,7 @@
                 try {
                     var value = storage.getItem(key);
                     if (value) {
-                        sinaadToolkit.debug('sinaadToolkit.storage.get:获取到' + key + '的值: ' + value);
+                        sinaadToolkit.debug('sinaadToolkit.storage.get:get value of ' + key + ':' + value);
                         value = value.split(';');
                         //有过期时间
                         if (value[1] && sinaadToolkit.now() > parseInt(value[1].split('=')[1], 10)) {
@@ -789,6 +811,18 @@
      * @namespace sinaadToolkit.url
      */
     sinaadToolkit.url = sinaadToolkit.url || /** @lends sinaadToolkit.url */{
+        protocol : (function() {
+            return (window.location.protocol === "https:" ? "https://" : "http://");
+        })(),
+        /**
+         * 确保传入的字符串是一个url, 同时去除前后空格
+         * iframe的src在ie下协议写错会导致刷新当前页面成iframe的src,
+         * 判断是否有http或者https开头，如果没有直接认定添加http或者https
+         */
+        ensureURL : function (source) {
+            source = sinaadToolkit.string.trim(source);
+            return source ? (/^(http|https):\/\//).test(source) ? source : (sinaadToolkit.url.protocol + source) : '';
+        },
         /**
          * 创建一个url
          * @param  {String} domain url主域
@@ -808,7 +842,11 @@
             try {
                 top = window.top.location.href;
             } catch (e) {}
-            return top || ((window.top === window.self) ?  window.location.href : window.document.referrer);
+            top = top || ((window.top === window.self) ?  window.location.href : window.document.referrer);
+            if (!top) {
+                sinaadToolkit.error('sinaadToolkit:cannot get page url.');
+            }
+            return top;
         })()
     };
 
@@ -1107,7 +1145,7 @@
                         }
                     }
                     catch (e) {
-                        sinaadToolkit.error('sinaadToolkit.Deferred: _pipe内部方法出错-' + e.message);
+                        sinaadToolkit.error('sinaadToolkit.Deferred: _pipe internal error. ' + e.message);
                         deferred.reject(e);
                     }
                 }
@@ -1130,7 +1168,7 @@
                     try {
                         callback.apply(deferred, deferred._args);
                     } catch (e) {
-                        sinaadToolkit.error('sinaadToolkit.Deferred: _flush出错' + e.message);
+                        sinaadToolkit.error('sinaadToolkit.Deferred: _flush internal error. ' + e.message);
                     }
                 });
             }, 0);
@@ -1629,7 +1667,7 @@
                             iframe.src = 'javascript:document.write(window["contents"]);/* document.close(); */';
                         }
                     } catch (e) {
-                        sinaadToolkit.error("sinaadToolkit.iframe.fill: 无法往ie的iframe中写入内容, ", e);
+                        sinaadToolkit.error("sinaadToolkit.iframe.fill: cannot fill iframe content in ie, ", e);
                     }
                 } else {
                     /**
@@ -1653,7 +1691,7 @@
                         iframe.src = 'javascript:\'<script type="text/javascript">' + content + "\x3c/script>'";
                     } catch (e) {
                         window[key] = null;
-                        sinaadToolkit.error("sinaadToolkit.iframe.fill: 无法通过修改document.domain的方式来填充IE下的iframe内容, ", e);
+                        sinaadToolkit.error("sinaadToolkit.iframe.fill: cannot fill iframe content by set document.domain on ie, ", e);
                     }
                 }
             //标准浏览器，标准方法
@@ -1665,7 +1703,7 @@
                     doc.write(content);
                     doc.close();
                 } catch (e) {
-                    sinaadToolkit.error("sinaadToolkit.iframe.fill: 无法使用标准方法填充iframe的内容, ", e);
+                    sinaadToolkit.error("sinaadToolkit.iframe.fill:cannot fill iframe content by standard method, ", e);
                 }
             }
         }
@@ -1708,18 +1746,18 @@
          * @param  {Array:String} pvs 曝光监控的url数组
          * @return {String}     返回创建曝光的iframe的html片段
          */
-        createImpressMonitor : function (pvs) {
-            var html = [];
+        // createImpressMonitor : function (pvs) {
+        //     var html = [];
 
-            sinaadToolkit.array.each(pvs, function (pv) {
-                var config = {};
-                sinaadToolkit.iframe.init(config, 1, 1, false);
-                config.src = pv;
-                config.style = 'display:none;';
-                html.push(sinaadToolkit.iframe.createHTML(config));
-            });
-            return html.join('');
-        },
+        //     sinaadToolkit.array.each(pvs, function (pv) {
+        //         var config = {};
+        //         sinaadToolkit.iframe.init(config, 1, 1, false);
+        //         config.src = pv;
+        //         config.style = 'display:none;';
+        //         html.push(sinaadToolkit.iframe.createHTML(config));
+        //     });
+        //     return html.join('');
+        // },
         /**
          * 创建点击监测
          * @param  {String} type    需要监测的对象的类型，如图片，链接，flash等
@@ -1742,11 +1780,11 @@
                     case 'image':
                     case 'flash':
                     case 'text':
-                        code = 'sinaadToolkit.sio.log(\'' + url + '\')';
+                        code = 'sinaadToolkit.sio.log(\'' + sinaadToolkit.url.ensureURL(url) + '\')';
                         comma = ';';
                         break;
                     case 'adbox':
-                        code = 'api_exu=' + encodeURIComponent(url);
+                        code = 'api_exu=' + encodeURIComponent(sinaadToolkit.url.ensureURL(url));
                         comma = '&';
                         break;
                     default:
@@ -1851,18 +1889,18 @@
             //如果没有自定模版
             src = src[0];
             type = type[0] || sinaadToolkit.ad.getTypeBySrc(src, type[0]);
-            link = link[0];
+            link = sinaadToolkit.url.ensureURL(link[0]);
             monitorCode = sinaadToolkit.monitor.createClickMonitor(type, monitor);
 
             switch (type) {
                 case 'url' :
                     config = {};
                     sinaadToolkit.iframe.init(config, width, height, false);
-                    config.src = src;
+                    config.src = sinaadToolkit.url.ensureURL(src);
                     html = sinaadToolkit.iframe.createHTML(config);
                     break;
                 case 'image' :
-                    html = '<img border="0" src="' + src + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
+                    html = '<img border="0" src="' + sinaadToolkit.url.ensureURL(src) + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
                     html = link ? '<a href="' + link + '" target="' + (sinaadToolkit.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + html + '</a>' : html;
                     break;
                 case 'text' :
@@ -1870,7 +1908,7 @@
                     break;
                 case 'flash' :
                     html = sinaadToolkit.swf.createHTML({
-                        url : src,
+                        url : sinaadToolkit.url.ensureURL(src),
                         width : width,
                         height : height,
                         wmode : 'transparent'
@@ -1887,12 +1925,12 @@
                 case 'adbox' :
                     config = {};
                     sinaadToolkit.iframe.init(config, width, height, false);
-                    config.src = src;
+                    config.src = sinaadToolkit.url.ensureURL(src);
                     monitorCode && (config.name = monitorCode);
                     html = sinaadToolkit.iframe.createHTML(config);
                     break;
                 case 'js' :
-                    html = ['<', 'script charset="utf-8" src="', src, '"></', 'script>'].join('');
+                    html = ['<', 'script charset="utf-8" src="', sinaadToolkit.url.ensureURL(src), '"></', 'script>'].join('');
                     break;
                 default :
                     html = src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>');

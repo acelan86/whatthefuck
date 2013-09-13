@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html>
     <head>
@@ -18,15 +19,7 @@
             width = ary[3] + 'px',
             height = ary[4] + 'px';
 
-        var srcAllowDomain = ['sina\\.com\\.cn','weibo\\.com','sinaimg\\.cn'],
-            urlAllowDomain = ['sina\\.com\\.cn','weibo\\.com','allyes\\.com'];
-
-        function checkDomain(url, allowDomain) {
-            var reg = new RegExp('^(http|https):\\/\\/([^\\/\\?#]+\\.)*(' + allowDomain.join('|') + ')(\\/|\\?|#|$)');
-            return reg.test(url);
-        }
-
-        if (type === 'flash' || type === 'image' && checkDomain(link, urlAllowDomain) && checkDomain(src, srcAllowDomain)) {
+        if (type === 'flash' || type === 'image') {
             document.write(sinaadToolkit.ad.createHTML(
                 type,
                 src,

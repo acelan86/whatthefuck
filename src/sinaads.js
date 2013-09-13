@@ -36,7 +36,7 @@
             _host = window.location.host,
             KEY = _host.split('.')[0] + _pathname.substring(0, _pathname.lastIndexOf('/'));
 
-        core.debug('sinaads: 当前页面种子key为:' + KEY);
+        core.debug('sinaads:seed key is ' + KEY);
 
         KEY = 'sinaads_' + core.hash(KEY);
 
@@ -107,7 +107,7 @@
             core.storage.remove('sinaads_entry');
         }
 
-        core.debug('sinaads: 取得定向信息', targeting);
+        core.debug('sinaads:targeting get,', targeting);
 
         return targeting;
     })();
@@ -131,7 +131,7 @@
                 engineType = ad.engineType;
 
             if (!ad.content && ad.value) {
-                core.debug('sinaads: 老数据格式，需要进行数据适配(pdps)', ad.id);
+                core.debug('sinaads:old data format, need adapter(pdps)', ad.id);
                 ad.content = ad.value;
                 delete ad.value;
             }
@@ -215,7 +215,7 @@
                 core.array.each(pdps, function (str) {
                     isLoaded = !!_cache[str];
                     if (isLoaded) {
-                        core.debug('sinaads: 当前pdps数据已加载，直接渲染（pdps, 数据）', str, _cache[str]);
+                        core.debug('sinaads:current pdps data is loaded, render immedietly. ', str, _cache[str]);
                     } else {
                         _pdps.push(str);
                     }
@@ -224,7 +224,7 @@
                 if (isLoaded) {
                     deferred.resolve();
                 } else {
-                    core.debug('sinaads: 当前pdps数据未加载，立即加载数据（pdps, 全局缓存数据）' + _pdps.join(), _cache);
+                    core.debug('sinaads:current pdps data is unload, load immedietly. ' + _pdps.join(), _cache);
                     params = [
                         'adunitid=' + _pdps.join(','),                   //pdps数组
                         'rotate_count=' + core.seed,                    //轮播数
@@ -238,11 +238,11 @@
                     }
 
                     core.sio.jsonp(IMPRESS_URL + '?' + params.join('&'), function (data) {
-                        if (data === 'nodata') {
-                            core.debug('sinaads: ' + _pdps.join() + '-该广告位没有获取到可用的数据');
+                        if (data === 'nodata' || (data.ad && data.ad[0] && (data.ad[0].value.length === 0))) {
+                            core.debug('sinaads:' + _pdps.join() + '. cannot found data. ');
                             deferred.reject();
                         } else {
-                            core.debug('sinaads: 获取数据完成（参数，时间，耗时ms，结果数据）', params, core.now(), core.now() - start, data);
+                            core.debug('sinaads:request data ready. ', params, core.now(), core.now() - start, data);
                             //缓存数据到list中
                             core.array.each(data.ad, function (ad) {
                                 ad = _adapter ? _adapter(ad) : ad;
@@ -256,7 +256,7 @@
                              * @type {Number}
                              */
                             core.array.each(data.mapUrl, function (url) {
-                                core.debug('sinaads: 取得数据，且需要mapping, 发送cookie mapping（url，参数，时间）' + url, params, core.now());
+                                core.debug('sinaads:data ready, send cookie mapping. ' + url, params, core.now());
                                 url && core.sio.log(url, 1);
                             });
                         }
@@ -571,14 +571,25 @@
     });
 
     viewModule.register('textlink', function (element, width, height, content, monitor, config) {
-        var fragmentNode = document.createElement('span'),
+        var fragmentNode = document.createElement('div'),
             tpl = config.sinaads_ad_tpl || '';
         if (core.isFunction(tpl)) {
             tpl = tpl(content.sinaads_content_index); //传入当前内容是第几条广告内容，返回该条广告内容对应的模版
         }
         fragmentNode.innerHTML = core.ad.createHTML(content.type, content.src, 0, 0, content.link, monitor, tpl);
         element.style.cssText += ';text-decoration:none';
-        element.appendChild(fragmentNode);
+        var childs = fragmentNode.childNodes || [],
+            _childs = [],
+            len = childs.length,
+            i = 0;
+        for (; i < len; i++) {
+            _childs.push(childs[i]);
+        }
+        for (i = 0; i < len; i++) {
+            element.appendChild(_childs[i]);
+            _childs[i] = null;
+        }
+        childs = fragmentNode = null;
         //element.innerHTML = core.ad.createHTML('text', content.src[0], 0, 0, content.link[0], monitor, config.sinaads_ad_tpl || '');
     });
 
@@ -703,14 +714,14 @@
         //从config.element中得到需要渲染的ins元素，如果没有，则获取页面上未完成状态的广告节点
         if (element) {
             if (!_isPenddingSinaad(element) && (element = element.id && _getSinaAd(element.id), !element)) {
-                core.debug("sinaads: 该元素已经被渲染完成，无需渲染", element);
+                core.debug("sinaads:this element is renderred. ", element);
             }
             if (!("innerHTML" in element)) {
-                core.debug("sinaads: 无法渲染该元素", element);
+                core.debug("sinaads:cannot render this element. ", element);
             }
         //没有对应的ins元素, 获取一个待初始化的ins, 如果没有，抛出异常
         } else if (element = _getSinaAd(), !element) {
-            core.debug("sinaads: 所有待渲染的元素都已经被渲染完成");
+            core.debug("sinaads:all is renderred. ");
         }
 
         //置成完成状态，下面开始渲染
@@ -751,7 +762,7 @@
      */
     function render(element, data, config) {
         if (!data) {
-            core.debug('sinaads: ' + config.sinaads_ad_pdps + '数据没有获取到, 无法渲染');
+            core.debug('sinaads:' + config.sinaads_ad_pdps + ', no data, cannot render. ');
             return;
         }
         var start = core.now();
@@ -761,7 +772,7 @@
             height  = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])) || 0;
 
         core.array.each(data.content, function (content, i) {
-            core.debug('sinaads: 处理' + config.sinaads_ad_pdps + '第' + (i + 1) + '个内容的广告展现');
+            core.debug('sinaads:processing ' + config.sinaads_ad_pdps + ', the ' + (i + 1) + ' content. ');
 
             content.src    = core.array.ensureArray(content.src);
             content.link   = core.array.ensureArray(content.link);
@@ -774,13 +785,13 @@
             /* 解析曝光，并注入模版值，发送曝光 */
             core.array.each(pv, function (url, i) {
                 pv[i] = core.monitor.parseTpl(url, config);
-                core.debug('sinaads: ' + config.sinaads_ad_pdps + '发送曝光' + url);
+                core.debug('sinaads:' + config.sinaads_ad_pdps + ', send impression. ' + url);
                 pv[i] && core.sio.log(pv[i]);
             });
             /* 解析监控链接，注入模版， 后续使用*/
             core.array.each(monitor, function (url, i) {
                 monitor[i] = core.monitor.parseTpl(url, config);
-                core.debug('sinaads: ' + config.sinaads_ad_pdps + '处理监测链接' + url);
+                core.debug('sinaads:' + config.sinaads_ad_pdps + ', send click monitor. ' + url);
             });
 
             /** 
@@ -803,7 +814,7 @@
             }
         });
 
-        core.debug('sinaads: 渲染广告完毕(耗时ms)', core.now() - start);
+        core.debug('sinaads:render complete. ', core.now() - start);
     }
 
 
@@ -812,7 +823,7 @@
      * 并将后续广告压入方法置成内部初始化方法
      */
     function init() {
-        core.debug('sinaads: 进入扫描渲染广告流程' + core.now());
+        core.debug('sinaads:start scan slot. ' + core.now());
         /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
         var perloadAds = window.sinaads;
         if (perloadAds && perloadAds.shift) {
@@ -852,7 +863,7 @@
         }
         //只有满足三个参数齐全才进行预览数据填充
         if (keys.length === 0) {
-            core.debug('sinaads: 广告位' + preview.pdps + '为预览广告位（预览数据）', preview);
+            core.debug('sinaads:' + preview.pdps + ' is preview slot. ', preview);
             //构造一个符合展现格式的数据放入到初始化数据缓存中
             modelModule.add(preview.pdps, {
                 content : [
@@ -878,7 +889,7 @@
     var perloadData = window.sinaadsPerloadData = window.sinaadsPerloadData || [];
     if (!perloadData.done) {
         if (perloadData instanceof Array && perloadData.length > 0) {
-            core.debug('sinaads: 预加载批量请求数据（预加载pdps列表）' + perloadData.join(','));
+            core.debug('sinaads:request perload data. ' + perloadData.join(','));
             modelModule.request(perloadData).done(init).fail(init);
         } else {
             init();
