@@ -90,6 +90,9 @@ module.exports = function(grunt) {
     uglify: {
       options : {
         report : 'gzip',
+        beautify : {
+          ascii_only : true
+        },
         sourceMapRoot : '<%= pkg.sourceRoot %>'
       },
       sinaadToolkit: {

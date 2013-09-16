@@ -844,7 +844,7 @@
             } catch (e) {}
             top = top || ((window.top === window.self) ?  window.location.href : window.document.referrer);
             if (!top) {
-                sinaadToolkit.error('sinaadToolkit:cannot get page url.');
+                sinaadToolkit.error('sinaadToolkit:Cannot get pageurl on which ad locates.');
             }
             return top;
         })()
@@ -1145,7 +1145,7 @@
                         }
                     }
                     catch (e) {
-                        sinaadToolkit.error('sinaadToolkit.Deferred: _pipe internal error. ' + e.message);
+                        sinaadToolkit.error('sinaadToolkit.Deferred:Error occurred in _pipe. ' + e.message);
                         deferred.reject(e);
                     }
                 }
@@ -1168,7 +1168,7 @@
                     try {
                         callback.apply(deferred, deferred._args);
                     } catch (e) {
-                        sinaadToolkit.error('sinaadToolkit.Deferred: _flush internal error. ' + e.message);
+                        sinaadToolkit.error('sinaadToolkit.Deferred:Error occurred in _flush. ' + e.message);
                     }
                 });
             }, 0);
@@ -1691,7 +1691,7 @@
                         iframe.src = 'javascript:\'<script type="text/javascript">' + content + "\x3c/script>'";
                     } catch (e) {
                         window[key] = null;
-                        sinaadToolkit.error("sinaadToolkit.iframe.fill: cannot fill iframe content by set document.domain on ie, ", e);
+                        sinaadToolkit.error("sinaadToolkit.iframe.fill:Cannot fill iframe in IE by modifying the document.domain. ", e);
                     }
                 }
             //标准浏览器，标准方法
@@ -1703,7 +1703,7 @@
                     doc.write(content);
                     doc.close();
                 } catch (e) {
-                    sinaadToolkit.error("sinaadToolkit.iframe.fill:cannot fill iframe content by standard method, ", e);
+                    sinaadToolkit.error("sinaadToolkit.iframe.fill:Cannot fill iframe by regular method. ", e);
                 }
             }
         }
@@ -1901,7 +1901,8 @@
                     break;
                 case 'image' :
                     html = '<img border="0" src="' + sinaadToolkit.url.ensureURL(src) + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
-                    html = link ? '<a href="' + link + '" target="' + (sinaadToolkit.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + html + '</a>' : html;
+                    //onclick与跳转同时发送会导致丢失移动端的监测
+                    html = link ? '<a href="' + link + '" target="' + (sinaadToolkit.browser.phone ? '_blank' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + html + '</a>' : html;
                     break;
                 case 'text' :
                     html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + src + '</a>' : src;

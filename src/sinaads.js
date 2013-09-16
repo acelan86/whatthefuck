@@ -714,14 +714,14 @@
         //从config.element中得到需要渲染的ins元素，如果没有，则获取页面上未完成状态的广告节点
         if (element) {
             if (!_isPenddingSinaad(element) && (element = element.id && _getSinaAd(element.id), !element)) {
-                core.debug("sinaads:this element is renderred. ", element);
+                core.debug("sinaads:Rendering of this element has been done. Stop rendering.", element);
             }
             if (!("innerHTML" in element)) {
-                core.debug("sinaads:cannot render this element. ", element);
+                core.debug("sinaads:Cannot render this element.", element);
             }
         //没有对应的ins元素, 获取一个待初始化的ins, 如果没有，抛出异常
         } else if (element = _getSinaAd(), !element) {
-            core.debug("sinaads:all is renderred. ");
+            core.debug("sinaads:Rendering of all elements in the queue is done.");
         }
 
         //置成完成状态，下面开始渲染
@@ -762,7 +762,7 @@
      */
     function render(element, data, config) {
         if (!data) {
-            core.debug('sinaads:' + config.sinaads_ad_pdps + ', no data, cannot render. ');
+            core.debug('sinaads:' + config.sinaads_ad_pdps + ', Cannot render this element because the data is unavilable.');
             return;
         }
         var start = core.now();
@@ -772,7 +772,7 @@
             height  = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])) || 0;
 
         core.array.each(data.content, function (content, i) {
-            core.debug('sinaads:processing ' + config.sinaads_ad_pdps + ', the ' + (i + 1) + ' content. ');
+            core.debug('sinaads:Processing the impression of the ' + (i + 1) + ' creative of ad unit ' + config.sinaads_ad_pdps);
 
             content.src    = core.array.ensureArray(content.src);
             content.link   = core.array.ensureArray(content.link);
@@ -785,13 +785,13 @@
             /* 解析曝光，并注入模版值，发送曝光 */
             core.array.each(pv, function (url, i) {
                 pv[i] = core.monitor.parseTpl(url, config);
-                core.debug('sinaads:' + config.sinaads_ad_pdps + ', send impression. ' + url);
+                core.debug('sinaads:Recording the impression of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
                 pv[i] && core.sio.log(pv[i]);
             });
             /* 解析监控链接，注入模版， 后续使用*/
             core.array.each(monitor, function (url, i) {
                 monitor[i] = core.monitor.parseTpl(url, config);
-                core.debug('sinaads:' + config.sinaads_ad_pdps + ', send click monitor. ' + url);
+                core.debug('sinaads:Recording the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
             });
 
             /** 
@@ -814,7 +814,7 @@
             }
         });
 
-        core.debug('sinaads:render complete. ', core.now() - start);
+        core.debug('sinaads:Ads Rendering is complete. (time elpased:' + (core.now() - start) + 'ms)');
     }
 
 
@@ -823,7 +823,7 @@
      * 并将后续广告压入方法置成内部初始化方法
      */
     function init() {
-        core.debug('sinaads:start scan slot. ' + core.now());
+        core.debug('sinaads:Begin to scan and render all ad placeholders.' + core.now());
         /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
         var perloadAds = window.sinaads;
         if (perloadAds && perloadAds.shift) {
@@ -863,7 +863,7 @@
         }
         //只有满足三个参数齐全才进行预览数据填充
         if (keys.length === 0) {
-            core.debug('sinaads:' + preview.pdps + ' is preview slot. ', preview);
+            core.debug('sinaads:Ad Unit ' + preview.pdps +  ' is for preview only. ', preview);
             //构造一个符合展现格式的数据放入到初始化数据缓存中
             modelModule.add(preview.pdps, {
                 content : [
@@ -889,7 +889,7 @@
     var perloadData = window.sinaadsPerloadData = window.sinaadsPerloadData || [];
     if (!perloadData.done) {
         if (perloadData instanceof Array && perloadData.length > 0) {
-            core.debug('sinaads:request perload data. ' + perloadData.join(','));
+            core.debug('sinaads:Data preload of bulk requests. ' + perloadData.join(','));
             modelModule.request(perloadData).done(init).fail(init);
         } else {
             init();
