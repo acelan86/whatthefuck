@@ -17,13 +17,13 @@ var checklist = argPDPS && argPDPS.length > 0 && argPDPS[0] ? argPDPS : (functio
 
 var succ = {
     list : [],
-    add : function (pdps, src) {
-        succ.list.push({ pdps: pdps, src: src });
+    add : function (pdps, src, link) {
+        succ.list.push({ pdps: pdps, src: src, link: link });
     },
     dump : function () {
         var info = ['检查通过的pdps, 总计' + succ.list.length + '个'];
         succ.list.forEach(function (item, i) {
-            info.push('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + JSON.stringify(item.src) + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps + '\n');
+            info.push('\n\t' + item.pdps + '\n\t' + (pdpsinfo[item.pdps] || '未录入') + '\n\t' + (readylist[item.pdps] ? '已接管' : '未接管') + '\n\t' + JSON.stringify(item.src) + '\n\t' + JSON.stringify(item.link) + '\n\thttp://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?' + item.pdps + '\n');
         });
         return info.join('');
     }
@@ -105,7 +105,12 @@ checklist.forEach(function (pdps, i) {
                     } else {
                         //console.log(chunk);
                         if (data.ad && data.ad[0] && data.ad[0].value && data.ad[0].value[0]) {
-                            succ.add(pdps, data.ad[0].value[0].content.src || data.ad[0].value[0].content);
+                            var content = data.ad[0].value[0].content;
+                            if (content.src && content.src.length > 0 && content.src[0].indexOf('.html') === -1 && content.src[0].indexOf('.js') === -1 &&!(content.link && content.link.length > 0 && content.link[0])) {
+                                warn.add(pdps, JSON.stringify(content.src) + '\t广告必须有链接，但链接为空');
+                            } else {
+                                succ.add(pdps, data.ad[0].value[0].content.src || data.ad[0].value[0].content, content.link);
+                            }
                         } else {
                             warn.add(pdps, '广告位数据为空');
                         }

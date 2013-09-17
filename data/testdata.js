@@ -188,7 +188,8 @@ _sinaadsCacheData["PDPS000000000068"] = {
         type : [/*'flash'*/'js'],
         src : [
             //'http://d1.sina.com.cn/rwei/shijia2012/shichuang1129/300x250.swf'
-            'http://rm.sina.com.cn/bj_chuanyang/bm20130812/3169.js'
+            //互动通js
+            "http://d1.sina.com.cn/litong/zhitou/sinaads/data/thirdpart/hudongtong/code.js"
         ],
         monitor : ["http://stream.com"],
         link : ['http://stream.com', 'http://stream.sina.com.cn']

@@ -1,12 +1,240 @@
-下面为Wed Sep 11 2013 09:42:43 GMT+0800 (CST)线上所有接管广告位的数据检查情况(请重点关注天窗和失败的位置)：
+下面为Tue Sep 17 2013 15:34:49 GMT+0800 (CST)线上所有接管广告位的数据检查情况(请重点关注天窗和失败的位置)：
 
-共1个
-	正常1个
-	警告0个
+共121个
+	正常83个
+	警告38个
 	失败0个
 
 ============================
-可能是天窗的pdps, 总计0个
+可能是天窗的pdps, 总计38个
+	PDPS000000005539
+	财经首页要闻区右侧40*170按钮03
+	已接管
+	["http://d1.sina.com.cn/201309/16/511708_fin-240170.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000005539
+
+	PDPS000000004446
+	股票图表最终页分时图右侧两轮播196*130按钮
+	已接管
+	["http://d1.sina.com.cn/201309/03/509133.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000004446
+
+	PDPS000000047264
+	新闻首页体育新闻左侧两轮播340*120按钮?
+	已接管
+	["http://d1.sina.com.cn/201309/13/511247_news-340x120.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047264
+
+	PDPS000000004529
+	基金要闻区左侧两轮播320*115按钮
+	已接管
+	["http://d1.sina.com.cn/201309/03/509147_320_115a.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000004529
+
+	PDPS000000047015
+	财经首页右侧两轮播240*200按钮04
+	已接管
+	["http://d1.sina.com.cn/201309/16/511749_240x200_30k.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047015
+
+	PDPS000000047289
+	女性首页1000*300二维码互动流媒体(小时)
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047289
+
+	PDPS000000005341
+	女性首页右侧260*200流媒体
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000005341
+
+	PDPS000000041374
+	时尚女性新闻内页与星座内页打通两轮播300*500画中画00
+	已接管
+	["http://d1.sina.com.cn/201309/05/509579_bvlgari300x500.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000041374
+
+	PDPS000000004569
+	育儿首页焦点新闻右侧两轮播250*230矩形广告
+	已接管
+	["http://d1.sina.com.cn/201309/04/509357_250230huarui.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000004569
+
+	PDPS000000003901
+	数码首页右侧260*200流媒体
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000003901
+
+	PDPS000000004934
+	未录入
+	已接管
+	广告位为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000004934
+
+	PDPS000000047323
+	时尚首页两轮播1000*90通栏02
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047323
+
+	PDPS000000003929
+	育儿首页950*90通栏01
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000003929
+
+	PDPS000000023468
+	健康首页950*90通栏02
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000023468
+
+	PDPS000000047461
+	婚嫁首页顶部两轮播1000*90通栏
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047461
+
+	PDPS000000028555
+	数码首页顶部两轮播950*90通栏
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000028555
+
+	PDPS000000047322
+	时尚首页两轮播1000*90通栏01
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047322
+
+	PDPS000000047337
+	尚品首页1000*90通栏01
+	已接管
+	["http://d1.sina.com.cn/201309/15/511514.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047337
+
+	PDPS000000004546
+	女性首页两轮播1000*90通栏01
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000004546
+
+	PDPS000000004547
+	女性首页两轮播950*90通栏02
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000004547
+
+	PDPS000000017965
+	读书首页焦点新闻右侧两轮播250*230矩形广告
+	已接管
+	["http://d1.sina.com.cn/201309/06/509754.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000017965
+
+	PDPS000000007950
+	数码首页两轮播950*90通栏01
+	已接管
+	["http://d1.sina.com.cn/201309/12/511025.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000007950
+
+	PDPS000000047040
+	手机首页顶部1000*90通栏
+	已接管
+	["http://d1.sina.com.cn/201309/16/511824.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047040
+
+	PDPS000000047042
+	未录入
+	已接管
+	["http://d1.sina.com.cn/201309/09/510197.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047042
+
+	PDPS000000047317
+	时尚首页两轮播1000*90跨栏广告
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047317
+
+	PDPS000000005331
+	未录入
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000005331
+
+	PDPS000000010101
+	未录入
+	已接管
+	["http://d1.sina.com.cn/201303/13/480432_F1300500.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000010101
+
+	PDPS000000002680
+	未录入
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000002680
+
+	PDPS000000000488
+	未录入
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000000488
+
+	PDPS000000040987
+	未录入
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000040987
+
+	PDPS000000041022
+	未录入
+	已接管
+	["http://d1.sina.com.cn/201309/16/511855.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000041022
+
+	PDPS000000005326
+	未录入
+	已接管
+	["http://d1.sina.com.cn/201309/16/511852.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000005326
+
+	PDPS000000010098
+	未录入
+	已接管
+	["http://d1.sina.com.cn/201309/13/511311.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000010098
+
+	PDPS000000005325
+	未录入
+	已接管
+	["http://d1.sina.com.cn/201309/16/511819.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000005325
+
+	PDPS000000003037
+	未录入
+	已接管
+	["http://d1.sina.com.cn/201309/11/510606.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000003037
+
+	PDPS000000004234
+	未录入
+	已接管
+	广告位数据为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000004234
+
+	PDPS000000041376
+	育儿内页两轮播300*500画中画00
+	已接管
+	["http://d1.sina.com.cn/201309/14/511477_300X500baby.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000041376
+
+	PDPS000000047041
+	未录入
+	已接管
+	["http://d1.sina.com.cn/201309/09/510171.swf"]	广告必须有链接，但链接为空
+	http://d1.sina.com.cn/litong/zhitou/sinaads/getAdCode.html?PDPS000000047041
+
 
 ============================
 检查失败的pdps, 总计0个
