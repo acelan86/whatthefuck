@@ -175,8 +175,11 @@
             /**
              * 是否是andriod系统
              * @type {Boolean}
+             * @marks zepto的Android判断好像有问题
+             * eg: userAgent: Mozilla/4.0 (compatible;Android;320x480)
              */
-            android : /(Android)\s+([\d.]+)/i.test(ua),
+            //android : /(Android)\s+([\d.]+)/i.test(ua),
+            android : /(Android)(\s+([\d.]+))*/i.test(ua),
             /**
              * @type {Boolean}
              */
@@ -1902,10 +1905,18 @@
                 case 'image' :
                     html = '<img border="0" src="' + sinaadToolkit.url.ensureURL(src) + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
                     //onclick与跳转同时发送会导致丢失移动端的监测
-                    html = link ? '<a href="' + link + '" target="' + (sinaadToolkit.browser.phone ? '_blank' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + html + '</a>' : html;
+                    if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitorCode) {
+                        html = link ? '<a href="javascript:;" onclick="try{' + monitorCode + '}catch(e){}finally{window.open(\'' + link +'\')}">' + html + '</a>' : html;
+                    } else {
+                        html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode +'}catch(e){}"' : '') + '>' + html + '</a>' : html;
+                    }
                     break;
                 case 'text' :
-                    html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>' + src + '</a>' : src;
+                    if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitorCode) {
+                        html = link ? '<a href="javascript:;" onclick="try{' + monitorCode + '}catch(e){}finally{window.open(\'' + link +'\')}">' + src + '</a>' : src;
+                    } else {
+                        html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode +'}catch(e){}"' : '') + '>' + src + '</a>' : src;
+                    }
                     break;
                 case 'flash' :
                     html = sinaadToolkit.swf.createHTML({
@@ -1918,7 +1929,7 @@
                         html = [
                             '<div style="width:' + width + ';height:' + height + ';position:relative;overflow:hidden;">',
                                 html,
-                                '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="' + (sinaadToolkit.browser.phone ? '_top' : '_blank') + '"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '></a>',
+                                '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '></a>',
                             '</div>'
                         ].join('');
                     }
