@@ -52,6 +52,7 @@
     //var IMPRESS_URL = 'http://123.126.53.109/impress.php';
     //var IMPRESS_URL =  'http://123.126.53.109:8527/impress.php';
     var IMPRESS_URL = 'http://sax.sina.com.cn/impress.php';
+    var SAX_TIMEOUT = 10 * 1000; //请求数据超时时间
 
     core.PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
 
@@ -80,7 +81,6 @@
         }
         return null;
     }
-
 
     /**
      * 获取定向关键词, 全局只获取一次
@@ -210,7 +210,6 @@
                     isLoaded = false,
                     _pdps = [];
 
-
                 //判断pdps相关数据是否存在，如果存在，直接返回，否则，请求后渲染
                 core.array.each(pdps, function (str) {
                     isLoaded = !!_cache[str];
@@ -261,6 +260,12 @@
                             });
                         }
                         deferred.resolve();
+                    }, {
+                        timeout : SAX_TIMEOUT,
+                        onfailure : function () {
+                            core.debug('sinaads:request timeout, via ' + _pdps.join());
+                            deferred.reject();
+                        }
                     });
                 }
 

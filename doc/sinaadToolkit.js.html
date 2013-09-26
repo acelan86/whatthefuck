@@ -1,7 +1,34 @@
-/*!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: sinaadToolkit.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: sinaadToolkit.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*!
  * sinaadToolkit
  * @description 新浪广告工具包，提供了浏览器判断，渲染，cookie, storage, iframe, 转义等基础操作
- * @author  acelan <xiaobin8[at]staff.sina.com.cn>
+ * @author  acelan &lt;xiaobin8[at]staff.sina.com.cn>
  * @version  1.0.0
  */
 (function (window, undefined) {
@@ -97,7 +124,7 @@
                 w;
 
             for (; !isNaN(w = s.charCodeAt(i++));) {
-                hash = ((hash << 5) - hash) + w;
+                hash = ((hash &lt;&lt; 5) - hash) + w;
                 hash = hash & hash;
             }
 
@@ -331,7 +358,7 @@
                 len = source.length;
             
             if ('function' === typeof iterator) {
-                for (i = 0; i < len; i++) {
+                for (i = 0; i &lt; len; i++) {
                     item = source[i];
                     //TODO
                     //此处实现和标准不符合，标准中是这样说的：
@@ -383,7 +410,7 @@
             encodeHTML : function (source) {
                 return String(source)
                             .replace(/&/g, '&amp;')
-                            .replace(/</g, '&lt;')
+                            .replace(/&lt;/g, '&lt;')
                             .replace(/>/g, '&gt;')
                             .replace(/"/g, "&quot;")
                             .replace(/'/g, "&#39;");
@@ -396,7 +423,7 @@
             decodeHTML : function (source) {
                 var str = String(source)
                             .replace(/&quot;/g, '"')
-                            .replace(/&lt;/g, '<')
+                            .replace(/&lt;/g, '&lt;')
                             .replace(/&gt;/g, '>')
                             .replace(/&amp;/g, "&");
                 //处理转义的中文和实体字符
@@ -456,7 +483,7 @@
             },
             toCamelCase : function (source) {
                 //提前判断，提高效率
-                if (source.indexOf('-') < 0 && source.indexOf('_') < 0) {
+                if (source.indexOf('-') &lt; 0 && source.indexOf('_') &lt; 0) {
                     return source;
                 }
                 return source.replace(/[-_][^-_]/g, function (match) {
@@ -554,18 +581,18 @@
         // word       = token | quoted-string
          
         // http://www.ietf.org/rfc/rfc2068.txt
-        // token      = 1*<any CHAR except CTLs or tspecials>
-        // CHAR       = <any US-ASCII character (octets 0 - 127)>
-        // CTL        = <any US-ASCII control character
+        // token      = 1*&lt;any CHAR except CTLs or tspecials>
+        // CHAR       = &lt;any US-ASCII character (octets 0 - 127)>
+        // CTL        = &lt;any US-ASCII control character
         //              (octets 0 - 31) and DEL (127)>
-        // tspecials  = "(" | ")" | "<" | ">" | "@"
-        //              | "," | ";" | ":" | "\" | <">
+        // tspecials  = "(" | ")" | "&lt;" | ">" | "@"
+        //              | "," | ";" | ":" | "\" | &lt;">
         //              | "/" | "[" | "]" | "?" | "="
         //              | "{" | "}" | SP | HT
-        // SP         = <US-ASCII SP, space (32)>
-        // HT         = <US-ASCII HT, horizontal-tab (9)>
+        // SP         = &lt;US-ASCII SP, space (32)>
+        // HT         = &lt;US-ASCII HT, horizontal-tab (9)>
         _isValidKey : function (key) {
-            return (new RegExp("^[^\\x00-\\x20\\x7f\\(\\)<>@,;:\\\\\\\"\\[\\]\\?=\\{\\}\\/\\u0080-\\uffff]+\x24")).test(key);
+            return (new RegExp("^[^\\x00-\\x20\\x7f\\(\\)&lt;>@,;:\\\\\\\"\\[\\]\\?=\\{\\}\\/\\u0080-\\uffff]+\x24")).test(key);
         },
         /**
          * 从cookie中获取key所对应的值
@@ -752,9 +779,9 @@
 
         /** 
          * 根据浏览器支持选择相关的存储方案
-         * 当ie且ie<8时使用userData方案，否则使用localStorage方案，否则使用cookie方案
+         * 当ie且ie&lt;8时使用userData方案，否则使用localStorage方案，否则使用cookie方案
          */
-        var storage = window.localStorage ? ls : sinaadToolkit.browser.ie && sinaadToolkit.browser.ie < 8 ? userData : cookie;
+        var storage = window.localStorage ? ls : sinaadToolkit.browser.ie && sinaadToolkit.browser.ie &lt; 8 ? userData : cookie;
 
         return /** @lends sinaadToolkit.storage */{
             /**
@@ -926,8 +953,8 @@
          * @param {string} key 要获取的样式名
          * @remark
          * 
-         * 为了精简代码，本模块默认不对任何浏览器返回值进行归一化处理（如使用getStyle时，不同浏览器下可能返回rgb颜色或hex颜色），也不会修复浏览器的bug和差异性（如设置IE的float属性叫styleFloat，firefox则是cssFloat）。<br />
-         * sinaadToolkit.dom._styleFixer和sinaadToolkit.dom._styleFilter可以为本模块提供支持。<br />
+         * 为了精简代码，本模块默认不对任何浏览器返回值进行归一化处理（如使用getStyle时，不同浏览器下可能返回rgb颜色或hex颜色），也不会修复浏览器的bug和差异性（如设置IE的float属性叫styleFloat，firefox则是cssFloat）。&lt;br />
+         * sinaadToolkit.dom._styleFixer和sinaadToolkit.dom._styleFilter可以为本模块提供支持。&lt;br />
          * 其中_styleFilter能对颜色和px进行归一化处理，_styleFixer能对display，float，opacity，textOverflow的浏览器兼容性bug进行处理。  
          * @shortcut getStyle
          * @meta standard
@@ -1244,7 +1271,8 @@
     })(sinaadToolkit);
 
 
-    sinaadToolkit.throttle = sinaadToolkit.throttle || /** 
+    sinaadToolkit.throttle = sinaadToolkit.throttle || 
+        /** 
          * @memberOf sinaadToolkit
          * @method throttle
          * @description  频率控制 返回函数连续调用时，fn 执行频率限定为每多少时间执行一次
@@ -1290,7 +1318,8 @@
         };
     };
      
-    sinaadToolkit.debounce = sinaadToolkit.debounce || /**
+    sinaadToolkit.debounce = sinaadToolkit.debounce || 
+    /**
      * @method  debounce
      * @description 空闲控制 返回函数连续调用时，空闲时间必须大于或等于 delay，fn 才会执行
      * @memberOf sinaadToolkit
@@ -1437,8 +1466,8 @@
                 //如果用户在URL中已有callback，用参数传入的callback替换之
                 url = url.replace(reg, '\x241' + queryField + '=' + callbackName);
                  
-                if (url.search(reg) < 0) {
-                    url += (url.indexOf('?') < 0 ? '?' : '&') + queryField + '=' + callbackName;
+                if (url.search(reg) &lt; 0) {
+                    url += (url.indexOf('?') &lt; 0 ? '?' : '&') + queryField + '=' + callbackName;
                 }
                 _createScriptTag(scr, url, charset);
             },
@@ -1537,10 +1566,10 @@
             if (version) {
                 version = version.split('.');
                 needVersion = needVersion.split('.');
-                for (i = 0; i < 3; i++) {
+                for (i = 0; i &lt; 3; i++) {
                     vUnit1 = parseInt(version[i], 10);
                     vUnit2 = parseInt(needVersion[i], 10);
-                    if (vUnit2 < vUnit1) {
+                    if (vUnit2 &lt; vUnit1) {
                         break;
                     } else if (vUnit2 > vUnit1) {
                         return ''; // 需要更高的版本号
@@ -1575,8 +1604,8 @@
             }
             
             // 构建IE下支持的object字符串，包括属性和参数列表
-            var str = ['<object '];
-            for (i = 0, len = objProperties.length; i < len; i++) {
+            var str = ['&lt;object '];
+            for (i = 0, len = objProperties.length; i &lt; len; i++) {
                 item = objProperties[i];
                 str.push(' ', item, '="', encodeHTML(options[item]), '"');
             }
@@ -1605,7 +1634,7 @@
                 item = options[k];
                 k = k.toLowerCase();
                 if (params[k] && (item || item === false || item === 0)) {
-                    str.push('<param name="' + k + '" value="' + encodeHTML(item) + '" />');
+                    str.push('&lt;param name="' + k + '" value="' + encodeHTML(item) + '" />');
                 }
             }
             
@@ -1620,7 +1649,7 @@
             
             
             // 构建embed标签的字符串
-            str.push('<embed');
+            str.push('&lt;embed');
             // 在firefox、opera、safari下，salign属性必须在scale属性之后，否则会失效
             // 经过讨论，决定采用BT方法，把scale属性的值先保存下来，最后输出
             var salign;
@@ -1639,7 +1668,7 @@
             if (salign) {
                 str.push(' salign="', encodeHTML(salign), '"');
             }
-            str.push('></embed></object>');
+            str.push('>&lt;/embed>&lt;/object>');
             
             return str.join('');
         }
@@ -1687,7 +1716,7 @@
             sinaadToolkit.object.map(config, function (value, key) {
                 html.push(" " + key + '="' + (null === value ? "" : value) + '"');
             });
-            return "<iframe" + html.join("") + "></iframe>";
+            return "&lt;iframe" + html.join("") + ">&lt;/iframe>";
         },
         /**
          * 往iframe中填充内容
@@ -1712,9 +1741,9 @@
                             // var k;
                             // i: {
                             //     //ie 7 - 10
-                            //     if (ie > 7 && ie <= 10) {
-                            //         for (var i = 0; i < content.length; ++i) {
-                            //             if (127 < content.charCodeAt(i)) {
+                            //     if (ie > 7 && ie &lt;= 10) {
+                            //         for (var i = 0; i &lt; content.length; ++i) {
+                            //             if (127 &lt; content.charCodeAt(i)) {
                             //                 k = true;
                             //                 break i;
                             //             }
@@ -1726,7 +1755,7 @@
                             //     var content = unescape(encodeURIComponent(content));
                             //     var mid = Math.floor(content.length / 2);
                             //     k = [];
-                            //     for (var i = 0; i < mid; ++i) {
+                            //     for (var i = 0; i &lt; mid; ++i) {
                             //         k[i] = String.fromCharCode(256 * content.charCodeAt(2 * i + 1) + content.charCodeAt(2 * i));
                             //     }
                             //     1 == content.length % 2 && (k[mid] = content.charAt(content.length - 1));
@@ -1734,7 +1763,7 @@
                             // }
                             window.frames[iframe.name].contents = content;
                             iframe.src = 'javascript:window["contents"]';
-                        // ie <= 6
+                        // ie &lt;= 6
                         } else {
                             window.frames[iframe.name].contents = content;
                             iframe.src = 'javascript:document.write(window["contents"]);/* document.close(); */';
@@ -1752,16 +1781,16 @@
                         var key = "sinaads-ad-iframecontent-" + sinaadToolkit.rnd();
                         window[key] = content;
                         content = 'var adContent = window.parent["' + key + '"];window.parent["' + key + '"] = null;document.write(adContent);';
-                        content = sinaadToolkit.browser.ie && sinaadToolkit.browser.ie <= 6 ?
+                        content = sinaadToolkit.browser.ie && sinaadToolkit.browser.ie &lt;= 6 ?
                              "window.onload = function() {" +
-                                "document.write(\\'<sc\\' + \\'ript type=\"text/javascript\">document.domain = \"" + document.domain + '";' + content + "<\\/scr\\' + \\'ipt>\\');" +
+                                "document.write(\\'&lt;sc\\' + \\'ript type=\"text/javascript\">document.domain = \"" + document.domain + '";' + content + "&lt;\\/scr\\' + \\'ipt>\\');" +
                                 "document.close();" +
                             "};" :
                             'document.domain = "' + document.domain + '";' +
                             content +
                             "document.close();";
 
-                        iframe.src = 'javascript:\'<script type="text/javascript">' + content + "\x3c/script>'";
+                        iframe.src = 'javascript:\'&lt;script type="text/javascript">' + content + "\x3c/script>'";
                     } catch (e) {
                         window[key] = null;
                         sinaadToolkit.error("sinaadToolkit.iframe.fill:Cannot fill iframe in IE by modifying the document.domain. ", e);
@@ -1973,19 +2002,19 @@
                     html = sinaadToolkit.iframe.createHTML(config);
                     break;
                 case 'image' :
-                    html = '<img border="0" src="' + sinaadToolkit.url.ensureURL(src) + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
+                    html = '&lt;img border="0" src="' + sinaadToolkit.url.ensureURL(src) + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
                     //onclick与跳转同时发送会导致丢失移动端的监测
                     if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitorCode) {
-                        html = link ? '<a href="javascript:;" onclick="try{' + monitorCode + '}catch(e){}finally{window.open(\'' + link +'\')}">' + html + '</a>' : html;
+                        html = link ? '&lt;a href="javascript:;" onclick="try{' + monitorCode + '}catch(e){}finally{window.open(\'' + link +'\')}">' + html + '&lt;/a>' : html;
                     } else {
-                        html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode +'}catch(e){}"' : '') + '>' + html + '</a>' : html;
+                        html = link ? '&lt;a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode +'}catch(e){}"' : '') + '>' + html + '&lt;/a>' : html;
                     }
                     break;
                 case 'text' :
                     if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitorCode) {
-                        html = link ? '<a href="javascript:;" onclick="try{' + monitorCode + '}catch(e){}finally{window.open(\'' + link +'\')}">' + src + '</a>' : src;
+                        html = link ? '&lt;a href="javascript:;" onclick="try{' + monitorCode + '}catch(e){}finally{window.open(\'' + link +'\')}">' + src + '&lt;/a>' : src;
                     } else {
-                        html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode +'}catch(e){}"' : '') + '>' + src + '</a>' : src;
+                        html = link ? '&lt;a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode +'}catch(e){}"' : '') + '>' + src + '&lt;/a>' : src;
                     }
                     break;
                 case 'flash' :
@@ -1997,10 +2026,10 @@
                     });
                     if (link) {
                         html = [
-                            '<div style="width:' + width + ';height:' + height + ';position:relative;overflow:hidden;">',
+                            '&lt;div style="width:' + width + ';height:' + height + ';position:relative;overflow:hidden;">',
                                 html,
-                                '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '></a>',
-                            '</div>'
+                                '&lt;a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '>&lt;/a>',
+                            '&lt;/div>'
                         ].join('');
                     }
                     break;
@@ -2012,10 +2041,10 @@
                     html = sinaadToolkit.iframe.createHTML(config);
                     break;
                 case 'js' :
-                    html = ['<', 'script charset="utf-8" src="', sinaadToolkit.url.ensureURL(src), '"></', 'script>'].join('');
+                    html = ['&lt;', 'script charset="utf-8" src="', sinaadToolkit.url.ensureURL(src), '">&lt;/', 'script>'].join('');
                     break;
                 default :
-                    html = src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>');
+                    html = src.replace(/\\x3c/g, '&lt;').replace(/\\x3e/g, '>');
                     break;
             }
             return html;
@@ -2066,7 +2095,7 @@
                         var len = value.length;
 
                         arr.push("[");
-                        for (comma = "", i = 0; i < len; i++) {
+                        for (comma = "", i = 0; i &lt; len; i++) {
                             arr.push(comma);
                             _stringify(value[i], arr);
                             comma = ",";
@@ -2141,7 +2170,7 @@
 
                 var iframeConfig = {};
                 sinaadToolkit.iframe.init(iframeConfig, width, height, 0);
-                iframeConfig.src = 'javascript:\'<html><body style=background:transparent;></body></html>\'';
+                iframeConfig.src = 'javascript:\'&lt;html>&lt;body style=background:transparent;>&lt;/body>&lt;/html>\'';
                 iframeConfig.id = sandboxId;
                 iframeConfig.style = 'float:left;';
 
@@ -2152,10 +2181,10 @@
 
                 //构造iframe实体
                 sinaadToolkit.iframe.fill(document.getElementById(sandboxId), [
-                    '<!doctype html><html><body style="background:transparent">',
-                        '<', 'script>', context, '</', 'script>',
+                    '&lt;!doctype html>&lt;html>&lt;body style="background:transparent">',
+                        '&lt;', 'script>', context, '&lt;/', 'script>',
                         content,
-                    '</body></html>'
+                    '&lt;/body>&lt;/html>'
                 ].join(""));
             }
         };
@@ -2275,3 +2304,26 @@
      */
 
 })(window);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Box.html">Box</a></li><li><a href="sinaadToolkit.Deferred.html">Deferred</a></li></ul><h3>Namespaces</h3><ul><li><a href="sinaadToolkit.html">sinaadToolkit</a></li><li><a href="sinaadToolkit.ad.html">ad</a></li><li><a href="sinaadToolkit.array.html">array</a></li><li><a href="sinaadToolkit.browser.html">browser</a></li><li><a href="sinaadToolkit.cookie.html">cookie</a></li><li><a href="sinaadToolkit.dom.html">dom</a></li><li><a href="sinaadToolkit.event.html">event</a></li><li><a href="sinaadToolkit.iframe.html">iframe</a></li><li><a href="sinaadToolkit.monitor.html">monitor</a></li><li><a href="sinaadToolkit.object.html">object</a></li><li><a href="sinaadToolkit.page.html">page</a></li><li><a href="sinaadToolkit.sandbox.html">sandbox</a></li><li><a href="sinaadToolkit.sio.html">sio</a></li><li><a href="sinaadToolkit.storage.html">storage</a></li><li><a href="sinaadToolkit.string.html">string</a></li><li><a href="sinaadToolkit.swf.html">swf</a></li><li><a href="sinaadToolkit.url.html">url</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Sep 26 2013 11:08:13 GMT+0800 (CST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
