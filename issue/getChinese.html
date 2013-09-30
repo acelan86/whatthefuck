@@ -1,0 +1,13 @@
+<script>
+/** 
+ * 获取中文所有字符
+ * 请在win中文版除chrome外执行
+ * 
+ * @type {Array}
+ */
+var arr = [];
+for(var i = 0x4e00; i < 0x9fa5; i++) {
+    arr.push(String.fromCharCode(i));
+}
+document.write(arr.join(''));
+</script>

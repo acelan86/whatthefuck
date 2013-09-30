@@ -76,7 +76,7 @@ checklist.forEach(function (pdps, i) {
       path: '/impress.php?' + params,
       method: 'get',
       header: {
-        'Cookie': 'U_TRS1=000000d3.99e719f1.51c12378.c89b1e33; SINAGLOBAL=61.135.152.211_1371612024.955334; UOR=,,; vjuids=460fb730a.13fe54b3c28.0.c43b2288; mvsign=v%3DK%3FJwYfCS%24%5BAG%23u%2FnRal%3D; sso_info=v02m6alo5qztKWRk5yljoOgpZCjoKWRk5yljoOgpZCjoKWRk5SlkJOYpY6DoKWRk5SlkJOYpY6DoKWRk5yljoOgpZCjhKWRk5SljoOUpY6TkKWRk5SlkJSUpY6UkKadlqWkj5OIsoyzhLSNg4C5jZOUwA==; ArtiFSize=14; U_TRS2=000000d3.90ba3ff2.52243fcb.5760624d; Apache=61.135.152.211_1378107339.987071; ULV=1378107549972:17:2:2:61.135.152.211_1378107339.987071:1378107339775; SINA_NEWS_CUSTOMIZE_city=%u5317%u4EAC; _ipuba=pub_u%3Dzhouyi3%26pub_t%3D9c2931fd53640304dee7f2b7994f8d82; __utma=269849203.1059777662.1372045200.1372241716.1378187321.4; __utmc=269849203; __utmz=269849203.1372241716.3.2.utmcsr=blog.sina.com.cn|utmccn=(referral)|utmcmd=referral|utmcct=/s/blog_908b9f3e01012huh.html; lxlrtst=1378199856_o; lxlrttp=1378199856; ULOGIN_IMG=xd-b5bbad5c194287282d52ed04df7c043e2d27; SGUID=1371612028420_35914480; rotatecount=0; vjlast=1378257374.1378257640.10',
+        'Cookie': 'Cookie:U_TRS1=000000d3.99e719f1.51c12378.c89b1e33; SINAGLOBAL=61.135.152.211_1371612024.955334; UOR=,,; vjuids=460fb730a.13fe54b3c28.0.c43b2288; mvsign=v%3DK%3FJwYfCS%24%5BAG%23u%2FnRal%3D; SGUID=1371612028420_35914480; __utma=269849203.1059777662.1372045200.1378877184.1379467889.8; __utmz=269849203.1378877184.7.5.utmcsr=games.sina.com.cn|utmccn=(referral)|utmcmd=referral|utmcct=/; sso_info=v02m6alo5qztKWRk5iljpOUpY6DoKWRk5iljpSUpY6UjKWRk5ilkKOUpY6EiKWRk6ClkJSYpY6TlKadlqWkj5OMtY2DiLWNk4C1jKOQwA==; U_TRS2=000000f3.1ebe12a4.523f99e1.fa64639c; Apache=61.135.152.218_1379899876.819534; ULV=1379899969351:19:4:1:61.135.152.218_1379899876.819534:1378874758140; ArtiFSize=14; lxlrtst=1380077610_o; lxlrttp=1380077610; SINA_NEWS_CUSTOMIZE_city=%u5317%u4EAC; SUS=SID-2231440955-1380174230-XD-xyo3v-386bdf770527d8825090cedb61059c9e; ALF=1382766230; ; SUE=es%3D2642e35fa72b908becfd33b01949892c%26ev%3Dv1%26es2%3D30ef8d8f881da43a64bdd15e0254dce0%26rs0%3DUVrKWl0fROoghHLRCpne37klvUOcTOFP4Y05GGgPXMSsT%252BzPq25fr25z5Lj1N6dYbfb8fRILZ3jLdBF4sSliHKdqYPbfxJ99wdfdthAozsN5vYuxgGysLjpayLhDnmRKjTEz%252B2cOzpuRYD3SCuePmYAYowGeRw18x16nW%252FJQaLg%253D%26rv%3D0; SUP=cv%3D1%26bt%3D1380174230%26et%3D1380269403%26d%3D40c3%26i%3D9c9e%26us%3D1%26vf%3D0%26vt%3D0%26ac%3D2%26st%3D0%26lt%3D7%26uid%3D2231440955%26user%3D79480491%2540qq.com%26ag%3D4%26name%3D79480491%2540qq.com%26nick%3D%25E7%2588%25B8%25E7%2588%25B8%25E5%25A6%2588%25E5%25A6%2588%25E7%2588%25B1%25E5%2585%2594%25E5%25AE%259D%26sex%3D1%26ps%3D0%26email%3D%26dob%3D%26ln%3D%26os%3D%26fmp%3D%26lcp%3D2012-03-28%252015%253A46%253A59; vjlast=1380185960; rotatecount=8; ULOGIN_IMG=xd-7bcd02e0185b38daa6e90e9cca31749d333f',
         'Referer': 'http://robot.sinaads.sina.com.cn',
         'User-Agent':'sinaads robot'
       }
@@ -106,6 +106,15 @@ checklist.forEach(function (pdps, i) {
                         //console.log(chunk);
                         if (data.ad && data.ad[0] && data.ad[0].value && data.ad[0].value[0]) {
                             var content = data.ad[0].value[0].content;
+                            if (content.monitor) {
+                                //console.log(JSON.stringify(content.monitor));
+                                for (var i = 0, len = content.monitor.length; i < len; i++) {
+                                    console.log(content.monitor[i]);
+                                    if (content.monitor[i].length > 2000) {
+                                        console.log(pdps + '\tmonitor长度过长');
+                                    }
+                                }
+                            }
                             if (content.src && content.src.length > 0 && content.src[0].indexOf('.html') === -1 && content.src[0].indexOf('.js') === -1 &&!(content.link && content.link.length > 0 && content.link[0])) {
                                 warn.add(pdps, JSON.stringify(content.src) + '\t广告必须有链接，但链接为空');
                             } else {
@@ -134,7 +143,7 @@ checklist.forEach(function (pdps, i) {
                 ].join('\n\n============================\n');
                 fs.writeFileSync('result' + /*time.getFullYear() + time.getMonth() + time.getDate() + time.getHours() +*/ '.log', logStr);
 		logStr += '\n\n==================\n' + succ.dump();
-                console.log(logStr);
+                //console.log(logStr);
             }
         });
     });

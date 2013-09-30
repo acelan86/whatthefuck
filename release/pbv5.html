@@ -14,7 +14,7 @@
 
         var type = ary[0],
             src = sinaadToolkit.string.encodeHTML(ary[1]),
-            link = ary[2],
+            link = sinaadToolkit.url.ensureURL(ary[2]),
             width = ary[3] + 'px',
             height = ary[4] + 'px';
 

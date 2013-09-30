@@ -484,6 +484,7 @@
         var trimer = new RegExp("(^[\\s\\t\\xa0\\u3000]+)|([\\u3000\\xa0\\s\\t]+\x24)", "g");
         
         return function (source) {
+            source = source || "";
             return String(source).replace(trimer, "");
         };
     })();
