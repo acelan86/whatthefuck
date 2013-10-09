@@ -51,7 +51,7 @@
 
     //var IMPRESS_URL = 'http://123.126.53.109/impress.php';
     //var IMPRESS_URL =  'http://123.126.53.109:8527/impress.php';
-    var IMPRESS_URL = 'http://sax.sina.com.cn/impress.php';
+    var IMPRESS_URL = 'http://sax.sina.com.cn/impress';
     var SAX_TIMEOUT = 10 * 1000; //请求数据超时时间
 
     core.PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
