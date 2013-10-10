@@ -50,7 +50,8 @@
     }
 
     //var IMPRESS_URL = 'http://123.126.53.109/impress.php';
-    //var IMPRESS_URL =  'http://123.126.53.109:8527/impress.php';
+    //var IMPRESS_URL =  'http://123.126.53.109:5677/impress';
+    //var IMPRESS_URL = 'http://sax.sina.com.cn:5677/newimpress';
     var IMPRESS_URL = 'http://sax.sina.com.cn/impress';
     var SAX_TIMEOUT = 10 * 1000; //请求数据超时时间
 
@@ -131,7 +132,7 @@
                 engineType = ad.engineType;
 
             if (!ad.content && ad.value) {
-                core.debug('sinaads:old data format, need adapter(pdps)', ad.id);
+                core.debug('sinaads:Old data format, need adapter(pdps)', ad.id);
                 ad.content = ad.value;
                 delete ad.value;
             }
@@ -237,16 +238,21 @@
                     }
 
                     core.sio.jsonp(IMPRESS_URL + '?' + params.join('&'), function (data) {
-                        if (data === 'nodata' || (data.ad && data.ad[0] && (data.ad[0].value.length === 0))) {
-                            core.debug('sinaads:' + _pdps.join() + '. cannot found data. ');
+                        if (data === 'nodata') {
+                            core.debug('sinaads:' + _pdps.join() + '. No register in SAX. ');
                             deferred.reject();
                         } else {
                             core.debug('sinaads:request data ready. ', params, core.now(), core.now() - start, data);
                             //缓存数据到list中
+                            //这里每次循环都reject可能会有问题
+                            var notAllContentNull = false; //是否此次请求所有的广告都没有内容
                             core.array.each(data.ad, function (ad) {
                                 ad = _adapter ? _adapter(ad) : ad;
                                 if (ad.content instanceof Array && ad.content.length > 0) {
                                     _cache[ad.id] = ad;
+                                    notAllContentNull = true;
+                                } else {
+                                    core.debug('sinaads:' + ad.id + '. cannot found data. ');
                                 }
                             });
                             /**
@@ -258,8 +264,12 @@
                                 core.debug('sinaads:data ready, send cookie mapping. ' + url, params, core.now());
                                 url && core.sio.log(url, 1);
                             });
+                            if (notAllContentNull) {
+                                deferred.resolve();
+                            } else {
+                                deferred.reject();
+                            }
                         }
-                        deferred.resolve();
                     }, {
                         timeout : SAX_TIMEOUT,
                         onfailure : function () {
