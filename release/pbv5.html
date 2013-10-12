@@ -19,7 +19,7 @@
             height = ary[4] + 'px';
 
         var srcAllowDomain = ['sina\\.com\\.cn','weibo\\.com','sinaimg\\.cn'],
-            urlAllowDomain = ['sina\\.com\\.cn','weibo\\.com','allyes\\.com'];
+            urlAllowDomain = ['sina\\.com\\.cn','weibo\\.com','allyes\\.com', 'admaster\\.com\\.cn', 'miaozhen\\.com'];
 
         function checkDomain(url, allowDomain) {
             var reg = new RegExp('^(http|https):\\/\\/([^\\/\\?#]+\\.)*(' + allowDomain.join('|') + ')(\\/|\\?|#|$)');
