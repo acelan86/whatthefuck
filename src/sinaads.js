@@ -51,7 +51,7 @@
 
     //var IMPRESS_URL = 'http://123.126.53.109/impress.php';
     //var IMPRESS_URL =  'http://123.126.53.109:5677/impress';
-    //var IMPRESS_URL = 'http://sax.sina.com.cn:5677/newimpress';
+    //var IMPRESS_URL = 'http://sax.sina.com.cn/newimpress';
     var IMPRESS_URL = 'http://sax.sina.com.cn/impress';
     var SAX_TIMEOUT = 30 * 1000; //请求数据超时时间
 
@@ -133,31 +133,30 @@
 
             if (!ad.content && ad.value) {
                 core.debug('sinaads:Old data format, need adapter(pdps)', ad.id);
-                ad.content = ad.value;
+                ad.content = [];
+                core.array.each(ad.value, function (value) {
+                    if (engineType === 'network') {
+                        value.content = {
+                            src : [networkMap['' + value.manageType] + value.content + '&w=' + size[0] + '&h=' + size[1]],
+                            type : ['url']
+                        };
+                    }
+                    if (engineType === 'dsp' && parseInt(value.manageType, 10) !== 17) {
+                        value.content = {
+                            src : [value.content],
+                            type : ['html']
+                        };
+                    }
+                    ad.content.push(value.content);
+                });
                 delete ad.value;
             }
 
             core.array.each(ad.content, function (content, i) {
-                var manageType = content.manageType,
-                    type,
-                    link;
+                var type, link;
 
-                content = content.content;
                 type = core.array.ensureArray(content.type);
                 link = core.array.ensureArray(content.link);
-
-                if (engineType === 'network') {
-                    content = {
-                        src : [networkMap['' + manageType] + content + '&w=' + size[0] + '&h=' + size[1]],
-                        type : ['url']
-                    };
-                }
-                if (ad.engineType === 'dsp' && parseInt(manageType, 10) !== 17) {
-                    content = {
-                        src : [content],
-                        type : ['html']
-                    };
-                }
 
                 core.array.each(content.src, function (src, i) {
                     type[i] = core.ad.getTypeBySrc(src, type[i]);
@@ -860,7 +859,7 @@
         }
         window._sinaadsPreviewDone = true;
 
-        var query = window.location.search.substring(1).split('&'),
+        var query = window.location.hash.substring(1).split('&'),
             preview = {},
             keys = ['pdps', 'src', 'size'], //必需有的key
             i = 0,

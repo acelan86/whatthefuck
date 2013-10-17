@@ -6,11 +6,27 @@ module.exports = function(grunt) {
   grunt.initConfig({
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
-    banner: '/*! <%= pkg.name %> \n' +
-      ' * @version <%= pkg.version %> \n' +
-      ' * @date <%= grunt.template.today("yyyy-mm-dd") %> \n' +
-      ' * @author <%= pkg.author.name %> (<%= pkg.author.mail %>) \n' + 
-    ' */ \n',
+    logo:         ' * \n' + 
+                    ' *                          $$!   ;$;\n' +                      
+                    ' *                    !$  $$$$  !$$$   ;;\n' +                   
+                    ' *                 $ *$$;$$$$$$$$$$;*$$$\n' +                   
+                    ' *                $$$$$$$$$$$$$$$$$$$$$\n' +                    
+                    ' *               $$$$$$;         o$$$$$o\n' +                   
+                    ' *              *$$$   *#####;     $$$$$\n' +                   
+                    ' *              $$$   &#$*!###     $$$$!\n' +                   
+                    ' *              $$$;  $#!!###$   ;$$$$\n' +                    
+                    ' *                $$$o  ;**   !$$$$!\n' +                      
+                    ' *          !$&&&&$!  o$$$$$$o;   ;$&###&!     ;o$&&##&$;\n' + 
+                    ' *       ###########$ o####*  #############!  o############\n' + 
+                    ' *     ;#####;        #####  $####    *####;          ####*\n' + 
+                    ' *      ###########  o####   ####;    ####$  $######;o####\n' + 
+                    ' *          ;*#####o ####$  ####&    !#### o####     ####\n' +  
+                    ' *    ####$**&####$ ;####  o####     ####o &####$o$#####\n' +  
+                    ' *   ;o########$    *###   ####!    &####   ;######&!\n' +     
+                    ' *                 ###;\n' +                                 
+                    ' *                  ##o\n' +                                   
+                    ' *                 ;#!\n' +                                     
+                    ' *                 ;\n',
     footer: '/* publish <%= pubtime %> */',
     pubtime : '<%= grunt.template.today("yyyy-mm-dd H:MM:ss") %>',
     // Task configuration.
@@ -98,6 +114,12 @@ module.exports = function(grunt) {
       sinaadToolkit: {
         options : {
           //preserveComments:'some',
+          banner : '/*!\n' + 
+                    ' * sinaadToolkit\n' +
+                    ' * @author acelan <xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
+                    ' * @version 1.0.0\n' +
+                    '<%= logo %>' + 
+                    ' */\n',
           sourceMap: 'sinaadToolkit.js.map'
         },
         files : [
@@ -107,6 +129,12 @@ module.exports = function(grunt) {
       sinaads : {
         options : {
           //preserveComments:'some',
+          banner : '/*!\n' + 
+                    ' * sinaads\n' +
+                    ' * @author acelan<xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
+                    ' * @version 1.0.0\n' +
+                    '<%= logo %>' + 
+                    ' */\n',
           sourceMap: 'sinaads.js.map'
         },
         files : [
@@ -115,12 +143,12 @@ module.exports = function(grunt) {
       },
       media : {
         options : {
-          // banner : '/*!\n' + 
-          //          ' * sinaadToolkit.Media\n' +
-          //          ' * @description 新浪富媒体广告脚本\n' +
-          //          ' * @author acelan <xiaobin8[at]staff.sina.com.cn> zhouyi <zhouyi2[at]staff.sina.com.cn>\n' +
-          //          ' * @version 1.0.0\n' +
-          //          ' */\n',
+          banner : '/*!\n' + 
+                    ' * sinaadToolkit.Media\n' +
+                    ' * @author acelan<xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
+                    ' * @version 1.0.0\n' +
+                    '<%= logo %>' +
+                    ' */\n',
           sourceMap: 'Media.js.map'
         },
         files : [
