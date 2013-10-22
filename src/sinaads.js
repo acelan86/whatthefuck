@@ -305,15 +305,22 @@
             !handlerMap[type] && (handlerMap[type] = handler);
         }
 
-        function _render(type, element, width, height, content, monitor, config) {
+        function _render(type, element, width, height, content, config) {
             var handler = handlerMap[type],
-                _type = type;
+                /**
+                 * _next {
+                 *     type:type, //有后续步骤，即需要进行格式化类型跟内容的后续操作
+                 *     content: content
+                 * }
+                 * 比如，一开始是couplet类型，当格式化后，让它按照embed方式来处理
+                 */
+                _next;
             if ('function' === typeof handler) {
-                _type = handler(element, width, height, content, monitor, config) || type;
+                _next = handler(element, width, height, content, config);
             }
             //上面的处理将媒体类型改变，按照新类型再执行一边render方法
-            if (_type !== type) {
-                _render(_type, element, width, height, content, monitor, config);
+            if (_next && (_next.type !== type)) {
+                _render(_next.type, element, width, height, _next.content, config);
             }
         }
 
@@ -329,8 +336,10 @@
     })();
 
     /** 注册一些常用的广告媒体类型显示方法 */
-    viewModule.register('couplet', function (element, width, height, content, monitor, config) {
+    viewModule.register('couplet', function (element, width, height, content, config) {
         var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/CoupletMedia.js';
+        
+        content = content[0]; //只用第一个内容
         //是跨栏，隐藏掉改区块
         element.style.cssText = 'position:absolute;top:-9999px';
         //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
@@ -349,6 +358,8 @@
                 src         : content.src,
                 type        : content.type,
                 link        : content.link,
+                mainWidth   : width,
+                mainHeight  : height,
                 top         : config.sinaads_couple_top || 0,
                 monitor     : content.monitor || [],
                 delay       : config.sinaads_ad_delay || 0
@@ -363,8 +374,10 @@
         }
     });
 
-    viewModule.register('videoWindow', function (element, width, height, content, monitor, config) {
+    viewModule.register('videoWindow', function (element, width, height, content, config) {
         var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/VideoWindowMedia.js';
+
+        content = content[0];
         element.style.cssText = 'position:absolute;top:-9999px';
         if (content.type[0] !== 'js') {
             var VideoWindowMediaData = {
@@ -388,8 +401,10 @@
         }
     });
 
-    viewModule.register('stream', function (element, width, height, content, monitor, config) {
+    viewModule.register('stream', function (element, width, height, content, config) {
         var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/StreamMedia.js';
+        
+        content = content[0];
         //流媒体，隐藏掉该区块
         element.style.cssText = 'position:absolute;top:-9999px';
         if (content.src.length === 1 && content.type[0] === 'js') {
@@ -417,7 +432,7 @@
                     type    : content.type[1] || 'flash',
                     link    : content.link[1] || content.link[0] || ''
                 },
-                monitor : monitor,
+                monitor : content.monitor,
                 delay : config.sinaads_ad_delay || 0
             };
             if (core.StreamMedia) {
@@ -431,8 +446,10 @@
     });
 
 
-    viewModule.register('fullscreen', function (element, width, height, content, monitor, config) {
+    viewModule.register('fullscreen', function (element, width, height, content, config) {
         var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/FullscreenMedia.js';
+
+        content = content[0];
         element.style.cssText = 'position:absolute;top:-9999px';
         if (content.src.length === 1 && content.type[0] === 'js') {
             //富媒体供应商提供的js
@@ -443,7 +460,7 @@
                 type        : content.type[0] || '',
                 src         : content.src[0] || '',
                 link        : content.link[0] || '',
-                monitor     : monitor,
+                monitor     : content.monitor,
                 width       : width,
                 height      : height,
                 hasClose    : config.sinaads_fullscreen_close || 0,
@@ -459,7 +476,7 @@
         }
     });
 
-    viewModule.register('bp', function (element, width, height, content, monitor, config) {
+    viewModule.register('bp', function (element, width, height, content, config) {
         /**
          * ie(null), firefox(null), safari(undefined)窗口拦截情况下window句柄
          * opera, chrome拦截情况下有window句柄
@@ -471,6 +488,7 @@
          *
          * 如果参数长度大于2000，从后面依此放弃monitor或者link内容，直到合适，无奈之举
          */
+        content = content[0];
         //是背投广告，隐藏掉改区块
         element.style.cssText = 'position:absolute;top:-9999px';
         var par = [
@@ -480,7 +498,7 @@
             width,
             height
         ];
-        core.array.each(monitor, function (url) {
+        core.array.each(content.monitor, function (url) {
             if (url) {
                 par.push(url);
             }
@@ -538,14 +556,16 @@
         // }
     });
 
-    viewModule.register('float', function (element, width, height, content, monitor, config) {
+    viewModule.register('float', function (element, width, height, content, config) {
         var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/FloatMedia.js';
+
+        content = content[0];
         element.style.cssText = 'position:absolute;top:-99999px';
         var FloatMediaData = {
             type : content.type,
             src : content.src,
             top : config.sinaads_float_top || 0,
-            monitor : monitor,
+            monitor : content.monitor,
             link : content.link,
             delay : config.sinaads_ad_delay || 0,
             sideWidth : width,
@@ -561,64 +581,76 @@
         }
     });
 
-    viewModule.register('turning', function (element, width, height, content, monitor, config) {
-        content.src = [
-            core.swf.createHTML({
-                id : 'TurningMedia' + config.sinaads_uid,
-                url : 'http://d3.sina.com.cn/d1images/fanpai/picshow.swf',
-                width : width,
-                height : height,
-                vars : {
-                    ad_num : content.src.length,
-                    pics : content.src.join('§'),
-                    urls : content.link.join('§'),
-                    pic_width : width - 5,
-                    pic_height : height - 5,
-                    flip_time : config.sinaads_turning_flip_duration * 1000 || 300,
-                    pause_time : config.sinaads_turning_flip_delay * 1000 || 4000,
-                    wait_time : config.sinaads_turning_wait * 1000 || 1000
-                }
-            })
+    viewModule.register('turning', function (element, width, height, content, config) {
+        var src = [],
+            link = [],
+            monitor = [],
+            mo,
+            len = content.length;
+        core.array.each(content, function (content) {
+            content.src && content.src[0] && (src.push(content.src[0]));
+            content.link && content.link[0] && (link.push(content.link[0]));
+            mo = core.array.ensureArray(content.monitor).join('|');
+            mo && monitor.push(mo);
+        });
+        content = [
+            {
+                src : [
+                    core.swf.createHTML({
+                        id : 'TurningMedia' + config.sinaads_uid,
+                        url : 'http://d3.sina.com.cn/litong/zhitou/sinaads/release/picshow_new.swf',
+                        width : width,
+                        height : height,
+                        vars : {
+                            ad_num : len,
+                            pics : src.join('§'),
+                            urls : link.join('§'),
+                            monitor : monitor.join('§'),
+                            pic_width : width - 5,
+                            pic_height : height - 5,
+                            flip_time : config.sinaads_turning_flip_duration * 1000 || 300,
+                            pause_time : config.sinaads_turning_flip_delay * 1000 || 4000,
+                            wait_time : config.sinaads_turning_wait * 1000 || 1000
+                        }
+                    })
+                ],
+                type : 'html',
+                link : []
+            }
         ];
-        content.type = ['html'];
-        return 'embed'; //使用embed来解析
+        return {
+            type : 'embed',
+            content : content
+        }; //使用embed来解析
     });
 
-    viewModule.register('textlink', function (element, width, height, content, monitor, config) {
-        var fragmentNode = document.createElement('div'),
-            tpl = config.sinaads_ad_tpl || '';
-        if (core.isFunction(tpl)) {
-            tpl = tpl(content.sinaads_content_index); //传入当前内容是第几条广告内容，返回该条广告内容对应的模版
-        }
-        fragmentNode.innerHTML = core.ad.createHTML(content.type, content.src, 0, 0, content.link, monitor, tpl);
+    viewModule.register('textlink', function (element, width, height, content, config) {
+        var tpl = config.sinaads_ad_tpl || '',
+            html = [];
+        core.array.each(content, function (content, i) {
+            if (core.isFunction(tpl)) {
+                tpl = tpl(i); //传入当前内容是第几条广告内容，返回该条广告内容对应的模版
+            }
+            html.push(core.ad.createHTML(content.type, content.src, 0, 0, content.link, content.monitor, tpl));
+        });
         element.style.cssText += ';text-decoration:none';
-        var childs = fragmentNode.childNodes || [],
-            _childs = [],
-            len = childs.length,
-            i = 0;
-        for (; i < len; i++) {
-            _childs.push(childs[i]);
-        }
-        for (i = 0; i < len; i++) {
-            element.appendChild(_childs[i]);
-            _childs[i] = null;
-        }
-        childs = fragmentNode = null;
-        //element.innerHTML = core.ad.createHTML('text', content.src[0], 0, 0, content.link[0], monitor, config.sinaads_ad_tpl || '');
+        element.innerHTML = html.join('');
     });
 
     viewModule.register('zhitoutextlink', viewModule.handlerMap.textlink);
 
 
-    viewModule.register('tip', function (element, width, height, content, monitor, config) {
+    viewModule.register('tip', function (element, width, height, content, config) {
         var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/TipsMedia.js';
+
+        content = content[0];
         var TipsMediaData = {
                 width : width,
                 height : height,
                 src : content.src,
                 type : content.type,
                 link : content.link,
-                monitor : monitor,
+                monitor : content.monitor,
                 autoShow : 1,
                 top : config.sinaads_tip_top || 0,
                 zIndex : config.sinaads_ad_zindex || 0
@@ -631,8 +663,10 @@
             });
         }
     });
-    viewModule.register('follow', function (element, width, height, content, monitor, config) {
+    viewModule.register('follow', function (element, width, height, content, config) {
         var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/FollowMedia.js';
+
+        content = content[0];
         var FollowMediaData = {
                 main : {
                     width : width,
@@ -648,7 +682,7 @@
                     link : content.link[1] || content.link[0] || '',
                     top : config.sinaads_follow_mini_top || 'bottom'
                 },
-                monitor : monitor,
+                monitor : content.monitor,
                 delay : config.sinaads_ad_delay || 0,
                 duration : config.sinaads_ad_duration || 5
             };
@@ -667,7 +701,10 @@
      * @param  {[type]} config  [description]
      * @return {[type]}         [description]
      */
-    viewModule.register('embed', function (element, width, height, content, monitor, config) {
+    viewModule.register('embed', function (element, width, height, content, config) {
+        //暂时让embed只支持一个广告
+        content = content[0];
+
         var uid         = config.sinaads_uid,
             iframeId    = 'sinaads_iframe_' + uid,
             type        = content.type[0] || '',
@@ -691,7 +728,7 @@
         element.innerHTML = '<ins style="margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';"></ins>';
         element = element.getElementsByTagName('ins')[0];
 
-        adContent = src ? core.ad.createHTML(type, src, width, height, link, monitor) : ''; //广告内容， 如果没有src，则不渲染
+        adContent = src ? core.ad.createHTML(type, src, width, height, link, content.monitor) : ''; //广告内容， 如果没有src，则不渲染
 
         switch (type) {
             case 'text' :
@@ -779,9 +816,8 @@
             core.debug('sinaads:' + config.sinaads_ad_pdps + ', Cannot render this element because the data is unavilable.');
             return;
         }
-        var start = core.now();
-
-        var size    = data.size.split('*'),
+        var start = core.now(),
+            size    = data.size.split('*'),
             width   = config.sinaads_ad_width || (config.sinaads_ad_width = Number(size[0])) || 0,
             height  = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])) || 0;
 
@@ -791,10 +827,27 @@
             content.src    = core.array.ensureArray(content.src);
             content.link   = core.array.ensureArray(content.link);
             content.type   = core.array.ensureArray(content.type);
-            content.sinaads_content_index = i;  //带入该内容在广告中的序号
+            //content.sinaads_content_index = i;  //带入该内容在广告中的序号
             
             var monitor = content.monitor,
-                pv = content.pv;
+                pv = content.pv,
+                link = content.link,
+                pid = content.pid ? 'sudapid=' + content.pid : '';
+
+            //如果存在pid为每个link加上pid
+            core.array.each(link, function (url, i) {
+                var hashFlag,
+                    hash = '',
+                    left = url;
+                if (pid && url) {
+                    hashFlag = url.indexOf('#');
+                    if (hashFlag !== -1) {
+                        hash = url.substr(hashFlag);
+                        left = url.substr(0, hashFlag);
+                    }
+                    link[i] = left + (left.indexOf('?') !== -1 ? '&' : '?') + pid + hash;
+                }
+            });
 
             /* 解析曝光，并注入模版值，发送曝光 */
             core.array.each(pv, function (url, i) {
@@ -807,26 +860,25 @@
                 monitor[i] = core.monitor.parseTpl(url, config);
                 core.debug('sinaads:Recording the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
             });
-
-            /** 
-             * 按照媒体类型渲染广告
-             */
-            viewModule.render(
-                config.sinaads_ad_type || data.type,
-                element,
-                width,
-                height,
-                content,
-                monitor,
-                config
-            );
-
-
-            //如果需要高亮广告位，则在广告位外部加上高亮标记
-            if (data.highlight && (config.sinaads_ad_type || data.type) === 'embed') {
-                element.style.outline = '2px solid #f00';
-            }
         });
+
+        /** 
+         * 按照媒体类型渲染广告
+         */
+        viewModule.render(
+            config.sinaads_ad_type || data.type,
+            element,
+            width,
+            height,
+            data.content,
+            config
+        );
+
+
+        //如果需要高亮广告位，则在广告位外部加上高亮标记
+        if (data.highlight && (config.sinaads_ad_type || data.type) === 'embed') {
+            element.style.outline = '2px solid #f00';
+        }
 
         core.debug('sinaads:Ads Rendering is complete. (time elpased:' + (core.now() - start) + 'ms)');
     }

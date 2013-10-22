@@ -67,14 +67,30 @@ _sinaadsCacheData["PDPS000000000100"] = {
     content : [
         {
             pv : ['http://123.126.53.109/click?type=3&t=MjAxMy0wOC0xOSAwOToyOTo1Nwk2MS4xMzUuMTUyLjIxMQkJLQlQRFBTMDAwMDAwMDQ3MjExCTZlNjJhZWVlLTczZmYtNDNlZS04Y2U0LWQzMDBhODIyM2Q2NAlmMDlkZTAzNGJlYjgJZjA5ZGUwMzRiZWI4CV92X3pvbmU6MzAyMDAwLDMwMjAwMHx2X3pvbmU6MzAyMDAwLDMwMjAwMHxwb3M6UERQUzAwMDAwMDA0NzIxMSxQRFBTMDAwMDAwMDQyMTM1LFBEUFMwMDAwMDAwMDY0NTAsUERQUzAwMDAwMDA0MjEzNQkJMzAyMDA'],
-            type : ['image', 'image', 'image'],
+            type : ['image'],
             src : [
-                'http://d5.sina.com.cn/201304/03/483869_jiaoyuzuocefp01-jmb.jpg',
-                'http://d3.sina.com.cn/201304/03/483870_jiaoyuzuocefp02-jmb.jpg',   
+                'http://d5.sina.com.cn/201304/03/483869_jiaoyuzuocefp01-jmb.jpg'
+            ],
+            monitor : ["http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore","http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore"],
+            link : ['http://www.gjjy.org.cn/', 'http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore&url=http://www.gjjy.org.cn/']
+        },
+        {
+            pv : ['http://123.126.53.109/click?type=3&t=MjAxMy0wOC0xOSAwOToyOTo1Nwk2MS4xMzUuMTUyLjIxMQkJLQlQRFBTMDAwMDAwMDQ3MjExCTZlNjJhZWVlLTczZmYtNDNlZS04Y2U0LWQzMDBhODIyM2Q2NAlmMDlkZTAzNGJlYjgJZjA5ZGUwMzRiZWI4CV92X3pvbmU6MzAyMDAwLDMwMjAwMHx2X3pvbmU6MzAyMDAwLDMwMjAwMHxwb3M6UERQUzAwMDAwMDA0NzIxMSxQRFBTMDAwMDAwMDQyMTM1LFBEUFMwMDAwMDAwMDY0NTAsUERQUzAwMDAwMDA0MjEzNQkJMzAyMDA'],
+            type : ['image'],
+            src : [
+                'http://d3.sina.com.cn/201304/03/483870_jiaoyuzuocefp02-jmb.jpg'
+            ],
+            monitor : ["http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore","http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore"],
+            link : ['http://www.gjjy.org.cn/', 'http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore&url=http://www.gjjy.org.cn/']
+        },
+        {
+            pv : ['http://123.126.53.109/click?type=3&t=MjAxMy0wOC0xOSAwOToyOTo1Nwk2MS4xMzUuMTUyLjIxMQkJLQlQRFBTMDAwMDAwMDQ3MjExCTZlNjJhZWVlLTczZmYtNDNlZS04Y2U0LWQzMDBhODIyM2Q2NAlmMDlkZTAzNGJlYjgJZjA5ZGUwMzRiZWI4CV92X3pvbmU6MzAyMDAwLDMwMjAwMHx2X3pvbmU6MzAyMDAwLDMwMjAwMHxwb3M6UERQUzAwMDAwMDA0NzIxMSxQRFBTMDAwMDAwMDQyMTM1LFBEUFMwMDAwMDAwMDY0NTAsUERQUzAwMDAwMDA0MjEzNQkJMzAyMDA'],
+            type : ['image'],
+            src : [  
                 'http://d3.sina.com.cn/200912/31/205332_12090.jpg'
             ],
-            monitor : ["http://stream.com"],
-            link : ['http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore&url=http://www.gjjy.org.cn/', 'http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore&url=http://www.gjjy.org.cn/']
+            monitor : ["http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore","http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore"],
+            link : ['http://www.gjjy.org.cn/', 'http://sina.allyes.com/main/adfclick?db=sina&bid=538707,604995,610265&cid=0,0,0&sid=613325&advid=2618&camid=93524&show=ignore&url=http://www.gjjy.org.cn/']
         }
     ]
 };
