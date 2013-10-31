@@ -1,0 +1,2318 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', '-g', 'install', 'jshint' ]
+2 info using npm@1.2.23
+3 info using node@v0.10.8
+4 verbose cache add [ 'jshint', null ]
+5 verbose cache add name=undefined spec="jshint" args=["jshint",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'jshint',
+6 verbose parsed url   path: 'jshint',
+6 verbose parsed url   href: 'jshint' }
+7 silly lockFile da5c03cb-jshint jshint
+8 verbose lock jshint /Users/acelan/.npm/da5c03cb-jshint.lock
+9 silly lockFile da5c03cb-jshint jshint
+10 silly lockFile da5c03cb-jshint jshint
+11 verbose addNamed [ 'jshint', '' ]
+12 verbose addNamed [ null, '' ]
+13 silly lockFile a02a2468-jshint jshint@
+14 verbose lock jshint@ /Users/acelan/.npm/a02a2468-jshint.lock
+15 silly addNameRange { name: 'jshint', range: '', hasData: false }
+16 verbose url raw jshint
+17 verbose url resolving [ 'https://registry.npmjs.org/', './jshint' ]
+18 verbose url resolved https://registry.npmjs.org/jshint
+19 info trying registry request attempt 1 at 11:15:07
+20 verbose etag "329TR56RE9SSX7SCUB3KD058O"
+21 http GET https://registry.npmjs.org/jshint
+22 http 304 https://registry.npmjs.org/jshint
+23 silly registry.get cb [ 304,
+23 silly registry.get   { server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+23 silly registry.get     etag: '"329TR56RE9SSX7SCUB3KD058O"',
+23 silly registry.get     date: 'Thu, 31 Oct 2013 03:15:07 GMT',
+23 silly registry.get     'content-length': '0' } ]
+24 verbose etag jshint from cache
+25 silly addNameRange number 2 { name: 'jshint', range: '', hasData: true }
+26 silly addNameRange versions [ 'jshint',
+26 silly addNameRange   [ '0.1.8',
+26 silly addNameRange     '0.1.9',
+26 silly addNameRange     '0.2.0',
+26 silly addNameRange     '0.2.1',
+26 silly addNameRange     '0.2.2',
+26 silly addNameRange     '0.2.3',
+26 silly addNameRange     '0.3.0',
+26 silly addNameRange     '0.3.1',
+26 silly addNameRange     '0.4.0',
+26 silly addNameRange     '0.5.0',
+26 silly addNameRange     '0.5.1',
+26 silly addNameRange     '0.5.2',
+26 silly addNameRange     '0.5.3',
+26 silly addNameRange     '0.5.4',
+26 silly addNameRange     '0.5.5',
+26 silly addNameRange     '0.5.6',
+26 silly addNameRange     '0.5.7',
+26 silly addNameRange     '0.5.8',
+26 silly addNameRange     '0.5.9',
+26 silly addNameRange     '0.6.0',
+26 silly addNameRange     '0.6.1',
+26 silly addNameRange     '0.6.2',
+26 silly addNameRange     '0.6.3',
+26 silly addNameRange     '0.7.0',
+26 silly addNameRange     '0.7.1',
+26 silly addNameRange     '0.7.2',
+26 silly addNameRange     '0.7.3',
+26 silly addNameRange     '0.8.0',
+26 silly addNameRange     '0.8.1',
+26 silly addNameRange     '0.8.2',
+26 silly addNameRange     '0.9.0',
+26 silly addNameRange     '0.9.1',
+26 silly addNameRange     '1.0.0',
+26 silly addNameRange     '1.1.0',
+26 silly addNameRange     '2.0.0',
+26 silly addNameRange     '2.0.1',
+26 silly addNameRange     '2.1.0',
+26 silly addNameRange     '2.1.1',
+26 silly addNameRange     '2.1.2',
+26 silly addNameRange     '2.1.3',
+26 silly addNameRange     '2.1.4',
+26 silly addNameRange     '2.1.5',
+26 silly addNameRange     '2.1.6',
+26 silly addNameRange     '2.1.7',
+26 silly addNameRange     '2.1.8',
+26 silly addNameRange     '2.1.9',
+26 silly addNameRange     '2.1.10',
+26 silly addNameRange     '2.1.11',
+26 silly addNameRange     '2.2.0',
+26 silly addNameRange     '2.3.0' ] ]
+27 verbose addNamed [ 'jshint', '2.3.0' ]
+28 verbose addNamed [ '2.3.0', '2.3.0' ]
+29 silly lockFile 8841ddaf-jshint-2-3-0 jshint@2.3.0
+30 verbose lock jshint@2.3.0 /Users/acelan/.npm/8841ddaf-jshint-2-3-0.lock
+31 silly lockFile 8841ddaf-jshint-2-3-0 jshint@2.3.0
+32 silly lockFile 8841ddaf-jshint-2-3-0 jshint@2.3.0
+33 silly lockFile a02a2468-jshint jshint@
+34 silly lockFile a02a2468-jshint jshint@
+35 silly resolved [ { name: 'jshint',
+35 silly resolved     version: '2.3.0',
+35 silly resolved     homepage: 'http://jshint.com/',
+35 silly resolved     description: 'Static analysis tool for JavaScript',
+35 silly resolved     author:
+35 silly resolved      { name: 'Anton Kovalyov',
+35 silly resolved        email: 'anton@kovalyov.net',
+35 silly resolved        url: 'http://anton.kovalyov.net/' },
+35 silly resolved     repository: { type: 'git', url: 'https://github.com/jshint/jshint.git' },
+35 silly resolved     bugs: { url: 'https://github.com/jshint/jshint/issues' },
+35 silly resolved     bin: { jshint: './bin/jshint' },
+35 silly resolved     scripts:
+35 silly resolved      { data: 'node scripts/generate-identifier-data',
+35 silly resolved        build: 'node bin/build',
+35 silly resolved        test: 'nodeunit tests tests/regression tests/unit',
+35 silly resolved        pretest: 'jshint src' },
+35 silly resolved     main: './src/jshint.js',
+35 silly resolved     dependencies:
+35 silly resolved      { shelljs: '0.1.x',
+35 silly resolved        underscore: '1.4.x',
+35 silly resolved        cli: '0.4.x',
+35 silly resolved        minimatch: '0.x.x',
+35 silly resolved        'console-browserify': '0.1.x' },
+35 silly resolved     devDependencies:
+35 silly resolved      { jshint: '2.3.x',
+35 silly resolved        shelljs: '0.1.x',
+35 silly resolved        browserify: '2.12.x',
+35 silly resolved        coveraje: '0.2.x',
+35 silly resolved        nodeunit: '0.8.x',
+35 silly resolved        sinon: '1.7.x',
+35 silly resolved        'unicode-6.3.0': '0.1.x',
+35 silly resolved        regenerate: '0.5.x' },
+35 silly resolved     jshintConfig:
+35 silly resolved      { boss: true,
+35 silly resolved        node: true,
+35 silly resolved        strict: true,
+35 silly resolved        white: true,
+35 silly resolved        smarttabs: true,
+35 silly resolved        maxlen: 100,
+35 silly resolved        newcap: false,
+35 silly resolved        undef: true,
+35 silly resolved        unused: true,
+35 silly resolved        onecase: true,
+35 silly resolved        indent: 2 },
+35 silly resolved     licenses: [ [Object] ],
+35 silly resolved     preferGlobal: true,
+35 silly resolved     files: [ 'bin', 'src', 'data' ],
+35 silly resolved     readme: 'JSHint, A Static Code Analysis Tool for JavaScript\n--------------------------------------------------\n\n\\[ [Use it online](http://jshint.com/) •  [About](http://jshint.com/about/) • \n[Docs](http://jshint.com/docs/) • [FAQ](http://jshint.com/docs/faq) • \n[Install](http://jshint.com/install/) • [Hack](http://jshint.com/hack/) • \n[Blog](http://jshint.com/blog/) • [Twitter](https://twitter.com/jshint/) \\]\n\n[![Build Status](https://travis-ci.org/jshint/jshint.png?branch=master)](https://travis-ci.org/jshint/jshint)\n[![NPM version](https://badge.fury.io/js/jshint.png)](http://badge.fury.io/js/jshint)\n\nJSHint is a community-driven tool to detect errors and potential problems\nin JavaScript code and to enforce your team’s coding conventions. It is\nvery flexible so you can easily adjust it to your particular coding guidelines\nand the environment you expect your code to execute in.\n\n#### JSHint 2.x versus JSHint 3\n\nThere\'s an effort going on to release the next major version of JSHint. All\ndevelopment in the `master` branch is for the version 3.0. Current stable\nversion is in the `2.x` branch. Keep that in mind when submitting pull requests.\n\nAlso, before reporting a bug or thinking about hacking on JSHint, read this:\n[JSHint 3 plans](http://www.jshint.com/blog/jshint-3-plans/). TL;DR: we\'re\nmoving away from style checks within JSHint so no new features around\nstyle checks will be accepted. Bug fixes are fine for the `2.x` branch.\n\n#### Reporting a bug\n\nTo report a bug simply create a\n[new GitHub Issue](https://github.com/jshint/jshint/issues/new) and describe\nyour problem or suggestion. We welcome all kind of feedback regarding\nJSHint including but not limited to:\n\n * When JSHint doesn\'t work as expected\n * When JSHint complains about valid JavaScript code that works in all browsers\n * When you simply want a new option or feature\n\nBefore reporting a bug look around to see if there are any open or closed tickets\nthat cover your issue. And remember the wisdom: pull request > bug report > tweet.\n\n\n#### License\n\nJSHint is distributed under the MIT License. One file and one file only\n(src/stable/jshint.js) is distributed under the slightly modified MIT License.\n\n\n#### Thank you!\n\nWe really appreciate all kind of feedback and contributions. Thanks for using and supporting JSHint!\n',
+35 silly resolved     readmeFilename: 'README.md',
+35 silly resolved     _id: 'jshint@2.3.0',
+35 silly resolved     _from: 'jshint@' } ]
+36 info install jshint@2.3.0 into /usr/local/lib
+37 info installOne jshint@2.3.0
+38 info /usr/local/lib/node_modules/jshint unbuild
+39 verbose tar unpack /Users/acelan/.npm/jshint/2.3.0/package.tgz
+40 silly lockFile 60c9d5e1-sr-local-lib-node-modules-jshint /usr/local/lib/node_modules/jshint
+41 verbose lock /usr/local/lib/node_modules/jshint /Users/acelan/.npm/60c9d5e1-sr-local-lib-node-modules-jshint.lock
+42 silly lockFile 6079e75b-lan-npm-jshint-2-3-0-package-tgz /Users/acelan/.npm/jshint/2.3.0/package.tgz
+43 verbose lock /Users/acelan/.npm/jshint/2.3.0/package.tgz /Users/acelan/.npm/6079e75b-lan-npm-jshint-2-3-0-package-tgz.lock
+44 silly gunzTarPerm modes [ '755', '644' ]
+45 silly gunzTarPerm extractEntry package.json
+46 silly gunzTarPerm extractEntry README.md
+47 silly gunzTarPerm extractEntry bin/apply
+48 silly gunzTarPerm extractEntry bin/build
+49 silly gunzTarPerm extractEntry bin/changelog
+50 silly gunzTarPerm extractEntry bin/jshint
+51 silly gunzTarPerm extractEntry bin/land
+52 silly gunzTarPerm extractEntry data/ascii-identifier-data.js
+53 silly gunzTarPerm extractEntry data/non-ascii-identifier-part-only.js
+54 silly gunzTarPerm extractEntry data/non-ascii-identifier-start.js
+55 silly gunzTarPerm extractEntry src/cli.js
+56 silly gunzTarPerm extractEntry src/jshint.js
+57 silly gunzTarPerm extractEntry src/lex.js
+58 silly gunzTarPerm extractEntry src/messages.js
+59 silly gunzTarPerm extractEntry src/reg.js
+60 silly gunzTarPerm extractEntry src/state.js
+61 silly gunzTarPerm extractEntry src/style.js
+62 silly gunzTarPerm extractEntry src/vars.js
+63 silly gunzTarPerm extractEntry src/platforms/rhino.js
+64 silly gunzTarPerm extractEntry src/reporters/checkstyle.js
+65 silly gunzTarPerm extractEntry src/reporters/default.js
+66 silly gunzTarPerm extractEntry src/reporters/jslint_xml.js
+67 silly gunzTarPerm extractEntry src/reporters/non_error.js
+68 silly lockFile 60c9d5e1-sr-local-lib-node-modules-jshint /usr/local/lib/node_modules/jshint
+69 silly lockFile 60c9d5e1-sr-local-lib-node-modules-jshint /usr/local/lib/node_modules/jshint
+70 silly lockFile 6079e75b-lan-npm-jshint-2-3-0-package-tgz /Users/acelan/.npm/jshint/2.3.0/package.tgz
+71 silly lockFile 6079e75b-lan-npm-jshint-2-3-0-package-tgz /Users/acelan/.npm/jshint/2.3.0/package.tgz
+72 info preinstall jshint@2.3.0
+73 verbose readDependencies using package.json deps
+74 verbose readDependencies using package.json deps
+75 verbose cache add [ 'cli@0.4.x', null ]
+76 verbose cache add name=undefined spec="cli@0.4.x" args=["cli@0.4.x",null]
+77 verbose parsed url { protocol: null,
+77 verbose parsed url   slashes: null,
+77 verbose parsed url   auth: null,
+77 verbose parsed url   host: null,
+77 verbose parsed url   port: null,
+77 verbose parsed url   hostname: null,
+77 verbose parsed url   hash: null,
+77 verbose parsed url   search: null,
+77 verbose parsed url   query: null,
+77 verbose parsed url   pathname: 'cli@0.4.x',
+77 verbose parsed url   path: 'cli@0.4.x',
+77 verbose parsed url   href: 'cli@0.4.x' }
+78 verbose cache add name="cli" spec="0.4.x" args=["cli","0.4.x"]
+79 verbose parsed url { protocol: null,
+79 verbose parsed url   slashes: null,
+79 verbose parsed url   auth: null,
+79 verbose parsed url   host: null,
+79 verbose parsed url   port: null,
+79 verbose parsed url   hostname: null,
+79 verbose parsed url   hash: null,
+79 verbose parsed url   search: null,
+79 verbose parsed url   query: null,
+79 verbose parsed url   pathname: '0.4.x',
+79 verbose parsed url   path: '0.4.x',
+79 verbose parsed url   href: '0.4.x' }
+80 verbose addNamed [ 'cli', '0.4.x' ]
+81 verbose addNamed [ null, '>=0.4.0- <0.5.0-' ]
+82 silly lockFile c9212ae8-cli-0-4-x cli@0.4.x
+83 verbose lock cli@0.4.x /Users/acelan/.npm/c9212ae8-cli-0-4-x.lock
+84 verbose cache add [ 'shelljs@0.1.x', null ]
+85 verbose cache add name=undefined spec="shelljs@0.1.x" args=["shelljs@0.1.x",null]
+86 verbose parsed url { protocol: null,
+86 verbose parsed url   slashes: null,
+86 verbose parsed url   auth: null,
+86 verbose parsed url   host: null,
+86 verbose parsed url   port: null,
+86 verbose parsed url   hostname: null,
+86 verbose parsed url   hash: null,
+86 verbose parsed url   search: null,
+86 verbose parsed url   query: null,
+86 verbose parsed url   pathname: 'shelljs@0.1.x',
+86 verbose parsed url   path: 'shelljs@0.1.x',
+86 verbose parsed url   href: 'shelljs@0.1.x' }
+87 verbose cache add name="shelljs" spec="0.1.x" args=["shelljs","0.1.x"]
+88 verbose parsed url { protocol: null,
+88 verbose parsed url   slashes: null,
+88 verbose parsed url   auth: null,
+88 verbose parsed url   host: null,
+88 verbose parsed url   port: null,
+88 verbose parsed url   hostname: null,
+88 verbose parsed url   hash: null,
+88 verbose parsed url   search: null,
+88 verbose parsed url   query: null,
+88 verbose parsed url   pathname: '0.1.x',
+88 verbose parsed url   path: '0.1.x',
+88 verbose parsed url   href: '0.1.x' }
+89 verbose addNamed [ 'shelljs', '0.1.x' ]
+90 verbose addNamed [ null, '>=0.1.0- <0.2.0-' ]
+91 silly lockFile cc65d7ed-shelljs-0-1-x shelljs@0.1.x
+92 verbose lock shelljs@0.1.x /Users/acelan/.npm/cc65d7ed-shelljs-0-1-x.lock
+93 verbose cache add [ 'underscore@1.4.x', null ]
+94 verbose cache add name=undefined spec="underscore@1.4.x" args=["underscore@1.4.x",null]
+95 verbose parsed url { protocol: null,
+95 verbose parsed url   slashes: null,
+95 verbose parsed url   auth: null,
+95 verbose parsed url   host: null,
+95 verbose parsed url   port: null,
+95 verbose parsed url   hostname: null,
+95 verbose parsed url   hash: null,
+95 verbose parsed url   search: null,
+95 verbose parsed url   query: null,
+95 verbose parsed url   pathname: 'underscore@1.4.x',
+95 verbose parsed url   path: 'underscore@1.4.x',
+95 verbose parsed url   href: 'underscore@1.4.x' }
+96 verbose cache add name="underscore" spec="1.4.x" args=["underscore","1.4.x"]
+97 verbose parsed url { protocol: null,
+97 verbose parsed url   slashes: null,
+97 verbose parsed url   auth: null,
+97 verbose parsed url   host: null,
+97 verbose parsed url   port: null,
+97 verbose parsed url   hostname: null,
+97 verbose parsed url   hash: null,
+97 verbose parsed url   search: null,
+97 verbose parsed url   query: null,
+97 verbose parsed url   pathname: '1.4.x',
+97 verbose parsed url   path: '1.4.x',
+97 verbose parsed url   href: '1.4.x' }
+98 verbose addNamed [ 'underscore', '1.4.x' ]
+99 verbose addNamed [ null, '>=1.4.0- <1.5.0-' ]
+100 silly lockFile 53dcd9dd-underscore-1-4-x underscore@1.4.x
+101 verbose lock underscore@1.4.x /Users/acelan/.npm/53dcd9dd-underscore-1-4-x.lock
+102 silly addNameRange { name: 'cli', range: '>=0.4.0- <0.5.0-', hasData: false }
+103 silly addNameRange { name: 'shelljs', range: '>=0.1.0- <0.2.0-', hasData: false }
+104 verbose cache add [ 'minimatch@0.x.x', null ]
+105 verbose cache add name=undefined spec="minimatch@0.x.x" args=["minimatch@0.x.x",null]
+106 verbose parsed url { protocol: null,
+106 verbose parsed url   slashes: null,
+106 verbose parsed url   auth: null,
+106 verbose parsed url   host: null,
+106 verbose parsed url   port: null,
+106 verbose parsed url   hostname: null,
+106 verbose parsed url   hash: null,
+106 verbose parsed url   search: null,
+106 verbose parsed url   query: null,
+106 verbose parsed url   pathname: 'minimatch@0.x.x',
+106 verbose parsed url   path: 'minimatch@0.x.x',
+106 verbose parsed url   href: 'minimatch@0.x.x' }
+107 verbose cache add name="minimatch" spec="0.x.x" args=["minimatch","0.x.x"]
+108 verbose parsed url { protocol: null,
+108 verbose parsed url   slashes: null,
+108 verbose parsed url   auth: null,
+108 verbose parsed url   host: null,
+108 verbose parsed url   port: null,
+108 verbose parsed url   hostname: null,
+108 verbose parsed url   hash: null,
+108 verbose parsed url   search: null,
+108 verbose parsed url   query: null,
+108 verbose parsed url   pathname: '0.x.x',
+108 verbose parsed url   path: '0.x.x',
+108 verbose parsed url   href: '0.x.x' }
+109 verbose addNamed [ 'minimatch', '0.x.x' ]
+110 verbose addNamed [ null, '>=0.0.0- <1.0.0-' ]
+111 silly lockFile 38c78372-minimatch-0-x-x minimatch@0.x.x
+112 verbose lock minimatch@0.x.x /Users/acelan/.npm/38c78372-minimatch-0-x-x.lock
+113 verbose cache add [ 'console-browserify@0.1.x', null ]
+114 verbose cache add name=undefined spec="console-browserify@0.1.x" args=["console-browserify@0.1.x",null]
+115 verbose parsed url { protocol: null,
+115 verbose parsed url   slashes: null,
+115 verbose parsed url   auth: null,
+115 verbose parsed url   host: null,
+115 verbose parsed url   port: null,
+115 verbose parsed url   hostname: null,
+115 verbose parsed url   hash: null,
+115 verbose parsed url   search: null,
+115 verbose parsed url   query: null,
+115 verbose parsed url   pathname: 'console-browserify@0.1.x',
+115 verbose parsed url   path: 'console-browserify@0.1.x',
+115 verbose parsed url   href: 'console-browserify@0.1.x' }
+116 verbose cache add name="console-browserify" spec="0.1.x" args=["console-browserify","0.1.x"]
+117 verbose parsed url { protocol: null,
+117 verbose parsed url   slashes: null,
+117 verbose parsed url   auth: null,
+117 verbose parsed url   host: null,
+117 verbose parsed url   port: null,
+117 verbose parsed url   hostname: null,
+117 verbose parsed url   hash: null,
+117 verbose parsed url   search: null,
+117 verbose parsed url   query: null,
+117 verbose parsed url   pathname: '0.1.x',
+117 verbose parsed url   path: '0.1.x',
+117 verbose parsed url   href: '0.1.x' }
+118 verbose addNamed [ 'console-browserify', '0.1.x' ]
+119 verbose addNamed [ null, '>=0.1.0- <0.2.0-' ]
+120 silly lockFile e69eec4c-console-browserify-0-1-x console-browserify@0.1.x
+121 verbose lock console-browserify@0.1.x /Users/acelan/.npm/e69eec4c-console-browserify-0-1-x.lock
+122 silly addNameRange { name: 'underscore', range: '>=1.4.0- <1.5.0-', hasData: false }
+123 silly addNameRange { name: 'minimatch', range: '>=0.0.0- <1.0.0-', hasData: false }
+124 silly addNameRange { name: 'console-browserify',
+124 silly addNameRange   range: '>=0.1.0- <0.2.0-',
+124 silly addNameRange   hasData: false }
+125 verbose url raw cli
+126 verbose url resolving [ 'https://registry.npmjs.org/', './cli' ]
+127 verbose url resolved https://registry.npmjs.org/cli
+128 info trying registry request attempt 1 at 11:15:17
+129 verbose etag "22PZAKGQ2TRANTUMT2LYDK4ZS"
+130 http GET https://registry.npmjs.org/cli
+131 verbose url raw shelljs
+132 verbose url resolving [ 'https://registry.npmjs.org/', './shelljs' ]
+133 verbose url resolved https://registry.npmjs.org/shelljs
+134 info trying registry request attempt 1 at 11:15:17
+135 verbose etag "ERIK2MR0RW2LVBLY2DLH5LME4"
+136 http GET https://registry.npmjs.org/shelljs
+137 verbose url raw underscore
+138 verbose url resolving [ 'https://registry.npmjs.org/', './underscore' ]
+139 verbose url resolved https://registry.npmjs.org/underscore
+140 info trying registry request attempt 1 at 11:15:17
+141 verbose etag "5B5TFBCUD4EE1HARVYGBG8GFE"
+142 http GET https://registry.npmjs.org/underscore
+143 verbose url raw minimatch
+144 verbose url resolving [ 'https://registry.npmjs.org/', './minimatch' ]
+145 verbose url resolved https://registry.npmjs.org/minimatch
+146 info trying registry request attempt 1 at 11:15:17
+147 verbose etag "433GUXE31BY78MEUH5M7CIXOG"
+148 http GET https://registry.npmjs.org/minimatch
+149 verbose url raw console-browserify
+150 verbose url resolving [ 'https://registry.npmjs.org/', './console-browserify' ]
+151 verbose url resolved https://registry.npmjs.org/console-browserify
+152 info trying registry request attempt 1 at 11:15:17
+153 verbose etag "BADWRBQ30PDH0V43BRFUYTFKX"
+154 http GET https://registry.npmjs.org/console-browserify
+155 http 304 https://registry.npmjs.org/cli
+156 silly registry.get cb [ 304,
+156 silly registry.get   { server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+156 silly registry.get     etag: '"22PZAKGQ2TRANTUMT2LYDK4ZS"',
+156 silly registry.get     date: 'Thu, 31 Oct 2013 03:15:15 GMT',
+156 silly registry.get     'content-length': '0' } ]
+157 verbose etag cli from cache
+158 http 304 https://registry.npmjs.org/shelljs
+159 silly registry.get cb [ 304,
+159 silly registry.get   { server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+159 silly registry.get     etag: '"ERIK2MR0RW2LVBLY2DLH5LME4"',
+159 silly registry.get     date: 'Thu, 31 Oct 2013 03:15:15 GMT',
+159 silly registry.get     'content-length': '0' } ]
+160 verbose etag shelljs from cache
+161 silly addNameRange number 2 { name: 'cli', range: '>=0.4.0- <0.5.0-', hasData: true }
+162 silly addNameRange versions [ 'cli',
+162 silly addNameRange   [ '0.1.0',
+162 silly addNameRange     '0.1.1',
+162 silly addNameRange     '0.1.3',
+162 silly addNameRange     '0.1.4',
+162 silly addNameRange     '0.1.5',
+162 silly addNameRange     '0.1.6',
+162 silly addNameRange     '0.1.7',
+162 silly addNameRange     '0.1.8',
+162 silly addNameRange     '0.1.9',
+162 silly addNameRange     '0.2.0',
+162 silly addNameRange     '0.2.1-1',
+162 silly addNameRange     '0.2.2-1',
+162 silly addNameRange     '0.2.3-1',
+162 silly addNameRange     '0.2.3-2',
+162 silly addNameRange     '0.2.3-3',
+162 silly addNameRange     '0.2.3-4',
+162 silly addNameRange     '0.2.3-5',
+162 silly addNameRange     '0.2.4-1',
+162 silly addNameRange     '0.2.4-2',
+162 silly addNameRange     '0.2.5',
+162 silly addNameRange     '0.2.6',
+162 silly addNameRange     '0.2.7',
+162 silly addNameRange     '0.2.8',
+162 silly addNameRange     '0.3.0',
+162 silly addNameRange     '0.3.1',
+162 silly addNameRange     '0.3.2',
+162 silly addNameRange     '0.3.3',
+162 silly addNameRange     '0.3.4',
+162 silly addNameRange     '0.3.5',
+162 silly addNameRange     '0.3.6',
+162 silly addNameRange     '0.3.7',
+162 silly addNameRange     '0.3.8',
+162 silly addNameRange     '0.3.9',
+162 silly addNameRange     '0.4.0',
+162 silly addNameRange     '0.4.1',
+162 silly addNameRange     '0.4.2',
+162 silly addNameRange     '0.4.3',
+162 silly addNameRange     '0.4.4',
+162 silly addNameRange     '0.4.4-1',
+162 silly addNameRange     '0.4.4-2',
+162 silly addNameRange     '0.4.5' ] ]
+163 verbose addNamed [ 'cli', '0.4.5' ]
+164 verbose addNamed [ '0.4.5', '0.4.5' ]
+165 silly lockFile f66b4835-cli-0-4-5 cli@0.4.5
+166 verbose lock cli@0.4.5 /Users/acelan/.npm/f66b4835-cli-0-4-5.lock
+167 silly addNameRange number 2 { name: 'shelljs', range: '>=0.1.0- <0.2.0-', hasData: true }
+168 silly addNameRange versions [ 'shelljs',
+168 silly addNameRange   [ '0.0.1',
+168 silly addNameRange     '0.0.2',
+168 silly addNameRange     '0.0.3',
+168 silly addNameRange     '0.0.4',
+168 silly addNameRange     '0.0.5',
+168 silly addNameRange     '0.0.6',
+168 silly addNameRange     '0.0.7',
+168 silly addNameRange     '0.0.8',
+168 silly addNameRange     '0.0.9',
+168 silly addNameRange     '0.1.0',
+168 silly addNameRange     '0.1.1',
+168 silly addNameRange     '0.1.2',
+168 silly addNameRange     '0.1.3',
+168 silly addNameRange     '0.1.4',
+168 silly addNameRange     '0.2.0',
+168 silly addNameRange     '0.2.1',
+168 silly addNameRange     '0.2.2',
+168 silly addNameRange     '0.2.3',
+168 silly addNameRange     '0.2.4',
+168 silly addNameRange     '0.2.5',
+168 silly addNameRange     '0.2.6',
+168 silly addNameRange     '0.0.1-alpha1',
+168 silly addNameRange     '0.0.2-pre1',
+168 silly addNameRange     '0.0.4-pre1',
+168 silly addNameRange     '0.0.5-pre1',
+168 silly addNameRange     '0.0.5-pre2',
+168 silly addNameRange     '0.0.5-pre3',
+168 silly addNameRange     '0.0.5-pre4',
+168 silly addNameRange     '0.0.6-pre1',
+168 silly addNameRange     '0.0.6-pre2' ] ]
+169 verbose addNamed [ 'shelljs', '0.1.4' ]
+170 verbose addNamed [ '0.1.4', '0.1.4' ]
+171 silly lockFile 77595a32-shelljs-0-1-4 shelljs@0.1.4
+172 verbose lock shelljs@0.1.4 /Users/acelan/.npm/77595a32-shelljs-0-1-4.lock
+173 http 304 https://registry.npmjs.org/minimatch
+174 silly registry.get cb [ 304,
+174 silly registry.get   { server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+174 silly registry.get     etag: '"433GUXE31BY78MEUH5M7CIXOG"',
+174 silly registry.get     date: 'Thu, 31 Oct 2013 03:15:15 GMT',
+174 silly registry.get     'content-length': '0' } ]
+175 verbose etag minimatch from cache
+176 silly addNameRange number 2 { name: 'minimatch', range: '>=0.0.0- <1.0.0-', hasData: true }
+177 silly addNameRange versions [ 'minimatch',
+177 silly addNameRange   [ '0.0.1',
+177 silly addNameRange     '0.0.2',
+177 silly addNameRange     '0.0.4',
+177 silly addNameRange     '0.0.5',
+177 silly addNameRange     '0.1.1',
+177 silly addNameRange     '0.1.2',
+177 silly addNameRange     '0.1.3',
+177 silly addNameRange     '0.1.4',
+177 silly addNameRange     '0.1.5',
+177 silly addNameRange     '0.2.0',
+177 silly addNameRange     '0.2.2',
+177 silly addNameRange     '0.2.3',
+177 silly addNameRange     '0.2.4',
+177 silly addNameRange     '0.2.5',
+177 silly addNameRange     '0.2.6',
+177 silly addNameRange     '0.2.7',
+177 silly addNameRange     '0.2.8',
+177 silly addNameRange     '0.2.9',
+177 silly addNameRange     '0.2.10',
+177 silly addNameRange     '0.2.11',
+177 silly addNameRange     '0.2.12' ] ]
+178 verbose addNamed [ 'minimatch', '0.2.12' ]
+179 verbose addNamed [ '0.2.12', '0.2.12' ]
+180 silly lockFile 16b89810-minimatch-0-2-12 minimatch@0.2.12
+181 verbose lock minimatch@0.2.12 /Users/acelan/.npm/16b89810-minimatch-0-2-12.lock
+182 silly lockFile f66b4835-cli-0-4-5 cli@0.4.5
+183 silly lockFile f66b4835-cli-0-4-5 cli@0.4.5
+184 silly lockFile c9212ae8-cli-0-4-x cli@0.4.x
+185 silly lockFile c9212ae8-cli-0-4-x cli@0.4.x
+186 http 304 https://registry.npmjs.org/underscore
+187 silly registry.get cb [ 304,
+187 silly registry.get   { server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+187 silly registry.get     etag: '"5B5TFBCUD4EE1HARVYGBG8GFE"',
+187 silly registry.get     date: 'Thu, 31 Oct 2013 03:15:15 GMT',
+187 silly registry.get     'content-length': '0' } ]
+188 verbose etag underscore from cache
+189 silly lockFile 77595a32-shelljs-0-1-4 shelljs@0.1.4
+190 silly lockFile 77595a32-shelljs-0-1-4 shelljs@0.1.4
+191 silly lockFile cc65d7ed-shelljs-0-1-x shelljs@0.1.x
+192 silly lockFile cc65d7ed-shelljs-0-1-x shelljs@0.1.x
+193 silly addNameRange number 2 { name: 'underscore', range: '>=1.4.0- <1.5.0-', hasData: true }
+194 silly addNameRange versions [ 'underscore',
+194 silly addNameRange   [ '1.0.3',
+194 silly addNameRange     '1.0.4',
+194 silly addNameRange     '1.1.0',
+194 silly addNameRange     '1.1.1',
+194 silly addNameRange     '1.1.2',
+194 silly addNameRange     '1.1.3',
+194 silly addNameRange     '1.1.4',
+194 silly addNameRange     '1.1.5',
+194 silly addNameRange     '1.1.6',
+194 silly addNameRange     '1.1.7',
+194 silly addNameRange     '1.2.0',
+194 silly addNameRange     '1.2.1',
+194 silly addNameRange     '1.2.2',
+194 silly addNameRange     '1.2.3',
+194 silly addNameRange     '1.2.4',
+194 silly addNameRange     '1.3.0',
+194 silly addNameRange     '1.3.1',
+194 silly addNameRange     '1.3.2',
+194 silly addNameRange     '1.3.3',
+194 silly addNameRange     '1.4.0',
+194 silly addNameRange     '1.4.1',
+194 silly addNameRange     '1.4.2',
+194 silly addNameRange     '1.4.3',
+194 silly addNameRange     '1.4.4',
+194 silly addNameRange     '1.5.0',
+194 silly addNameRange     '1.5.1',
+194 silly addNameRange     '1.5.2' ] ]
+195 verbose addNamed [ 'underscore', '1.4.4' ]
+196 verbose addNamed [ '1.4.4', '1.4.4' ]
+197 silly lockFile c6b5e825-underscore-1-4-4 underscore@1.4.4
+198 verbose lock underscore@1.4.4 /Users/acelan/.npm/c6b5e825-underscore-1-4-4.lock
+199 silly lockFile 16b89810-minimatch-0-2-12 minimatch@0.2.12
+200 silly lockFile 16b89810-minimatch-0-2-12 minimatch@0.2.12
+201 silly lockFile 38c78372-minimatch-0-x-x minimatch@0.x.x
+202 silly lockFile 38c78372-minimatch-0-x-x minimatch@0.x.x
+203 silly lockFile c6b5e825-underscore-1-4-4 underscore@1.4.4
+204 silly lockFile c6b5e825-underscore-1-4-4 underscore@1.4.4
+205 silly lockFile 53dcd9dd-underscore-1-4-x underscore@1.4.x
+206 silly lockFile 53dcd9dd-underscore-1-4-x underscore@1.4.x
+207 http 200 https://registry.npmjs.org/console-browserify
+208 silly registry.get cb [ 200,
+208 silly registry.get   { vary: 'Accept',
+208 silly registry.get     server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+208 silly registry.get     etag: '"A6FUTX76X8Y0BIXTD4F10KYVN"',
+208 silly registry.get     date: 'Thu, 31 Oct 2013 03:15:15 GMT',
+208 silly registry.get     'content-type': 'application/json',
+208 silly registry.get     'content-length': '18503' } ]
+209 silly addNameRange number 2 { name: 'console-browserify',
+209 silly addNameRange   range: '>=0.1.0- <0.2.0-',
+209 silly addNameRange   hasData: true }
+210 silly addNameRange versions [ 'console-browserify',
+210 silly addNameRange   [ '0.1.0',
+210 silly addNameRange     '0.1.1',
+210 silly addNameRange     '0.1.2',
+210 silly addNameRange     '0.1.3',
+210 silly addNameRange     '0.1.4',
+210 silly addNameRange     '0.1.5',
+210 silly addNameRange     '0.1.6',
+210 silly addNameRange     '1.0.1' ] ]
+211 verbose addNamed [ 'console-browserify', '0.1.6' ]
+212 verbose addNamed [ '0.1.6', '0.1.6' ]
+213 silly lockFile f41566ee-console-browserify-0-1-6 console-browserify@0.1.6
+214 verbose lock console-browserify@0.1.6 /Users/acelan/.npm/f41566ee-console-browserify-0-1-6.lock
+215 silly lockFile f41566ee-console-browserify-0-1-6 console-browserify@0.1.6
+216 silly lockFile f41566ee-console-browserify-0-1-6 console-browserify@0.1.6
+217 silly lockFile e69eec4c-console-browserify-0-1-x console-browserify@0.1.x
+218 silly lockFile e69eec4c-console-browserify-0-1-x console-browserify@0.1.x
+219 silly resolved [ { name: 'cli',
+219 silly resolved     description: 'A tool for rapidly building command line apps',
+219 silly resolved     version: '0.4.5',
+219 silly resolved     homepage: 'http://github.com/chriso/cli',
+219 silly resolved     keywords:
+219 silly resolved      [ 'cli',
+219 silly resolved        'command line',
+219 silly resolved        'opts',
+219 silly resolved        'parseopt',
+219 silly resolved        'opt',
+219 silly resolved        'args',
+219 silly resolved        'console',
+219 silly resolved        'argsparse',
+219 silly resolved        'optparse',
+219 silly resolved        'daemon',
+219 silly resolved        'autocomplete',
+219 silly resolved        'command',
+219 silly resolved        'autocompletion' ],
+219 silly resolved     author: { name: 'Chris O\'Hara', email: 'cohara87@gmail.com' },
+219 silly resolved     main: 'cli.js',
+219 silly resolved     bugs: { url: 'http://github.com/chriso/cli/issues' },
+219 silly resolved     repository: { type: 'git', url: 'http://github.com/chriso/cli.git' },
+219 silly resolved     dependencies: { glob: '>= 3.1.4' },
+219 silly resolved     contributors: [ [Object] ],
+219 silly resolved     engines: { node: '>=0.2.5' },
+219 silly resolved     licenses: [ [Object] ],
+219 silly resolved     readme: '**cli is a toolkit for rapidly building command line apps - it includes:**\n\n- Full featured opts/args parser\n- Plugin support for adding common options and switches\n- Helper methods for working with input/output and spawning child processes\n- Output colored/styled messages, [progress bars](https://github.com/chriso/cli/blob/master/examples/progress.js) or [spinners](https://github.com/chriso/cli/blob/master/examples/spinner.js)\n- Command [auto-completion](https://github.com/chriso/cli/blob/master/examples/command.js) and [glob support](https://github.com/chriso/cli/blob/master/examples/glob.js)\n\nInstall using `npm install cli` or just bundle [cli.js](https://github.com/chriso/cli/raw/master/cli-min.js) with your app.\n\n## Example apps\n\n### sort.js\n\n```javascript\n#!/usr/bin/env node\nrequire(\'cli\').withStdinLines(function(lines, newline) {\n    this.output(lines.sort().join(newline));\n});\n```\n\nTry it out\n\n```bash\n$ ./sort.js < input.txt\n```\n\nLet\'s add support for an `-n` switch to use a numeric sort, and a `-r` switch to reverse output - only 5 extra lines of code (!)\n\n```javascript\nvar cli = require(\'cli\'), options = cli.parse();\n\ncli.withStdinLines(function(lines, newline) {\n    lines.sort(!options.n ? null : function(a, b) {\n        return parseInt(a) > parseInt(b);\n    });\n    if (options.r) lines.reverse();\n    this.output(lines.join(newline));\n});\n```\n\n### static.js\n\nLet\'s create a static file server with daemon support to see the opts parser + plugins in use - note: this requires `npm install creationix daemon`\n\n```javascript\nvar cli = require(\'cli\').enable(\'daemon\', \'status\'); //Enable 2 plugins\n\ncli.parse({\n    log:   [\'l\', \'Enable logging\'],\n    port:  [\'p\', \'Listen on this port\', \'number\', 8080],\n    serve: [false, \'Serve static files from PATH\', \'path\', \'./public\']\n});\n\ncli.main(function(args, options) {\n    var server, middleware = [];\n\n    if (options.log) {\n        this.debug(\'Enabling logging\');\n        middleware.push(require(\'creationix/log\')());\n    }\n\n    this.debug(\'Serving files from \' + options.serve);\n    middleware.push(require(\'creationix/static\')(\'/\', options.serve, \'index.html\'));\n\n    server = this.createServer(middleware).listen(options.port);\n\n    this.ok(\'Listening on port \' + options.port);\n});\n```\n\nTo output usage information\n\n```bash\n$ ./static.js --help\n```\n\nTo create a daemon that serves files from */tmp*, run\n\n```bash\n$ ./static.js -ld --serve=/tmp\n```\n\nFor more examples, see [./examples](https://github.com/chriso/cli/tree/master/examples)\n\n## Helper methods\n\ncli has methods that collect stdin (newline is autodetected as \\n or \\r\\n)\n\n```javascript\ncli.withStdin(callback);        //callback receives stdin as a string\ncli.withStdinLines(callback);   //callback receives stdin split into an array of lines (lines, newline)\n```\n\ncli also has a lower level method for working with input line by line (see [./examples/cat.js](https://github.com/chriso/cli/blob/master/examples/cat.js) for an example). \n\n```javascript\ncli.withInput(file, function (line, newline, eof) {\n    if (!eof) {\n        this.output(line + newline);\n    }\n});\n```\n\n*Note: `file` can be omitted if you want to work with stdin*\n\nTo output a progress bar, call\n\n```javascript\ncli.progress(progress); //Where 0 <= progress <= 1\n```\n\nTo spawn a child process, use\n\n```javascript\ncli.exec(cmd, callback); //callback receives the output of the process (split into lines)\n```\n\ncli also comes bundled with kof\'s [node-natives](https://github.com/kof/node-natives) (access with cli.native) and creationix\' [stack](https://github.com/creationix/stack) (access with cli.createServer)\n\n## Plugins\n\nPlugins are a way of adding common opts and can be enabled using \n\n```javascript\ncli.enable(plugin1, [plugin2, ...]);  //To disable, use the equivalent disable() method\n```\n\n**help** - *enabled by default*\n\nAdds `-h,--help` to output auto-generated usage information\n\n**version**\n\nAdds `-v,--version` to output version information for the app. cli will attempt to locate and parse a nearby *package.json*\n\nTo set your own app name and version, use `cli.setApp(app_name, version)`\n\n**status**\n\nAdds options to show/hide the stylized status messages that are output to the console when using one of these methods\n\n```javascript\ncli.debug(msg);  //Only shown when using --debug\ncli.error(msg);\ncli.fatal(msg);  //Exits the process after outputting msg\ncli.info(msg);\ncli.ok(msg);\n```\n\n`-k,--no-color` will omit ANSI color escapes from the output\n\n**glob**  - *requires* `npm install glob`\n\nEnables glob matching of arguments\n\n**daemon**  - *requires* `npm install daemon`\n\nAdds `-d,--daemon ARG` for daemonizing the process and controlling the resulting daemon\n\n`ARG` can be either start (default), stop, restart, pid (outputs the daemon\'s pid if it\'s running), or log (output the daemon\'s stdout+stderr)\n\n**timeout**\n\nAdds `-t,--timeout N` to exit the process after N seconds with an error\n\n**catchall**\n\nAdds `-c,--catch` to catch and output uncaughtExceptions and resume execution\n\n*Note: Plugins are automatically disabled if an option or switch of the same name is already defined*\n\n## LICENSE\n\n(MIT license)\n\nCopyright (c) 2010 Chris O\'Hara <cohara87@gmail.com>\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n"Software"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\nNONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\nLIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\nOF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\nWITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n',
+219 silly resolved     readmeFilename: 'README.md',
+219 silly resolved     _id: 'cli@0.4.5',
+219 silly resolved     _from: 'cli@0.4.x' },
+219 silly resolved   { name: 'shelljs',
+219 silly resolved     version: '0.1.4',
+219 silly resolved     author: { name: 'Artur Adib', email: 'aadib@mozilla.com' },
+219 silly resolved     description: 'Portable Unix shell commands for Node.js',
+219 silly resolved     keywords: [ 'unix', 'shell', 'makefile', 'make', 'jake', 'synchronous' ],
+219 silly resolved     repository: { type: 'git', url: 'git://github.com/arturadib/shelljs.git' },
+219 silly resolved     homepage: 'http://github.com/arturadib/shelljs',
+219 silly resolved     main: './shell.js',
+219 silly resolved     scripts: { test: 'node scripts/run-tests' },
+219 silly resolved     bin: { shjs: './bin/shjs' },
+219 silly resolved     dependencies: {},
+219 silly resolved     devDependencies: { jshint: '~1.1.0' },
+219 silly resolved     optionalDependencies: {},
+219 silly resolved     engines: { node: '*' },
+219 silly resolved     readme: '# ShellJS - Unix shell commands for Node.js [![Build Status](https://secure.travis-ci.org/arturadib/shelljs.png)](http://travis-ci.org/arturadib/shelljs)\n\nShellJS is a portable **(Windows/Linux/OS X)** implementation of Unix shell commands on top of the Node.js API. You can use it to eliminate your shell script\'s dependency on Unix while still keeping its familiar and powerful commands. You can also install it globally so you can run it from outside Node projects - say goodbye to those gnarly Bash scripts!\n\nThe project is [unit-tested](http://travis-ci.org/arturadib/shelljs) and battled-tested in projects like:\n\n+ [PDF.js](http://github.com/mozilla/pdf.js) - Firefox\'s next-gen PDF reader\n+ [Firebug](http://getfirebug.com/) - Firefox\'s infamous debugger\n+ [JSHint](http://jshint.com) - Most popular JavaScript linter\n+ [Zepto](http://zeptojs.com) - jQuery-compatible JavaScript library for modern browsers\n+ [Yeoman](http://yeoman.io/) - Web application stack and development tool\n+ [Deployd.com](http://deployd.com) - Open source PaaS for quick API backend generation\n\nand [many more](https://npmjs.org/browse/depended/shelljs).\n\n## Installing\n\nVia npm:\n\n```bash\n$ npm install [-g] shelljs\n```\n\nIf the global option `-g` is specified, the binary `shjs` will be installed. This makes it possible to\nrun ShellJS scripts much like any shell script from the command line, i.e. without requiring a `node_modules` folder:\n\n```bash\n$ shjs my_script\n```\n\nYou can also just copy `shell.js` into your project\'s directory, and `require()` accordingly.\n\n\n## Examples\n\n### JavaScript\n\n```javascript\nrequire(\'shelljs/global\');\n\nif (!which(\'git\')) {\n  echo(\'Sorry, this script requires git\');\n  exit(1);\n}\n\n// Copy files to release dir\nmkdir(\'-p\', \'out/Release\');\ncp(\'-R\', \'stuff/*\', \'out/Release\');\n\n// Replace macros in each .js file\ncd(\'lib\');\nls(\'*.js\').forEach(function(file) {\n  sed(\'-i\', \'BUILD_VERSION\', \'v0.1.2\', file);\n  sed(\'-i\', /.*REMOVE_THIS_LINE.*\\n/, \'\', file);\n  sed(\'-i\', /.*REPLACE_LINE_WITH_MACRO.*\\n/, cat(\'macro.js\'), file);\n});\ncd(\'..\');\n\n// Run external tool synchronously\nif (exec(\'git commit -am "Auto-commit"\').code !== 0) {\n  echo(\'Error: Git commit failed\');\n  exit(1);\n}\n```\n\n### CoffeeScript\n\n```coffeescript\nrequire \'shelljs/global\'\n\nif not which \'git\'\n  echo \'Sorry, this script requires git\'\n  exit 1\n\n# Copy files to release dir\nmkdir \'-p\', \'out/Release\'\ncp \'-R\', \'stuff/*\', \'out/Release\'\n\n# Replace macros in each .js file\ncd \'lib\'\nfor file in ls \'*.js\'\n  sed \'-i\', \'BUILD_VERSION\', \'v0.1.2\', file\n  sed \'-i\', /.*REMOVE_THIS_LINE.*\\n/, \'\', file\n  sed \'-i\', /.*REPLACE_LINE_WITH_MACRO.*\\n/, cat \'macro.js\', file\ncd \'..\'\n\n# Run external tool synchronously\nif (exec \'git commit -am "Auto-commit"\').code != 0\n  echo \'Error: Git commit failed\'\n  exit 1\n```\n\n## Global vs. Local\n\nThe example above uses the convenience script `shelljs/global` to reduce verbosity. If polluting your global namespace is not desirable, simply require `shelljs`.\n\nExample:\n\n```javascript\nvar shell = require(\'shelljs\');\nshell.echo(\'hello world\');\n```\n\n## Make tool\n\nA convenience script `shelljs/make` is also provided to mimic the behavior of a Unix Makefile. In this case all shell objects are global, and command line arguments will cause the script to execute only the corresponding function in the global `target` object. To avoid redundant calls, target functions are executed only once per script.\n\nExample (CoffeeScript):\n\n```coffeescript\nrequire \'shelljs/make\'\n\ntarget.all = ->\n  target.bundle()\n  target.docs()\n\ntarget.bundle = ->\n  cd __dirname\n  mkdir \'build\'\n  cd \'lib\'\n  (cat \'*.js\').to \'../build/output.js\'\n\ntarget.docs = ->\n  cd __dirname\n  mkdir \'docs\'\n  cd \'lib\'\n  for file in ls \'*.js\'\n    text = grep \'//@\', file     # extract special comments\n    text.replace \'//@\', \'\'      # remove comment tags\n    text.to \'docs/my_docs.md\'\n```\n\nTo run the target `all`, call the above script without arguments: `$ node make`. To run the target `docs`: `$ node make docs`, and so on.\n\n\n\n<!-- \n\n  DO NOT MODIFY BEYOND THIS POINT - IT\'S AUTOMATICALLY GENERATED\n\n-->\n\n\n## Command reference\n\n\nAll commands run synchronously, unless otherwise stated.\n\n\n### cd(\'dir\')\nChanges to directory `dir` for the duration of the script\n\n### pwd()\nReturns the current directory.\n\n### ls([options ,] path [,path ...])\n### ls([options ,] path_array)\nAvailable options:\n\n+ `-R`: recursive\n+ `-A`: all files (include files beginning with `.`, except for `.` and `..`)\n\nExamples:\n\n```javascript\nls(\'projs/*.js\');\nls(\'-R\', \'/users/me\', \'/tmp\');\nls(\'-R\', [\'/users/me\', \'/tmp\']); // same as above\n```\n\nReturns array of files in the given path, or in current directory if no path provided.\n\n### find(path [,path ...])\n### find(path_array)\nExamples:\n\n```javascript\nfind(\'src\', \'lib\');\nfind([\'src\', \'lib\']); // same as above\nfind(\'.\').filter(function(file) { return file.match(/\\.js$/); });\n```\n\nReturns array of all files (however deep) in the given paths.\n\nThe main difference from `ls(\'-R\', path)` is that the resulting file names\ninclude the base directories, e.g. `lib/resources/file1` instead of just `file1`.\n\n### cp([options ,] source [,source ...], dest)\n### cp([options ,] source_array, dest)\nAvailable options:\n\n+ `-f`: force\n+ `-r, -R`: recursive\n\nExamples:\n\n```javascript\ncp(\'file1\', \'dir1\');\ncp(\'-Rf\', \'/tmp/*\', \'/usr/local/*\', \'/home/tmp\');\ncp(\'-Rf\', [\'/tmp/*\', \'/usr/local/*\'], \'/home/tmp\'); // same as above\n```\n\nCopies files. The wildcard `*` is accepted.\n\n### rm([options ,] file [, file ...])\n### rm([options ,] file_array)\nAvailable options:\n\n+ `-f`: force\n+ `-r, -R`: recursive\n\nExamples:\n\n```javascript\nrm(\'-rf\', \'/tmp/*\');\nrm(\'some_file.txt\', \'another_file.txt\');\nrm([\'some_file.txt\', \'another_file.txt\']); // same as above\n```\n\nRemoves files. The wildcard `*` is accepted.\n\n### mv(source [, source ...], dest\')\n### mv(source_array, dest\')\nAvailable options:\n\n+ `f`: force\n\nExamples:\n\n```javascript\nmv(\'-f\', \'file\', \'dir/\');\nmv(\'file1\', \'file2\', \'dir/\');\nmv([\'file1\', \'file2\'], \'dir/\'); // same as above\n```\n\nMoves files. The wildcard `*` is accepted.\n\n### mkdir([options ,] dir [, dir ...])\n### mkdir([options ,] dir_array)\nAvailable options:\n\n+ `p`: full path (will create intermediate dirs if necessary)\n\nExamples:\n\n```javascript\nmkdir(\'-p\', \'/tmp/a/b/c/d\', \'/tmp/e/f/g\');\nmkdir(\'-p\', [\'/tmp/a/b/c/d\', \'/tmp/e/f/g\']); // same as above\n```\n\nCreates directories.\n\n### test(expression)\nAvailable expression primaries:\n\n+ `\'-b\', \'path\'`: true if path is a block device\n+ `\'-c\', \'path\'`: true if path is a character device\n+ `\'-d\', \'path\'`: true if path is a directory\n+ `\'-e\', \'path\'`: true if path exists\n+ `\'-f\', \'path\'`: true if path is a regular file\n+ `\'-L\', \'path\'`: true if path is a symboilc link\n+ `\'-p\', \'path\'`: true if path is a pipe (FIFO)\n+ `\'-S\', \'path\'`: true if path is a socket\n\nExamples:\n\n```javascript\nif (test(\'-d\', path)) { /* do something with dir */ };\nif (!test(\'-f\', path)) continue; // skip if it\'s a regular file\n```\n\nEvaluates expression using the available primaries and returns corresponding value.\n\n### cat(file [, file ...])\n### cat(file_array)\n\nExamples:\n\n```javascript\nvar str = cat(\'file*.txt\');\nvar str = cat(\'file1\', \'file2\');\nvar str = cat([\'file1\', \'file2\']); // same as above\n```\n\nReturns a string containing the given file, or a concatenated string\ncontaining the files if more than one file is given (a new line character is\nintroduced between each file). Wildcard `*` accepted.\n\n### \'string\'.to(file)\n\nExamples:\n\n```javascript\ncat(\'input.txt\').to(\'output.txt\');\n```\n\nAnalogous to the redirection operator `>` in Unix, but works with JavaScript strings (such as\nthose returned by `cat`, `grep`, etc). _Like Unix redirections, `to()` will overwrite any existing file!_\n\n### sed([options ,] search_regex, replace_str, file)\nAvailable options:\n\n+ `-i`: Replace contents of \'file\' in-place. _Note that no backups will be created!_\n\nExamples:\n\n```javascript\nsed(\'-i\', \'PROGRAM_VERSION\', \'v0.1.3\', \'source.js\');\nsed(/.*DELETE_THIS_LINE.*\\n/, \'\', \'source.js\');\n```\n\nReads an input string from `file` and performs a JavaScript `replace()` on the input\nusing the given search regex and replacement string. Returns the new string after replacement.\n\n### grep([options ,] regex_filter, file [, file ...])\n### grep([options ,] regex_filter, file_array)\nAvailable options:\n\n+ `-v`: Inverse the sense of the regex and print the lines not matching the criteria.\n\nExamples:\n\n```javascript\ngrep(\'-v\', \'GLOBAL_VARIABLE\', \'*.js\');\ngrep(\'GLOBAL_VARIABLE\', \'*.js\');\n```\n\nReads input string from given files and returns a string containing all lines of the\nfile that match the given `regex_filter`. Wildcard `*` accepted.\n\n### which(command)\n\nExamples:\n\n```javascript\nvar nodeExec = which(\'node\');\n```\n\nSearches for `command` in the system\'s PATH. On Windows looks for `.exe`, `.cmd`, and `.bat` extensions.\nReturns string containing the absolute path to the command.\n\n### echo(string [,string ...])\n\nExamples:\n\n```javascript\necho(\'hello world\');\nvar str = echo(\'hello world\');\n```\n\nPrints string to stdout, and returns string with additional utility methods\nlike `.to()`.\n\n### dirs([options | \'+N\' | \'-N\'])\n\nAvailable options:\n\n+ `-c`: Clears the directory stack by deleting all of the elements.\n\nArguments:\n\n+ `+N`: Displays the Nth directory (counting from the left of the list printed by dirs when invoked without options), starting with zero.\n+ `-N`: Displays the Nth directory (counting from the right of the list printed by dirs when invoked without options), starting with zero.\n\nDisplay the list of currently remembered directories. Returns an array of paths in the stack, or a single path if +N or -N was specified.\n\nSee also: pushd, popd\n\n### pushd([options,] [dir | \'-N\' | \'+N\'])\n\nAvailable options:\n\n+ `-n`: Suppresses the normal change of directory when adding directories to the stack, so that only the stack is manipulated.\n\nArguments:\n\n+ `dir`: Makes the current working directory be the top of the stack, and then executes the equivalent of `cd dir`.\n+ `+N`: Brings the Nth directory (counting from the left of the list printed by dirs, starting with zero) to the top of the list by rotating the stack.\n+ `-N`: Brings the Nth directory (counting from the right of the list printed by dirs, starting with zero) to the top of the list by rotating the stack.\n\nExamples:\n\n```javascript\n// process.cwd() === \'/usr\'\npushd(\'/etc\'); // Returns /etc /usr\npushd(\'+1\');   // Returns /usr /etc\n```\n\nSave the current directory on the top of the directory stack and then cd to `dir`. With no arguments, pushd exchanges the top two directories. Returns an array of paths in the stack.\n\n### popd([options,] [\'-N\' | \'+N\'])\n\nAvailable options:\n\n+ `-n`: Suppresses the normal change of directory when removing directories from the stack, so that only the stack is manipulated.\n\nArguments:\n\n+ `+N`: Removes the Nth directory (counting from the left of the list printed by dirs), starting with zero.\n+ `-N`: Removes the Nth directory (counting from the right of the list printed by dirs), starting with zero.\n\nExamples:\n\n```javascript\necho(process.cwd()); // \'/usr\'\npushd(\'/etc\');       // \'/etc /usr\'\necho(process.cwd()); // \'/etc\'\npopd();              // \'/usr\'\necho(process.cwd()); // \'/usr\'\n```\n\nWhen no arguments are given, popd removes the top directory from the stack and performs a cd to the new top directory. The elements are numbered from 0 starting at the first directory listed with dirs; i.e., popd is equivalent to popd +0. Returns an array of paths in the stack.\n\n### exit(code)\nExits the current process with the given exit code.\n\n### env[\'VAR_NAME\']\nObject containing environment variables (both getter and setter). Shortcut to process.env.\n\n### exec(command [, options] [, callback])\nAvailable options (all `false` by default):\n\n+ `async`: Asynchronous execution. Defaults to true if a callback is provided.\n+ `silent`: Do not echo program output to console.\n\nExamples:\n\n```javascript\nvar version = exec(\'node --version\', {silent:true}).output;\n\nvar child = exec(\'some_long_running_process\', {async:true});\nchild.stdout.on(\'data\', function(data) {\n  /* ... do something with data ... */\n});\n\nexec(\'some_long_running_process\', function(code, output) {\n  console.log(\'Exit code:\', code);\n  console.log(\'Program output:\', output);\n});\n```\n\nExecutes the given `command` _synchronously_, unless otherwise specified.\nWhen in synchronous mode returns the object `{ code:..., output:... }`, containing the program\'s\n`output` (stdout + stderr)  and its exit `code`. Otherwise returns the child process object, and\nthe `callback` gets the arguments `(code, output)`.\n\n**Note:** For long-lived processes, it\'s best to run `exec()` asynchronously as\nthe current synchronous implementation uses a lot of CPU. This should be getting\nfixed soon.\n\n### chmod(octal_mode || octal_string, file)\n### chmod(symbolic_mode, file)\n\nAvailable options:\n\n+ `-v`: output a diagnostic for every file processed\n+ `-c`: like verbose but report only when a change is made\n+ `-R`: change files and directories recursively\n\nExamples:\n\n```javascript\nchmod(755, \'/Users/brandon\');\nchmod(\'755\', \'/Users/brandon\'); // same as above \nchmod(\'u+x\', \'/Users/brandon\');\n```\n\nAlters the permissions of a file or directory by either specifying the\nabsolute permissions in octal form or expressing the changes in symbols.\nThis command tries to mimic the POSIX behavior as much as possible.\nNotable exceptions:\n\n+ In symbolic modes, \'a-r\' and \'-r\' are identical.  No consideration is\n  given to the umask.\n+ There is no "quiet" option since default behavior is to run silent.\n\n## Configuration\n\n\n### config.silent\nExample:\n\n```javascript\nvar silentState = config.silent; // save old silent state\nconfig.silent = true;\n/* ... */\nconfig.silent = silentState; // restore old silent state\n```\n\nSuppresses all command output if `true`, except for `echo()` calls.\nDefault is `false`.\n\n### config.fatal\nExample:\n\n```javascript\nconfig.fatal = true;\ncp(\'this_file_does_not_exist\', \'/dev/null\'); // dies here\n/* more commands... */\n```\n\nIf `true` the script will die on errors. Default is `false`.\n\n## Non-Unix commands\n\n\n### tempdir()\nSearches and returns string containing a writeable, platform-dependent temporary directory.\nFollows Python\'s [tempfile algorithm](http://docs.python.org/library/tempfile.html#tempfile.tempdir).\n\n### error()\nTests if error occurred in the last command. Returns `null` if no error occurred,\notherwise returns string explaining the error\n',
+219 silly resolved     readmeFilename: 'README.md',
+219 silly resolved     bugs: { url: 'https://github.com/arturadib/shelljs/issues' },
+219 silly resolved     _id: 'shelljs@0.1.4',
+219 silly resolved     _from: 'shelljs@0.1.x' },
+219 silly resolved   { author:
+219 silly resolved      { name: 'Isaac Z. Schlueter',
+219 silly resolved        email: 'i@izs.me',
+219 silly resolved        url: 'http://blog.izs.me' },
+219 silly resolved     name: 'minimatch',
+219 silly resolved     description: 'a glob matcher in javascript',
+219 silly resolved     version: '0.2.12',
+219 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/minimatch.git' },
+219 silly resolved     main: 'minimatch.js',
+219 silly resolved     scripts: { test: 'tap test' },
+219 silly resolved     engines: { node: '*' },
+219 silly resolved     dependencies: { 'lru-cache': '2', sigmund: '~1.0.0' },
+219 silly resolved     devDependencies: { tap: '' },
+219 silly resolved     license:
+219 silly resolved      { type: 'MIT',
+219 silly resolved        url: 'http://github.com/isaacs/minimatch/raw/master/LICENSE' },
+219 silly resolved     readme: '# minimatch\n\nA minimal matching utility.\n\n[![Build Status](https://secure.travis-ci.org/isaacs/minimatch.png)](http://travis-ci.org/isaacs/minimatch)\n\n\nThis is the matching library used internally by npm.\n\nEventually, it will replace the C binding in node-glob.\n\nIt works by converting glob expressions into JavaScript `RegExp`\nobjects.\n\n## Usage\n\n```javascript\nvar minimatch = require("minimatch")\n\nminimatch("bar.foo", "*.foo") // true!\nminimatch("bar.foo", "*.bar") // false!\n```\n\n## Features\n\nSupports these glob features:\n\n* Brace Expansion\n* Extended glob matching\n* "Globstar" `**` matching\n\nSee:\n\n* `man sh`\n* `man bash`\n* `man 3 fnmatch`\n* `man 5 gitignore`\n\n### Comparisons to other fnmatch/glob implementations\n\nWhile strict compliance with the existing standards is a worthwhile\ngoal, some discrepancies exist between minimatch and other\nimplementations, and are intentional.\n\nIf the pattern starts with a `!` character, then it is negated.  Set the\n`nonegate` flag to suppress this behavior, and treat leading `!`\ncharacters normally.  This is perhaps relevant if you wish to start the\npattern with a negative extglob pattern like `!(a|B)`.  Multiple `!`\ncharacters at the start of a pattern will negate the pattern multiple\ntimes.\n\nIf a pattern starts with `#`, then it is treated as a comment, and\nwill not match anything.  Use `\\#` to match a literal `#` at the\nstart of a line, or set the `nocomment` flag to suppress this behavior.\n\nThe double-star character `**` is supported by default, unless the\n`noglobstar` flag is set.  This is supported in the manner of bsdglob\nand bash 4.1, where `**` only has special significance if it is the only\nthing in a path part.  That is, `a/**/b` will match `a/x/y/b`, but\n`a/**b` will not.  **Note that this is different from the way that `**` is\nhandled by ruby\'s `Dir` class.**\n\nIf an escaped pattern has no matches, and the `nonull` flag is set,\nthen minimatch.match returns the pattern as-provided, rather than\ninterpreting the character escapes.  For example,\n`minimatch.match([], "\\\\*a\\\\?")` will return `"\\\\*a\\\\?"` rather than\n`"*a?"`.  This is akin to setting the `nullglob` option in bash, except\nthat it does not resolve escaped pattern characters.\n\nIf brace expansion is not disabled, then it is performed before any\nother interpretation of the glob pattern.  Thus, a pattern like\n`+(a|{b),c)}`, which would not be valid in bash or zsh, is expanded\n**first** into the set of `+(a|b)` and `+(a|c)`, and those patterns are\nchecked for validity.  Since those two are valid, matching proceeds.\n\n\n## Minimatch Class\n\nCreate a minimatch object by instanting the `minimatch.Minimatch` class.\n\n```javascript\nvar Minimatch = require("minimatch").Minimatch\nvar mm = new Minimatch(pattern, options)\n```\n\n### Properties\n\n* `pattern` The original pattern the minimatch object represents.\n* `options` The options supplied to the constructor.\n* `set` A 2-dimensional array of regexp or string expressions.\n  Each row in the\n  array corresponds to a brace-expanded pattern.  Each item in the row\n  corresponds to a single path-part.  For example, the pattern\n  `{a,b/c}/d` would expand to a set of patterns like:\n\n        [ [ a, d ]\n        , [ b, c, d ] ]\n\n    If a portion of the pattern doesn\'t have any "magic" in it\n    (that is, it\'s something like `"foo"` rather than `fo*o?`), then it\n    will be left as a string rather than converted to a regular\n    expression.\n\n* `regexp` Created by the `makeRe` method.  A single regular expression\n  expressing the entire pattern.  This is useful in cases where you wish\n  to use the pattern somewhat like `fnmatch(3)` with `FNM_PATH` enabled.\n* `negate` True if the pattern is negated.\n* `comment` True if the pattern is a comment.\n* `empty` True if the pattern is `""`.\n\n### Methods\n\n* `makeRe` Generate the `regexp` member if necessary, and return it.\n  Will return `false` if the pattern is invalid.\n* `match(fname)` Return true if the filename matches the pattern, or\n  false otherwise.\n* `matchOne(fileArray, patternArray, partial)` Take a `/`-split\n  filename, and match it against a single row in the `regExpSet`.  This\n  method is mainly for internal use, but is exposed so that it can be\n  used by a glob-walker that needs to avoid excessive filesystem calls.\n\nAll other methods are internal, and will be called as necessary.\n\n## Functions\n\nThe top-level exported function has a `cache` property, which is an LRU\ncache set to store 100 items.  So, calling these methods repeatedly\nwith the same pattern and options will use the same Minimatch object,\nsaving the cost of parsing it multiple times.\n\n### minimatch(path, pattern, options)\n\nMain export.  Tests a path against the pattern using the options.\n\n```javascript\nvar isJS = minimatch(file, "*.js", { matchBase: true })\n```\n\n### minimatch.filter(pattern, options)\n\nReturns a function that tests its\nsupplied argument, suitable for use with `Array.filter`.  Example:\n\n```javascript\nvar javascripts = fileList.filter(minimatch.filter("*.js", {matchBase: true}))\n```\n\n### minimatch.match(list, pattern, options)\n\nMatch against the list of\nfiles, in the style of fnmatch or glob.  If nothing is matched, and\noptions.nonull is set, then return a list containing the pattern itself.\n\n```javascript\nvar javascripts = minimatch.match(fileList, "*.js", {matchBase: true}))\n```\n\n### minimatch.makeRe(pattern, options)\n\nMake a regular expression object from the pattern.\n\n## Options\n\nAll options are `false` by default.\n\n### debug\n\nDump a ton of stuff to stderr.\n\n### nobrace\n\nDo not expand `{a,b}` and `{1..3}` brace sets.\n\n### noglobstar\n\nDisable `**` matching against multiple folder names.\n\n### dot\n\nAllow patterns to match filenames starting with a period, even if\nthe pattern does not explicitly have a period in that spot.\n\nNote that by default, `a/**/b` will **not** match `a/.d/b`, unless `dot`\nis set.\n\n### noext\n\nDisable "extglob" style patterns like `+(a|b)`.\n\n### nocase\n\nPerform a case-insensitive match.\n\n### nonull\n\nWhen a match is not found by `minimatch.match`, return a list containing\nthe pattern itself.  When set, an empty list is returned if there are\nno matches.\n\n### matchBase\n\nIf set, then patterns without slashes will be matched\nagainst the basename of the path if it contains slashes.  For example,\n`a?b` would match the path `/xyz/123/acb`, but not `/xyz/acb/123`.\n\n### nocomment\n\nSuppress the behavior of treating `#` at the start of a pattern as a\ncomment.\n\n### nonegate\n\nSuppress the behavior of treating a leading `!` character as negation.\n\n### flipNegate\n\nReturns from negate expressions the same as if they were not negated.\n(Ie, true on a hit, false on a miss.)\n',
+219 silly resolved     readmeFilename: 'README.md',
+219 silly resolved     bugs: { url: 'https://github.com/isaacs/minimatch/issues' },
+219 silly resolved     _id: 'minimatch@0.2.12',
+219 silly resolved     _from: 'minimatch@0.x.x' },
+219 silly resolved   { name: 'underscore',
+219 silly resolved     description: 'JavaScript\'s functional programming helper library.',
+219 silly resolved     homepage: 'http://underscorejs.org',
+219 silly resolved     keywords: [ 'util', 'functional', 'server', 'client', 'browser' ],
+219 silly resolved     author: { name: 'Jeremy Ashkenas', email: 'jeremy@documentcloud.org' },
+219 silly resolved     repository:
+219 silly resolved      { type: 'git',
+219 silly resolved        url: 'git://github.com/documentcloud/underscore.git' },
+219 silly resolved     main: 'underscore.js',
+219 silly resolved     version: '1.4.4',
+219 silly resolved     devDependencies: { phantomjs: '0.2.2' },
+219 silly resolved     scripts: { test: 'phantomjs test/vendor/runner.js test/index.html?noglobals=true' },
+219 silly resolved     readme: '                       __\n                      /\\ \\                                                         __\n     __  __    ___    \\_\\ \\     __   _ __   ____    ___    ___   _ __    __       /\\_\\    ____\n    /\\ \\/\\ \\ /\' _ `\\  /\'_  \\  /\'__`\\/\\  __\\/ ,__\\  / ___\\ / __`\\/\\  __\\/\'__`\\     \\/\\ \\  /\',__\\\n    \\ \\ \\_\\ \\/\\ \\/\\ \\/\\ \\ \\ \\/\\  __/\\ \\ \\//\\__, `\\/\\ \\__//\\ \\ \\ \\ \\ \\//\\  __/  __  \\ \\ \\/\\__, `\\\n     \\ \\____/\\ \\_\\ \\_\\ \\___,_\\ \\____\\\\ \\_\\\\/\\____/\\ \\____\\ \\____/\\ \\_\\\\ \\____\\/\\_\\ _\\ \\ \\/\\____/\n      \\/___/  \\/_/\\/_/\\/__,_ /\\/____/ \\/_/ \\/___/  \\/____/\\/___/  \\/_/ \\/____/\\/_//\\ \\_\\ \\/___/\n                                                                                  \\ \\____/\n                                                                                   \\/___/\n\nUnderscore.js is a utility-belt library for JavaScript that provides\nsupport for the usual functional suspects (each, map, reduce, filter...)\nwithout extending any core JavaScript objects.\n\nFor Docs, License, Tests, and pre-packed downloads, see:\nhttp://underscorejs.org\n\nMany thanks to our contributors:\nhttps://github.com/documentcloud/underscore/contributors\n',
+219 silly resolved     readmeFilename: 'README.md',
+219 silly resolved     bugs: { url: 'https://github.com/documentcloud/underscore/issues' },
+219 silly resolved     _id: 'underscore@1.4.4',
+219 silly resolved     _from: 'underscore@1.4.x' },
+219 silly resolved   { name: 'console-browserify',
+219 silly resolved     version: '0.1.6',
+219 silly resolved     description: 'Emulate console for all the browsers',
+219 silly resolved     keywords: [],
+219 silly resolved     author: { name: 'Raynos', email: 'raynos2@gmail.com' },
+219 silly resolved     repository:
+219 silly resolved      { type: 'git',
+219 silly resolved        url: 'git://github.com/Raynos/console-browserify.git' },
+219 silly resolved     main: 'index',
+219 silly resolved     homepage: 'https://github.com/Raynos/console-browserify',
+219 silly resolved     contributors: [ [Object] ],
+219 silly resolved     bugs:
+219 silly resolved      { url: 'https://github.com/Raynos/console-browserify/issues',
+219 silly resolved        email: 'raynos2@gmail.com' },
+219 silly resolved     dependencies: {},
+219 silly resolved     devDependencies:
+219 silly resolved      { tape: '~0.2.2',
+219 silly resolved        browserify: 'https://github.com/raynos/node-browserify/tarball/master',
+219 silly resolved        testem: '~0.2.55',
+219 silly resolved        jsonify: '0.0.0' },
+219 silly resolved     licenses: [ [Object] ],
+219 silly resolved     scripts:
+219 silly resolved      { test: 'node ./test',
+219 silly resolved        build: 'browserify test/index.js -o test/static/bundle.js',
+219 silly resolved        testem: 'testem' },
+219 silly resolved     testling: { files: 'test/index.js', browsers: [Object] },
+219 silly resolved     readme: '# console-browserify\n\n[![build status][1]][2]\n\n[![browser support][3]][4]\n\nEmulate console for all the browsers\n\n## Example\n\n```js\nvar console = require("console-browserify")\n\nconsole.log("hello world!")\n```\n\n## Installation\n\n`npm install console-browserify`\n\n## Contributors\n\n - Raynos\n\n## MIT Licenced\n\n\n\n  [1]: https://secure.travis-ci.org/Raynos/console-browserify.png\n  [2]: http://travis-ci.org/Raynos/console-browserify\n  [3]: http://ci.testling.com/Raynos/console-browserify.png\n  [4]: http://ci.testling.com/Raynos/console-browserify\n',
+219 silly resolved     readmeFilename: 'README.md',
+219 silly resolved     _id: 'console-browserify@0.1.6',
+219 silly resolved     _from: 'console-browserify@0.1.x' } ]
+220 info install cli@0.4.5 into /usr/local/lib/node_modules/jshint
+221 info install shelljs@0.1.4 into /usr/local/lib/node_modules/jshint
+222 info install minimatch@0.2.12 into /usr/local/lib/node_modules/jshint
+223 info install underscore@1.4.4 into /usr/local/lib/node_modules/jshint
+224 info install console-browserify@0.1.6 into /usr/local/lib/node_modules/jshint
+225 info installOne cli@0.4.5
+226 info installOne shelljs@0.1.4
+227 info installOne minimatch@0.2.12
+228 info installOne underscore@1.4.4
+229 info installOne console-browserify@0.1.6
+230 info /usr/local/lib/node_modules/jshint/node_modules/cli unbuild
+231 info /usr/local/lib/node_modules/jshint/node_modules/shelljs unbuild
+232 info /usr/local/lib/node_modules/jshint/node_modules/minimatch unbuild
+233 info /usr/local/lib/node_modules/jshint/node_modules/underscore unbuild
+234 info /usr/local/lib/node_modules/jshint/node_modules/console-browserify unbuild
+235 verbose tar unpack /Users/acelan/.npm/cli/0.4.5/package.tgz
+236 silly lockFile 17cd2e7d--modules-jshint-node-modules-cli /usr/local/lib/node_modules/jshint/node_modules/cli
+237 verbose lock /usr/local/lib/node_modules/jshint/node_modules/cli /Users/acelan/.npm/17cd2e7d--modules-jshint-node-modules-cli.lock
+238 silly lockFile fab51055-acelan-npm-cli-0-4-5-package-tgz /Users/acelan/.npm/cli/0.4.5/package.tgz
+239 verbose lock /Users/acelan/.npm/cli/0.4.5/package.tgz /Users/acelan/.npm/fab51055-acelan-npm-cli-0-4-5-package-tgz.lock
+240 verbose tar unpack /Users/acelan/.npm/shelljs/0.1.4/package.tgz
+241 silly lockFile b1e1d7ed-ules-jshint-node-modules-shelljs /usr/local/lib/node_modules/jshint/node_modules/shelljs
+242 verbose lock /usr/local/lib/node_modules/jshint/node_modules/shelljs /Users/acelan/.npm/b1e1d7ed-ules-jshint-node-modules-shelljs.lock
+243 silly lockFile 003079e5-an-npm-shelljs-0-1-4-package-tgz /Users/acelan/.npm/shelljs/0.1.4/package.tgz
+244 verbose lock /Users/acelan/.npm/shelljs/0.1.4/package.tgz /Users/acelan/.npm/003079e5-an-npm-shelljs-0-1-4-package-tgz.lock
+245 verbose tar unpack /Users/acelan/.npm/minimatch/0.2.12/package.tgz
+246 silly lockFile 848149df-es-jshint-node-modules-minimatch /usr/local/lib/node_modules/jshint/node_modules/minimatch
+247 verbose lock /usr/local/lib/node_modules/jshint/node_modules/minimatch /Users/acelan/.npm/848149df-es-jshint-node-modules-minimatch.lock
+248 silly lockFile 361f0aa6-npm-minimatch-0-2-12-package-tgz /Users/acelan/.npm/minimatch/0.2.12/package.tgz
+249 verbose lock /Users/acelan/.npm/minimatch/0.2.12/package.tgz /Users/acelan/.npm/361f0aa6-npm-minimatch-0-2-12-package-tgz.lock
+250 verbose tar unpack /Users/acelan/.npm/underscore/1.4.4/package.tgz
+251 silly lockFile f2cc8c8b-s-jshint-node-modules-underscore /usr/local/lib/node_modules/jshint/node_modules/underscore
+252 verbose lock /usr/local/lib/node_modules/jshint/node_modules/underscore /Users/acelan/.npm/f2cc8c8b-s-jshint-node-modules-underscore.lock
+253 silly lockFile 7f6f20a9-npm-underscore-1-4-4-package-tgz /Users/acelan/.npm/underscore/1.4.4/package.tgz
+254 verbose lock /Users/acelan/.npm/underscore/1.4.4/package.tgz /Users/acelan/.npm/7f6f20a9-npm-underscore-1-4-4-package-tgz.lock
+255 verbose tar unpack /Users/acelan/.npm/console-browserify/0.1.6/package.tgz
+256 silly lockFile c9bb70bc--node-modules-console-browserify /usr/local/lib/node_modules/jshint/node_modules/console-browserify
+257 verbose lock /usr/local/lib/node_modules/jshint/node_modules/console-browserify /Users/acelan/.npm/c9bb70bc--node-modules-console-browserify.lock
+258 silly lockFile 0a47f33e-ole-browserify-0-1-6-package-tgz /Users/acelan/.npm/console-browserify/0.1.6/package.tgz
+259 verbose lock /Users/acelan/.npm/console-browserify/0.1.6/package.tgz /Users/acelan/.npm/0a47f33e-ole-browserify-0-1-6-package-tgz.lock
+260 silly gunzTarPerm modes [ '755', '644' ]
+261 silly gunzTarPerm modes [ '755', '644' ]
+262 silly gunzTarPerm modes [ '755', '644' ]
+263 silly gunzTarPerm modes [ '755', '644' ]
+264 silly gunzTarPerm modes [ '755', '644' ]
+265 silly gunzTarPerm extractEntry package.json
+266 silly gunzTarPerm extractEntry package.json
+267 silly gunzTarPerm extractEntry package.json
+268 silly gunzTarPerm extractEntry package.json
+269 silly gunzTarPerm extractEntry package.json
+270 silly gunzTarPerm extractEntry README.md
+271 silly gunzTarPerm extractEntry cli.js
+272 silly gunzTarPerm extractEntry README.md
+273 silly gunzTarPerm extractEntry LICENSE
+274 silly gunzTarPerm extractEntry .npmignore
+275 silly gunzTarPerm extractEntry README.md
+276 silly gunzTarPerm extractEntry .npmignore
+277 silly gunzTarPerm extractEntry README.md
+278 silly gunzTarPerm extractEntry .npmignore
+279 silly gunzTarPerm extractEntry README.md
+280 silly gunzTarPerm extractEntry index.js
+281 silly gunzTarPerm extractEntry minimatch.js
+282 silly gunzTarPerm extractEntry test/basic.js
+283 silly gunzTarPerm extractEntry test/brace-expand.js
+284 silly gunzTarPerm extractEntry test/caching.js
+285 silly gunzTarPerm extractEntry test/defaults.js
+286 silly gunzTarPerm extractEntry LICENSE
+287 silly gunzTarPerm extractEntry LICENSE
+288 silly gunzTarPerm extractEntry underscore-min.js
+289 silly gunzTarPerm extractEntry LICENCE
+290 silly gunzTarPerm extractEntry index.js
+291 silly gunzTarPerm extractEntry global.js
+292 silly gunzTarPerm extractEntry make.js
+293 silly gunzTarPerm extractEntry underscore.js
+294 silly gunzTarPerm extractEntry .testem.json
+295 silly gunzTarPerm extractEntry .travis.yml
+296 silly gunzTarPerm extractEntry examples/cat.js
+297 silly gunzTarPerm extractEntry examples/command.js
+298 silly gunzTarPerm extractEntry index.js
+299 silly gunzTarPerm extractEntry .travis.yml
+300 silly gunzTarPerm extractEntry test/index.js
+301 silly gunzTarPerm extractEntry test/static/test-adapter.js
+302 silly gunzTarPerm extractEntry index.html
+303 silly gunzTarPerm extractEntry favicon.ico
+304 silly gunzTarPerm extractEntry test/static/index.html
+305 silly gunzTarPerm extractEntry shell.js
+306 silly gunzTarPerm extractEntry jshint.json
+307 silly gunzTarPerm extractEntry .travis.yml
+308 silly gunzTarPerm extractEntry bin/shjs
+309 silly gunzTarPerm extractEntry scripts/docs.js
+310 silly gunzTarPerm extractEntry scripts/run-tests.js
+311 silly gunzTarPerm extractEntry CONTRIBUTING.md
+312 silly gunzTarPerm extractEntry CNAME
+313 silly gunzTarPerm extractEntry .documentup.json
+314 silly gunzTarPerm extractEntry test/.npmignore
+315 silly gunzTarPerm extractEntry examples/echo.js
+316 silly gunzTarPerm extractEntry examples/glob.js
+317 silly lockFile c9bb70bc--node-modules-console-browserify /usr/local/lib/node_modules/jshint/node_modules/console-browserify
+318 silly lockFile c9bb70bc--node-modules-console-browserify /usr/local/lib/node_modules/jshint/node_modules/console-browserify
+319 silly lockFile 0a47f33e-ole-browserify-0-1-6-package-tgz /Users/acelan/.npm/console-browserify/0.1.6/package.tgz
+320 silly lockFile 0a47f33e-ole-browserify-0-1-6-package-tgz /Users/acelan/.npm/console-browserify/0.1.6/package.tgz
+321 silly gunzTarPerm extractEntry examples/long_desc.js
+322 silly gunzTarPerm extractEntry examples/progress.js
+323 info preinstall console-browserify@0.1.6
+324 verbose readDependencies using package.json deps
+325 verbose readDependencies using package.json deps
+326 silly resolved []
+327 verbose about to build /usr/local/lib/node_modules/jshint/node_modules/console-browserify
+328 info build /usr/local/lib/node_modules/jshint/node_modules/console-browserify
+329 verbose linkStuff [ true,
+329 verbose linkStuff   '/usr/local/lib/node_modules',
+329 verbose linkStuff   false,
+329 verbose linkStuff   '/usr/local/lib/node_modules/jshint/node_modules' ]
+330 info linkStuff console-browserify@0.1.6
+331 silly gunzTarPerm extractEntry examples/sort.js
+332 silly gunzTarPerm extractEntry examples/spinner.js
+333 silly gunzTarPerm extractEntry examples/static.js
+334 silly gunzTarPerm extractEntry examples/static.coffee
+335 verbose linkBins console-browserify@0.1.6
+336 verbose linkMans console-browserify@0.1.6
+337 verbose rebuildBundles console-browserify@0.1.6
+338 info install console-browserify@0.1.6
+339 info postinstall console-browserify@0.1.6
+340 silly gunzTarPerm extractEntry test/exec.js
+341 silly gunzTarPerm extractEntry test/find.js
+342 silly lockFile 848149df-es-jshint-node-modules-minimatch /usr/local/lib/node_modules/jshint/node_modules/minimatch
+343 silly lockFile 848149df-es-jshint-node-modules-minimatch /usr/local/lib/node_modules/jshint/node_modules/minimatch
+344 silly lockFile 361f0aa6-npm-minimatch-0-2-12-package-tgz /Users/acelan/.npm/minimatch/0.2.12/package.tgz
+345 silly lockFile 361f0aa6-npm-minimatch-0-2-12-package-tgz /Users/acelan/.npm/minimatch/0.2.12/package.tgz
+346 silly gunzTarPerm extractEntry test/grep.js
+347 silly gunzTarPerm extractEntry test/env.js
+348 info preinstall minimatch@0.2.12
+349 verbose readDependencies using package.json deps
+350 silly gunzTarPerm extractEntry test/cat.js
+351 silly gunzTarPerm extractEntry test/mkdir.js
+352 verbose readDependencies using package.json deps
+353 verbose cache add [ 'lru-cache@2', null ]
+354 verbose cache add name=undefined spec="lru-cache@2" args=["lru-cache@2",null]
+355 verbose parsed url { protocol: null,
+355 verbose parsed url   slashes: null,
+355 verbose parsed url   auth: null,
+355 verbose parsed url   host: null,
+355 verbose parsed url   port: null,
+355 verbose parsed url   hostname: null,
+355 verbose parsed url   hash: null,
+355 verbose parsed url   search: null,
+355 verbose parsed url   query: null,
+355 verbose parsed url   pathname: 'lru-cache@2',
+355 verbose parsed url   path: 'lru-cache@2',
+355 verbose parsed url   href: 'lru-cache@2' }
+356 verbose cache add name="lru-cache" spec="2" args=["lru-cache","2"]
+357 verbose parsed url { protocol: null,
+357 verbose parsed url   slashes: null,
+357 verbose parsed url   auth: null,
+357 verbose parsed url   host: null,
+357 verbose parsed url   port: null,
+357 verbose parsed url   hostname: null,
+357 verbose parsed url   hash: null,
+357 verbose parsed url   search: null,
+357 verbose parsed url   query: null,
+357 verbose parsed url   pathname: '2',
+357 verbose parsed url   path: '2',
+357 verbose parsed url   href: '2' }
+358 verbose addNamed [ 'lru-cache', '2' ]
+359 verbose addNamed [ null, '>=2.0.0- <3.0.0-' ]
+360 silly lockFile b4f9d1ff-lru-cache-2 lru-cache@2
+361 verbose lock lru-cache@2 /Users/acelan/.npm/b4f9d1ff-lru-cache-2.lock
+362 verbose cache add [ 'sigmund@~1.0.0', null ]
+363 verbose cache add name=undefined spec="sigmund@~1.0.0" args=["sigmund@~1.0.0",null]
+364 verbose parsed url { protocol: null,
+364 verbose parsed url   slashes: null,
+364 verbose parsed url   auth: null,
+364 verbose parsed url   host: null,
+364 verbose parsed url   port: null,
+364 verbose parsed url   hostname: null,
+364 verbose parsed url   hash: null,
+364 verbose parsed url   search: null,
+364 verbose parsed url   query: null,
+364 verbose parsed url   pathname: 'sigmund@~1.0.0',
+364 verbose parsed url   path: 'sigmund@~1.0.0',
+364 verbose parsed url   href: 'sigmund@~1.0.0' }
+365 verbose cache add name="sigmund" spec="~1.0.0" args=["sigmund","~1.0.0"]
+366 verbose parsed url { protocol: null,
+366 verbose parsed url   slashes: null,
+366 verbose parsed url   auth: null,
+366 verbose parsed url   host: null,
+366 verbose parsed url   port: null,
+366 verbose parsed url   hostname: null,
+366 verbose parsed url   hash: null,
+366 verbose parsed url   search: null,
+366 verbose parsed url   query: null,
+366 verbose parsed url   pathname: '~1.0.0',
+366 verbose parsed url   path: '~1.0.0',
+366 verbose parsed url   href: '~1.0.0' }
+367 verbose addNamed [ 'sigmund', '~1.0.0' ]
+368 verbose addNamed [ null, '>=1.0.0- <1.1.0-' ]
+369 silly lockFile 584a4a05-sigmund-1-0-0 sigmund@~1.0.0
+370 verbose lock sigmund@~1.0.0 /Users/acelan/.npm/584a4a05-sigmund-1-0-0.lock
+371 silly addNameRange { name: 'lru-cache', range: '>=2.0.0- <3.0.0-', hasData: false }
+372 silly addNameRange { name: 'sigmund', range: '>=1.0.0- <1.1.0-', hasData: false }
+373 verbose url raw sigmund
+374 verbose url resolving [ 'https://registry.npmjs.org/', './sigmund' ]
+375 verbose url resolved https://registry.npmjs.org/sigmund
+376 info trying registry request attempt 1 at 11:15:18
+377 verbose etag "BAAVPGGBONNEW4H9S234JOULZ"
+378 http GET https://registry.npmjs.org/sigmund
+379 silly lockFile 17cd2e7d--modules-jshint-node-modules-cli /usr/local/lib/node_modules/jshint/node_modules/cli
+380 silly lockFile 17cd2e7d--modules-jshint-node-modules-cli /usr/local/lib/node_modules/jshint/node_modules/cli
+381 silly gunzTarPerm extractEntry test/mv.js
+382 silly gunzTarPerm extractEntry test/popd.js
+383 verbose url raw lru-cache
+384 verbose url resolving [ 'https://registry.npmjs.org/', './lru-cache' ]
+385 verbose url resolved https://registry.npmjs.org/lru-cache
+386 info trying registry request attempt 1 at 11:15:18
+387 verbose etag "14VF40U499GDAIDK33TEOG56Q"
+388 http GET https://registry.npmjs.org/lru-cache
+389 silly lockFile fab51055-acelan-npm-cli-0-4-5-package-tgz /Users/acelan/.npm/cli/0.4.5/package.tgz
+390 silly lockFile fab51055-acelan-npm-cli-0-4-5-package-tgz /Users/acelan/.npm/cli/0.4.5/package.tgz
+391 info preinstall cli@0.4.5
+392 verbose readDependencies using package.json deps
+393 silly gunzTarPerm extractEntry test/pushd.js
+394 silly gunzTarPerm extractEntry test/echo.js
+395 verbose readDependencies using package.json deps
+396 verbose cache add [ 'glob@>= 3.1.4', null ]
+397 verbose cache add name=undefined spec="glob@>= 3.1.4" args=["glob@>= 3.1.4",null]
+398 verbose parsed url { protocol: null,
+398 verbose parsed url   slashes: null,
+398 verbose parsed url   auth: null,
+398 verbose parsed url   host: null,
+398 verbose parsed url   port: null,
+398 verbose parsed url   hostname: null,
+398 verbose parsed url   hash: null,
+398 verbose parsed url   search: null,
+398 verbose parsed url   query: null,
+398 verbose parsed url   pathname: 'glob@%3E=%203.1.4',
+398 verbose parsed url   path: 'glob@%3E=%203.1.4',
+398 verbose parsed url   href: 'glob@%3E=%203.1.4' }
+399 verbose cache add name="glob" spec=">= 3.1.4" args=["glob",">= 3.1.4"]
+400 verbose parsed url { protocol: null,
+400 verbose parsed url   slashes: null,
+400 verbose parsed url   auth: null,
+400 verbose parsed url   host: null,
+400 verbose parsed url   port: null,
+400 verbose parsed url   hostname: null,
+400 verbose parsed url   hash: null,
+400 verbose parsed url   search: null,
+400 verbose parsed url   query: null,
+400 verbose parsed url   pathname: '%3E=%203.1.4',
+400 verbose parsed url   path: '%3E=%203.1.4',
+400 verbose parsed url   href: '%3E=%203.1.4' }
+401 verbose addNamed [ 'glob', '>= 3.1.4' ]
+402 verbose addNamed [ null, '>=3.1.4' ]
+403 silly lockFile 2f09716d-glob-3-1-4 glob@>= 3.1.4
+404 verbose lock glob@>= 3.1.4 /Users/acelan/.npm/2f09716d-glob-3-1-4.lock
+405 silly addNameRange { name: 'glob', range: '>=3.1.4', hasData: false }
+406 silly gunzTarPerm extractEntry test/pwd.js
+407 silly gunzTarPerm extractEntry test/dirs.js
+408 silly gunzTarPerm extractEntry test/to.js
+409 silly gunzTarPerm extractEntry test/cp.js
+410 verbose url raw glob
+411 verbose url resolving [ 'https://registry.npmjs.org/', './glob' ]
+412 verbose url resolved https://registry.npmjs.org/glob
+413 info trying registry request attempt 1 at 11:15:18
+414 verbose etag "FHUPEI84RTD0TUQHAT6GOLU3"
+415 http GET https://registry.npmjs.org/glob
+416 silly gunzTarPerm extractEntry test/rm.js
+417 silly gunzTarPerm extractEntry test/config.js
+418 silly gunzTarPerm extractEntry test/sed.js
+419 silly gunzTarPerm extractEntry test/chmod.js
+420 silly gunzTarPerm extractEntry test/tempdir.js
+421 silly gunzTarPerm extractEntry test/cd.js
+422 silly gunzTarPerm extractEntry test/test.js
+423 silly gunzTarPerm extractEntry test/ls.js
+424 silly gunzTarPerm extractEntry test/which.js
+425 silly gunzTarPerm extractEntry test/make.js
+426 silly gunzTarPerm extractEntry test/resources/file1.js
+427 silly gunzTarPerm extractEntry test/resources/file2.js
+428 silly gunzTarPerm extractEntry test/resources/file2
+429 silly gunzTarPerm extractEntry test/resources/external/node_script.js
+430 silly gunzTarPerm extractEntry test/resources/file1
+431 silly gunzTarPerm extractEntry test/resources/a.txt
+432 silly gunzTarPerm extractEntry test/resources/file1.txt
+433 silly gunzTarPerm extractEntry test/resources/chmod/a/b/c/.npmignore
+434 silly gunzTarPerm extractEntry test/resources/chmod/b/a/b/.npmignore
+435 silly gunzTarPerm extractEntry test/resources/chmod/c/a/b/.npmignore
+436 silly lockFile f2cc8c8b-s-jshint-node-modules-underscore /usr/local/lib/node_modules/jshint/node_modules/underscore
+437 silly lockFile f2cc8c8b-s-jshint-node-modules-underscore /usr/local/lib/node_modules/jshint/node_modules/underscore
+438 silly lockFile 7f6f20a9-npm-underscore-1-4-4-package-tgz /Users/acelan/.npm/underscore/1.4.4/package.tgz
+439 silly lockFile 7f6f20a9-npm-underscore-1-4-4-package-tgz /Users/acelan/.npm/underscore/1.4.4/package.tgz
+440 silly gunzTarPerm extractEntry test/resources/chmod/file1
+441 silly gunzTarPerm extractEntry test/resources/cp/a
+442 info preinstall underscore@1.4.4
+443 verbose readDependencies using package.json deps
+444 verbose readDependencies using package.json deps
+445 silly resolved []
+446 verbose about to build /usr/local/lib/node_modules/jshint/node_modules/underscore
+447 info build /usr/local/lib/node_modules/jshint/node_modules/underscore
+448 verbose linkStuff [ true,
+448 verbose linkStuff   '/usr/local/lib/node_modules',
+448 verbose linkStuff   false,
+448 verbose linkStuff   '/usr/local/lib/node_modules/jshint/node_modules' ]
+449 info linkStuff underscore@1.4.4
+450 verbose linkBins underscore@1.4.4
+451 verbose linkMans underscore@1.4.4
+452 verbose rebuildBundles underscore@1.4.4
+453 info install underscore@1.4.4
+454 silly gunzTarPerm extractEntry test/resources/cp/b
+455 silly gunzTarPerm extractEntry test/resources/cp/dir_a/z
+456 info postinstall underscore@1.4.4
+457 silly gunzTarPerm extractEntry test/resources/cp/dir_b/dir_b_a/dir_b_a_a/z
+458 silly gunzTarPerm extractEntry test/resources/file2.txt
+459 silly gunzTarPerm extractEntry test/resources/find/.hidden
+460 silly gunzTarPerm extractEntry test/resources/find/a
+461 silly gunzTarPerm extractEntry test/resources/find/b
+462 silly gunzTarPerm extractEntry test/resources/find/dir1/a_dir1
+463 silly gunzTarPerm extractEntry test/resources/find/dir1/dir11/a_dir11
+464 silly gunzTarPerm extractEntry test/resources/find/dir2/a_dir1
+465 silly gunzTarPerm extractEntry test/resources/issue44/main.js
+466 silly gunzTarPerm extractEntry test/resources/ls/file1.js
+467 silly gunzTarPerm extractEntry test/resources/ls/file2.js
+468 silly gunzTarPerm extractEntry test/resources/ls/.hidden_dir/nada
+469 silly gunzTarPerm extractEntry test/resources/ls/.hidden_file
+470 silly gunzTarPerm extractEntry test/resources/ls/a_dir/.hidden_dir/nada
+471 silly gunzTarPerm extractEntry test/resources/ls/a_dir/b_dir/z
+472 silly gunzTarPerm extractEntry test/resources/ls/a_dir/nada
+473 silly gunzTarPerm extractEntry test/resources/ls/file1
+474 silly gunzTarPerm extractEntry test/resources/ls/file2
+475 silly gunzTarPerm extractEntry test/resources/ls/filename(with)[chars$]^that.must+be-escaped
+476 silly gunzTarPerm extractEntry test/resources/pushd/a/dummy
+477 silly gunzTarPerm extractEntry test/resources/pushd/b/c/dummy
+478 silly lockFile b1e1d7ed-ules-jshint-node-modules-shelljs /usr/local/lib/node_modules/jshint/node_modules/shelljs
+479 silly lockFile b1e1d7ed-ules-jshint-node-modules-shelljs /usr/local/lib/node_modules/jshint/node_modules/shelljs
+480 silly lockFile 003079e5-an-npm-shelljs-0-1-4-package-tgz /Users/acelan/.npm/shelljs/0.1.4/package.tgz
+481 silly lockFile 003079e5-an-npm-shelljs-0-1-4-package-tgz /Users/acelan/.npm/shelljs/0.1.4/package.tgz
+482 info preinstall shelljs@0.1.4
+483 verbose readDependencies using package.json deps
+484 verbose readDependencies using package.json deps
+485 silly resolved []
+486 verbose about to build /usr/local/lib/node_modules/jshint/node_modules/shelljs
+487 info build /usr/local/lib/node_modules/jshint/node_modules/shelljs
+488 verbose linkStuff [ true,
+488 verbose linkStuff   '/usr/local/lib/node_modules',
+488 verbose linkStuff   false,
+488 verbose linkStuff   '/usr/local/lib/node_modules/jshint/node_modules' ]
+489 info linkStuff shelljs@0.1.4
+490 verbose linkBins shelljs@0.1.4
+491 verbose link bins [ { shjs: './bin/shjs' },
+491 verbose link bins   '/usr/local/lib/node_modules/jshint/node_modules/.bin',
+491 verbose link bins   false ]
+492 verbose linkMans shelljs@0.1.4
+493 verbose rebuildBundles shelljs@0.1.4
+494 info install shelljs@0.1.4
+495 info postinstall shelljs@0.1.4
+496 http 304 https://registry.npmjs.org/lru-cache
+497 silly registry.get cb [ 304,
+497 silly registry.get   { server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+497 silly registry.get     etag: '"14VF40U499GDAIDK33TEOG56Q"',
+497 silly registry.get     date: 'Thu, 31 Oct 2013 03:15:17 GMT',
+497 silly registry.get     'content-length': '0' } ]
+498 verbose etag lru-cache from cache
+499 silly addNameRange number 2 { name: 'lru-cache', range: '>=2.0.0- <3.0.0-', hasData: true }
+500 silly addNameRange versions [ 'lru-cache',
+500 silly addNameRange   [ '1.0.1',
+500 silly addNameRange     '1.0.2',
+500 silly addNameRange     '1.0.3',
+500 silly addNameRange     '1.0.4',
+500 silly addNameRange     '1.0.5',
+500 silly addNameRange     '1.0.6',
+500 silly addNameRange     '1.1.0',
+500 silly addNameRange     '1.1.1',
+500 silly addNameRange     '2.0.0',
+500 silly addNameRange     '2.0.1',
+500 silly addNameRange     '2.0.2',
+500 silly addNameRange     '2.0.3',
+500 silly addNameRange     '2.0.4',
+500 silly addNameRange     '2.1.0',
+500 silly addNameRange     '2.2.0',
+500 silly addNameRange     '2.2.1',
+500 silly addNameRange     '2.2.2',
+500 silly addNameRange     '2.2.4',
+500 silly addNameRange     '2.3.0',
+500 silly addNameRange     '2.3.1' ] ]
+501 verbose addNamed [ 'lru-cache', '2.3.1' ]
+502 verbose addNamed [ '2.3.1', '2.3.1' ]
+503 silly lockFile ef81ebb1-lru-cache-2-3-1 lru-cache@2.3.1
+504 verbose lock lru-cache@2.3.1 /Users/acelan/.npm/ef81ebb1-lru-cache-2-3-1.lock
+505 silly lockFile ef81ebb1-lru-cache-2-3-1 lru-cache@2.3.1
+506 silly lockFile ef81ebb1-lru-cache-2-3-1 lru-cache@2.3.1
+507 silly lockFile b4f9d1ff-lru-cache-2 lru-cache@2
+508 silly lockFile b4f9d1ff-lru-cache-2 lru-cache@2
+509 http 304 https://registry.npmjs.org/sigmund
+510 silly registry.get cb [ 304,
+510 silly registry.get   { server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+510 silly registry.get     etag: '"BAAVPGGBONNEW4H9S234JOULZ"',
+510 silly registry.get     date: 'Thu, 31 Oct 2013 03:15:17 GMT',
+510 silly registry.get     'content-length': '0' } ]
+511 verbose etag sigmund from cache
+512 silly addNameRange number 2 { name: 'sigmund', range: '>=1.0.0- <1.1.0-', hasData: true }
+513 silly addNameRange versions [ 'sigmund', [ '1.0.0' ] ]
+514 verbose addNamed [ 'sigmund', '1.0.0' ]
+515 verbose addNamed [ '1.0.0', '1.0.0' ]
+516 silly lockFile 7b2d1244-sigmund-1-0-0 sigmund@1.0.0
+517 verbose lock sigmund@1.0.0 /Users/acelan/.npm/7b2d1244-sigmund-1-0-0.lock
+518 silly lockFile 7b2d1244-sigmund-1-0-0 sigmund@1.0.0
+519 silly lockFile 7b2d1244-sigmund-1-0-0 sigmund@1.0.0
+520 silly lockFile 584a4a05-sigmund-1-0-0 sigmund@~1.0.0
+521 silly lockFile 584a4a05-sigmund-1-0-0 sigmund@~1.0.0
+522 silly resolved [ { name: 'lru-cache',
+522 silly resolved     description: 'A cache object that deletes the least-recently-used items.',
+522 silly resolved     version: '2.3.1',
+522 silly resolved     author: { name: 'Isaac Z. Schlueter', email: 'i@izs.me' },
+522 silly resolved     scripts: { test: 'tap test --gc' },
+522 silly resolved     main: 'lib/lru-cache.js',
+522 silly resolved     repository:
+522 silly resolved      { type: 'git',
+522 silly resolved        url: 'git://github.com/isaacs/node-lru-cache.git' },
+522 silly resolved     devDependencies: { tap: '', weak: '' },
+522 silly resolved     license:
+522 silly resolved      { type: 'MIT',
+522 silly resolved        url: 'http://github.com/isaacs/node-lru-cache/raw/master/LICENSE' },
+522 silly resolved     readme: '# lru cache\n\nA cache object that deletes the least-recently-used items.\n\n## Usage:\n\n```javascript\nvar LRU = require("lru-cache")\n  , options = { max: 500\n              , length: function (n) { return n * 2 }\n              , dispose: function (key, n) { n.close() }\n              , maxAge: 1000 * 60 * 60 }\n  , cache = LRU(options)\n  , otherCache = LRU(50) // sets just the max size\n\ncache.set("key", "value")\ncache.get("key") // "value"\n\ncache.reset()    // empty the cache\n```\n\nIf you put more stuff in it, then items will fall out.\n\nIf you try to put an oversized thing in it, then it\'ll fall out right\naway.\n\n## Options\n\n* `max` The maximum size of the cache, checked by applying the length\n  function to all values in the cache.  Not setting this is kind of\n  silly, since that\'s the whole purpose of this lib, but it defaults\n  to `Infinity`.\n* `maxAge` Maximum age in ms.  Items are not pro-actively pruned out\n  as they age, but if you try to get an item that is too old, it\'ll\n  drop it and return undefined instead of giving it to you.\n* `length` Function that is used to calculate the length of stored\n  items.  If you\'re storing strings or buffers, then you probably want\n  to do something like `function(n){return n.length}`.  The default is\n  `function(n){return 1}`, which is fine if you want to store `n`\n  like-sized things.\n* `dispose` Function that is called on items when they are dropped\n  from the cache.  This can be handy if you want to close file\n  descriptors or do other cleanup tasks when items are no longer\n  accessible.  Called with `key, value`.  It\'s called *before*\n  actually removing the item from the internal cache, so if you want\n  to immediately put it back in, you\'ll have to do that in a\n  `nextTick` or `setTimeout` callback or it won\'t do anything.\n* `stale` By default, if you set a `maxAge`, it\'ll only actually pull\n  stale items out of the cache when you `get(key)`.  (That is, it\'s\n  not pre-emptively doing a `setTimeout` or anything.)  If you set\n  `stale:true`, it\'ll return the stale value before deleting it.  If\n  you don\'t set this, then it\'ll return `undefined` when you try to\n  get a stale entry, as if it had already been deleted.\n\n## API\n\n* `set(key, value)`\n* `get(key) => value`\n\n    Both of these will update the "recently used"-ness of the key.\n    They do what you think.\n\n* `peek(key)`\n\n    Returns the key value (or `undefined` if not found) without\n    updating the "recently used"-ness of the key.\n\n    (If you find yourself using this a lot, you *might* be using the\n    wrong sort of data structure, but there are some use cases where\n    it\'s handy.)\n\n* `del(key)`\n\n    Deletes a key out of the cache.\n\n* `reset()`\n\n    Clear the cache entirely, throwing away all values.\n\n* `has(key)`\n\n    Check if a key is in the cache, without updating the recent-ness\n    or deleting it for being stale.\n\n* `forEach(function(value,key,cache), [thisp])`\n\n    Just like `Array.prototype.forEach`.  Iterates over all the keys\n    in the cache, in order of recent-ness.  (Ie, more recently used\n    items are iterated over first.)\n\n* `keys()`\n\n    Return an array of the keys in the cache.\n\n* `values()`\n\n    Return an array of the values in the cache.\n',
+522 silly resolved     readmeFilename: 'README.md',
+522 silly resolved     contributors:
+522 silly resolved      [ [Object],
+522 silly resolved        [Object],
+522 silly resolved        [Object],
+522 silly resolved        [Object],
+522 silly resolved        [Object],
+522 silly resolved        [Object],
+522 silly resolved        [Object] ],
+522 silly resolved     bugs: { url: 'https://github.com/isaacs/node-lru-cache/issues' },
+522 silly resolved     _id: 'lru-cache@2.3.1',
+522 silly resolved     _from: 'lru-cache@2' },
+522 silly resolved   { name: 'sigmund',
+522 silly resolved     version: '1.0.0',
+522 silly resolved     description: 'Quick and dirty signatures for Objects.',
+522 silly resolved     main: 'sigmund.js',
+522 silly resolved     directories: { test: 'test' },
+522 silly resolved     dependencies: {},
+522 silly resolved     devDependencies: { tap: '~0.3.0' },
+522 silly resolved     scripts: { test: 'tap test/*.js', bench: 'node bench.js' },
+522 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/sigmund' },
+522 silly resolved     keywords: [ 'object', 'signature', 'key', 'data', 'psychoanalysis' ],
+522 silly resolved     author:
+522 silly resolved      { name: 'Isaac Z. Schlueter',
+522 silly resolved        email: 'i@izs.me',
+522 silly resolved        url: 'http://blog.izs.me/' },
+522 silly resolved     license: 'BSD',
+522 silly resolved     readme: '# sigmund\n\nQuick and dirty signatures for Objects.\n\nThis is like a much faster `deepEquals` comparison, which returns a\nstring key suitable for caches and the like.\n\n## Usage\n\n```javascript\nfunction doSomething (someObj) {\n  var key = sigmund(someObj, maxDepth) // max depth defaults to 10\n  var cached = cache.get(key)\n  if (cached) return cached)\n\n  var result = expensiveCalculation(someObj)\n  cache.set(key, result)\n  return result\n}\n```\n\nThe resulting key will be as unique and reproducible as calling\n`JSON.stringify` or `util.inspect` on the object, but is much faster.\nIn order to achieve this speed, some differences are glossed over.\nFor example, the object `{0:\'foo\'}` will be treated identically to the\narray `[\'foo\']`.\n\nAlso, just as there is no way to summon the soul from the scribblings\nof a cocain-addled psychoanalyst, there is no way to revive the object\nfrom the signature string that sigmund gives you.  In fact, it\'s\nbarely even readable.\n\nAs with `sys.inspect` and `JSON.stringify`, larger objects will\nproduce larger signature strings.\n\nBecause sigmund is a bit less strict than the more thorough\nalternatives, the strings will be shorter, and also there is a\nslightly higher chance for collisions.  For example, these objects\nhave the same signature:\n\n    var obj1 = {a:\'b\',c:/def/,g:[\'h\',\'i\',{j:\'\',k:\'l\'}]}\n    var obj2 = {a:\'b\',c:\'/def/\',g:[\'h\',\'i\',\'{jkl\']}\n\nLike a good Freudian, sigmund is most effective when you already have\nsome understanding of what you\'re looking for.  It can help you help\nyourself, but you must be willing to do some work as well.\n\nCycles are handled, and cyclical objects are silently omitted (though\nthe key is included in the signature output.)\n\nThe second argument is the maximum depth, which defaults to 10,\nbecause that is the maximum object traversal depth covered by most\ninsurance carriers.\n',
+522 silly resolved     readmeFilename: 'README.md',
+522 silly resolved     bugs: { url: 'https://github.com/isaacs/sigmund/issues' },
+522 silly resolved     _id: 'sigmund@1.0.0',
+522 silly resolved     _from: 'sigmund@~1.0.0' } ]
+523 info install lru-cache@2.3.1 into /usr/local/lib/node_modules/jshint/node_modules/minimatch
+524 info install sigmund@1.0.0 into /usr/local/lib/node_modules/jshint/node_modules/minimatch
+525 info installOne lru-cache@2.3.1
+526 info installOne sigmund@1.0.0
+527 info /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/lru-cache unbuild
+528 info /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/sigmund unbuild
+529 verbose tar unpack /Users/acelan/.npm/lru-cache/2.3.1/package.tgz
+530 silly lockFile 4c21ad12-minimatch-node-modules-lru-cache /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/lru-cache
+531 verbose lock /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/lru-cache /Users/acelan/.npm/4c21ad12-minimatch-node-modules-lru-cache.lock
+532 silly lockFile 4c1c70e2--npm-lru-cache-2-3-1-package-tgz /Users/acelan/.npm/lru-cache/2.3.1/package.tgz
+533 verbose lock /Users/acelan/.npm/lru-cache/2.3.1/package.tgz /Users/acelan/.npm/4c1c70e2--npm-lru-cache-2-3-1-package-tgz.lock
+534 verbose tar unpack /Users/acelan/.npm/sigmund/1.0.0/package.tgz
+535 silly lockFile 463c4256-s-minimatch-node-modules-sigmund /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/sigmund
+536 verbose lock /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/sigmund /Users/acelan/.npm/463c4256-s-minimatch-node-modules-sigmund.lock
+537 silly lockFile 603817d3-an-npm-sigmund-1-0-0-package-tgz /Users/acelan/.npm/sigmund/1.0.0/package.tgz
+538 verbose lock /Users/acelan/.npm/sigmund/1.0.0/package.tgz /Users/acelan/.npm/603817d3-an-npm-sigmund-1-0-0-package-tgz.lock
+539 silly gunzTarPerm modes [ '755', '644' ]
+540 silly gunzTarPerm modes [ '755', '644' ]
+541 silly gunzTarPerm extractEntry package.json
+542 silly gunzTarPerm extractEntry package.json
+543 silly gunzTarPerm extractEntry .npmignore
+544 silly gunzTarPerm extractEntry README.md
+545 silly gunzTarPerm extractEntry README.md
+546 silly gunzTarPerm extractEntry LICENSE
+547 silly gunzTarPerm extractEntry LICENSE
+548 silly gunzTarPerm extractEntry bench.js
+549 silly gunzTarPerm extractEntry bench.js
+550 silly gunzTarPerm extractEntry sigmund.js
+551 silly gunzTarPerm extractEntry AUTHORS
+552 silly gunzTarPerm extractEntry lib/lru-cache.js
+553 silly gunzTarPerm extractEntry test/basic.js
+554 silly gunzTarPerm extractEntry test/basic.js
+555 silly gunzTarPerm extractEntry test/foreach.js
+556 silly gunzTarPerm extractEntry test/memory-leak.js
+557 silly lockFile 463c4256-s-minimatch-node-modules-sigmund /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/sigmund
+558 silly lockFile 463c4256-s-minimatch-node-modules-sigmund /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/sigmund
+559 silly lockFile 603817d3-an-npm-sigmund-1-0-0-package-tgz /Users/acelan/.npm/sigmund/1.0.0/package.tgz
+560 silly lockFile 603817d3-an-npm-sigmund-1-0-0-package-tgz /Users/acelan/.npm/sigmund/1.0.0/package.tgz
+561 info preinstall sigmund@1.0.0
+562 verbose readDependencies using package.json deps
+563 verbose readDependencies using package.json deps
+564 silly resolved []
+565 verbose about to build /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/sigmund
+566 info build /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/sigmund
+567 verbose linkStuff [ true,
+567 verbose linkStuff   '/usr/local/lib/node_modules',
+567 verbose linkStuff   false,
+567 verbose linkStuff   '/usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules' ]
+568 info linkStuff sigmund@1.0.0
+569 verbose linkBins sigmund@1.0.0
+570 verbose linkMans sigmund@1.0.0
+571 verbose rebuildBundles sigmund@1.0.0
+572 info install sigmund@1.0.0
+573 info postinstall sigmund@1.0.0
+574 silly lockFile 4c21ad12-minimatch-node-modules-lru-cache /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/lru-cache
+575 silly lockFile 4c21ad12-minimatch-node-modules-lru-cache /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/lru-cache
+576 silly lockFile 4c1c70e2--npm-lru-cache-2-3-1-package-tgz /Users/acelan/.npm/lru-cache/2.3.1/package.tgz
+577 silly lockFile 4c1c70e2--npm-lru-cache-2-3-1-package-tgz /Users/acelan/.npm/lru-cache/2.3.1/package.tgz
+578 info preinstall lru-cache@2.3.1
+579 verbose readDependencies using package.json deps
+580 verbose readDependencies using package.json deps
+581 silly resolved []
+582 verbose about to build /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/lru-cache
+583 info build /usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules/lru-cache
+584 verbose linkStuff [ true,
+584 verbose linkStuff   '/usr/local/lib/node_modules',
+584 verbose linkStuff   false,
+584 verbose linkStuff   '/usr/local/lib/node_modules/jshint/node_modules/minimatch/node_modules' ]
+585 info linkStuff lru-cache@2.3.1
+586 verbose linkBins lru-cache@2.3.1
+587 verbose linkMans lru-cache@2.3.1
+588 verbose rebuildBundles lru-cache@2.3.1
+589 info install lru-cache@2.3.1
+590 info postinstall lru-cache@2.3.1
+591 verbose about to build /usr/local/lib/node_modules/jshint/node_modules/minimatch
+592 info build /usr/local/lib/node_modules/jshint/node_modules/minimatch
+593 verbose linkStuff [ true,
+593 verbose linkStuff   '/usr/local/lib/node_modules',
+593 verbose linkStuff   false,
+593 verbose linkStuff   '/usr/local/lib/node_modules/jshint/node_modules' ]
+594 info linkStuff minimatch@0.2.12
+595 verbose linkBins minimatch@0.2.12
+596 verbose linkMans minimatch@0.2.12
+597 verbose rebuildBundles minimatch@0.2.12
+598 verbose rebuildBundles [ 'lru-cache', 'sigmund' ]
+599 info install minimatch@0.2.12
+600 info postinstall minimatch@0.2.12
+601 http 200 https://registry.npmjs.org/glob
+602 silly registry.get cb [ 200,
+602 silly registry.get   { vary: 'Accept',
+602 silly registry.get     server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+602 silly registry.get     etag: '"1W1NU8TJZ8J9UU08IW6CJW235"',
+602 silly registry.get     date: 'Thu, 31 Oct 2013 03:15:17 GMT',
+602 silly registry.get     'content-type': 'application/json',
+602 silly registry.get     'content-length': '275682' } ]
+603 silly addNameRange number 2 { name: 'glob', range: '>=3.1.4', hasData: true }
+604 silly addNameRange versions [ 'glob',
+604 silly addNameRange   [ '1.1.0',
+604 silly addNameRange     '2.0.9',
+604 silly addNameRange     '2.0.8',
+604 silly addNameRange     '2.0.7',
+604 silly addNameRange     '2.1.0',
+604 silly addNameRange     '3.0.0',
+604 silly addNameRange     '3.0.1',
+604 silly addNameRange     '3.1.0',
+604 silly addNameRange     '3.1.1',
+604 silly addNameRange     '3.1.2',
+604 silly addNameRange     '3.1.3',
+604 silly addNameRange     '3.1.4',
+604 silly addNameRange     '3.1.5',
+604 silly addNameRange     '3.1.6',
+604 silly addNameRange     '3.1.7',
+604 silly addNameRange     '3.1.9',
+604 silly addNameRange     '3.1.10',
+604 silly addNameRange     '3.1.11',
+604 silly addNameRange     '3.1.12',
+604 silly addNameRange     '3.1.13',
+604 silly addNameRange     '3.1.14',
+604 silly addNameRange     '3.1.15',
+604 silly addNameRange     '3.1.16',
+604 silly addNameRange     '3.1.17',
+604 silly addNameRange     '3.1.18',
+604 silly addNameRange     '3.1.19',
+604 silly addNameRange     '3.1.20',
+604 silly addNameRange     '3.1.21',
+604 silly addNameRange     '3.2.0',
+604 silly addNameRange     '3.2.1',
+604 silly addNameRange     '3.2.3',
+604 silly addNameRange     '3.2.4',
+604 silly addNameRange     '3.2.5',
+604 silly addNameRange     '3.2.6' ] ]
+605 verbose addNamed [ 'glob', '3.2.6' ]
+606 verbose addNamed [ '3.2.6', '3.2.6' ]
+607 silly lockFile 7c662a47-glob-3-2-6 glob@3.2.6
+608 verbose lock glob@3.2.6 /Users/acelan/.npm/7c662a47-glob-3-2-6.lock
+609 silly lockFile 7c662a47-glob-3-2-6 glob@3.2.6
+610 silly lockFile 7c662a47-glob-3-2-6 glob@3.2.6
+611 silly lockFile 2f09716d-glob-3-1-4 glob@>= 3.1.4
+612 silly lockFile 2f09716d-glob-3-1-4 glob@>= 3.1.4
+613 silly resolved [ { author:
+613 silly resolved      { name: 'Isaac Z. Schlueter',
+613 silly resolved        email: 'i@izs.me',
+613 silly resolved        url: 'http://blog.izs.me/' },
+613 silly resolved     name: 'glob',
+613 silly resolved     description: 'a little globber',
+613 silly resolved     version: '3.2.6',
+613 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/node-glob.git' },
+613 silly resolved     main: 'glob.js',
+613 silly resolved     engines: { node: '*' },
+613 silly resolved     dependencies: { minimatch: '~0.2.11', inherits: '2' },
+613 silly resolved     devDependencies: { tap: '~0.4.0', mkdirp: '0', rimraf: '1' },
+613 silly resolved     scripts: { test: 'tap test/*.js' },
+613 silly resolved     license: 'BSD',
+613 silly resolved     readme: '# Glob\n\nMatch files using the patterns the shell uses, like stars and stuff.\n\nThis is a glob implementation in JavaScript.  It uses the `minimatch`\nlibrary to do its matching.\n\n## Attention: node-glob users!\n\nThe API has changed dramatically between 2.x and 3.x. This library is\nnow 100% JavaScript, and the integer flags have been replaced with an\noptions object.\n\nAlso, there\'s an event emitter class, proper tests, and all the other\nthings you\'ve come to expect from node modules.\n\nAnd best of all, no compilation!\n\n## Usage\n\n```javascript\nvar glob = require("glob")\n\n// options is optional\nglob("**/*.js", options, function (er, files) {\n  // files is an array of filenames.\n  // If the `nonull` option is set, and nothing\n  // was found, then files is ["**/*.js"]\n  // er is an error object or null.\n})\n```\n\n## Features\n\nPlease see the [minimatch\ndocumentation](https://github.com/isaacs/minimatch) for more details.\n\nSupports these glob features:\n\n* Brace Expansion\n* Extended glob matching\n* "Globstar" `**` matching\n\nSee:\n\n* `man sh`\n* `man bash`\n* `man 3 fnmatch`\n* `man 5 gitignore`\n* [minimatch documentation](https://github.com/isaacs/minimatch)\n\n## glob(pattern, [options], cb)\n\n* `pattern` {String} Pattern to be matched\n* `options` {Object}\n* `cb` {Function}\n  * `err` {Error | null}\n  * `matches` {Array<String>} filenames found matching the pattern\n\nPerform an asynchronous glob search.\n\n## glob.sync(pattern, [options])\n\n* `pattern` {String} Pattern to be matched\n* `options` {Object}\n* return: {Array<String>} filenames found matching the pattern\n\nPerform a synchronous glob search.\n\n## Class: glob.Glob\n\nCreate a Glob object by instanting the `glob.Glob` class.\n\n```javascript\nvar Glob = require("glob").Glob\nvar mg = new Glob(pattern, options, cb)\n```\n\nIt\'s an EventEmitter, and starts walking the filesystem to find matches\nimmediately.\n\n### new glob.Glob(pattern, [options], [cb])\n\n* `pattern` {String} pattern to search for\n* `options` {Object}\n* `cb` {Function} Called when an error occurs, or matches are found\n  * `err` {Error | null}\n  * `matches` {Array<String>} filenames found matching the pattern\n\nNote that if the `sync` flag is set in the options, then matches will\nbe immediately available on the `g.found` member.\n\n### Properties\n\n* `minimatch` The minimatch object that the glob uses.\n* `options` The options object passed in.\n* `error` The error encountered.  When an error is encountered, the\n  glob object is in an undefined state, and should be discarded.\n* `aborted` Boolean which is set to true when calling `abort()`.  There\n  is no way at this time to continue a glob search after aborting, but\n  you can re-use the statCache to avoid having to duplicate syscalls.\n* `statCache` Collection of all the stat results the glob search\n  performed.\n* `cache` Convenience object.  Each field has the following possible\n  values:\n  * `false` - Path does not exist\n  * `true` - Path exists\n  * `1` - Path exists, and is not a directory\n  * `2` - Path exists, and is a directory\n  * `[file, entries, ...]` - Path exists, is a directory, and the\n    array value is the results of `fs.readdir`\n\n### Events\n\n* `end` When the matching is finished, this is emitted with all the\n  matches found.  If the `nonull` option is set, and no match was found,\n  then the `matches` list contains the original pattern.  The matches\n  are sorted, unless the `nosort` flag is set.\n* `match` Every time a match is found, this is emitted with the matched.\n* `error` Emitted when an unexpected error is encountered, or whenever\n  any fs error occurs if `options.strict` is set.\n* `abort` When `abort()` is called, this event is raised.\n\n### Methods\n\n* `abort` Stop the search.\n\n### Options\n\nAll the options that can be passed to Minimatch can also be passed to\nGlob to change pattern matching behavior.  Also, some have been added,\nor have glob-specific ramifications.\n\nAll options are false by default, unless otherwise noted.\n\nAll options are added to the glob object, as well.\n\n* `cwd` The current working directory in which to search.  Defaults\n  to `process.cwd()`.\n* `root` The place where patterns starting with `/` will be mounted\n  onto.  Defaults to `path.resolve(options.cwd, "/")` (`/` on Unix\n  systems, and `C:\\` or some such on Windows.)\n* `dot` Include `.dot` files in normal matches and `globstar` matches.\n  Note that an explicit dot in a portion of the pattern will always\n  match dot files.\n* `nomount` By default, a pattern starting with a forward-slash will be\n  "mounted" onto the root setting, so that a valid filesystem path is\n  returned.  Set this flag to disable that behavior.\n* `mark` Add a `/` character to directory matches.  Note that this\n  requires additional stat calls.\n* `nosort` Don\'t sort the results.\n* `stat` Set to true to stat *all* results.  This reduces performance\n  somewhat, and is completely unnecessary, unless `readdir` is presumed\n  to be an untrustworthy indicator of file existence.  It will cause\n  ELOOP to be triggered one level sooner in the case of cyclical\n  symbolic links.\n* `silent` When an unusual error is encountered\n  when attempting to read a directory, a warning will be printed to\n  stderr.  Set the `silent` option to true to suppress these warnings.\n* `strict` When an unusual error is encountered\n  when attempting to read a directory, the process will just continue on\n  in search of other matches.  Set the `strict` option to raise an error\n  in these cases.\n* `cache` See `cache` property above.  Pass in a previously generated\n  cache object to save some fs calls.\n* `statCache` A cache of results of filesystem information, to prevent\n  unnecessary stat calls.  While it should not normally be necessary to\n  set this, you may pass the statCache from one glob() call to the\n  options object of another, if you know that the filesystem will not\n  change between calls.  (See "Race Conditions" below.)\n* `sync` Perform a synchronous glob search.\n* `nounique` In some cases, brace-expanded patterns can result in the\n  same file showing up multiple times in the result set.  By default,\n  this implementation prevents duplicates in the result set.\n  Set this flag to disable that behavior.\n* `nonull` Set to never return an empty set, instead returning a set\n  containing the pattern itself.  This is the default in glob(3).\n* `nocase` Perform a case-insensitive match.  Note that case-insensitive\n  filesystems will sometimes result in glob returning results that are\n  case-insensitively matched anyway, since readdir and stat will not\n  raise an error.\n* `debug` Set to enable debug logging in minimatch and glob.\n* `globDebug` Set to enable debug logging in glob, but not minimatch.\n\n## Comparisons to other fnmatch/glob implementations\n\nWhile strict compliance with the existing standards is a worthwhile\ngoal, some discrepancies exist between node-glob and other\nimplementations, and are intentional.\n\nIf the pattern starts with a `!` character, then it is negated.  Set the\n`nonegate` flag to suppress this behavior, and treat leading `!`\ncharacters normally.  This is perhaps relevant if you wish to start the\npattern with a negative extglob pattern like `!(a|B)`.  Multiple `!`\ncharacters at the start of a pattern will negate the pattern multiple\ntimes.\n\nIf a pattern starts with `#`, then it is treated as a comment, and\nwill not match anything.  Use `\\#` to match a literal `#` at the\nstart of a line, or set the `nocomment` flag to suppress this behavior.\n\nThe double-star character `**` is supported by default, unless the\n`noglobstar` flag is set.  This is supported in the manner of bsdglob\nand bash 4.1, where `**` only has special significance if it is the only\nthing in a path part.  That is, `a/**/b` will match `a/x/y/b`, but\n`a/**b` will not.\n\nIf an escaped pattern has no matches, and the `nonull` flag is set,\nthen glob returns the pattern as-provided, rather than\ninterpreting the character escapes.  For example,\n`glob.match([], "\\\\*a\\\\?")` will return `"\\\\*a\\\\?"` rather than\n`"*a?"`.  This is akin to setting the `nullglob` option in bash, except\nthat it does not resolve escaped pattern characters.\n\nIf brace expansion is not disabled, then it is performed before any\nother interpretation of the glob pattern.  Thus, a pattern like\n`+(a|{b),c)}`, which would not be valid in bash or zsh, is expanded\n**first** into the set of `+(a|b)` and `+(a|c)`, and those patterns are\nchecked for validity.  Since those two are valid, matching proceeds.\n\n## Windows\n\n**Please only use forward-slashes in glob expressions.**\n\nThough windows uses either `/` or `\\` as its path separator, only `/`\ncharacters are used by this glob implementation.  You must use\nforward-slashes **only** in glob expressions.  Back-slashes will always\nbe interpreted as escape characters, not path separators.\n\nResults from absolute patterns such as `/foo/*` are mounted onto the\nroot setting using `path.join`.  On windows, this will by default result\nin `/foo/*` matching `C:\\foo\\bar.txt`.\n\n## Race Conditions\n\nGlob searching, by its very nature, is susceptible to race conditions,\nsince it relies on directory walking and such.\n\nAs a result, it is possible that a file that exists when glob looks for\nit may have been deleted or modified by the time it returns the result.\n\nAs part of its internal implementation, this program caches all stat\nand readdir calls that it makes, in order to cut down on system\noverhead.  However, this also makes it even more susceptible to races,\nespecially if the cache or statCache objects are reused between glob\ncalls.\n\nUsers are thus advised not to use a glob result as a guarantee of\nfilesystem state in the face of rapid changes.  For the vast majority\nof operations, this is never a problem.\n',
+613 silly resolved     readmeFilename: 'README.md',
+613 silly resolved     bugs: { url: 'https://github.com/isaacs/node-glob/issues' },
+613 silly resolved     _id: 'glob@3.2.6',
+613 silly resolved     _from: 'glob@>= 3.1.4' } ]
+614 info install glob@3.2.6 into /usr/local/lib/node_modules/jshint/node_modules/cli
+615 info installOne glob@3.2.6
+616 info /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob unbuild
+617 verbose tar unpack /Users/acelan/.npm/glob/3.2.6/package.tgz
+618 silly lockFile 4834f903-de-modules-cli-node-modules-glob /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob
+619 verbose lock /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob /Users/acelan/.npm/4834f903-de-modules-cli-node-modules-glob.lock
+620 silly lockFile cf34f1ef-celan-npm-glob-3-2-6-package-tgz /Users/acelan/.npm/glob/3.2.6/package.tgz
+621 verbose lock /Users/acelan/.npm/glob/3.2.6/package.tgz /Users/acelan/.npm/cf34f1ef-celan-npm-glob-3-2-6-package-tgz.lock
+622 silly gunzTarPerm modes [ '755', '644' ]
+623 silly gunzTarPerm extractEntry package.json
+624 silly gunzTarPerm extractEntry .npmignore
+625 silly gunzTarPerm extractEntry README.md
+626 silly gunzTarPerm extractEntry LICENSE
+627 silly gunzTarPerm extractEntry glob.js
+628 silly gunzTarPerm extractEntry .travis.yml
+629 silly gunzTarPerm extractEntry examples/g.js
+630 silly gunzTarPerm extractEntry examples/usr-local.js
+631 silly gunzTarPerm extractEntry test/00-setup.js
+632 silly gunzTarPerm extractEntry test/stat.js
+633 silly gunzTarPerm extractEntry test/cwd-test.js
+634 silly gunzTarPerm extractEntry test/globstar-match.js
+635 silly gunzTarPerm extractEntry test/mark.js
+636 silly gunzTarPerm extractEntry test/bash-comparison.js
+637 silly gunzTarPerm extractEntry test/pause-resume.js
+638 silly gunzTarPerm extractEntry test/root-nomount.js
+639 silly gunzTarPerm extractEntry test/root.js
+640 silly gunzTarPerm extractEntry test/zz-cleanup.js
+641 silly gunzTarPerm extractEntry test/nocase-nomagic.js
+642 silly gunzTarPerm extractEntry test/bash-results.json
+643 silly lockFile 4834f903-de-modules-cli-node-modules-glob /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob
+644 silly lockFile 4834f903-de-modules-cli-node-modules-glob /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob
+645 silly lockFile cf34f1ef-celan-npm-glob-3-2-6-package-tgz /Users/acelan/.npm/glob/3.2.6/package.tgz
+646 silly lockFile cf34f1ef-celan-npm-glob-3-2-6-package-tgz /Users/acelan/.npm/glob/3.2.6/package.tgz
+647 info preinstall glob@3.2.6
+648 verbose readDependencies using package.json deps
+649 verbose readDependencies using package.json deps
+650 verbose cache add [ 'inherits@2', null ]
+651 verbose cache add name=undefined spec="inherits@2" args=["inherits@2",null]
+652 verbose parsed url { protocol: null,
+652 verbose parsed url   slashes: null,
+652 verbose parsed url   auth: null,
+652 verbose parsed url   host: null,
+652 verbose parsed url   port: null,
+652 verbose parsed url   hostname: null,
+652 verbose parsed url   hash: null,
+652 verbose parsed url   search: null,
+652 verbose parsed url   query: null,
+652 verbose parsed url   pathname: 'inherits@2',
+652 verbose parsed url   path: 'inherits@2',
+652 verbose parsed url   href: 'inherits@2' }
+653 verbose cache add name="inherits" spec="2" args=["inherits","2"]
+654 verbose parsed url { protocol: null,
+654 verbose parsed url   slashes: null,
+654 verbose parsed url   auth: null,
+654 verbose parsed url   host: null,
+654 verbose parsed url   port: null,
+654 verbose parsed url   hostname: null,
+654 verbose parsed url   hash: null,
+654 verbose parsed url   search: null,
+654 verbose parsed url   query: null,
+654 verbose parsed url   pathname: '2',
+654 verbose parsed url   path: '2',
+654 verbose parsed url   href: '2' }
+655 verbose addNamed [ 'inherits', '2' ]
+656 verbose addNamed [ null, '>=2.0.0- <3.0.0-' ]
+657 silly lockFile 1f7ff4de-inherits-2 inherits@2
+658 verbose lock inherits@2 /Users/acelan/.npm/1f7ff4de-inherits-2.lock
+659 silly addNameRange { name: 'inherits', range: '>=2.0.0- <3.0.0-', hasData: false }
+660 verbose url raw inherits
+661 verbose url resolving [ 'https://registry.npmjs.org/', './inherits' ]
+662 verbose url resolved https://registry.npmjs.org/inherits
+663 info trying registry request attempt 1 at 11:15:21
+664 verbose etag "DOPV80KRXW9892OY8IW4CKYQ2"
+665 http GET https://registry.npmjs.org/inherits
+666 http 304 https://registry.npmjs.org/inherits
+667 silly registry.get cb [ 304,
+667 silly registry.get   { server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+667 silly registry.get     etag: '"DOPV80KRXW9892OY8IW4CKYQ2"',
+667 silly registry.get     date: 'Thu, 31 Oct 2013 03:15:20 GMT',
+667 silly registry.get     'content-length': '0' } ]
+668 verbose etag inherits from cache
+669 silly addNameRange number 2 { name: 'inherits', range: '>=2.0.0- <3.0.0-', hasData: true }
+670 silly addNameRange versions [ 'inherits', [ '1.0.0', '2.0.0', '2.0.1' ] ]
+671 verbose addNamed [ 'inherits', '2.0.1' ]
+672 verbose addNamed [ '2.0.1', '2.0.1' ]
+673 silly lockFile 2b2e8f1b-inherits-2-0-1 inherits@2.0.1
+674 verbose lock inherits@2.0.1 /Users/acelan/.npm/2b2e8f1b-inherits-2-0-1.lock
+675 silly lockFile 2b2e8f1b-inherits-2-0-1 inherits@2.0.1
+676 silly lockFile 2b2e8f1b-inherits-2-0-1 inherits@2.0.1
+677 silly lockFile 1f7ff4de-inherits-2 inherits@2
+678 silly lockFile 1f7ff4de-inherits-2 inherits@2
+679 silly resolved [ { name: 'inherits',
+679 silly resolved     description: 'Browser-friendly inheritance fully compatible with standard node.js inherits()',
+679 silly resolved     version: '2.0.1',
+679 silly resolved     keywords:
+679 silly resolved      [ 'inheritance',
+679 silly resolved        'class',
+679 silly resolved        'klass',
+679 silly resolved        'oop',
+679 silly resolved        'object-oriented',
+679 silly resolved        'inherits',
+679 silly resolved        'browser',
+679 silly resolved        'browserify' ],
+679 silly resolved     main: './inherits.js',
+679 silly resolved     browser: './inherits_browser.js',
+679 silly resolved     repository: { type: 'git', url: 'git://github.com/isaacs/inherits' },
+679 silly resolved     license: 'ISC',
+679 silly resolved     scripts: { test: 'node test' },
+679 silly resolved     readme: 'Browser-friendly inheritance fully compatible with standard node.js\n[inherits](http://nodejs.org/api/util.html#util_util_inherits_constructor_superconstructor).\n\nThis package exports standard `inherits` from node.js `util` module in\nnode environment, but also provides alternative browser-friendly\nimplementation through [browser\nfield](https://gist.github.com/shtylman/4339901). Alternative\nimplementation is a literal copy of standard one located in standalone\nmodule to avoid requiring of `util`. It also has a shim for old\nbrowsers with no `Object.create` support.\n\nWhile keeping you sure you are using standard `inherits`\nimplementation in node.js environment, it allows bundlers such as\n[browserify](https://github.com/substack/node-browserify) to not\ninclude full `util` package to your client code if all you need is\njust `inherits` function. It worth, because browser shim for `util`\npackage is large and `inherits` is often the single function you need\nfrom it.\n\nIt\'s recommended to use this package instead of\n`require(\'util\').inherits` for any code that has chances to be used\nnot only in node.js but in browser too.\n\n## usage\n\n```js\nvar inherits = require(\'inherits\');\n// then use exactly as the standard one\n```\n\n## note on version ~1.0\n\nVersion ~1.0 had completely different motivation and is not compatible\nneither with 2.0 nor with standard node.js `inherits`.\n\nIf you are using version ~1.0 and planning to switch to ~2.0, be\ncareful:\n\n* new version uses `super_` instead of `super` for referencing\n  superclass\n* new version overwrites current prototype while old one preserves any\n  existing fields on it\n',
+679 silly resolved     readmeFilename: 'README.md',
+679 silly resolved     bugs: { url: 'https://github.com/isaacs/inherits/issues' },
+679 silly resolved     _id: 'inherits@2.0.1',
+679 silly resolved     _from: 'inherits@2' } ]
+680 info install inherits@2.0.1 into /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob
+681 info installOne inherits@2.0.1
+682 info /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob/node_modules/inherits unbuild
+683 verbose tar unpack /Users/acelan/.npm/inherits/2.0.1/package.tgz
+684 silly lockFile cb21a89d-dules-glob-node-modules-inherits /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob/node_modules/inherits
+685 verbose lock /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob/node_modules/inherits /Users/acelan/.npm/cb21a89d-dules-glob-node-modules-inherits.lock
+686 silly lockFile fd4b0695-n-npm-inherits-2-0-1-package-tgz /Users/acelan/.npm/inherits/2.0.1/package.tgz
+687 verbose lock /Users/acelan/.npm/inherits/2.0.1/package.tgz /Users/acelan/.npm/fd4b0695-n-npm-inherits-2-0-1-package-tgz.lock
+688 silly gunzTarPerm modes [ '755', '644' ]
+689 silly gunzTarPerm extractEntry package.json
+690 silly gunzTarPerm extractEntry README.md
+691 silly gunzTarPerm extractEntry LICENSE
+692 silly gunzTarPerm extractEntry inherits.js
+693 silly gunzTarPerm extractEntry inherits_browser.js
+694 silly gunzTarPerm extractEntry test.js
+695 silly lockFile cb21a89d-dules-glob-node-modules-inherits /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob/node_modules/inherits
+696 silly lockFile cb21a89d-dules-glob-node-modules-inherits /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob/node_modules/inherits
+697 silly lockFile fd4b0695-n-npm-inherits-2-0-1-package-tgz /Users/acelan/.npm/inherits/2.0.1/package.tgz
+698 silly lockFile fd4b0695-n-npm-inherits-2-0-1-package-tgz /Users/acelan/.npm/inherits/2.0.1/package.tgz
+699 info preinstall inherits@2.0.1
+700 verbose readDependencies using package.json deps
+701 verbose readDependencies using package.json deps
+702 silly resolved []
+703 verbose about to build /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob/node_modules/inherits
+704 info build /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob/node_modules/inherits
+705 verbose linkStuff [ true,
+705 verbose linkStuff   '/usr/local/lib/node_modules',
+705 verbose linkStuff   false,
+705 verbose linkStuff   '/usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob/node_modules' ]
+706 info linkStuff inherits@2.0.1
+707 verbose linkBins inherits@2.0.1
+708 verbose linkMans inherits@2.0.1
+709 verbose rebuildBundles inherits@2.0.1
+710 info install inherits@2.0.1
+711 info postinstall inherits@2.0.1
+712 verbose about to build /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob
+713 info build /usr/local/lib/node_modules/jshint/node_modules/cli/node_modules/glob
+714 verbose linkStuff [ true,
+714 verbose linkStuff   '/usr/local/lib/node_modules',
+714 verbose linkStuff   false,
+714 verbose linkStuff   '/usr/local/lib/node_modules/jshint/node_modules/cli/node_modules' ]
+715 info linkStuff glob@3.2.6
+716 verbose linkBins glob@3.2.6
+717 verbose linkMans glob@3.2.6
+718 verbose rebuildBundles glob@3.2.6
+719 verbose rebuildBundles [ 'inherits' ]
+720 info install glob@3.2.6
+721 info postinstall glob@3.2.6
+722 verbose about to build /usr/local/lib/node_modules/jshint/node_modules/cli
+723 info build /usr/local/lib/node_modules/jshint/node_modules/cli
+724 verbose linkStuff [ true,
+724 verbose linkStuff   '/usr/local/lib/node_modules',
+724 verbose linkStuff   false,
+724 verbose linkStuff   '/usr/local/lib/node_modules/jshint/node_modules' ]
+725 info linkStuff cli@0.4.5
+726 verbose linkBins cli@0.4.5
+727 verbose linkMans cli@0.4.5
+728 verbose rebuildBundles cli@0.4.5
+729 verbose rebuildBundles [ 'glob' ]
+730 info install cli@0.4.5
+731 info postinstall cli@0.4.5
+732 verbose about to build /usr/local/lib/node_modules/jshint
+733 info build /usr/local/lib/node_modules/jshint
+734 verbose linkStuff [ true,
+734 verbose linkStuff   '/usr/local/lib/node_modules',
+734 verbose linkStuff   true,
+734 verbose linkStuff   '/usr/local/lib/node_modules' ]
+735 info linkStuff jshint@2.3.0
+736 verbose linkBins jshint@2.3.0
+737 verbose link bins [ { jshint: './bin/jshint' }, '/usr/local/bin', true ]
+738 verbose linkMans jshint@2.3.0
+739 verbose rebuildBundles jshint@2.3.0
+740 verbose rebuildBundles [ '.bin',
+740 verbose rebuildBundles   'cli',
+740 verbose rebuildBundles   'console-browserify',
+740 verbose rebuildBundles   'minimatch',
+740 verbose rebuildBundles   'shelljs',
+740 verbose rebuildBundles   'underscore' ]
+741 info install jshint@2.3.0
+742 info postinstall jshint@2.3.0
+743 verbose readInstalled returning bower@1.2.6
+744 verbose readInstalled returning generator-angular@0.2.2
+745 verbose readInstalled returning generator-karma@0.2.0
+746 verbose readInstalled returning grunt-cli@0.1.9
+747 verbose readInstalled returning grunt-init@0.2.0
+748 verbose readInstalled returning jsdoc@3.2.0-dev
+749 verbose readInstalled returning jshint@2.3.0
+750 verbose readInstalled returning karma@0.8.6
+751 verbose readInstalled returning n@0.7.3
+752 verbose readInstalled returning npm@1.2.23
+753 verbose readInstalled returning socket.io@0.9.13
+754 verbose readInstalled returning spm@1.6.0
+755 verbose readInstalled returning uglify-js@2.4.0
+756 verbose readInstalled returning uglifyjs@2.3.6
+757 verbose readInstalled returning weibo@0.6.8
+758 verbose readInstalled returning yo@1.0.0-beta.6
+759 verbose readInstalled returning abbrev@1.0.4
+760 verbose readInstalled returning archy@0.0.2
+761 verbose readInstalled returning bower-config@0.5.0
+762 verbose readInstalled returning bower-endpoint-parser@0.2.1
+763 verbose readInstalled returning bower-json@0.4.0
+764 verbose readInstalled returning bower-logger@0.2.1
+765 verbose readInstalled returning bower-registry-client@0.1.4
+766 verbose readInstalled returning cardinal@0.4.2
+767 verbose readInstalled returning chalk@0.2.1
+768 verbose readInstalled returning chmodr@0.1.0
+769 verbose readInstalled returning fstream@0.1.24
+770 verbose readInstalled returning fstream-ignore@0.0.7
+771 verbose readInstalled returning glob@3.2.6
+772 verbose readInstalled returning graceful-fs@2.0.1
+773 verbose readInstalled returning handlebars@1.0.12
+774 verbose readInstalled returning inquirer@0.3.3
+775 verbose readInstalled returning junk@0.2.1
+776 verbose readInstalled returning mkdirp@0.3.5
+777 verbose readInstalled returning mout@0.6.0
+778 verbose readInstalled returning nopt@2.1.2
+779 verbose readInstalled returning lru-cache@2.3.1
+780 verbose readInstalled returning open@0.0.4
+781 verbose readInstalled returning osenv@0.0.3
+782 verbose readInstalled returning promptly@0.2.0
+783 verbose readInstalled returning q@0.9.7
+784 verbose readInstalled returning request@2.27.0
+785 verbose readInstalled returning request-progress@0.3.1
+786 verbose readInstalled returning retry@0.6.0
+787 verbose readInstalled returning rimraf@2.2.2
+788 verbose readInstalled returning semver@2.1.0
+789 verbose readInstalled returning stringify-object@0.1.6
+790 verbose readInstalled returning sudo-block@0.2.1
+791 verbose readInstalled returning tar@0.1.18
+792 verbose readInstalled returning tmp@0.0.21
+793 verbose readInstalled returning unzip@0.1.9
+794 verbose readInstalled returning update-notifier@0.1.5
+795 verbose readInstalled returning which@1.0.5
+796 verbose readInstalled returning optimist@0.6.0
+797 verbose readInstalled returning wordwrap@0.0.2
+798 verbose readInstalled returning minimist@0.0.3
+799 verbose readInstalled returning deep-extend@0.2.6
+800 verbose readInstalled returning intersect@0.0.3
+801 verbose readInstalled returning async@0.2.9
+802 verbose readInstalled returning bower-config@0.4.5
+803 verbose readInstalled returning request-replay@0.2.0
+804 verbose readInstalled returning optimist@0.6.0
+805 verbose readInstalled returning wordwrap@0.0.2
+806 verbose readInstalled returning minimist@0.0.3
+807 verbose readInstalled returning qs@0.6.5
+808 verbose readInstalled returning json-stringify-safe@5.0.0
+809 verbose readInstalled returning forever-agent@0.5.0
+810 verbose readInstalled returning tunnel-agent@0.3.0
+811 verbose readInstalled returning http-signature@0.10.0
+812 verbose readInstalled returning hawk@1.0.0
+813 verbose readInstalled returning aws-sign@0.3.0
+814 verbose readInstalled returning oauth-sign@0.3.0
+815 verbose readInstalled returning cookie-jar@0.3.0
+816 verbose readInstalled returning node-uuid@1.4.1
+817 verbose readInstalled returning mime@1.2.11
+818 verbose readInstalled returning form-data@0.1.1
+819 verbose readInstalled returning assert-plus@0.1.2
+820 verbose readInstalled returning asn1@0.1.11
+821 verbose readInstalled returning ctype@0.5.2
+822 verbose readInstalled returning hoek@0.9.1
+823 verbose readInstalled returning boom@0.4.2
+824 verbose readInstalled returning cryptiles@0.2.2
+825 verbose readInstalled returning sntp@0.2.4
+826 verbose readInstalled returning combined-stream@0.0.4
+827 verbose readInstalled returning async@0.2.9
+828 verbose readInstalled returning delayed-stream@0.0.5
+829 verbose readInstalled returning redeyed@0.4.2
+830 verbose readInstalled returning ansicolors@0.2.1
+831 verbose readInstalled returning esprima@1.0.4
+832 verbose readInstalled returning has-color@0.1.1
+833 verbose readInstalled returning ansi-styles@0.2.0
+834 verbose readInstalled returning inherits@2.0.1
+835 verbose readInstalled returning minimatch@0.2.12
+836 verbose readInstalled returning inherits@2.0.1
+837 verbose readInstalled returning sigmund@1.0.0
+838 verbose readInstalled returning minimatch@0.2.12
+839 verbose readInstalled returning inherits@2.0.1
+840 verbose readInstalled returning sigmund@1.0.0
+841 verbose readInstalled returning optimist@0.3.7
+842 verbose readInstalled returning uglify-js@2.3.6
+843 verbose readInstalled returning wordwrap@0.0.2
+844 verbose readInstalled returning async@0.2.9
+845 verbose readInstalled returning source-map@0.1.29
+846 verbose readInstalled returning amdefine@0.0.8
+847 verbose readInstalled returning lodash@1.2.1
+848 verbose readInstalled returning async@0.2.9
+849 verbose readInstalled returning cli-color@0.2.2
+850 verbose readInstalled returning mute-stream@0.0.3
+851 verbose readInstalled returning es5-ext@0.9.2
+852 verbose readInstalled returning memoizee@0.2.5
+853 verbose readInstalled returning event-emitter@0.2.2
+854 verbose readInstalled returning next-tick@0.1.0
+855 verbose readInstalled returning read@1.0.5
+856 verbose readInstalled returning mute-stream@0.0.4
+857 verbose readInstalled returning throttleit@0.0.2
+858 verbose readInstalled returning chalk@0.1.1
+859 verbose readInstalled returning has-color@0.1.1
+860 verbose readInstalled returning ansi-styles@0.1.2
+861 verbose readInstalled returning inherits@2.0.1
+862 verbose readInstalled returning block-stream@0.0.7
+863 verbose readInstalled returning pullstream@0.4.0
+864 verbose readInstalled returning binary@0.3.0
+865 verbose readInstalled returning readable-stream@1.0.17
+866 verbose readInstalled returning setimmediate@1.0.1
+867 verbose readInstalled returning match-stream@0.0.2
+868 verbose readInstalled returning over@0.0.5
+869 verbose readInstalled returning slice-stream@0.0.0
+870 verbose readInstalled returning chainsaw@0.1.0
+871 verbose readInstalled returning buffers@0.1.1
+872 verbose readInstalled returning traverse@0.3.9
+873 verbose readInstalled returning buffers@0.1.1
+874 verbose readInstalled returning request@2.22.0
+875 verbose readInstalled returning configstore@0.1.5
+876 verbose readInstalled returning semver@2.0.11
+877 verbose readInstalled returning chalk@0.1.1
+878 verbose readInstalled returning qs@0.6.5
+879 verbose readInstalled returning json-stringify-safe@4.0.0
+880 verbose readInstalled returning forever-agent@0.5.0
+881 verbose readInstalled returning tunnel-agent@0.3.0
+882 verbose readInstalled returning http-signature@0.10.0
+883 verbose readInstalled returning hawk@0.13.1
+884 verbose readInstalled returning aws-sign@0.3.0
+885 verbose readInstalled returning oauth-sign@0.3.0
+886 verbose readInstalled returning cookie-jar@0.3.0
+887 verbose readInstalled returning node-uuid@1.4.1
+888 verbose readInstalled returning mime@1.2.11
+889 verbose readInstalled returning form-data@0.0.8
+890 verbose readInstalled returning assert-plus@0.1.2
+891 verbose readInstalled returning asn1@0.1.11
+892 verbose readInstalled returning ctype@0.5.2
+893 verbose readInstalled returning hoek@0.8.5
+894 verbose readInstalled returning boom@0.4.2
+895 verbose readInstalled returning cryptiles@0.2.2
+896 verbose readInstalled returning sntp@0.2.4
+897 verbose readInstalled returning hoek@0.9.1
+898 verbose readInstalled returning hoek@0.9.1
+899 verbose readInstalled returning combined-stream@0.0.4
+900 verbose readInstalled returning async@0.2.9
+901 verbose readInstalled returning delayed-stream@0.0.5
+902 verbose readInstalled returning lodash@1.3.1
+903 verbose readInstalled returning js-yaml@2.1.0
+904 verbose readInstalled returning argparse@0.1.15
+905 verbose readInstalled returning esprima@1.0.4
+906 verbose readInstalled returning underscore@1.4.4
+907 verbose readInstalled returning underscore.string@2.3.3
+908 verbose readInstalled returning has-color@0.1.1
+909 verbose readInstalled returning ansi-styles@0.1.2
+910 verbose readInstalled returning yeoman-generator@0.10.5
+911 verbose readInstalled returning cheerio@0.10.8
+912 verbose readInstalled returning request@2.16.6
+913 verbose readInstalled returning rimraf@2.1.4
+914 verbose readInstalled returning tar@0.1.17
+915 verbose readInstalled returning diff@1.0.4
+916 verbose readInstalled returning mime@1.2.9
+917 verbose readInstalled returning underscore.string@2.3.1
+918 verbose readInstalled returning lodash@1.1.1
+919 verbose readInstalled returning mkdirp@0.3.5
+920 verbose readInstalled returning read@1.0.4
+921 verbose readInstalled returning glob@3.1.21
+922 verbose readInstalled returning nopt@2.1.1
+923 verbose readInstalled returning cli-table@0.2.0
+924 verbose readInstalled returning debug@0.7.2
+925 verbose readInstalled returning isbinaryfile@0.1.9
+926 verbose readInstalled returning cheerio-select@0.0.3
+927 verbose readInstalled returning htmlparser2@2.6.0
+928 verbose readInstalled returning underscore@1.4.4
+929 verbose readInstalled returning entities@0.3.0
+930 verbose readInstalled returning CSSselect@0.3.1
+931 verbose readInstalled returning CSSwhat@0.2.0
+932 verbose readInstalled returning domhandler@2.0.3
+933 verbose readInstalled returning domutils@1.0.1
+934 verbose readInstalled returning domelementtype@1.1.1
+935 verbose readInstalled returning form-data@0.0.10
+936 verbose readInstalled returning hawk@0.10.2
+937 verbose readInstalled returning node-uuid@1.4.0
+938 verbose readInstalled returning cookie-jar@0.2.0
+939 verbose readInstalled returning aws-sign@0.2.0
+940 verbose readInstalled returning oauth-sign@0.2.0
+941 verbose readInstalled returning forever-agent@0.2.0
+942 verbose readInstalled returning tunnel-agent@0.2.0
+943 verbose readInstalled returning json-stringify-safe@3.0.0
+944 verbose readInstalled returning qs@0.5.6
+945 verbose readInstalled returning combined-stream@0.0.4
+946 verbose readInstalled returning async@0.2.8
+947 verbose readInstalled returning delayed-stream@0.0.5
+948 verbose readInstalled returning hoek@0.7.6
+949 verbose readInstalled returning boom@0.3.8
+950 verbose readInstalled returning cryptiles@0.1.3
+951 verbose readInstalled returning sntp@0.1.4
+952 verbose readInstalled returning graceful-fs@1.2.1
+953 verbose readInstalled returning inherits@1.0.0
+954 verbose readInstalled returning block-stream@0.0.6
+955 verbose readInstalled returning fstream@0.1.22
+956 verbose readInstalled returning graceful-fs@1.2.1
+957 verbose readInstalled returning mute-stream@0.0.3
+958 verbose readInstalled returning minimatch@0.2.12
+959 verbose readInstalled returning graceful-fs@1.2.1
+960 verbose readInstalled returning inherits@1.0.0
+961 verbose readInstalled returning lru-cache@2.3.0
+962 verbose readInstalled returning sigmund@1.0.0
+963 verbose readInstalled returning abbrev@1.0.4
+964 verbose readInstalled returning colors@0.3.0
+965 verbose readInstalled returning yeoman-generator@0.10.5
+966 verbose readInstalled returning colors@0.6.0-1
+967 verbose readInstalled returning semver@1.1.4
+968 verbose readInstalled returning cheerio@0.10.8
+969 verbose readInstalled returning request@2.16.6
+970 verbose readInstalled returning rimraf@2.1.4
+971 verbose readInstalled returning tar@0.1.17
+972 verbose readInstalled returning diff@1.0.4
+973 verbose readInstalled returning mime@1.2.9
+974 verbose readInstalled returning underscore.string@2.3.1
+975 verbose readInstalled returning lodash@1.1.1
+976 verbose readInstalled returning mkdirp@0.3.5
+977 verbose readInstalled returning read@1.0.4
+978 verbose readInstalled returning glob@3.1.21
+979 verbose readInstalled returning nopt@2.1.1
+980 verbose readInstalled returning cli-table@0.2.0
+981 verbose readInstalled returning debug@0.7.2
+982 verbose readInstalled returning isbinaryfile@0.1.9
+983 verbose readInstalled returning cheerio-select@0.0.3
+984 verbose readInstalled returning htmlparser2@2.6.0
+985 verbose readInstalled returning underscore@1.4.4
+986 verbose readInstalled returning entities@0.3.0
+987 verbose readInstalled returning CSSselect@0.3.1
+988 verbose readInstalled returning CSSwhat@0.2.0
+989 verbose readInstalled returning domhandler@2.0.3
+990 verbose readInstalled returning domutils@1.0.1
+991 verbose readInstalled returning domelementtype@1.1.1
+992 verbose readInstalled returning form-data@0.0.10
+993 verbose readInstalled returning hawk@0.10.2
+994 verbose readInstalled returning node-uuid@1.4.0
+995 verbose readInstalled returning cookie-jar@0.2.0
+996 verbose readInstalled returning aws-sign@0.2.0
+997 verbose readInstalled returning oauth-sign@0.2.0
+998 verbose readInstalled returning forever-agent@0.2.0
+999 verbose readInstalled returning tunnel-agent@0.2.0
+1000 verbose readInstalled returning json-stringify-safe@3.0.0
+1001 verbose readInstalled returning qs@0.5.6
+1002 verbose readInstalled returning combined-stream@0.0.4
+1003 verbose readInstalled returning async@0.2.8
+1004 verbose readInstalled returning delayed-stream@0.0.5
+1005 verbose readInstalled returning hoek@0.7.6
+1006 verbose readInstalled returning boom@0.3.8
+1007 verbose readInstalled returning cryptiles@0.1.3
+1008 verbose readInstalled returning sntp@0.1.4
+1009 verbose readInstalled returning graceful-fs@1.2.1
+1010 verbose readInstalled returning inherits@1.0.0
+1011 verbose readInstalled returning block-stream@0.0.6
+1012 verbose readInstalled returning fstream@0.1.22
+1013 verbose readInstalled returning graceful-fs@1.2.1
+1014 verbose readInstalled returning mute-stream@0.0.3
+1015 verbose readInstalled returning minimatch@0.2.12
+1016 verbose readInstalled returning graceful-fs@1.2.1
+1017 verbose readInstalled returning inherits@1.0.0
+1018 verbose readInstalled returning lru-cache@2.3.0
+1019 verbose readInstalled returning sigmund@1.0.0
+1020 verbose readInstalled returning abbrev@1.0.4
+1021 verbose readInstalled returning colors@0.3.0
+1022 verbose readInstalled returning nopt@1.0.10
+1023 verbose readInstalled returning findup-sync@0.1.2
+1024 verbose readInstalled returning resolve@0.3.1
+1025 verbose readInstalled returning abbrev@1.0.4
+1026 verbose readInstalled returning glob@3.1.21
+1027 verbose readInstalled returning lodash@1.0.1
+1028 verbose readInstalled returning minimatch@0.2.12
+1029 verbose readInstalled returning graceful-fs@1.2.3
+1030 verbose readInstalled returning inherits@1.0.0
+1031 verbose readInstalled returning lru-cache@2.3.1
+1032 verbose readInstalled returning sigmund@1.0.0
+1033 verbose readInstalled returning prompt@0.1.12
+1034 verbose readInstalled returning semver@1.0.14
+1035 verbose readInstalled returning hooker@0.2.3
+1036 verbose readInstalled returning colors@0.6.0-1
+1037 verbose readInstalled returning grunt@0.4.1
+1038 verbose readInstalled returning async@0.1.22
+1039 verbose readInstalled returning pkginfo@0.3.0
+1040 verbose readInstalled returning winston@0.5.11
+1041 verbose readInstalled returning eyes@0.1.8
+1042 verbose readInstalled returning loggly@0.3.11
+1043 verbose readInstalled returning pkginfo@0.2.3
+1044 verbose readInstalled returning stack-trace@0.0.6
+1045 verbose readInstalled returning request@2.9.203
+1046 verbose readInstalled returning timespan@2.2.0
+1047 verbose readInstalled returning async@0.1.22
+1048 verbose readInstalled returning coffee-script@1.3.3
+1049 verbose readInstalled returning dateformat@1.0.2-1.2.3
+1050 verbose readInstalled returning eventemitter2@0.4.11
+1051 verbose readInstalled returning findup-sync@0.1.2
+1052 verbose readInstalled returning glob@3.1.21
+1053 verbose readInstalled returning iconv-lite@0.2.7
+1054 verbose readInstalled returning minimatch@0.2.12
+1055 verbose readInstalled returning nopt@1.0.10
+1056 verbose readInstalled returning rimraf@2.0.3
+1057 verbose readInstalled returning lodash@0.9.2
+1058 verbose readInstalled returning underscore.string@2.2.0rc
+1059 verbose readInstalled returning which@1.0.5
+1060 verbose readInstalled returning js-yaml@2.0.4
+1061 verbose readInstalled returning lodash@1.0.1
+1062 verbose readInstalled returning graceful-fs@1.2.0
+1063 verbose readInstalled returning inherits@1.0.0
+1064 verbose readInstalled returning lru-cache@2.3.0
+1065 verbose readInstalled returning sigmund@1.0.0
+1066 verbose readInstalled returning abbrev@1.0.4
+1067 verbose readInstalled returning graceful-fs@1.1.14
+1068 verbose readInstalled returning argparse@0.1.13
+1069 verbose readInstalled returning underscore@1.4.4
+1070 verbose readInstalled returning underscore.string@2.3.1
+1071 verbose readInstalled returning async@0.1.22
+1072 verbose readInstalled returning catharsis@0.5.6
+1073 verbose readInstalled returning crypto-browserify@0.1.1
+1074 verbose readInstalled returning js2xmlparser@0.1.0
+1075 verbose readInstalled returning jshint@0.9.1
+1076 verbose readInstalled returning markdown@0.4.0
+1077 verbose readInstalled returning marked@0.2.8
+1078 verbose readInstalled returning taffydb@2.6.2
+1079 verbose readInstalled returning underscore@1.4.2
+1080 verbose readInstalled returning wrench@1.3.9
+1081 verbose readInstalled returning cli@0.4.3
+1082 verbose readInstalled returning minimatch@0.0.5
+1083 verbose readInstalled returning glob@3.2.6
+1084 verbose readInstalled returning minimatch@0.2.12
+1085 verbose readInstalled returning inherits@2.0.0
+1086 verbose readInstalled returning lru-cache@2.3.0
+1087 verbose readInstalled returning sigmund@1.0.0
+1088 verbose readInstalled returning lru-cache@1.0.6
+1089 verbose readInstalled returning nopt@1.0.10
+1090 verbose readInstalled returning abbrev@1.0.4
+1091 verbose readInstalled returning shelljs@0.1.4
+1092 verbose readInstalled returning underscore@1.4.4
+1093 verbose readInstalled returning cli@0.4.5
+1094 verbose readInstalled returning minimatch@0.2.12
+1095 verbose readInstalled returning console-browserify@0.1.6
+1096 verbose readInstalled returning glob@3.2.6
+1097 verbose readInstalled returning inherits@2.0.1
+1098 verbose readInstalled returning lru-cache@2.3.1
+1099 verbose readInstalled returning sigmund@1.0.0
+1100 verbose readInstalled returning socket.io@0.9.16
+1101 verbose readInstalled returning chokidar@0.6.2
+1102 verbose readInstalled returning glob@3.1.21
+1103 verbose readInstalled returning minimatch@0.2.12
+1104 verbose readInstalled returning http-proxy@0.10.2
+1105 verbose readInstalled returning optimist@0.3.5
+1106 verbose readInstalled returning coffee-script@1.6.3
+1107 verbose readInstalled returning xmlbuilder@0.4.2
+1108 verbose readInstalled returning rimraf@2.1.4
+1109 verbose readInstalled returning q@0.9.6
+1110 verbose readInstalled returning LiveScript@1.0.1
+1111 verbose readInstalled returning colors@0.6.0-1
+1112 verbose readInstalled returning dateformat@1.0.2-1.2.3
+1113 verbose readInstalled returning istanbul@0.1.22
+1114 verbose readInstalled returning lodash@1.1.1
+1115 verbose readInstalled returning growly@1.1.1
+1116 verbose readInstalled returning pause@0.0.1
+1117 verbose readInstalled returning mime@1.2.9
+1118 verbose readInstalled returning log4js@0.6.6
+1119 verbose readInstalled returning socket.io-client@0.9.16
+1120 verbose readInstalled returning policyfile@0.0.4
+1121 verbose readInstalled returning base64id@0.1.0
+1122 verbose readInstalled returning redis@0.7.3
+1123 verbose readInstalled returning uglify-js@1.2.5
+1124 verbose readInstalled returning ws@0.4.25
+1125 verbose readInstalled returning xmlhttprequest@1.4.2
+1126 verbose readInstalled returning active-x-obfuscator@0.0.1
+1127 verbose readInstalled returning commander@0.6.1
+1128 verbose readInstalled returning tinycolor@0.0.1
+1129 verbose readInstalled returning options@0.0.5
+1130 verbose readInstalled returning zeparser@0.0.5
+1131 verbose readInstalled returning graceful-fs@1.2.2
+1132 verbose readInstalled returning inherits@1.0.0
+1133 verbose readInstalled returning lru-cache@2.3.0
+1134 verbose readInstalled returning sigmund@1.0.0
+1135 verbose readInstalled returning pkginfo@0.2.3
+1136 verbose readInstalled returning utile@0.1.7
+1137 verbose readInstalled returning wordwrap@0.0.2
+1138 verbose readInstalled returning async@0.1.22
+1139 verbose readInstalled returning deep-equal@0.0.0
+1140 verbose readInstalled returning i@0.3.1
+1141 verbose readInstalled returning mkdirp@0.3.5
+1142 verbose readInstalled returning ncp@0.2.7
+1143 verbose readInstalled returning rimraf@1.0.9
+1144 verbose readInstalled returning graceful-fs@1.2.2
+1145 verbose readInstalled returning prelude-ls@1.0.0
+1146 verbose readInstalled returning esprima@0.9.9
+1147 verbose readInstalled returning escodegen@0.0.23
+1148 verbose readInstalled returning handlebars@1.0.12
+1149 verbose readInstalled returning mkdirp@0.3.5
+1150 verbose readInstalled returning nopt@2.0.0
+1151 verbose readInstalled returning fileset@0.1.5
+1152 verbose readInstalled returning which@1.0.5
+1153 verbose readInstalled returning async@0.1.22
+1154 verbose readInstalled returning abbrev@1.0.4
+1155 verbose readInstalled returning wordwrap@0.0.2
+1156 verbose readInstalled returning esprima@1.0.3
+1157 verbose readInstalled returning estraverse@0.0.4
+1158 verbose readInstalled returning source-map@0.1.23
+1159 verbose readInstalled returning amdefine@0.0.5
+1160 verbose readInstalled returning uglify-js@2.3.6
+1161 verbose readInstalled returning async@0.2.9
+1162 verbose readInstalled returning source-map@0.1.23
+1163 verbose readInstalled returning amdefine@0.0.5
+1164 verbose readInstalled returning async@0.1.15
+1165 verbose readInstalled returning dequeue@1.0.3
+1166 verbose readInstalled returning semver@1.1.4
+1167 verbose readInstalled returning readable-stream@1.0.2
+1168 verbose readInstalled returning semver@1.1.4
+1169 verbose readInstalled returning ini@1.1.0
+1170 verbose readInstalled returning slide@1.1.4
+1171 verbose readInstalled returning abbrev@1.0.4
+1172 verbose readInstalled returning graceful-fs@1.2.1
+1173 verbose readInstalled returning minimatch@0.2.12
+1174 verbose readInstalled returning nopt@2.1.1
+1175 verbose readInstalled returning rimraf@2.1.4
+1176 verbose readInstalled returning request@2.21.0
+1177 verbose readInstalled returning which@1.0.5
+1178 verbose readInstalled returning tar@0.1.17
+1179 verbose readInstalled returning fstream@0.1.22
+1180 verbose readInstalled returning block-stream@0.0.6
+1181 verbose readInstalled returning inherits@1.0.0
+1182 verbose readInstalled returning mkdirp@0.3.5
+1183 verbose readInstalled returning read@1.0.4
+1184 verbose readInstalled returning lru-cache@2.3.0
+1185 verbose readInstalled returning node-gyp@0.9.5
+1186 verbose readInstalled returning fstream-npm@0.1.4
+1187 verbose readInstalled returning uid-number@0.0.3
+1188 verbose readInstalled returning archy@0.0.2
+1189 verbose readInstalled returning chownr@0.0.1
+1190 verbose readInstalled returning npmlog@0.0.2
+1191 verbose readInstalled returning ansi@0.1.2
+1192 verbose readInstalled returning npm-registry-client@0.2.24
+1193 verbose readInstalled returning read-package-json@0.4.1
+1194 verbose readInstalled returning read-installed@0.1.1
+1195 verbose readInstalled returning glob@3.2.1
+1196 verbose readInstalled returning init-package-json@0.0.8
+1197 verbose readInstalled returning osenv@0.0.3
+1198 verbose readInstalled returning lockfile@0.3.2
+1199 verbose readInstalled returning retry@0.6.0
+1200 verbose readInstalled returning once@1.1.1
+1201 verbose readInstalled returning npmconf@0.0.24
+1202 verbose readInstalled returning opener@1.3.0
+1203 verbose readInstalled returning chmodr@0.1.0
+1204 verbose readInstalled returning cmd-shim@1.1.0
+1205 verbose readInstalled returning sha@1.0.1
+1206 verbose readInstalled returning editor@0.0.4
+1207 verbose readInstalled returning child-process-close@0.1.1
+1208 verbose readInstalled returning npm-user-validate@0.0.1
+1209 verbose readInstalled returning lru-cache@2.0.1
+1210 verbose readInstalled returning sigmund@1.0.0
+1211 verbose readInstalled returning qs@0.6.4
+1212 verbose readInstalled returning json-stringify-safe@4.0.0
+1213 verbose readInstalled returning forever-agent@0.5.0
+1214 verbose readInstalled returning tunnel-agent@0.3.0
+1215 verbose readInstalled returning http-signature@0.9.11
+1216 verbose readInstalled returning hawk@0.13.1
+1217 verbose readInstalled returning aws-sign@0.3.0
+1218 verbose readInstalled returning oauth-sign@0.3.0
+1219 verbose readInstalled returning cookie-jar@0.3.0
+1220 verbose readInstalled returning node-uuid@1.4.0
+1221 verbose readInstalled returning mime@1.2.9
+1222 verbose readInstalled returning form-data@0.0.8
+1223 verbose readInstalled returning assert-plus@0.1.2
+1224 verbose readInstalled returning asn1@0.1.11
+1225 verbose readInstalled returning ctype@0.5.2
+1226 verbose readInstalled returning hoek@0.8.5
+1227 verbose readInstalled returning boom@0.4.1
+1228 verbose readInstalled returning cryptiles@0.2.1
+1229 verbose readInstalled returning sntp@0.2.2
+1230 verbose readInstalled returning combined-stream@0.0.4
+1231 verbose readInstalled returning async@0.2.8
+1232 verbose readInstalled returning delayed-stream@0.0.5
+1233 verbose readInstalled returning mute-stream@0.0.3
+1234 verbose readInstalled returning glob@3.1.12
+1235 verbose readInstalled returning graceful-fs@1.1.10
+1236 verbose readInstalled returning fstream@0.1.18
+1237 verbose readInstalled returning minimatch@0.2.6
+1238 verbose readInstalled returning mkdirp@0.3.3
+1239 verbose readInstalled returning nopt@2.0.0
+1240 verbose readInstalled returning npmlog@0.0.2
+1241 verbose readInstalled returning osenv@0.0.3
+1242 verbose readInstalled returning request@2.9.203
+1243 verbose readInstalled returning rimraf@2.0.2
+1244 verbose readInstalled returning semver@1.0.14
+1245 verbose readInstalled returning tar@0.1.13
+1246 verbose readInstalled returning which@1.0.5
+1247 verbose readInstalled returning inherits@1.0.0
+1248 verbose readInstalled returning lru-cache@2.0.1
+1249 verbose readInstalled returning inherits@1.0.0
+1250 verbose readInstalled returning abbrev@1.0.3
+1251 verbose readInstalled returning ansi@0.1.2
+1252 verbose readInstalled returning inherits@1.0.0
+1253 verbose readInstalled returning block-stream@0.0.6
+1254 verbose readInstalled returning fstream-ignore@0.0.6
+1255 verbose readInstalled returning minimatch@0.2.6
+1256 verbose readInstalled returning lru-cache@2.0.1
+1257 verbose readInstalled returning couch-login@0.1.16
+1258 verbose readInstalled returning glob@3.1.12
+1259 verbose readInstalled returning lru-cache@2.0.1
+1260 verbose readInstalled returning normalize-package-data@0.1.6
+1261 verbose readInstalled returning npmlog@0.0.2
+1262 verbose readInstalled returning graceful-fs@1.1.10
+1263 verbose readInstalled returning slide@1.1.3
+1264 verbose readInstalled returning semver@1.0.14
+1265 verbose readInstalled returning minimatch@0.2.6
+1266 verbose readInstalled returning inherits@1.0.0
+1267 verbose readInstalled returning github-url-from-git@1.1.1
+1268 verbose readInstalled returning ansi@0.1.2
+1269 verbose readInstalled returning read-package-json@0.1.3
+1270 verbose readInstalled returning glob@3.1.12
+1271 verbose readInstalled returning lru-cache@2.0.1
+1272 verbose readInstalled returning semver@1.0.14
+1273 verbose readInstalled returning slide@1.1.3
+1274 verbose readInstalled returning npmlog@0.0.2
+1275 verbose readInstalled returning graceful-fs@1.1.10
+1276 verbose readInstalled returning minimatch@0.2.6
+1277 verbose readInstalled returning inherits@1.0.0
+1278 verbose readInstalled returning ansi@0.1.2
+1279 verbose readInstalled returning minimatch@0.2.6
+1280 verbose readInstalled returning graceful-fs@1.1.10
+1281 verbose readInstalled returning inherits@1.0.0
+1282 verbose readInstalled returning lru-cache@2.0.1
+1283 verbose readInstalled returning promzard@0.2.0
+1284 verbose readInstalled returning read@1.0.3
+1285 verbose readInstalled returning read-package-json@0.1.3
+1286 verbose readInstalled returning read@1.0.3
+1287 verbose readInstalled returning mute-stream@0.0.2
+1288 verbose readInstalled returning mute-stream@0.0.2
+1289 verbose readInstalled returning glob@3.1.12
+1290 verbose readInstalled returning lru-cache@2.0.1
+1291 verbose readInstalled returning semver@1.0.14
+1292 verbose readInstalled returning slide@1.1.3
+1293 verbose readInstalled returning npmlog@0.0.2
+1294 verbose readInstalled returning graceful-fs@1.1.10
+1295 verbose readInstalled returning minimatch@0.2.6
+1296 verbose readInstalled returning inherits@1.0.0
+1297 verbose readInstalled returning ansi@0.1.2
+1298 verbose readInstalled returning config-chain@1.1.7
+1299 verbose readInstalled returning proto-list@1.2.2
+1300 verbose readInstalled returning socket.io-client@0.9.11
+1301 verbose readInstalled returning policyfile@0.0.4
+1302 verbose readInstalled returning base64id@0.1.0
+1303 verbose readInstalled returning redis@0.7.3
+1304 verbose readInstalled returning uglify-js@1.2.5
+1305 verbose readInstalled returning ws@0.4.25
+1306 verbose readInstalled returning xmlhttprequest@1.4.2
+1307 verbose readInstalled returning active-x-obfuscator@0.0.1
+1308 verbose readInstalled returning commander@0.6.1
+1309 verbose readInstalled returning tinycolor@0.0.1
+1310 verbose readInstalled returning options@0.0.3
+1311 verbose readInstalled returning zeparser@0.0.5
+1312 verbose readInstalled returning semver@1.0.14
+1313 verbose readInstalled returning uglify-js@2.2.3
+1314 verbose readInstalled returning async@0.1.22
+1315 verbose readInstalled returning tar@0.1.14
+1316 verbose readInstalled returning fstream@0.1.21
+1317 verbose readInstalled returning fstream-ignore@0.0.5
+1318 verbose readInstalled returning inherits@1.0.0
+1319 verbose readInstalled returning request@2.9.203
+1320 verbose readInstalled returning coffee-script@1.4.0
+1321 verbose readInstalled returning jshint@0.9.1
+1322 verbose readInstalled returning less@1.3.3
+1323 verbose readInstalled returning glob@3.1.17
+1324 verbose readInstalled returning colors@0.6.0-1
+1325 verbose readInstalled returning shelljs@0.0.9
+1326 verbose readInstalled returning clean-css@0.6.0
+1327 verbose readInstalled returning csslint@0.9.10
+1328 verbose readInstalled returning prompt@0.2.9
+1329 verbose readInstalled returning connect@2.6.2
+1330 verbose readInstalled returning JSONPath@0.9.1
+1331 verbose readInstalled returning prettyjson@0.7.1
+1332 verbose readInstalled returning spm-env@1.0.0
+1333 verbose readInstalled returning underscore@1.4.3
+1334 verbose readInstalled returning commander@1.1.1
+1335 verbose readInstalled returning source-map@0.1.8
+1336 verbose readInstalled returning optimist@0.3.5
+1337 verbose readInstalled returning amdefine@0.0.4
+1338 verbose readInstalled returning wordwrap@0.0.2
+1339 verbose readInstalled returning block-stream@0.0.6
+1340 verbose readInstalled returning rimraf@2.1.2
+1341 verbose readInstalled returning mkdirp@0.3.4
+1342 verbose readInstalled returning graceful-fs@1.1.14
+1343 verbose readInstalled returning minimatch@0.2.9
+1344 verbose readInstalled returning lru-cache@2.0.4
+1345 verbose readInstalled returning sigmund@1.0.0
+1346 verbose readInstalled returning cli@0.4.3
+1347 verbose readInstalled returning minimatch@0.0.5
+1348 verbose readInstalled returning minimatch@0.2.9
+1349 verbose readInstalled returning graceful-fs@1.1.14
+1350 verbose readInstalled returning lru-cache@2.0.4
+1351 verbose readInstalled returning sigmund@1.0.0
+1352 verbose readInstalled returning lru-cache@1.0.6
+1353 verbose readInstalled returning ycssmin@1.0.1
+1354 verbose readInstalled returning optimist@0.3.5
+1355 verbose readInstalled returning wordwrap@0.0.2
+1356 verbose readInstalled returning pkginfo@0.3.0
+1357 verbose readInstalled returning read@1.0.4
+1358 verbose readInstalled returning revalidator@0.1.5
+1359 verbose readInstalled returning utile@0.1.7
+1360 verbose readInstalled returning winston@0.6.2
+1361 verbose readInstalled returning mute-stream@0.0.3
+1362 verbose readInstalled returning deep-equal@0.0.0
+1363 verbose readInstalled returning i@0.3.1
+1364 verbose readInstalled returning mkdirp@0.3.4
+1365 verbose readInstalled returning ncp@0.2.6
+1366 verbose readInstalled returning rimraf@1.0.9
+1367 verbose readInstalled returning cycle@1.0.1
+1368 verbose readInstalled returning eyes@0.1.8
+1369 verbose readInstalled returning pkginfo@0.2.3
+1370 verbose readInstalled returning stack-trace@0.0.6
+1371 verbose readInstalled returning qs@0.5.1
+1372 verbose readInstalled returning formidable@1.0.11
+1373 verbose readInstalled returning cookie-signature@0.0.1
+1374 verbose readInstalled returning crc@0.2.0
+1375 verbose readInstalled returning cookie@0.0.4
+1376 verbose readInstalled returning bytes@0.1.0
+1377 verbose readInstalled returning send@0.1.0
+1378 verbose readInstalled returning fresh@0.1.0
+1379 verbose readInstalled returning pause@0.0.1
+1380 verbose readInstalled returning debug@0.7.0
+1381 verbose readInstalled returning mime@1.2.6
+1382 verbose readInstalled returning range-parser@0.0.4
+1383 verbose readInstalled returning underscore@1.3.3
+1384 verbose readInstalled returning keypress@0.1.0
+1385 verbose readInstalled returning async@0.2.9
+1386 verbose readInstalled returning source-map@0.1.29
+1387 verbose readInstalled returning optimist@0.3.7
+1388 verbose readInstalled returning uglify-to-browserify@1.0.1
+1389 verbose readInstalled returning amdefine@0.0.8
+1390 verbose readInstalled returning wordwrap@0.0.2
+1391 verbose readInstalled returning async@0.2.9
+1392 verbose readInstalled returning source-map@0.1.29
+1393 verbose readInstalled returning optimist@0.3.7
+1394 verbose readInstalled returning amdefine@0.0.8
+1395 verbose readInstalled returning wordwrap@0.0.2
+1396 verbose readInstalled returning eventproxy@0.2.0
+1397 verbose readInstalled returning emoji@0.1.2
+1398 verbose readInstalled returning urllib@0.3.4
+1399 verbose readInstalled returning buffer-concat@0.0.1
+1400 verbose readInstalled returning yeoman-generator@0.11.1
+1401 verbose readInstalled returning colors@0.6.0-1
+1402 verbose readInstalled returning nopt@2.1.1
+1403 verbose readInstalled returning lodash@1.1.1
+1404 verbose readInstalled returning update-notifier@0.1.3
+1405 verbose readInstalled returning insight@0.1.0
+1406 verbose readInstalled returning cheerio@0.10.8
+1407 verbose readInstalled returning request@2.16.6
+1408 verbose readInstalled returning rimraf@2.1.4
+1409 verbose readInstalled returning tar@0.1.17
+1410 verbose readInstalled returning diff@1.0.4
+1411 verbose readInstalled returning mime@1.2.9
+1412 verbose readInstalled returning underscore.string@2.3.1
+1413 verbose readInstalled returning mkdirp@0.3.5
+1414 verbose readInstalled returning glob@3.1.21
+1415 verbose readInstalled returning cli-table@0.2.0
+1416 verbose readInstalled returning debug@0.7.2
+1417 verbose readInstalled returning isbinaryfile@0.1.9
+1418 verbose readInstalled returning prompt@0.2.9
+1419 verbose readInstalled returning revalidator@0.1.5
+1420 verbose readInstalled returning dargs@0.1.0
+1421 verbose readInstalled returning cheerio-select@0.0.3
+1422 verbose readInstalled returning htmlparser2@2.6.0
+1423 verbose readInstalled returning underscore@1.4.4
+1424 verbose readInstalled returning entities@0.3.0
+1425 verbose readInstalled returning CSSselect@0.3.1
+1426 verbose readInstalled returning CSSwhat@0.2.0
+1427 verbose readInstalled returning domhandler@2.0.3
+1428 verbose readInstalled returning domutils@1.0.1
+1429 verbose readInstalled returning domelementtype@1.1.1
+1430 verbose readInstalled returning form-data@0.0.10
+1431 verbose readInstalled returning hawk@0.10.2
+1432 verbose readInstalled returning node-uuid@1.4.0
+1433 verbose readInstalled returning cookie-jar@0.2.0
+1434 verbose readInstalled returning aws-sign@0.2.0
+1435 verbose readInstalled returning oauth-sign@0.2.0
+1436 verbose readInstalled returning forever-agent@0.2.0
+1437 verbose readInstalled returning tunnel-agent@0.2.0
+1438 verbose readInstalled returning json-stringify-safe@3.0.0
+1439 verbose readInstalled returning qs@0.5.6
+1440 verbose readInstalled returning combined-stream@0.0.4
+1441 verbose readInstalled returning async@0.2.8
+1442 verbose readInstalled returning delayed-stream@0.0.5
+1443 verbose readInstalled returning hoek@0.7.6
+1444 verbose readInstalled returning boom@0.3.8
+1445 verbose readInstalled returning cryptiles@0.1.3
+1446 verbose readInstalled returning sntp@0.1.4
+1447 verbose readInstalled returning graceful-fs@1.2.1
+1448 verbose readInstalled returning inherits@1.0.0
+1449 verbose readInstalled returning block-stream@0.0.6
+1450 verbose readInstalled returning fstream@0.1.22
+1451 verbose readInstalled returning graceful-fs@1.2.1
+1452 verbose readInstalled returning minimatch@0.2.12
+1453 verbose readInstalled returning graceful-fs@1.2.1
+1454 verbose readInstalled returning inherits@1.0.0
+1455 verbose readInstalled returning lru-cache@2.3.0
+1456 verbose readInstalled returning sigmund@1.0.0
+1457 verbose readInstalled returning abbrev@1.0.4
+1458 verbose readInstalled returning colors@0.3.0
+1459 verbose readInstalled returning pkginfo@0.3.0
+1460 verbose readInstalled returning read@1.0.4
+1461 verbose readInstalled returning utile@0.1.7
+1462 verbose readInstalled returning winston@0.6.2
+1463 verbose readInstalled returning mute-stream@0.0.3
+1464 verbose readInstalled returning async@0.1.22
+1465 verbose readInstalled returning deep-equal@0.0.0
+1466 verbose readInstalled returning i@0.3.1
+1467 verbose readInstalled returning ncp@0.2.7
+1468 verbose readInstalled returning rimraf@1.0.9
+1469 verbose readInstalled returning async@0.1.22
+1470 verbose readInstalled returning cycle@1.0.2
+1471 verbose readInstalled returning eyes@0.1.8
+1472 verbose readInstalled returning pkginfo@0.2.3
+1473 verbose readInstalled returning request@2.9.203
+1474 verbose readInstalled returning stack-trace@0.0.6
+1475 verbose readInstalled returning request@2.12.0
+1476 verbose readInstalled returning configstore@0.1.2
+1477 verbose readInstalled returning semver@1.1.4
+1478 verbose readInstalled returning form-data@0.0.3
+1479 verbose readInstalled returning mime@1.2.7
+1480 verbose readInstalled returning combined-stream@0.0.3
+1481 verbose readInstalled returning async@0.1.9
+1482 verbose readInstalled returning delayed-stream@0.0.5
+1483 verbose readInstalled returning lodash@1.2.1
+1484 verbose readInstalled returning mkdirp@0.3.5
+1485 verbose readInstalled returning yamljs@0.1.4
+1486 verbose readInstalled returning argparse@0.1.15
+1487 verbose readInstalled returning glob@3.1.21
+1488 verbose readInstalled returning underscore@1.4.4
+1489 verbose readInstalled returning underscore.string@2.3.1
+1490 verbose readInstalled returning minimatch@0.2.12
+1491 verbose readInstalled returning graceful-fs@1.2.1
+1492 verbose readInstalled returning inherits@1.0.0
+1493 verbose readInstalled returning lru-cache@2.3.0
+1494 verbose readInstalled returning sigmund@1.0.0
+1495 verbose readInstalled returning request@2.12.0
+1496 verbose readInstalled returning configstore@0.1.2
+1497 verbose readInstalled returning async@0.1.22
+1498 verbose readInstalled returning lodash@1.0.1
+1499 verbose readInstalled returning prompt@0.2.9
+1500 verbose readInstalled returning form-data@0.0.3
+1501 verbose readInstalled returning mime@1.2.7
+1502 verbose readInstalled returning combined-stream@0.0.3
+1503 verbose readInstalled returning async@0.1.9
+1504 verbose readInstalled returning delayed-stream@0.0.5
+1505 verbose readInstalled returning lodash@1.2.1
+1506 verbose readInstalled returning mkdirp@0.3.5
+1507 verbose readInstalled returning yamljs@0.1.4
+1508 verbose readInstalled returning argparse@0.1.15
+1509 verbose readInstalled returning glob@3.1.21
+1510 verbose readInstalled returning underscore@1.4.4
+1511 verbose readInstalled returning underscore.string@2.3.1
+1512 verbose readInstalled returning minimatch@0.2.12
+1513 verbose readInstalled returning graceful-fs@1.2.1
+1514 verbose readInstalled returning inherits@1.0.0
+1515 verbose readInstalled returning lru-cache@2.3.0
+1516 verbose readInstalled returning sigmund@1.0.0
+1517 verbose readInstalled returning pkginfo@0.3.0
+1518 verbose readInstalled returning read@1.0.4
+1519 verbose readInstalled returning revalidator@0.1.5
+1520 verbose readInstalled returning utile@0.1.7
+1521 verbose readInstalled returning winston@0.6.2
+1522 verbose readInstalled returning mute-stream@0.0.3
+1523 verbose readInstalled returning deep-equal@0.0.0
+1524 verbose readInstalled returning i@0.3.1
+1525 verbose readInstalled returning mkdirp@0.3.5
+1526 verbose readInstalled returning ncp@0.2.7
+1527 verbose readInstalled returning rimraf@1.0.9
+1528 verbose readInstalled returning cycle@1.0.2
+1529 verbose readInstalled returning eyes@0.1.8
+1530 verbose readInstalled returning pkginfo@0.2.3
+1531 verbose readInstalled returning request@2.9.203
+1532 verbose readInstalled returning stack-trace@0.0.6
+1533 verbose readInstalled returning undefined
+1534 error peerinvalid The package bower does not satisfy its siblings' peerDependencies requirements!
+1534 error peerinvalid Peer yo@1.0.0-beta.6 wants bower@~0.9.2
+1535 error System Darwin 13.0.0
+1536 error command "node" "/usr/local/bin/npm" "-g" "install" "jshint"
+1537 error cwd /Users/acelan/github/sinaads
+1538 error node -v v0.10.8
+1539 error npm -v 1.2.23
+1540 error code EPEERINVALID
+1541 verbose exit [ 1, true ]

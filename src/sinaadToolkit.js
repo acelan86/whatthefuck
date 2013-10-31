@@ -1922,12 +1922,16 @@
          * @param  {String} link    广告资源落地页地址
          * @param  {Array:String} monitor 广告点击监测的url数组
          * @param  {String} tpl     模版
+         * @param  {Object} opt_options 额外参数
+         *         @param {Boolean} wmode 是否透明
          * @return {String}         广告展现html
          */
-        createHTML : function (type, src, width, height, link, monitor, tpl) {
+        createHTML : function (type, src, width, height, link, monitor, tpl, opt_options) {
             var html = '',
                 config,
                 monitorCode;
+
+            opt_options = opt_options || {};
 
             src = sinaadToolkit.array.ensureArray(src),
             type = sinaadToolkit.array.ensureArray(type),
@@ -1994,7 +1998,7 @@
                         url : sinaadToolkit.url.ensureURL(src),
                         width : width,
                         height : height,
-                        wmode : 'transparent'
+                        wmode : opt_options.wmode || 'opaque'
                     });
                     if (link) {
                         html = [

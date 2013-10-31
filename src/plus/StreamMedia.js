@@ -96,7 +96,11 @@
                 config.main.width,
                 config.main.height,
                 config.main.link || config.link,
-                config.monitor
+                config.monitor,
+                '',
+                {
+                    wmode : 'transparent'
+                }
             );
             this.main.show();
             this.mini.hide();

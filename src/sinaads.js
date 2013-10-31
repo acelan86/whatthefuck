@@ -832,7 +832,8 @@
             var monitor = content.monitor,
                 pv = content.pv,
                 link = content.link,
-                pid = content.pid ? 'sudapid=' + content.pid : '';
+                //pid = content.pid ? 'sudapid=' + content.pid : '';
+                pid = ''; //暂时封闭功能
 
             //如果存在pid为每个link加上pid
             core.array.each(link, function (url, i) {
