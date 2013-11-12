@@ -126,7 +126,7 @@
 
             if ((entry = core.cookie.get('sinaads_entry') || core.storage.get('sinaads_entry'))) {
                 targeting.entry = entry;
-                core.cookie.remove('sinaads_entry');
+                core.cookie.remove('sinaads_entry', {domain: 'sina.com.cn'});
                 core.storage.remove('sinaads_entry');
             }
 
