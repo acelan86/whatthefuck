@@ -9,7 +9,7 @@
 
  /** 
   * @useage
-  *     window.sinaadsPerloadData = [pdps1, pdps2, pdps3, ..., pdpsn]; 批量加载的代码
+  *     window.sinaadsPreloadData = [pdps1, pdps2, pdps3, ..., pdpsn]; 批量加载的代码
   *     (window.sinaads = window.sinaads || []).push({}); 投放一个位置
   *     (window.sinaads = window.sinaads || []).push({
   *         element : HTMLDOMElement,
@@ -31,18 +31,20 @@
     /**
      * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
      */
-    if (!core.seed) {
-        var _pathname = window.location.pathname,
-            _host = window.location.host,
-            KEY = _host.split('.')[0] + _pathname.substring(0, _pathname.lastIndexOf('/'));
+    function getSeed() {
+        if (!core.seed) {
+            var _pathname = window.location.pathname,
+                _host = window.location.host,
+                KEY = _host.split('.')[0] + _pathname.substring(0, _pathname.lastIndexOf('/'));
 
-        core.debug('sinaads:seed key is ' + KEY);
+            core.debug('sinaads:seed key is ' + KEY);
 
-        KEY = 'sinaads_' + core.hash(KEY);
-
-        core.seed = parseInt(core.storage.get(KEY), 10) || core.rand(0, 100);
-        //大于1000就从0开始，防止整数过大
-        core.storage.set(KEY, core.seed > 1000 ? 0 : ++core.seed, 30 * 24 * 60 * 60 * 1000); //默认一个月过期
+            KEY = 'sinaads_' + core.hash(KEY);
+            core.seed = parseInt(core.storage.get(KEY), 10) || core.rand(1, 100);
+            //大于1000就从0开始，防止整数过大
+            core.storage.set(KEY, core.seed > 1000 ? 1 : ++core.seed, 30 * 24 * 60 * 60 * 1000); //默认一个月过期
+        }
+        return core.seed;
     }
 
     if (!core.enterTime) {
@@ -86,33 +88,60 @@
     /**
      * 获取定向关键词, 全局只获取一次
      */
-    var targeting = window._sinaadsTargeting = window._sinaadsTargeting || (function () {
-        var metaNodes = document.getElementsByTagName('head')[0].getElementsByTagName('meta'),
-            targeting = {},
-            metas = [],
-            entry,
-            i = 0,
-            len = metaNodes.length;
-        //metas = Array.prototype.slice.call(metaNodes)在ie下报错’缺少 JScript 对象‘
-        for (; i < len; i++) {
-            metas.push(metaNodes[i]);
-        }
-        core.array.each(metas, function (meta) {
-            if (meta.name.indexOf('sinaads_') === 0) {
-                targeting[meta.name.split('_')[1]] = meta.content;
+    
+    //var targeting = window._sinaadsTargeting = window._sinaadsTargeting || (function () {
+    function getTargeting() {
+        var targeting = core._sinaadsTargeting;
+        if (!targeting) {
+            var metaNodes = document.getElementsByTagName('head')[0].getElementsByTagName('meta'),
+                metas = {},
+                meta,
+                key,
+                content,
+                len = metaNodes.length,
+                i = 0,
+                entry,
+                ip;
+
+            targeting = {};
+            /* 先将所有的meta节点的name和content缓存下来, 缓存是为了提高查找效率, 不用每次都去遍历 */
+            for (; i < len; i++) {
+                meta = metaNodes[i];
+                key = meta.name;
+                content = core.string.trim(meta.content);
+                if (!metas[key]) {
+                    metas[key] = [];
+                }
+                content && (metas[meta.name].push(content));
             }
-        });
-        if ((entry = core.cookie.get('sinaads_entry') || core.storage.get('sinaads_entry'))) {
-            targeting.entry = entry;
-            core.cookie.remove('sinaads_entry');
-            core.storage.remove('sinaads_entry');
+            /* 拆解出name = ^sinaads_ 的key, 并得到真实的key值
+             * 如果name=sinaads_key的content为空，则查找name=key的content作为内容
+             */
+            for (var name in metas) {
+                if (name.indexOf('sinaads_') === 0) {
+                    key = name.replace('sinaads_', ''); //因为以sinaads_开头，因此replace的一定是开头那个，不用使用正则/^sinaads_/匹配，提高效率
+                    targeting[key] = metas[name].join(',') || metas[key].join(',');
+                }
+            }
+
+            if ((entry = core.cookie.get('sinaads_entry') || core.storage.get('sinaads_entry'))) {
+                targeting.entry = entry;
+                core.cookie.remove('sinaads_entry');
+                core.storage.remove('sinaads_entry');
+            }
+
+            /* 模拟ip定向 */
+            if ((ip = core.cookie.get('sinaads_ip') || core.storage.get('sinaads_ip'))) {
+                targeting.ip = ip;
+                core.cookie.remove('sinaads_ip');
+                core.storage.remove('sinaads_ip');
+            }
+
+            core._sinaadsTargeting = targeting;
+            core.debug('sinaads:Targeting init,', targeting);
         }
-
-        core.debug('sinaads:targeting get,', targeting);
-
         return targeting;
-    })();
-
+    }
 
     /**
      * 数据模块
@@ -171,24 +200,24 @@
                 // 背投  750*450 bt
                 // 文字链 wzl
                 ad.type = ({
-                    'lmt' : 'stream',
-                    'kl' : 'couplet',
-                    'sc' : 'videoWindow',
-                    'hzh' : 'embed',
-                    'tl' : 'embed',
-                    'jx' : 'embed',
-                    'dtl' : 'embed',
-                    'an' : 'embed',
-                    'dan' : 'embed',
-                    'xan' : 'embed',
-                    'wzl' : 'textlink',
+                    'lmt'   : 'stream',
+                    'kl'    : 'couplet',
+                    'sc'    : 'videoWindow',
+                    'hzh'   : 'embed',
+                    'tl'    : 'embed',
+                    'jx'    : 'embed',
+                    'dtl'   : 'embed',
+                    'an'    : 'embed',
+                    'dan'   : 'embed',
+                    'xan'   : 'embed',
+                    'wzl'   : 'textlink',
                     'ztwzl' : 'zhitoutextlink',
-                    'qp' : 'fullscreen',
-                    'fp' : 'turning',
-                    'dl' : 'float',
-                    'tip' : 'tip',
-                    'bt' : 'bp',
-                    'sx' : 'follow'
+                    'qp'    : 'fullscreen',
+                    'fp'    : 'turning',
+                    'dl'    : 'float',
+                    'tip'   : 'tip',
+                    'bt'    : 'bp',
+                    'sx'    : 'follow'
                 }[ad.type]) || ad.type || 'embed';
 
                 ad.content[i] = content;
@@ -223,10 +252,13 @@
                 if (isLoaded) {
                     deferred.resolve();
                 } else {
+                    var targeting = getTargeting();
+
                     core.debug('sinaads:current pdps data is unload, load immedietly. ' + _pdps.join(), _cache);
+                    
                     params = [
                         'adunitid=' + _pdps.join(','),                   //pdps数组
-                        'rotate_count=' + core.seed,                    //轮播数
+                        'rotate_count=' + getSeed(),                    //轮播数
                         'TIMESTAMP=' + core.enterTime.toString(36),         //时间戳
                         'referral=' + encodeURIComponent(core.url.top)  //当前页面url
                     ];
@@ -628,10 +660,7 @@
         var tpl = config.sinaads_ad_tpl || '',
             html = [];
         core.array.each(content, function (content, i) {
-            if (core.isFunction(tpl)) {
-                tpl = tpl(i); //传入当前内容是第几条广告内容，返回该条广告内容对应的模版
-            }
-            html.push(core.ad.createHTML(content.type, content.src, 0, 0, content.link, content.monitor, tpl));
+            html.push(core.ad.createHTML(content.type, content.src, 0, 0, content.link, content.monitor, core.isFunction(tpl) ? tpl(i) : tpl));
         });
         element.style.cssText += ';text-decoration:none';
         element.innerHTML = html.join('');
@@ -706,7 +735,6 @@
         content = content[0];
 
         var uid         = config.sinaads_uid,
-            iframeId    = 'sinaads_iframe_' + uid,
             type        = content.type[0] || '',
             link        = content.link[0] || '',
             src         = content.src[0] || '',
@@ -742,7 +770,6 @@
                 //创建广告渲染的沙箱环境，并传递部分广告参数到沙箱中
                 core.sandbox.create(element, width, height, adContent, {
                     sinaads_uid             : uid,
-                    sinaads_async_iframe_id : iframeId,
                     sinaads_ad_pdps         : pdps,
                     sinaads_ad_width        : width,
                     sinaads_ad_height       : height
@@ -797,7 +824,6 @@
         }
         //获取page_url 广告所在页面url
         config.sinaads_page_url = core.url.top;
-
 
         modelModule.request(config.sinaads_ad_pdps).done(function () {
             render(element, modelModule.get(config.sinaads_ad_pdps), config);
@@ -891,10 +917,11 @@
      */
     function init() {
         core.debug('sinaads:Begin to scan and render all ad placeholders.' + core.now());
+
         /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
-        var perloadAds = window.sinaads;
-        if (perloadAds && perloadAds.shift) {
-            for (var ad, len = 50; (ad = perloadAds.shift()) && 0 < len--;) {
+        var preloadAds = window.sinaads;
+        if (preloadAds && preloadAds.shift) {
+            for (var ad, len = 50; (ad = preloadAds.shift()) && 0 < len--;) {
                 _init(ad);
             }
         }
@@ -953,15 +980,15 @@
 
 
     /* 判断是否有需要预加载的数据，加载完成后执行初始化操作，否则执行初始化操作 */
-    var perloadData = window.sinaadsPerloadData = window.sinaadsPerloadData || [];
-    if (!perloadData.done) {
-        if (perloadData instanceof Array && perloadData.length > 0) {
-            core.debug('sinaads:Data preload of bulk requests. ' + perloadData.join(','));
-            modelModule.request(perloadData).done(init).fail(init);
+    var preloadData = window.sinaadsPreloadData = window.sinaadsPreloadData || [];
+    if (!preloadData.done) {
+        if (preloadData instanceof Array && preloadData.length > 0) {
+            core.debug('sinaads:Data preload of bulk requests. ' + preloadData.join(','));
+            modelModule.request(preloadData).done(init).fail(init);
         } else {
             init();
         }
     }
-    window.sinaadsPerloadData.done = 1; //处理完成
+    window.sinaadsPreloadData.done = 1; //处理完成
 
 })(window, window.sinaadToolkit);

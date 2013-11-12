@@ -26,7 +26,7 @@
             return reg.test(url);
         }
 
-        if (type === 'flash' || type === 'image' && checkDomain(link, urlAllowDomain) && checkDomain(src, srcAllowDomain)) {
+        if ((type === 'flash' || type === 'image') && checkDomain(link, urlAllowDomain) && checkDomain(src, srcAllowDomain)) {
             document.write(sinaadToolkit.ad.createHTML(
                 type,
                 src,

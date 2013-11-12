@@ -26,20 +26,26 @@
          */
         mode : window.location.href.indexOf('__sinaadToolkitDebug__') !== -1 ? 'debug' : 'release',  //是否开启debug模式
         /**
-         * @private
-         */
-        _consoleViewId : 'sinaadToolkitDebugContainer',
-        /**
          * 调试方法，用于方便线上调试问题
          * @param  {String} msg 输出的信息
          */
-        debug : function (msg) {
+        debug : (function () {
+            /**
+             * @remarks 当script放在head中，立即执行的时候doc.body不存在，这时候模拟的console窗口没有地方挂接
+             * 这是我们选择的是抛弃这部分debug信息，后续考虑使用cache将这部分信息缓存下来，当body加载后进行回放
+             * 但是考虑到这只是调试信息，而且head上挂接js的使用方法在广告逻辑上比较少用，因此没有必要花大力气用几行
+             * 代码去实现这个功能。
+             */
+            var containerId = 'sinaadToolkitDebugContainer';
             var console = window.console || {
                 log : function (msg) {
-                    var consoleView = document.getElementById(sinaadToolkit._consoleViewId);
-                    if (!consoleView && document.body) {
+                    if (!document.body) {
+                        return;
+                    }
+                    var consoleView = document.getElementById(containerId);
+                    if (!consoleView) {
                         consoleView = document.createElement('ul');
-                        consoleView.id = sinaadToolkit._consoleViewId;
+                        consoleView.id = containerId;
                         consoleView.style.cssText = 'z-index:99999;overflow:auto;height:300px;position:absolute;right:0;top:0;opacity:.9;*filter:alpha(opacity=90);background:#fff;width:500px;';
                         document.body.insertBefore(consoleView, document.body.firstChild);
                     }
@@ -49,10 +55,12 @@
                     consoleView.appendChild(li);
                 }
             };
-            if (sinaadToolkit.mode === 'debug') {
-                console.log(msg, Array.prototype.slice.call(arguments, 1));
-            }
-        },
+            return function (msg) {
+                if (sinaadToolkit.mode === 'debug') {
+                    console.log(msg, Array.prototype.slice.call(arguments, 1));
+                }
+            };
+        })(),
         /**
          * 错误信息
          */
@@ -683,7 +691,7 @@
                         expires.setDate(expires.getDate() + 365);
                         dom.expires = expires.toUTCString();
                     } catch (e) {
-                        sinaadToolkit.error('sinaadToolkit.storage:userData init fail, ' + e.message);
+                        sinaadToolkit.debug('sinaadToolkit.storage:userData init fail, ' + e.message);
                         return null;
                     }
                 }
@@ -706,6 +714,7 @@
                     dom.load(userData.name);
                     return dom.getAttribute(key);
                 }
+                return null;
             },
             removeItem : function (key) {
                 var dom = userData.init();
@@ -768,9 +777,9 @@
                     var value = storage.getItem(key);
                     if (value) {
                         sinaadToolkit.debug('sinaadToolkit.storage.get:get value of ' + key + ':' + value);
-                        value = value.split(';');
+                        value = value.split(';expires=');
                         //有过期时间
-                        if (value[1] && sinaadToolkit.now() > parseInt(value[1].split('=')[1], 10)) {
+                        if (value[1] && sinaadToolkit.now() > parseInt(value[1], 10)) {
                             storage.removeItem(key);
                             return null;
                         } else {
@@ -779,7 +788,7 @@
                     }
                     return null;
                 } catch (e) {
-                    sinaadToolkit.error('sinaadToolkit.storage.get:' + e.message);
+                    sinaadToolkit.debug('sinaadToolkit.storage.get:' + e.message);
                     return null;
                 }
             },
@@ -2140,6 +2149,8 @@
                 var sandboxId =  'sinaadtk_sandbox_id_' + uid++;
 
                 context = context || {};
+
+                context.sinaadToolkitSandboxId = sandboxId; //增加sandboxId到全局变量中，方便内部获取iframe节点
 
                 width += sinaadToolkit.isNumber(width) ? 'px' : '';
                 height += sinaadToolkit.isNumber(height) ? 'px' : '';
