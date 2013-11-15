@@ -92,6 +92,12 @@
     //var targeting = window._sinaadsTargeting = window._sinaadsTargeting || (function () {
     function getTargeting() {
         var targeting = core._sinaadsTargeting;
+
+        function clearEntryTag() {
+            core.cookie.remove('sinaads_entry', {domain: '.sina.com.cn', path: '/'});
+            core.storage.remove('sinaads_entry');
+        }
+
         if (!targeting) {
             var metaNodes = document.getElementsByTagName('head')[0].getElementsByTagName('meta'),
                 metas = {},
@@ -126,8 +132,17 @@
 
             if ((entry = core.cookie.get('sinaads_entry') || core.storage.get('sinaads_entry'))) {
                 targeting.entry = entry;
-                core.cookie.remove('sinaads_entry', {domain: 'sina.com.cn'});
-                core.storage.remove('sinaads_entry');
+                /**
+                 * @todo
+                 * 这里有个问题，如果获取到entry后保存到全局，然后立刻清除，如果iframe里面的广告需要获取entry的话则获取不到
+                 * 但是如果在unload的时候清除，可能会有用户没有关闭当前文章，又打开了另外一个文章，这时候entry也没有清除
+                 * 所以最终使用了延时5s删除
+                 */
+                var timer = setTimeout(clearEntryTag, 5000);
+                core.event.on(window, 'beforeunload', function () {
+                    timer && clearTimeout(timer);
+                    clearEntryTag();
+                });
             }
 
             /* 模拟ip定向 */

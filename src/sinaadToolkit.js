@@ -1957,8 +1957,7 @@
             if (tpl && 'string' === typeof tpl) {
                 var tplData = {
                     width : width,
-                    height : height,
-                    monitor : monitorCode
+                    height : height
                 };
                 sinaadToolkit.array.each(src, function (_src, i) {
                     tplData['src' + i] = _src;
