@@ -1936,9 +1936,12 @@
          * @return {String}         广告展现html
          */
         createHTML : function (type, src, width, height, link, monitor, tpl, opt_options) {
-            var html = '',
+            var html = [],
+                _html = '',
                 config,
-                monitorCode;
+                tmpData = {},
+                len = 0,
+                i = 0;
 
             opt_options = opt_options || {};
 
@@ -1949,89 +1952,104 @@
             width += sinaadToolkit.isNumber(width) ? 'px' : '',
             height += sinaadToolkit.isNumber(height) ? 'px' : '';
 
-            
+
+            /**
+             * 把所有的属性拉平，方便模板处理
+             * src0, src1, src2 ... srcn
+             * type0, type1, type2 ... typen
+             * link0, link1, link2 ... linkn
+             * monitor0, monitor1, monitor2 ... monitorn
+             */
+            sinaadToolkit.array.each(src, function (_src, i) {
+                tmpData['src' + i] = _src;
+                tmpData['type' + i] = type[i] || sinaadToolkit.ad.getTypeBySrc(_src, type[i]);
+                tmpData['link' + i] = sinaadToolkit.url.ensureURL(link[i]) || '';
+                tmpData['monitor' + i] = sinaadToolkit.monitor.createClickMonitor(tmpData['type' + i], monitor);
+            });
+            tmpData.width = width;
+            tmpData.height = height;
+            tmpData.src = tmpData.src0 || '';
+            tmpData.type = tmpData.type0 || '';
+            tmpData.link = tmpData.link0 || '';
+            tmpData.monitor = tmpData.monitor0 || '';
+
 
             //如果提供了模版，则使用模版来渲染广告
             //模版中可以含有参数type, src, width, height, monitor, link
             //现在主要用在智投文字链和图文方式
             if (tpl && 'string' === typeof tpl) {
-                var tplData = {
-                    width : width,
-                    height : height
-                };
-                sinaadToolkit.array.each(src, function (_src, i) {
-                    tplData['src' + i] = _src;
-                    tplData['type' + i] = type[i] || sinaadToolkit.ad.getTypeBySrc(_src, type[i]);
-                    tplData['link' + i] = link[i] || '';
-                    tplData['monitor' + i] = sinaadToolkit.monitor.createClickMonitor(tplData['type' + i], monitor);
-                });
-                tplData.src = tplData.src0 || '';
-                tplData.type = tplData.type0 || '';
-                tplData.link = tplData.link0 || '';
-                tplData.monitor = tplData.monitor0 || '';
-                return sinaadToolkit.string.format(tpl, tplData);
+                return sinaadToolkit.string.format(tpl, tmpData);
             }
 
-            //如果没有自定模版
-            src = src[0];
-            type = type[0] || sinaadToolkit.ad.getTypeBySrc(src, type[0]);
-            link = sinaadToolkit.url.ensureURL(link[0]);
-            monitorCode = sinaadToolkit.monitor.createClickMonitor(type, monitor);
 
-            switch (type) {
-                case 'url' :
-                    config = {};
-                    sinaadToolkit.iframe.init(config, width, height, false);
-                    config.src = sinaadToolkit.url.ensureURL(src);
-                    html = sinaadToolkit.iframe.createHTML(config);
-                    break;
-                case 'image' :
-                    html = '<img border="0" src="' + sinaadToolkit.url.ensureURL(src) + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
-                    //onclick与跳转同时发送会导致丢失移动端的监测
-                    if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitorCode) {
-                        html = link ? '<a href="javascript:;" onclick="try{' + monitorCode + '}catch(e){}finally{window.open(\'' + link +'\')}">' + html + '</a>' : html;
-                    } else {
-                        html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode +'}catch(e){}"' : '') + '>' + html + '</a>' : html;
-                    }
-                    break;
-                case 'text' :
-                    if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitorCode) {
-                        html = link ? '<a href="javascript:;" onclick="try{' + monitorCode + '}catch(e){}finally{window.open(\'' + link +'\')}">' + src + '</a>' : src;
-                    } else {
-                        html = link ? '<a href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode +'}catch(e){}"' : '') + '>' + src + '</a>' : src;
-                    }
-                    break;
-                case 'flash' :
-                    html = sinaadToolkit.swf.createHTML({
-                        url : sinaadToolkit.url.ensureURL(src),
-                        width : width,
-                        height : height,
-                        wmode : opt_options.wmode || 'opaque'
-                    });
-                    if (link) {
-                        html = [
-                            '<div style="width:' + width + ';height:' + height + ';position:relative;overflow:hidden;">',
-                                html,
-                                '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="_blank"' + (monitorCode ? ' onclick="try{' + monitorCode + '}catch(e){}"' : '') + '></a>',
-                            '</div>'
-                        ].join('');
-                    }
-                    break;
-                case 'adbox' :
-                    config = {};
-                    sinaadToolkit.iframe.init(config, width, height, false);
-                    config.src = sinaadToolkit.url.ensureURL(src);
-                    monitorCode && (config.name = monitorCode);
-                    html = sinaadToolkit.iframe.createHTML(config);
-                    break;
-                case 'js' :
-                    html = ['<', 'script charset="utf-8" src="', sinaadToolkit.url.ensureURL(src), '"></', 'script>'].join('');
-                    break;
-                default :
-                    html = src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>');
-                    break;
+            len = src.length;
+            len = 1; //暂时先支持一个元素
+
+            for (; i < len; i++) {
+                //如果没有自定模版
+                src = tmpData['src' + i];
+                type = tmpData['type' + i];
+                link = tmpData['link' + i];
+                monitor = tmpData['monitor' + i];
+
+                switch (type) {
+                    case 'url' :
+                        config = {};
+                        sinaadToolkit.iframe.init(config, width, height, false);
+                        config.src = sinaadToolkit.url.ensureURL(src);
+                        _html = sinaadToolkit.iframe.createHTML(config);
+                        break;
+                    case 'image' :
+                        _html = '<img border="0" src="' + sinaadToolkit.url.ensureURL(src) + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
+                        //onclick与跳转同时发送会导致丢失移动端的监测
+                        if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitor) {
+                            _html = link ? '<a href="javascript:;" onclick="try{' + monitor + '}catch(e){}finally{window.open(\'' + link +'\')}">' + _html + '</a>' : _html;
+                        } else {
+                            _html = link ? '<a href="' + link + '" target="_blank"' + (monitor ? ' onclick="try{' + monitor +'}catch(e){}"' : '') + '>' + _html + '</a>' : _html;
+                        }
+                        break;
+                    case 'text' :
+                        if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitor) {
+                            _html = link ? '<a href="javascript:;" onclick="try{' + monitor + '}catch(e){}finally{window.open(\'' + link +'\')}">' + src + '</a>' : src;
+                        } else {
+                            _html = link ? '<a href="' + link + '" target="_blank"' + (monitor ? ' onclick="try{' + monitor +'}catch(e){}"' : '') + '>' + src + '</a>' : src;
+                        }
+                        break;
+                    case 'flash' :
+                        _html = sinaadToolkit.swf.createHTML({
+                            url : sinaadToolkit.url.ensureURL(src),
+                            width : width,
+                            height : height,
+                            wmode : opt_options.wmode || 'opaque'
+                        });
+                        if (link) {
+                            _html = [
+                                '<div style="width:' + width + ';height:' + height + ';position:relative;overflow:hidden;">',
+                                    _html,
+                                    '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="_blank"' + (monitor ? ' onclick="try{' + monitor + '}catch(e){}"' : '') + '></a>',
+                                '</div>'
+                            ].join('');
+                        }
+                        break;
+                    case 'adbox' :
+                        config = {};
+                        sinaadToolkit.iframe.init(config, width, height, false);
+                        config.src = sinaadToolkit.url.ensureURL(src);
+                        monitor && (config.name = monitor);
+                        _html = sinaadToolkit.iframe.createHTML(config);
+                        break;
+                    case 'js' :
+                        _html = [
+                            '<', 'script charset="utf-8" src="', sinaadToolkit.url.ensureURL(src), '"></', 'script>'
+                            ].join('');
+                        break;
+                    default :
+                        _html = src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>');
+                        break;
+                }
+                html.push(_html);
             }
-            return html;
+            return html.join(' ');
         }
     };
 
@@ -2189,13 +2207,14 @@
         this.height = config.height || 'auto';
         this.position = config.position || "center center";
         this.follow = config.follow || 0;
+        this.zIndex = config.zIndex || 99999;
         this.minViewportWidth = config.minViewportWidth || 0;  //容器最小宽度
 
         this.positionStyle = this.follow ? (sinaadToolkit.browser.isSupportFixed ? 'fixed' : 'absolute') : 'absolute';
 
         var element = document.createElement('div');
         element.id = this.uid;
-        element.style.cssText += 'position:' + this.positionStyle + ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:9999;display:' + (config.autoShow ? 'block' : 'none');
+        element.style.cssText += 'position:' + this.positionStyle + ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:' + this.zIndex + ';display:' + (config.autoShow ? 'block' : 'none');
         document.body.insertBefore(element, document.body.firstChild);
 
         this.setPosition();

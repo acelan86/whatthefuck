@@ -3,7 +3,9 @@
 
     //常量定义
     var CLOSE_NORMAL_BTN = "http://d1.sina.com.cn/shh/ws/2012/09/29/1/close1.gif",
-        CLOSE_HOVER_BTN = "http://d1.sina.com.cn/shh/ws/2012/09/29/1/close2.gif";
+        CLOSE_HOVER_BTN = "http://d1.sina.com.cn/shh/ws/2012/09/29/1/close2.gif",
+        MAIN_ZINDEX = 11000,
+        CLOSE_ZINDEX = 11010;
 
 
     function VideoWindowMedia(config) {
@@ -18,7 +20,8 @@
             width : config.width,
             height : config.height,
             position : 'right bottom',
-            follow : 1
+            follow : 1,
+            zIndex : MAIN_ZINDEX
         });
 
         var mainWrap = this.mainWrap = document.createElement('div');
@@ -28,7 +31,7 @@
         mainContent.style.cssText = 'position:absolute;width:' + config.width + 'px;height:' + config.height + 'px;left:0px;top:0px;';
 
         var closeBtn = this.closeBtn = document.createElement('div');
-        closeBtn.style.cssText = 'cursor:pointer;z-index:999;position:absolute;width:42px;height:19px;right:7px;top:1px;';
+        closeBtn.style.cssText = 'cursor:pointer;z-index:' + CLOSE_ZINDEX + ';position:absolute;width:42px;height:19px;right:7px;top:1px;';
         
         mainWrap.appendChild(closeBtn);
         mainWrap.appendChild(mainContent);

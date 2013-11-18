@@ -67,6 +67,15 @@
     function _isPenddingSinaad(element) {
         return (/(^| )sinaads($| )/).test(element.className) && "done" !== element.getAttribute("data-ad-status");
     }
+
+    /**
+     * 判断是否为sina商业广告节点且为异步插入的节点
+     */
+    //1.class=sinaads 
+    //2.data-sinaads-status === "async"
+    function _isAsyncSinaAd(element) {
+        return (/(^| )sinaads($| )/).test(element.className) && "async" === element.getAttribute("data-ad-status");
+    }
     /**
      * 如果有id参数，则获取id为当前id的未渲染元素，如果没有提供id，则从现有的元素中获取一个待渲染广告元素
      * @param  {[type]} id [description]
@@ -78,7 +87,7 @@
             len = inss.length,
             ins;
         for (ins = inss[i]; i < len; ins = inss[++i]) {
-            if (_isPenddingSinaad(ins) && (!id || ins.id === id)) {
+            if (_isPenddingSinaad(ins) && ((!id && !_isAsyncSinaAd(ins)) || ins.id === id)) {
                 return ins;
             }
         }
@@ -661,7 +670,7 @@
                         }
                     })
                 ],
-                type : 'html',
+                type : ['html'],
                 link : []
             }
         ];

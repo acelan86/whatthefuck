@@ -10,7 +10,9 @@
     var MAIN_CLOSE_ICON1 = 'http://d4.sina.com.cn/d1images/lmt/cls_77x31.gif',
         MAIN_CLOSE_ICON2 = 'http://d2.sina.com.cn/d1images/lmt/cls_66x22.gif',
         REPLAY_ICON = 'http://d5.sina.com.cn/d1images/lmt/play.gif',
-        MINI_CLOSE_ICON = 'http://d1.sina.com.cn/d1images/lmt/close1.jpg';
+        MINI_CLOSE_ICON = 'http://d1.sina.com.cn/d1images/lmt/close1.jpg',
+        MAIN_ZINDEX = 12000,
+        MIN_ZINDEX = 10000;
 
     function StreamMedia(config) {
         var THIS = this;
@@ -27,13 +29,15 @@
             width : width,
             height : height,
             position : 'center ' + (config.main.top || 'center'),
-            follow : 1
+            follow : 1,
+            zIndex : MAIN_ZINDEX
         });
         var mini = this.mini = new sinaadToolkit.Box({
             width : 25,
             height : 219,
             position : 'right bottom',
-            follow : 1
+            follow : 1,
+            zIndex : MIN_ZINDEX
         });
 
         var mainCloseBtn = this.mainCloseBtn = document.createElement('div');
@@ -43,7 +47,7 @@
             'position:absolute',
             'right:0px',
             'bottom:' + (width > 375 ? -31 : -22) + 'px',
-            'z-index:99999',
+            'z-index:' + MAIN_ZINDEX,
             'background:url(' + (width > 375 ? MAIN_CLOSE_ICON1 : MAIN_CLOSE_ICON2) + ') no-repeat',
             'margin:0',
             'padding:0',

@@ -10,7 +10,6 @@
                 margin:0px;
             }
         </style>
-        <script async charset="utf-8" src="./release/sinaads.js"></script>
     <script>
         var sinaadsPerloadData = [
             'PDPS000000042135'
@@ -63,6 +62,9 @@
     <script src="./data/testdata.js"></script>
     </head>
     <body>
+        <script>
+            document.write('<ins id="SinaAsync" class="sinaads" data-ad-status="async" data-ad-pdps="PDPS10000000000"></ins>');
+        </script>
         <div style="margin:0px auto;width:1000px;">
             <style>
                 h2{
@@ -317,10 +319,20 @@
                 </script>
             </div>
         </div>
-
         <script>
-            //document.domain = 'sina.com.cn';
+            (sinaads = window.sinaads || []).push({
+                element : document.getElementById('SinaAsync'),
+                params : {
+                    sinaads_success_handler : function () {
+                        alert('success');
+                    },
+                    sinaads_fail_handler : function () {
+                        alert('fail');
+                    }
+                }
+            });
         </script>
+        <script async charset="utf-8" src="./release/sinaads.js"></script>
         
         <!--新闻中心轮播新浪视窗广告结束-->
     </body>
