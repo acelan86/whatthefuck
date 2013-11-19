@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title> 博客右下广告位 </title>
+    </head>
+    <body>
+        <div style="width:150px;height:100px;position:fixed;right:0px;bottom:0px;border:1px solid #ccc;background:#fc0;">
+            <div id="closebtn" style="position:absolute;right:10px;top:10px;line-height:12px; font-size:10px;overflow:hidden;padding:2px;border:1px solid #Ccc;background:#fff;">x</div>
+        </div>
+        <script src="http://d1.sina.com.cn/litong/zhitou/sinaads/release/sinaads.js" async></script>
+        <script>
+            document.getElementById('closebtn').onclick = function () {
+                this.parentNode.style.display = "none";
+            };
+            /**
+             * 博客右下角广告事件处理
+             */
+            (function (id) {
+                var closebtn = document.getElementById(id);
+                function on(dom, type, cb) {
+                    if (dom.addEventListener) {
+                        dom.addEventListener(type, cb, false);
+                    } else if (dom.attachEvent) {
+                        dom.attachEvent('on' + type, cb);
+                    }
+                }
+                if (!closebtn) return;
+
+                on(closebtn, 'click', function () {
+                    var ad = new sinaadToolkit.Box({
+                        position: "right bottom",
+                        width: 350,
+                        height: 110
+                    });
+                    ad.getMain().innerHTML = '<ins class="sinaads" id="SinaadsBlogAD" data-ad-status="async" data-ad-pdps="PDPS000000005574"></ins>';
+                    (sinaads = window.sinaads || []).push({
+                        element : document.getElementById('SinaadsBlogAD'),
+                        params : {
+                            sinaads_success_handler : function () {
+                                ad.show();
+                                setTimeout(function () {
+                                    ad.hide();
+                                }, 3000)
+                            }
+                        }
+                    });
+                });
+            })("closebtn");
+
+        </script>
+    </body>
+</html>
