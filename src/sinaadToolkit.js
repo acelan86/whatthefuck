@@ -148,6 +148,24 @@
          */
         isNumber : function (source) {
             return '[object Number]' === Object.prototype.toString.call(source) && isFinite(source);
+        },
+        /**
+         * 在全局上下文中执行script
+         * @remarks  来自jquery
+         * @param  {String} data 要执行的脚本代码
+         */
+        // Evaluates a script in a global context
+        // Workarounds based on findings by Jim Driscoll
+        // http://weblogs.java.net/blog/driscoll/archive/2009/09/08/eval-javascript-global-context
+        globalEval: function (data) {
+            if (data && /\S/.test(data)) {
+                // We use execScript on Internet Explorer
+                // We use an anonymous function so that context is window
+                // rather than jQuery in Firefox
+                (window.execScript || function (data) {
+                    window["eval"].call(window, data);
+                })(data);
+            }
         }
     };
 
@@ -1079,7 +1097,55 @@
             }
 
             return pos;
-        }
+        },
+        /**
+         * dom.innerHTML的增强版本，可执行script
+         * @param  {HTMLElement} dom     容器节点元素
+         * @param  {String} content 插入的内容
+         */
+        fill : (function () {
+            var rcleanScript = /^\s*<!(?:\[CDATA\[|\-\-)|[\]\-]{2}>\s*$/g;
+
+            return function (dom, content) {
+                if (!dom) {
+                    return;
+                }
+
+                /*
+                 * 当inner的第一个节点就是script的时候ie会丢弃这个节点，不下载也不执行
+                 * 因此这里有这个hack，考虑到没有什么大影响，直接没有区分浏览器
+                 */
+                dom.innerHTML = '<i style="display:none;">Hack ie first node is script</i>' + content;
+
+                var scripts = dom.getElementsByTagName('script'),
+                    i = 0,
+                    len = scripts.length,
+                    script;
+
+                /* 保证按顺序执行 */
+                function exec() {
+                    if (i++ < len && (script = scripts[0])) {
+                        //ie6下会自动执行具有defer属性的内联和外部脚本
+                        if (sinaadToolkit.browser.ie <= 6 && script.defer) {
+                            exec();
+                        } else {
+                            if (script.src) {
+                                sinaadToolkit.sio.loadScript(script.src, exec, {charset:'gb2312'});
+                            } else {
+                                sinaadToolkit.globalEval((script.text || script.textContent || script.innerHTML || "").replace(rcleanScript, ""));
+                                exec();
+                            }
+                        }
+                        //移除脚本节点
+                        if (script.parentNode ) {
+                            script.parentNode.removeChild(script);
+                        }
+                    }
+                }
+
+                exec();
+            };
+        })()
     };
 
     /**

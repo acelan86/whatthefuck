@@ -63,7 +63,7 @@ module.exports = function(grunt) {
         "debug": false,
         "eqnull": false,
         "esnext": true,
-        "evil": false,
+        "evil": true,
         "es3":true,
         "expr": true,
         "funcscope": false,

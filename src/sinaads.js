@@ -405,10 +405,12 @@
                     core.sio.loadScript(content.src[0]);
                     break;
                 case 'html' :
-                    return 'embed'; //某dsp插入一轮，比如乐居
+                    core.dom.fill(element, content.src[0]);
+                    break;
+                default :
+                    break;
             }
-        }
-        if (content.src.length > 1) {
+        } else {
             //注入跨栏数据
             var CoupletMediaData = {
                 src         : content.src,
@@ -435,25 +437,31 @@
 
         content = content[0];
         element.style.cssText = 'position:absolute;top:-9999px';
-        if (content.type[0] !== 'js') {
-            var VideoWindowMediaData = {
-                src     : content.src[0],
-                type    : content.type[0],
-                width   : width,
-                height  : height,
-                link    : content.link[0],
-                monitor : content.monitor,
-                delay   : config.sinaads_ad_delay || 0
-            };
-            if (core.VideoWindowMedia) {
-                new core.VideoWindowMedia(VideoWindowMediaData);
-            } else {
-                core.sio.loadScript(RESOURCE_URL, function () {
+        switch (content.type[0]) {
+            case 'js' :
+                core.sio.loadScript(content.src[0]);
+                break;
+            case 'html' :
+                core.dom.fill(element, content.src[0]);
+                break;
+            default :
+                var VideoWindowMediaData = {
+                    src     : content.src[0],
+                    type    : content.type[0],
+                    width   : width,
+                    height  : height,
+                    link    : content.link[0],
+                    monitor : content.monitor,
+                    delay   : config.sinaads_ad_delay || 0
+                };
+                if (core.VideoWindowMedia) {
                     new core.VideoWindowMedia(VideoWindowMediaData);
-                });
-            }
-        } else {
-            core.sio.loadScript(content.src[0]);
+                } else {
+                    core.sio.loadScript(RESOURCE_URL, function () {
+                        new core.VideoWindowMedia(VideoWindowMediaData);
+                    });
+                }
+                break;
         }
     });
 
@@ -463,17 +471,25 @@
         content = content[0];
         //流媒体，隐藏掉该区块
         element.style.cssText = 'position:absolute;top:-9999px';
-        if (content.src.length === 1 && content.type[0] === 'js') {
-            //富媒体供应商提供的js
+        if (content.src.length === 1) {
             //生成一个用于渲染容器到页面中
             var streamContainer = document.createElement('div');
             streamContainer.id = 'SteamMediaWrap';
             document.body.insertBefore(streamContainer, document.body.firstChild);
-                
-            core.sio.loadScript(content.src[0]);
-        }
-        //这里认为如果给的是素材的话，那么素材必须大于1个，否则为js类型
-        if (content.src.length > 1) {
+
+            switch (content.type[0]) {
+                case 'js' :
+                    //富媒体供应商提供的js
+                    core.sio.loadScript(content.src[0]);
+                    break;
+                case 'html' :
+                    core.dom.fill(element, content.src[0]);
+                    break;
+                default :
+                    break;
+            }
+        } else {
+            //这里认为如果给的是素材的话，那么素材必须大于1个，否则为js类型
             //注入流媒体数据
             var StreamMediaData = {
                 main : {
@@ -507,9 +523,18 @@
 
         content = content[0];
         element.style.cssText = 'position:absolute;top:-9999px';
-        if (content.src.length === 1 && content.type[0] === 'js') {
-            //富媒体供应商提供的js
-            core.sio.loadScript(content.src[0]);
+        if (content.src.length === 1) {
+            switch (content.type[0]) {
+                case 'js' :
+                    //富媒体供应商提供的js
+                    core.sio.loadScript(content.src[0]);
+                    break;
+                case 'html' :
+                    core.dom.fill(element, content.src[0]);
+                    break;
+                default :
+                    break;
+            }
         } else {
             //是全屏广告，隐藏掉改区块
             var FullScreenMediaData = {
@@ -808,10 +833,9 @@
      * 初始化广告对象
      * @param  {object} config 配置项
      */
-    function _init(config) {
-        var element = config.element;      //广告容器
-
-        config = config.params || {};   //广告配置
+    function _init(conf) {
+        var element = conf.element,    //广告容器
+            config = conf.params || {};   //广告配置
 
         //从config.element中得到需要渲染的ins元素，如果没有，则获取页面上未完成状态的广告节点
         if (element) {

@@ -1,0 +1,23 @@
+<div id="xxx1"></div>
+<div id="xxx2"></div>
+
+<script>
+    var n = 10000,
+        el1 = document.getElementById('xxx1');
+        el2 = document.getElementById('xxx2');
+    var start = new Date();
+    el1.innerHTML = Array(n + 1).join('<span>') + Array(n + 1).join('</span>');
+    alert(new Date() - start);
+
+    start = new Date();
+
+    var frag = document.createDocumentFragment();
+    var root = frag;
+    while (n--) {
+        var span = document.createElement('span');
+        root.appendChild(span);
+        root = span;
+    }
+    el2.appendChild(frag);
+    alert(new Date() - start);
+</script>

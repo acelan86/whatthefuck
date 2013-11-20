@@ -168,10 +168,17 @@ _sinaadsCacheData["PDPS000000000066"] = {
     type : 'stream',
     content : [{
         pv : [],
-        type : ['flash', 'flash'],
+        type : ['html'],
         src : [
-            'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fc1715.swf',
-            'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fb1.swf'
+            '<!--SmartCreative Begin:-->' + 
+            '<SCRIPT type="text/javascript" SRC="http://smcommon.allyes.com/smcreative/flash_fx.js"></SCRIPT>' + 
+            '<SCRIPT type="text/javascript" SRC="http://sinasc.allyes.com/main/adfshow?user=sinasc|auto|mercuryqirui130916&db=sinasc&border=0&local=yes&js=mid" charset="GBK"></SCRIPT>' + 
+            '<SCRIPT LANGUAGE="JAVASCRIPT">' + 
+                'changeSinaControlFlag();' + 
+            '</SCRIPT>' + 
+            '<!--SmartCreative End-->'
+            // 'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fc1715.swf',
+            // 'http://rm.sina.com.cn/bj_chuanyang/yhd20130701/fb1.swf'
             //'http://rm.sina.com.cn/bj-icast/mv/cr/2013/07/129132/31641/code.js'
         ],
         monitor : ["http://stream.com"],
