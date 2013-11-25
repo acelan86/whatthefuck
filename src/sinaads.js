@@ -28,24 +28,26 @@
  (function (window, core, undefined) {
     "use strict";
 
-    /**
-     * 计数种子，每次加载获取cookie或者storage中的这个值，如果没有，随机生成1个值
-     */
-    function getSeed() {
-        if (!core.seed) {
-            var _pathname = window.location.pathname,
-                _host = window.location.host,
-                KEY = _host.split('.')[0] + _pathname.substring(0, _pathname.lastIndexOf('/'));
+    //页面url转换成唯一hash值，用于标记页面唯一的广告位
+    var PAGE_HASH = 'sinaads_' + core.hash(window.location.host.split('.')[0] + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')));
 
-            core.debug('sinaads:seed key is ' + KEY);
+    var seed = {
+        /**
+         * 获取轮播计数值，如果没有，自动生成一个，有的话自动加1
+         * @param  {String} pdps 是否为特殊的广告计数值，比如视窗有特殊计数要求，如果PDPS为空则为全局适用计数值
+         * @return {Number}      计数值
+         */
+        get : function (pdps) {
+            var key = PAGE_HASH + (pdps || '');
 
-            KEY = 'sinaads_' + core.hash(KEY);
-            core.seed = parseInt(core.storage.get(KEY), 10) || core.rand(1, 100);
-            //大于1000就从0开始，防止整数过大
-            core.storage.set(KEY, core.seed > 1000 ? 1 : ++core.seed, 30 * 24 * 60 * 60 * 1000); //默认一个月过期
+            if (!core[key]) {
+                core[key] = parseInt(core.storage.get(key), 10) || core.rand(1, 100);
+                //大于1000就从0开始，防止整数过大
+                core.storage.set(key, core[key] > 1000 ? 1 : ++core[key], 30 * 24 * 60 * 60 * 1000); //默认一个月过期
+            }
+            return core[key];
         }
-        return core.seed;
-    }
+    };
 
     if (!core.enterTime) {
         core.enterTime = core.now();
@@ -256,7 +258,7 @@
              * @param  {Array} pdps 广告pdps
              * @return {Deferred}      promise调用对象
              */
-            request : function (pdps) {
+            request : function (pdps, rotateCount) {
                 var start = core.now(),
                     deferred = new core.Deferred(),
                     params = [],
@@ -282,7 +284,7 @@
                     
                     params = [
                         'adunitid=' + _pdps.join(','),                   //pdps数组
-                        'rotate_count=' + getSeed(),                    //轮播数
+                        'rotate_count=' + rotateCount,                    //轮播数
                         'TIMESTAMP=' + core.enterTime.toString(36),         //时间戳
                         'referral=' + encodeURIComponent(core.url.top)  //当前页面url
                     ];
@@ -870,15 +872,31 @@
                 config.hasOwnProperty(key) || (config[key] = attr.nodeValue);
             }
         }
+
         //获取page_url 广告所在页面url
         config.sinaads_page_url = core.url.top;
 
-        modelModule.request(config.sinaads_ad_pdps).done(function () {
-            render(element, modelModule.get(config.sinaads_ad_pdps), config);
-            core.isFunction(config.sinaads_success_handler) && config.sinaads_success_handler();
-        }).fail(function () {
+        var frequence = config.sinaads_frequence = config.sinaads_frequence || 0, //请求频率，默认为0， 即每次刷新都请求
+            pdps = config.sinaads_ad_pdps,
+            disableKey = PAGE_HASH + pdps + '_disabled';
+
+        //如果该pdps不是处于禁止请求状态，发请求，否者直接进入失败处理
+        if (!core.storage.get(disableKey)) {
+            modelModule.request(pdps, seed.get(frequence ? pdps : null))
+                .done(function () {
+                    //如果有频率限制，则在成功时写入频率限制数据
+                    if (frequence) {
+                        core.storage.set(disableKey, 1, frequence * 1000);
+                    }
+                    render(element, modelModule.get(config.sinaads_ad_pdps), config);
+                    core.isFunction(config.sinaads_success_handler) && config.sinaads_success_handler();
+                })
+                .fail(function () {
+                    core.isFunction(config.sinaads_fail_handler) && config.sinaads_fail_handler();
+                });
+        } else {
             core.isFunction(config.sinaads_fail_handler) && config.sinaads_fail_handler();
-        });
+        }
     }
 
 
@@ -1032,7 +1050,8 @@
     if (!preloadData.done) {
         if (preloadData instanceof Array && preloadData.length > 0) {
             core.debug('sinaads:Data preload of bulk requests. ' + preloadData.join(','));
-            modelModule.request(preloadData).done(init).fail(init);
+            //预加载不允许加载频率不为0的请求，比如视窗，这个需要人工控制
+            modelModule.request(preloadData, seed.get()).done(init).fail(init);
         } else {
             init();
         }

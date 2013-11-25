@@ -38,6 +38,14 @@ module.exports = function(grunt) {
     //     ]
     //   }
     // },
+    // 
+    concat : {
+      sinaads : {
+        files : [
+          { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaads.js'] }
+        ]
+      }
+    },
     jshint : {
       options : {
         "bitwise": false,
@@ -182,14 +190,14 @@ module.exports = function(grunt) {
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-copy');
-  //grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'uglify', 'copy', 'connect', 'watch']);
+  grunt.registerTask('default', ['concat', 'jshint', 'uglify', 'copy', 'connect', 'watch']);
   grunt.registerTask('nouglify', ['jshint', 'connect']);
   grunt.registerTask('nowatch', ['jshint', 'uglify', 'connect']);
 
