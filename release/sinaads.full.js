@@ -2782,7 +2782,7 @@
         if (content.src.length === 1) {
             switch (content.type[0]) {
                 case 'js' :
-                    core.sio.loadScript(content.src[0]);
+                    core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
                     break;
                 case 'html' :
                     core.dom.fill(element, content.src[0]);
@@ -2819,7 +2819,7 @@
         element.style.cssText = 'position:absolute;top:-9999px';
         switch (content.type[0]) {
             case 'js' :
-                core.sio.loadScript(content.src[0]);
+                core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
                 break;
             case 'html' :
                 core.dom.fill(element, content.src[0]);
@@ -2860,7 +2860,7 @@
             switch (content.type[0]) {
                 case 'js' :
                     //富媒体供应商提供的js
-                    core.sio.loadScript(content.src[0]);
+                    core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
                     break;
                 case 'html' :
                     core.dom.fill(element, content.src[0]);
@@ -2907,7 +2907,7 @@
             switch (content.type[0]) {
                 case 'js' :
                     //富媒体供应商提供的js
-                    core.sio.loadScript(content.src[0]);
+                    core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
                     break;
                 case 'html' :
                     core.dom.fill(element, content.src[0]);
@@ -3111,6 +3111,7 @@
                 monitor : content.monitor,
                 autoShow : 1,
                 top : config.sinaads_tip_top || 0,
+                left : config.sinaads_tip_left || 0,
                 zIndex : config.sinaads_ad_zindex || 0
             };
         if (core.TipsMedia) {
@@ -3429,7 +3430,7 @@
         if (preloadData instanceof Array && preloadData.length > 0) {
             core.debug('sinaads:Data preload of bulk requests. ' + preloadData.join(','));
             //预加载不允许加载频率不为0的请求，比如视窗，这个需要人工控制
-            modelModule.request(preloadData, 0).done(init).fail(init);
+            modelModule.request(preloadData, seed.get()).done(init).fail(init);
         } else {
             init();
         }

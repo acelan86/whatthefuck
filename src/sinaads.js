@@ -404,7 +404,7 @@
         if (content.src.length === 1) {
             switch (content.type[0]) {
                 case 'js' :
-                    core.sio.loadScript(content.src[0]);
+                    core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
                     break;
                 case 'html' :
                     core.dom.fill(element, content.src[0]);
@@ -441,7 +441,7 @@
         element.style.cssText = 'position:absolute;top:-9999px';
         switch (content.type[0]) {
             case 'js' :
-                core.sio.loadScript(content.src[0]);
+                core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
                 break;
             case 'html' :
                 core.dom.fill(element, content.src[0]);
@@ -482,7 +482,7 @@
             switch (content.type[0]) {
                 case 'js' :
                     //富媒体供应商提供的js
-                    core.sio.loadScript(content.src[0]);
+                    core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
                     break;
                 case 'html' :
                     core.dom.fill(element, content.src[0]);
@@ -529,7 +529,7 @@
             switch (content.type[0]) {
                 case 'js' :
                     //富媒体供应商提供的js
-                    core.sio.loadScript(content.src[0]);
+                    core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
                     break;
                 case 'html' :
                     core.dom.fill(element, content.src[0]);
