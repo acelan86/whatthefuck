@@ -7,6 +7,7 @@
     sinaadToolkit.Tip = function (element, config) {
         this.relateElement = element;
         this.top = config.top || 0;
+        this.left = config.left || 0;
         this.element = document.createElement('div');
         this.element.style.cssText += ';border:1px solid #ccc;z-index:' + (config.zIndex || 9999) + ';display:none;position:absolute;width:' + config.width + 'px;height:' + config.height + 'px;overflow:hidden;';
         this.setPosition();
@@ -22,9 +23,9 @@
         },
         setPosition : function () {
             var pos = sinaadToolkit.dom.getPosition(this.relateElement),
-                height = this.top || this.relateElement.offsetHeight || 0;
-            this.element.style.left = pos.left + 'px';
-            this.element.style.top = pos.top + height + 'px';
+                height = this.relateElement.offsetHeight || 0;
+            this.element.style.left = (this.left || pos.left) + 'px';
+            this.element.style.top = (this.top || (pos.top + height)) + 'px';
         },
         getResizeHandler : function () {
             var THIS = this;
@@ -61,6 +62,7 @@
                 width : config.width,
                 height : config.height,
                 top : config.top || 0,
+                left : config.left || 0,
                 zIndex : config.zIndex
             });
             this.tip.element.appendChild(tipContent);

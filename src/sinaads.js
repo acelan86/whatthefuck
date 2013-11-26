@@ -733,6 +733,7 @@
                 monitor : content.monitor,
                 autoShow : 1,
                 top : config.sinaads_tip_top || 0,
+                left : config.sinaads_tip_left || 0,
                 zIndex : config.sinaads_ad_zindex || 0
             };
         if (core.TipsMedia) {
