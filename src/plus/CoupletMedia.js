@@ -36,7 +36,8 @@
             height : config.sideHeight + SIDE_CLOSE_BTN_SIZE[1],
             position : 'left ' + config.top || 0,
             autoShow : 1,
-            minViewportWidth : config.mainWidth + 2 * config.sideWidth
+            minViewportWidth : config.mainWidth + 2 * config.sideWidth,
+            zIndex : 10500
         });
 
         var right = this.right = new sinaadToolkit.Box({
@@ -44,13 +45,15 @@
             height : config.sideHeight + SIDE_CLOSE_BTN_SIZE[1],
             position : 'right ' + config.top || 0,
             autoShow : 1,
-            minViewportWidth : config.mainWidth + 2 * config.sideWidth
+            minViewportWidth : config.mainWidth + 2 * config.sideWidth,
+            zIndex : 10500
         });
 
         var main = this.main = new sinaadToolkit.Box({
             width : config.mainWidth,
             height : config.mainHeight,
-            position : 'center ' + config.top || 0
+            position : 'center ' + config.top || 0,
+            zIndex : 10500
         });
 
 

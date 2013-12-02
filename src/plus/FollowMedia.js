@@ -48,14 +48,16 @@
             width : width,
             height : height,
             position : 'right ' + (config.main.top || 'top'),
-            follow : 1
+            follow : 1,
+            zIndex : 10010
         });
 
         var mini = this.mini = new sinaadToolkit.Box({
             width : MINI_CONTENT_SIZE[0],
             height : MINI_CONTENT_SIZE[1] + MINI_CLOSE_BTN_SIZE[1] + MINI_REPLAY_BTN_SIZE[1],
             position : 'right ' + (config.mini.top || 'bottom'),
-            follow : 1
+            follow : 1,
+            zIndex : 10000
         });
 
         var mainCloseBtn = this.mainCloseBtn = document.createElement('div');

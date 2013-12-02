@@ -1,0 +1,207 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-g', 'esprima' ]
+2 info using npm@1.3.11
+3 info using node@v0.10.21
+4 verbose cache add [ 'esprima', null ]
+5 verbose cache add name=undefined spec="esprima" args=["esprima",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'esprima',
+6 verbose parsed url   path: 'esprima',
+6 verbose parsed url   href: 'esprima' }
+7 silly lockFile 69931885-esprima esprima
+8 verbose lock esprima /Users/xiaobinlan/.npm/69931885-esprima.lock
+9 silly lockFile 69931885-esprima esprima
+10 silly lockFile 69931885-esprima esprima
+11 verbose addNamed [ 'esprima', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 1e02aa9d-esprima esprima@
+14 verbose lock esprima@ /Users/xiaobinlan/.npm/1e02aa9d-esprima.lock
+15 silly addNameRange { name: 'esprima', range: '*', hasData: false }
+16 verbose url raw esprima
+17 verbose url resolving [ 'https://registry.npmjs.org/', './esprima' ]
+18 verbose url resolved https://registry.npmjs.org/esprima
+19 info trying registry request attempt 1 at 22:04:13
+20 http GET https://registry.npmjs.org/esprima
+21 http 200 https://registry.npmjs.org/esprima
+22 silly registry.get cb [ 200,
+22 silly registry.get   { vary: 'Accept',
+22 silly registry.get     server: 'CouchDB/1.3.1 (Erlang OTP/R15B03)',
+22 silly registry.get     etag: '"7UR341PV11GZJUL9IBFB9RU48"',
+22 silly registry.get     date: 'Tue, 26 Nov 2013 14:04:18 GMT',
+22 silly registry.get     'content-type': 'application/json',
+22 silly registry.get     'content-length': '44928' } ]
+23 silly addNameRange number 2 { name: 'esprima', range: '*', hasData: true }
+24 silly addNameRange versions [ 'esprima',
+24 silly addNameRange   [ '0.7.0',
+24 silly addNameRange     '0.8.0',
+24 silly addNameRange     '0.8.1',
+24 silly addNameRange     '0.8.2',
+24 silly addNameRange     '0.9.0',
+24 silly addNameRange     '0.9.1',
+24 silly addNameRange     '0.9.2',
+24 silly addNameRange     '0.9.3',
+24 silly addNameRange     '0.9.4',
+24 silly addNameRange     '0.9.5',
+24 silly addNameRange     '0.9.6',
+24 silly addNameRange     '0.9.7',
+24 silly addNameRange     '0.9.8',
+24 silly addNameRange     '0.9.9',
+24 silly addNameRange     '1.0.0',
+24 silly addNameRange     '1.0.1',
+24 silly addNameRange     '1.0.2',
+24 silly addNameRange     '1.0.3',
+24 silly addNameRange     '1.0.4' ] ]
+25 verbose addNamed [ 'esprima', '1.0.4' ]
+26 verbose addNamed [ '1.0.4', '1.0.4' ]
+27 silly lockFile 758953aa-esprima-1-0-4 esprima@1.0.4
+28 verbose lock esprima@1.0.4 /Users/xiaobinlan/.npm/758953aa-esprima-1-0-4.lock
+29 silly lockFile da06523f-js-org-esprima-esprima-1-0-4-tgz https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz
+30 verbose lock https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz /Users/xiaobinlan/.npm/da06523f-js-org-esprima-esprima-1-0-4-tgz.lock
+31 verbose addRemoteTarball [ 'https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz',
+31 verbose addRemoteTarball   '9f557e08fc3b4d26ece9dd34f8fbf476b62585ad' ]
+32 info retry fetch attempt 1 at 22:04:19
+33 verbose fetch to= /var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/tmp.tgz
+34 http GET https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz
+35 http 200 https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz
+36 verbose tar unpack /var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/tmp.tgz
+37 silly lockFile 7202728e-272-0-039386966498568654-package tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/package
+38 verbose lock tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/package /Users/xiaobinlan/.npm/7202728e-272-0-039386966498568654-package.lock
+39 silly lockFile 2cb53e3d-272-0-039386966498568654-tmp-tgz tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/tmp.tgz
+40 verbose lock tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/tmp.tgz /Users/xiaobinlan/.npm/2cb53e3d-272-0-039386966498568654-tmp-tgz.lock
+41 silly gunzTarPerm modes [ '755', '644' ]
+42 silly gunzTarPerm extractEntry package.json
+43 silly gunzTarPerm extractEntry README.md
+44 silly gunzTarPerm extractEntry esprima.js
+45 silly gunzTarPerm extractEntry bin/esparse.js
+46 silly gunzTarPerm extractEntry bin/esvalidate.js
+47 silly gunzTarPerm extractEntry test/compat.js
+48 silly gunzTarPerm extractEntry test/reflect.js
+49 silly gunzTarPerm extractEntry test/run.js
+50 silly gunzTarPerm extractEntry test/runner.js
+51 silly gunzTarPerm extractEntry test/test.js
+52 silly lockFile 7202728e-272-0-039386966498568654-package tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/package
+53 silly lockFile 7202728e-272-0-039386966498568654-package tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/package
+54 silly lockFile 2cb53e3d-272-0-039386966498568654-tmp-tgz tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/tmp.tgz
+55 silly lockFile 2cb53e3d-272-0-039386966498568654-tmp-tgz tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/tmp.tgz
+56 verbose tar pack [ '/Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz',
+56 verbose tar pack   '/var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/package' ]
+57 verbose tarball /Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz
+58 verbose folder /var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/package
+59 silly lockFile 7202728e-272-0-039386966498568654-package tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/package
+60 verbose lock tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/package /Users/xiaobinlan/.npm/7202728e-272-0-039386966498568654-package.lock
+61 silly lockFile 746d2b8c-an-npm-esprima-1-0-4-package-tgz tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz
+62 verbose lock tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz /Users/xiaobinlan/.npm/746d2b8c-an-npm-esprima-1-0-4-package-tgz.lock
+63 silly lockFile 7202728e-272-0-039386966498568654-package tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/package
+64 silly lockFile 7202728e-272-0-039386966498568654-package tar:///var/folders/n0/_6m4gp8908z2mbdzc55m46180000gn/T/npm-4839-XhU9oxLO/1385474659272-0.039386966498568654/package
+65 silly lockFile 746d2b8c-an-npm-esprima-1-0-4-package-tgz tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz
+66 silly lockFile 746d2b8c-an-npm-esprima-1-0-4-package-tgz tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz
+67 silly lockFile 6fe4343a-binlan-npm-esprima-1-0-4-package /Users/xiaobinlan/.npm/esprima/1.0.4/package
+68 verbose lock /Users/xiaobinlan/.npm/esprima/1.0.4/package /Users/xiaobinlan/.npm/6fe4343a-binlan-npm-esprima-1-0-4-package.lock
+69 silly lockFile 6fe4343a-binlan-npm-esprima-1-0-4-package /Users/xiaobinlan/.npm/esprima/1.0.4/package
+70 silly lockFile 6fe4343a-binlan-npm-esprima-1-0-4-package /Users/xiaobinlan/.npm/esprima/1.0.4/package
+71 verbose tar unpack /Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz
+72 silly lockFile 0fab324a-binlan-npm-esprima-1-0-4-package tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package
+73 verbose lock tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package /Users/xiaobinlan/.npm/0fab324a-binlan-npm-esprima-1-0-4-package.lock
+74 silly lockFile 746d2b8c-an-npm-esprima-1-0-4-package-tgz tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz
+75 verbose lock tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz /Users/xiaobinlan/.npm/746d2b8c-an-npm-esprima-1-0-4-package-tgz.lock
+76 silly gunzTarPerm modes [ '755', '644' ]
+77 silly gunzTarPerm extractEntry package.json
+78 silly gunzTarPerm extractEntry README.md
+79 silly gunzTarPerm extractEntry esprima.js
+80 silly gunzTarPerm extractEntry bin/esparse.js
+81 silly gunzTarPerm extractEntry bin/esvalidate.js
+82 silly gunzTarPerm extractEntry test/compat.js
+83 silly gunzTarPerm extractEntry test/reflect.js
+84 silly gunzTarPerm extractEntry test/run.js
+85 silly gunzTarPerm extractEntry test/runner.js
+86 silly gunzTarPerm extractEntry test/test.js
+87 silly lockFile 0fab324a-binlan-npm-esprima-1-0-4-package tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package
+88 silly lockFile 0fab324a-binlan-npm-esprima-1-0-4-package tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package
+89 silly lockFile 746d2b8c-an-npm-esprima-1-0-4-package-tgz tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz
+90 silly lockFile 746d2b8c-an-npm-esprima-1-0-4-package-tgz tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz
+91 verbose chmod /Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz 644
+92 verbose chown /Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz [ 501, 20 ]
+93 silly lockFile da06523f-js-org-esprima-esprima-1-0-4-tgz https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz
+94 silly lockFile da06523f-js-org-esprima-esprima-1-0-4-tgz https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz
+95 silly lockFile 758953aa-esprima-1-0-4 esprima@1.0.4
+96 silly lockFile 758953aa-esprima-1-0-4 esprima@1.0.4
+97 silly lockFile 1e02aa9d-esprima esprima@
+98 silly lockFile 1e02aa9d-esprima esprima@
+99 silly resolved [ { name: 'esprima',
+99 silly resolved     description: 'ECMAScript parsing infrastructure for multipurpose analysis',
+99 silly resolved     homepage: 'http://esprima.org',
+99 silly resolved     main: 'esprima.js',
+99 silly resolved     bin:
+99 silly resolved      { esparse: './bin/esparse.js',
+99 silly resolved        esvalidate: './bin/esvalidate.js' },
+99 silly resolved     files:
+99 silly resolved      [ 'bin',
+99 silly resolved        'test/run.js',
+99 silly resolved        'test/runner.js',
+99 silly resolved        'test/test.js',
+99 silly resolved        'test/compat.js',
+99 silly resolved        'test/reflect.js',
+99 silly resolved        'esprima.js' ],
+99 silly resolved     version: '1.0.4',
+99 silly resolved     engines: { node: '>=0.4.0' },
+99 silly resolved     maintainers: [ [Object] ],
+99 silly resolved     repository: { type: 'git', url: 'http://github.com/ariya/esprima.git' },
+99 silly resolved     licenses: [ [Object] ],
+99 silly resolved     keywords: [ 'ast', 'ecmascript', 'javascript', 'parser', 'syntax' ],
+99 silly resolved     scripts:
+99 silly resolved      { test: 'node test/run.js',
+99 silly resolved        benchmark: 'node test/benchmarks.js',
+99 silly resolved        'benchmark-quick': 'node test/benchmarks.js quick' },
+99 silly resolved     readme: '**Esprima** ([esprima.org](http://esprima.org)) is a high performance,\nstandard-compliant [ECMAScript](http://www.ecma-international.org/publications/standards/Ecma-262.htm)\nparser written in ECMAScript (also popularly known as\n[JavaScript](http://en.wikipedia.org/wiki/JavaScript>JavaScript)).\nEsprima is created and maintained by [Ariya Hidayat](http://twitter.com/ariyahidayat),\nwith the help of [many contributors](https://github.com/ariya/esprima/contributors).\n\nEsprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror 4.6+, Opera 8+) as well as\n[Node.js](http://nodejs.org).\n\n### Features\n\n- Full support for [ECMAScript 5.1](http://www.ecma-international.org/publications/standards/Ecma-262.htm)(ECMA-262)\n- Sensible [syntax tree format](http://esprima.org/doc/index.html#ast) compatible with Mozilla\n[Parser AST](https://developer.mozilla.org/en/SpiderMonkey/Parser_API)\n- Heavily tested (> 550 [unit tests](http://esprima.org/test/) with solid 100% statement coverage)\n- Optional tracking of syntax node location (index-based and line-column)\n- Experimental support for ES6/Harmony (module, class, destructuring, ...)\n\nEsprima is blazing fast (see the [benchmark suite](http://esprima.org/test/benchmarks.html)).\nIt is up to 3x faster than UglifyJS v1 and it is still [competitive](http://esprima.org/test/compare.html)\nwith the new generation of fast parsers.\n\n### Applications\n\nEsprima serves as the basis for many popular JavaScript development tools:\n\n- Code coverage analysis: [node-cover](https://github.com/itay/node-cover), [Istanbul](https://github.com/yahoo/Istanbul)\n- Documentation tool: [JFDoc](https://github.com/thejohnfreeman/jfdoc), [JSDuck](https://github.com/senchalabs/jsduck)\n- Language extension: [LLJS](http://mbebenita.github.com/LLJS/) (low-level JS),\n[Sweet.js](http://sweetjs.org/) (macro)\n- ES6/Harmony transpiler: [Six](https://github.com/matthewrobb/six), [Harmonizr](https://github.com/jdiamond/harmonizr)\n- Eclipse Orion smart editing ([outline view](https://github.com/aclement/esprima-outline), [content assist](http://contraptionsforprogramming.blogspot.com/2012/02/better-javascript-content-assist-in.html))\n- Source code modification: [Esmorph](https://github.com/ariya/esmorph), [Code Painter](https://github.com/fawek/codepainter),\n- Source transformation: [node-falafel](https://github.com/substack/node-falafel), [Esmangle](https://github.com/Constellation/esmangle), [escodegen](https://github.com/Constellation/escodegen)\n\n### Questions?\n- [Documentation](http://esprima.org/doc)\n- [Issue tracker](http://issues.esprima.org): [known problems](http://code.google.com/p/esprima/issues/list?q=Defect)\nand [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement)\n- [Mailing list](http://groups.google.com/group/esprima)\n- [Contribution guide](http://esprima.org/doc/index.html#contribution)\n\nFollow [@Esprima](http://twitter.com/Esprima) on Twitter to get the\ndevelopment updates.\nFeedback and contribution are welcomed!\n\n### License\n\nCopyright (C) 2012, 2011 [Ariya Hidayat](http://ariya.ofilabs.com/about)\n and other contributors.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are met:\n\n  * Redistributions of source code must retain the above copyright\n    notice, this list of conditions and the following disclaimer.\n\n  * Redistributions in binary form must reproduce the above copyright\n    notice, this list of conditions and the following disclaimer in the\n    documentation and/or other materials provided with the distribution.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"\nAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\nIMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE\nARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY\nDIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\nLOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND\nON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF\nTHIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\n',
+99 silly resolved     readmeFilename: 'README.md',
+99 silly resolved     bugs: { url: 'https://github.com/ariya/esprima/issues' },
+99 silly resolved     _id: 'esprima@1.0.4',
+99 silly resolved     dist: { shasum: '9f557e08fc3b4d26ece9dd34f8fbf476b62585ad' },
+99 silly resolved     _from: 'esprima@',
+99 silly resolved     _resolved: 'https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz' } ]
+100 info install esprima@1.0.4 into /usr/local/lib
+101 info installOne esprima@1.0.4
+102 info /usr/local/lib/node_modules/esprima unbuild
+103 verbose tar unpack /Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz
+104 silly lockFile 81c6d409-r-local-lib-node-modules-esprima tar:///usr/local/lib/node_modules/esprima
+105 verbose lock tar:///usr/local/lib/node_modules/esprima /Users/xiaobinlan/.npm/81c6d409-r-local-lib-node-modules-esprima.lock
+106 silly lockFile 746d2b8c-an-npm-esprima-1-0-4-package-tgz tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz
+107 verbose lock tar:///Users/xiaobinlan/.npm/esprima/1.0.4/package.tgz /Users/xiaobinlan/.npm/746d2b8c-an-npm-esprima-1-0-4-package-tgz.lock
+108 silly gunzTarPerm modes [ '755', '644' ]
+109 error Error: EACCES, mkdir '/usr/local/lib/node_modules/esprima'
+109 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/esprima']
+109 error   errno: 3,
+109 error   code: 'EACCES',
+109 error   path: '/usr/local/lib/node_modules/esprima',
+109 error   fstream_type: 'Directory',
+109 error   fstream_path: '/usr/local/lib/node_modules/esprima',
+109 error   fstream_class: 'DirWriter',
+109 error   fstream_stack:
+109 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+109 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:37:53',
+109 error      'Object.oncomplete (fs.js:107:15)' ] }
+110 error Please try running this command again as root/Administrator.
+111 error System Darwin 13.0.1
+112 error command "node" "/usr/local/bin/npm" "install" "-g" "esprima"
+113 error cwd /Users/xiaobinlan/github/sinaads
+114 error node -v v0.10.21
+115 error npm -v 1.3.11
+116 error path /usr/local/lib/node_modules/esprima
+117 error fstream_path /usr/local/lib/node_modules/esprima
+118 error fstream_type Directory
+119 error fstream_class DirWriter
+120 error code EACCES
+121 error errno 3
+122 error stack Error: EACCES, mkdir '/usr/local/lib/node_modules/esprima'
+123 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+123 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:37:53
+123 error fstream_stack Object.oncomplete (fs.js:107:15)
+124 verbose exit [ 3, true ]

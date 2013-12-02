@@ -15,7 +15,58 @@
     <meta name="msapplication-TileColor" content="#ffbf27"/>
 <meta name="sogou_site_verification" content="BVIdHxKGrl"/>
 <link rel="apple-touch-icon" href="http://i3.sinaimg.cn/home/2013/0331/U586P30DT20130331093840.png" />
-
+    <script>
+        _sinaadsCacheData = {
+            "TEST000000000001":{
+                "type":"couplet",
+                "content":[
+                    {
+                        "monitor":[
+                            "http://sax.sina.com.cn/click?type=3&t=MjAxMy0xMS0yOCAxNzo0MToyNQk2MS4xMzUuM匒1ZmE1ZDkJOGIxMTRlZWI5MWNmZGViMAkJNjlkYTNhZTU1ZjUwCUFFCTIyMzE0NDA5NTUJLQkt"
+                        ],
+                        "link":[],
+                        "type":["html"],
+                        "pv":[""],
+                        "pid":null,
+                        "src":[
+                            '<script>' +
+                                'var sinaadsLejuCoupletID = "couplet";' +
+                                'parent.lejuMedia.then(function (data) {' +
+                                    'var data = data[sinaadsLejuCoupletID];' +
+                                    'if (data && data[0] && (data = data[0].params)) {' +
+                                        'var CoupletMediaData = {' +
+                                            'src: [data.bar, data.left, data.right],' +
+                                            'type: [' +
+                                                'parent.sinaadToolkit.ad.getTypeBySrc(data.bar),' +
+                                                'parent.sinaadToolkit.ad.getTypeBySrc(data.left), ' +  
+                                                'parent.sinaadToolkit.ad.getTypeBySrc(data.right)' +
+                                            '],' +
+                                            'link: [data.link],' +
+                                            'mainWidth: sinaads_ad_width,' +
+                                            'mainHeight: sinaads_ad_height,' +
+                                            'top: sinaads_couple_top || 0,' +
+                                            'delay: sinaads_ad_delay || 0' +
+                                        '};' +
+                                        'if (parent.sinaadToolkit.CoupletMediaData) {' +
+                                            'alert("has");' +
+                                            'new parent.sinaadToolkit.CoupletMedia(CoupletMediaData);' +
+                                        '} else {' +
+                                            'alert("no");' +
+                                            'parent.sinaadToolkit.sio.loadScript(parent.sinaadToolkit.RESOURCE_URL + "/release/plus/Media.js", function () {' +
+                                                'new parent.sinaadToolkit.CoupletMedia(CoupletMediaData);' +
+                                            '});' +
+                                        '}' +
+                                    '}' +
+                                '});' +
+                            '</' + 'script>'
+                        ]
+                    }
+                ],
+                "size":"1000*90",
+                "id":"TEST000000000001"
+            }
+        };
+    </script>
 	<script type="text/javascript">
     //js异步加载管理
     (function(){var w=this,d=document,version='1.0.7',data={},length=0,cbkLen=0;if(w.jsLoader){if(w.jsLoader.version>=version){return};data=w.jsLoader.getData();length=data.length};var addEvent=function(obj,eventType,func){if(obj.attachEvent){obj.attachEvent("on"+eventType,func)}else{obj.addEventListener(eventType,func,false)}};var domReady=false,ondomReady=function(){domReady=true};if(d.addEventListener){var webkit=navigator.userAgent.match(/AppleWebKit\/(\d+)/);if(webkit&&webkit[1]<525){doReadyStateCheck()}else{d.addEventListener("DOMContentLoaded",function(){d.removeEventListener("DOMContentLoaded",arguments.callee,false);ondomReady()},false)}};function doScrollCheck(){if(domReady){return};try{d.documentElement.doScroll("left")}catch(e){return};ondomReady()};function doReadyStateCheck(){if(domReady){return};if(d.readyState=='loaded'||d.readyState=='complete'){ondomReady();return}else{setTimeout(doReadyStateCheck,1);return}};function createPosNode(){if(jsLoader.caller){return};cbkLen++;if(!domReady&&d.attachEvent){doScrollCheck()};if(!domReady){try{d.write('<div style="display:none" id="_jl_pos_'+cbkLen+'"></div>');s=d.getElementById('_jl_pos_'+cbkLen)}catch(e){var s=d.createElement('div');s.id='_jl_pos_'+cbkLen;s.style.display='none';d.body.insertBefore(s,d.body.firstChild)}}else{var s=d.createElement('div');s.id='_jl_pos_'+cbkLen;s.style.display='none';d.body.appendChild(s)};return s};function getScript(url,dispose,charset){var scriptNode=d.createElement("script");scriptNode.type="text/javascript";if(charset){scriptNode.charset=charset};scriptNode.onreadystatechange=scriptNode.onload=function(){if(!this.readyState||this.readyState=="loaded"||this.readyState=="complete"){if(dispose){dispose()};scriptNode.onreadystatechange=scriptNode.onload=null;scriptNode.parentNode.removeChild(scriptNode)}};scriptNode.src=url;var h=d.getElementsByTagName("head")[0];h.insertBefore(scriptNode,h.firstChild)};var write=d.write,posNode;function cWrite(str){if(posNode.childNodes.length>0){return};if(posNode.innerHTML!=''){while(posNode.childNodes.length){posNode.parentNode.insertBefore(posNode.childNodes[0],posNode)}};posNode.innerHTML=str;while(posNode.childNodes.length){posNode.parentNode.insertBefore(posNode.childNodes[0],posNode)}};var JsObj=function(name,url){this.name=name;this.url=url;this.callback=[]};JsObj.prototype={status:'init',onload:function(){this.status='ok';var errors=[];for(var i=0;i<this.callback.length;i++){if(typeof this.callback[i]=='function'){try{if(this.callback[i].posNode){posNode=this.callback[i].posNode;d.write=cWrite};this.callback[i]();if(this.callback[i].posNode){d.write=write;this.callback[i].posNode.parentNode.removeChild(this.callback[i].posNode)}}catch(e){errors.push(e)}}};this.callback=[];if(errors.length!=0){throw errors[0]}}};w.jsLoader=function(cfg){var url=cfg.url||"";var name=cfg.name||"";var callback=cfg.callback||"";var charset=cfg.charset||"";if(name){if(!data[name]){if(!url){data[name]=new JsObj(name);data[name].status='waiting'}else{data[name]=new JsObj(name,url)};length++}else if(data[name].status=='waiting'&&url){data[name].status='init'};if(cfg.status){data[name].status=cfg.status};if(data[name].status=='loading'||data[name].status=='waiting'){if(typeof callback=='function'){callback.posNode=createPosNode();data[name].callback.push(callback)};return}else if(data[name].status=='ok'){if(typeof callback=='function'){callback()};return}}else{if(!url){return};for(var item in data){if(data[item].url==url){name=item;break}};if(!name){name='noname'+length;data[name]=new JsObj(name,url);length++};if(data[name].status=='loading'){if(typeof callback=='function'){callback.posNode=createPosNode();data[name].callback.push(callback)};return}else if(data[name].status=='ok'){if(typeof callback=='function'){callback()};return}};if(typeof callback=='function'){callback.posNode=createPosNode();data[name].callback.push(callback)};getScript(url,function(){data[name].onload()},charset);data[name].status='loading'};w.jsLoader.version=version;w.jsLoader.getData=function(){return data}})();
@@ -1283,13 +1334,7 @@ document.domain = "sina.com.cn";
             <div class="top-ads-fwrap">
 
 <!--_SINA_ADS_BEGIN_-->
-<div id="ad_45825">
-<script src="http://d1.sina.com.cn/litong/zhitou/sinaads/release/sinaads.js" async></script>
-<ins class="sinaads" data-ad-pdps="TEST000000000001"></ins>
-<script>
-  (sinaads = window.sinaads || []).push({});
-</script>
-</div>
+<div id="ad_45825"></div>
 <!--_SINA_ADS_END_-->
 
 			</div>
@@ -1328,38 +1373,6 @@ document.domain = "sina.com.cn";
 <!--_SINA_ADS_BEGIN_-->
 <!-- 240x350 5轮播地域定向按钮广告 begin -->
 <div id="ad_45976" style="width:240px; height:350px;">
-<script>
-    window._sinaadsCacheData = window._sinaadsCacheData || {};
-    window._sinaadsCacheData["PDPS000000000006"] = {
-        size : "240*350",
-        type : 'embed',
-        content : [
-            {
-                type : ['html'],
-                src : [
-                    '<div id="Container"></div>' +
-                    '<script src="http://d1.sina.com.cn/litong/zhitou/sinaads/release/sinaadToolkit.js"></' + 'script>' + 
-                    '<script>' + 
-                        'window.onload = function () {' +
-                            'parent.lejuMedia.then(function (data) {' + 
-                                'var data = data["ad_45976"];' +
-                                'if (data && data[0] && (data = data[0].params)) {' +
-                                    'alert(data.src + data.link);' +
-                                    'document.getElementById("Container").innerHTML = sinaadToolkit.ad.createHTML(sinaadToolkit.ad.getTypeBySrc(data.src), data.src, 240, 350, data.link);' +
-                                '}' + 
-                            '});' + 
-                        '};' +
-                    '</' + 'script>'
-                ]
-            }
-        ]
-    };
-</script>
-<script src="http://d1.sina.com.cn/litong/zhitou/sinaads/release/sinaads.js" async></script>
-<ins class="sinaads" data-ad-pdps="PDPS000000000006"></ins>
-<script>
-  (sinaads = window.sinaads || []).push({});
-</script>
 </div>
 <!-- 240x350 5轮播地域定向通栏广告 end -->
 <!--_SINA_ADS_END_-->
@@ -8508,101 +8521,7 @@ document.write('<script type="text/javascript" src="http://rm.sina.com.cn/bj_chu
 
 <!--加载跨栏 begin-->
 <span id="CoupletMediaWrap"></span>
-<script language="javascript" type="text/javascript">
-//<![CDATA[
-var CoupletMediaData=new Array();
-
-/*--投放列表 begin--*/
-
-//乐居跨栏广告 begin
-try {
-    if((new Date).getDay() === 4) {
-        var _CoupletMediaOpenWin = CoupletMediaOpenWin;
-        CoupletMediaOpenWin = function (rad, nad, divid) {
-            lejuMedia.then(function (data) {
-                leju.couplet(CoupletMediaData, data, "2013-2-14-9", "2013-12-31-9");
-                _CoupletMediaOpenWin();
-                CoupletMediaOpenWin = _CoupletMediaOpenWin;
-                _CoupletMediaOpenWin = null;
-            }, function () {
-                _CoupletMediaOpenWin();
-                CoupletMediaOpenWin = _CoupletMediaOpenWin;
-                _CoupletMediaOpenWin = null;
-            });
-        };
-    }
-} catch (e) {}
-//乐居跨栏广告 end
-
-<!--ADS:begin=PDPS000000006450:{A8380FE1-4FBD-48F3-A80D-A9DD7DA5C549}-->
-
-<!--A9DD7DA5C549--> 
-CoupletMediaData.push([
-"2013-11-20-9",//投放开始时间<startdate>2013-11-20</startdate>
-"2013-11-21-9",//投放结束时间非单天要加1<enddate>2013-11-20</enddate>
-"http://d1.sina.com.cn/201311/20/523209_lsh-120-270-1120c4l.swf",//左素材
- "http://d3.sina.com.cn/201311/20/523210_lsh-120-270-1120c4l.swf",//右素材
- "http://d2.sina.com.cn/201311/20/523208_lsh-cro1000-90-1120c4l.swf",//触发素材
-"",//链接地址
-"",//触发监测
-0//跨栏距离顶部高度
-]);<!--$$ 杜少平/2013-11-20 ~ 2013-11-20/B $-->
-
-<!--36BCC2BFABE5--> 
-CoupletMediaData.push([
-"2013-11-20-9",//投放开始时间<startdate>2013-11-20</startdate>
-"2013-11-21-9",//投放结束时间非单天要加1<enddate>2013-11-20</enddate>
-"http://d5.sina.com.cn/201311/19/523137_lsh-120_270-1120panda.gif",//左素材
- "http://d2.sina.com.cn/201311/19/523139_lsh-120_270-1120panda.gif",//右素材
- "http://d4.sina.com.cn/201311/19/523138_lsh-cro-1000_90-1120panda.swf",//触发素材
-"http://sina.allyes.com/main/adfclick?db=sina&bid=611859,680281,685548&cid=0,0,0&sid=690672&advid=22901&camid=108453&show=ignore&url=http://rm.sina.com.cn/shanghai/minisite/2014panda/index.html?qq-pf-to=pcqq.c2c",//链接地址
-"",//触发监测
-0//跨栏距离顶部高度
-]);<!--$$ 杜少平/2013-11-20 ~ 2013-11-20/B $-->
-
-<!--14929EB6B2CE--> 
-CoupletMediaData.push([
-"2013-11-22-9",//投放开始时间<startdate>2013-11-22</startdate>
-"2013-11-23-9",//投放结束时间非单天要加1<enddate>2013-11-22</enddate>
-"http://d5.sina.com.cn/201311/17/522659_120270ls_kl_bt_1118-X80.swf",//左素材
- "http://d2.sina.com.cn/201311/17/522660_120270ls_kl_bt_1118-X80.swf",//右素材
- "http://d3.sina.com.cn/201311/17/522658_100090ls_kl_1118-X80.swf",//触发素材
-"",//链接地址
-"",//触发监测
-0//跨栏距离顶部高度
-]);<!--$$ 董惟峰/2013-11-22 ~ 2013-11-22/B $-->
-
-<!--94B7F1551ED4--> 
-CoupletMediaData.push([
-"2013-11-18-9",//投放开始时间<startdate>2013-11-18</startdate>
-"2013-11-19-9",//投放结束时间非单天要加1<enddate>2013-11-19</enddate>
-"http://d3.sina.com.cn/201311/09/521208.swf",//左素材
- "http://d4.sina.com.cn/201311/09/521209.swf",//右素材
- "http://d2.sina.com.cn/201311/09/521207.swf",//触发素材
-"",//链接地址
-"",//触发监测
-0//跨栏距离顶部高度
-]);<!--$$ yuxia/2013-11-18 ~ 2013-11-18/B $-->
-
-<!--ADS:end-->
-
-<!--86868275A0A1--> 
-CoupletMediaData.push([
-"2013-4-19-9",//投放开始时间<startdate>2013-4-19</startdate>
-"2013-4-19-9",//投放结束时间非单天要加1<enddate>2013-4-19</enddate>
-"http://d1.sina.com.cn/201304/19/487038_25x300_l.swf",//左素材
- "http://d5.sina.com.cn/201304/19/487036_25x300_r.swf",//右素材
- "http://d1.sina.com.cn/201304/19/487037_1000x90_30k.swf",//触发素材
-"",//链接地址
-"",//触发监测
-0//跨栏距离顶部高度
-]);<!--$$ 奚稼清/2013-4-19 ~ 2013-4-19/B $-->
-
-<!--ADS:end-->
-
-/*--投放列表 end--*/
-//]]>
-</script>
+<script async charset="utf-8" src="http://d8.sina.com.cn/litong/zhitou/sinaads/release/sinaads.js"></script><ins class="sinaads" data-ad-pdps="TEST000000000001"></ins><script>(sinaads = window.sinaads || []).push({});</script>
 <!--加载跨栏 end-->
 
 <!--新浪首页二轮播背投广告开始-->

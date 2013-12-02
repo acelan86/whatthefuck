@@ -554,6 +554,13 @@
             } else if (dom.addEventListener) {
                 dom.addEventListener(type, callback, false);
             }
+        },
+        un : function (dom, type, callback) {
+            if (dom.detachEvent) {
+                dom.detachEvent('on' + type, callback);
+            } else if (dom.removeEventListener) {
+                dom.removeEventListener(type, callback);
+            }
         }
     };
 

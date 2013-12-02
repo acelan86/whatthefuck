@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0"/>
+        <title> 视频前插片测试 </title>
+        <script>
+            _sinaadsCacheData = {
+                'TEST000000000001' : {
+                    "type":"frontfilm",
+                    "content":[
+                        {
+                            "monitor":[
+                                "http://sax.sina.com.cn/click?type=3&t=MjAxMy0xMS0yOCAxNzo0MToyNQk2MS4xMzUuM…A1ZmE1ZDkJOGIxMTRlZWI5MWNmZGViMAkJNjlkYTNhZTU1ZjUwCUFFCTIyMzE0NDA5NTUJLQkt"
+                            ],
+                            "link":[],
+                            "type":["xml"],
+                            "pv":[""],
+                            "pid":null,
+                            "src":[
+                                'http://218.206.207.65/40/10/109/letv-gug/7934563-AVC-602284-AAC-32000-15040-1201203-e47e0a249a3922bdd1d772b79525a501-1383645513494.letv?crypt=49aa7f2e400&b=1100&nlh=3072&nlt=45&bf=29&gn=122&p2p=1&video_type=mp4&opck=1&check=0&tm=1385778000&key=b63b1fdce08e05900b3dab326b02f94f&proxy=1880689805,2071812442&cips=223.72.72.178&geo=CN-1-0-4&lgn=letv&gugtype=2&_r=0'
+                                //'http://218.206.207.65/40/10/109/letv-gug/7934563-AVC-602284-AAC-32000-15040-1201203-e47e0a249a3922bdd1d772b79525a501-1383645513494.letv?crypt=49aa7f2e400&b=1100&nlh=3072&nlt=45&bf=29&gn=122&p2p=1&video_type=mp4&opck=1&check=0&tm=1385778000&key=b63b1fdce08e05900b3dab326b02f94f&proxy=1880689805,2071812442&cips=223.72.72.178&geo=CN-1-0-4&lgn=letv&gugtype=2&_r=0'
+                            ]
+                        }
+                    ],
+                    "size":"300*150",
+                    "id":"TEST000000000001"
+                },
+                'TEST000000000002' : {
+                    "type":"pausefilm",
+                    "content":[
+                        {
+                            "monitor":[
+                                "http://sax.sina.com.cn/click?type=3&t=MjAxMy0xMS0yOCAxNzo0MToyNQk2MS4xMzUuM…A1ZmE1ZDkJOGIxMTRlZWI5MWNmZGViMAkJNjlkYTNhZTU1ZjUwCUFFCTIyMzE0NDA5NTUJLQkt"
+                            ],
+                            "link":[],
+                            "type":["xml"],
+                            "pv":[""],
+                            "pid":null,
+                            "src":[
+                                'http://218.206.207.65/40/10/109/letv-gug/7934563-AVC-602284-AAC-32000-15040-1201203-e47e0a249a3922bdd1d772b79525a501-1383645513494.letv?crypt=49aa7f2e400&b=1100&nlh=3072&nlt=45&bf=29&gn=122&p2p=1&video_type=mp4&opck=1&check=0&tm=1385778000&key=b63b1fdce08e05900b3dab326b02f94f&proxy=1880689805,2071812442&cips=223.72.72.178&geo=CN-1-0-4&lgn=letv&gugtype=2&_r=0'
+                            ]
+                        }
+                    ],
+                    "size":"300*150",
+                    "id":"TEST000000000002"
+                }
+            };
+            sinaadsRenderHandler = {
+                'frontfilm' : function (element, w, h, data, config) {
+                    var video = sinaadToolkit.dom.get(config.sinaads_video_id);
+
+                    data[0].src.push(video.src);
+
+                    var i = 0,
+                        adlen = data[0].src.length
+
+                    onInit();
+
+                    function onInit() {
+                        i = 0;
+                        sinaadToolkit.event.on(video, 'play', onPlay);
+                        sinaadToolkit.event.on(video, 'ended', onEnded);
+                    }
+
+                    function playOne() {
+                        if (data[0].src[i]) {
+                            //video.removeAttribute('filmplaying');
+                            console.debug(data[0].src[i]);
+                            video.src = data[0].src[i];
+                            if (i >= adlen - 1) {
+                                sinaadToolkit.event.un(video, 'ended', onEnded);
+                                sinaadToolkit.event.on(video, 'ended', onInit);
+                                //进入正片
+                                // setTimeout(function () {
+                                //     video.setAttribute('filmplaying', true);
+                                // }, 0);
+                                video.controls = true;
+                            }
+                            video.play();
+                            i++;
+                        }
+                    }
+
+
+                    function onPlay() {
+                        video.controls = false;
+                        video.pause();
+                        sinaadToolkit.event.un(video, 'play', onPlay);
+                        playOne();
+                    }
+                    function onEnded () { 
+                        playOne();
+                    }
+                },
+                'pausefilm' : function (element, w, h, data, config) {
+                    var video = sinaadToolkit.dom.get(config.sinaads_video_id),
+                        pauseFilm = null;
+                    function onPause() { 
+                        // if (!video.getAttribute('filmplaying')) {
+                        //     //非正片时间暂停;
+                        //     return;
+                        // }
+                        if (video.ended) {
+                            //结束前触发的暂停
+                            return;
+                        }
+                        if (data[0].src[0]) {
+                            pauseFilm = document.createElement('video');
+                            pauseFilm.autoplay = true;
+                            pauseFilm.controls = false;
+                            pauseFilm.style.cssText = 'position:absolute;width:200px;height:150px;left:150px;top:75px;';
+                            pauseFilm.src = data[0].src[0];
+                            document.body.appendChild(pauseFilm);
+                            sinaadToolkit.event.on(video, 'play', onPlay);
+                        }
+                    }
+                    function onPlay() {
+                        pauseFilm && pauseFilm.pause();
+                        pauseFilm && pauseFilm.parentNode.removeChild(pauseFilm);
+                        pauseFilm = null;
+                    }
+                    if (video) {
+                        var adlen = data[0].src.length,
+                            i = 0;
+                        sinaadToolkit.event.on(video, 'pause', onPause);
+                    }
+                }
+            };
+        </script>
+    </head>
+    <body>
+        <video id="video" style="background:#000;" src="googleplex.mp4" width="500" height="300" controls>
+            <source>无法播放</source>
+        </video>
+        <script async charset="utf-8" src="../release/sinaads.full.js"></script>
+        <ins class="sinaads" data-ad-pdps="TEST000000000001"></ins>
+        <script>
+            (sinaads = window.sinaads || []).push({
+                params : {
+                    sinaads_video_id : 'video'
+                }
+            });
+        </script>
+        <script async charset="utf-8" src="../release/sinaads.full.js"></script>
+        <ins class="sinaads" data-ad-pdps="TEST000000000002"></ins>
+        <script>
+            (sinaads = window.sinaads || []).push({
+                params : {
+                    sinaads_video_id : 'video'
+                }
+            });
+        </script>
+    </body>
+</html>

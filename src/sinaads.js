@@ -56,7 +56,7 @@
     //var IMPRESS_URL = 'http://123.126.53.109/impress.php';
     //var IMPRESS_URL =  'http://123.126.53.109:5677/impress';
     //var IMPRESS_URL = 'http://sax.sina.com.cn/newimpress';
-    var IMPRESS_URL = 'http://sax.sina.com.cn/impress';
+    var IMPRESS_URL = 'http://sax.sina.com.cn/newimpress';
     var SAX_TIMEOUT = 30 * 1000; //请求数据超时时间
 
     core.PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
@@ -124,7 +124,7 @@
             /* 先将所有的meta节点的name和content缓存下来, 缓存是为了提高查找效率, 不用每次都去遍历 */
             for (; i < len; i++) {
                 meta = metaNodes[i];
-                key = meta.name;
+                key = meta.name.toLowerCase();
                 content = core.string.trim(meta.content);
                 if (!metas[key]) {
                     metas[key] = [];

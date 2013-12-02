@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title> video </title>
+    </head>
+    <body>
+        <video id="video" src="./googleplex.mp4" poster="" preload autoplay controls width="500" height="300">
+            <source>no support video</source>
+        </video>
+        <script>
+            var video = document.getElementById('video');
+            function on(dom, type, cb) {
+                dom.addEventListener(type, function (e) {
+                    cb.call(dom, e);
+                }, false);
+            }
+
+
+            var et = [
+                "loadstart", "progress", "suspend", "abort", "error", "emptied",
+                "stalled", "play", "pause", "loadedmetadata", "loadeddata", "waiting", 
+                "playing", "canplay", "canplaythrough", "seeking", "seeked", "timeupdate",
+                "ended", "ratechange", "durationchange", "volumechange"];
+            var prop = [
+                "error", "currentSrc", "networkState", "preload", "buffered", "readyState", 
+                "seeking", "currentTime", "startTime", "duration", "paused", "defaultPlaybackRate", 
+                "playbackRate", "played", "seekable", "ended", "autoplay", "loop", "controls", 
+                "volume", "muted"
+            ];
+            var cache = {};
+            et.forEach(function (type, i) {
+                on(video, type, function (e) {
+                    var thiz = this;
+                    if (!cache[type]) {
+                        cache[type] = 1;
+                        console.log('%cemit:' + type, 'color:#f00');
+                        prop.forEach(function (propName, j) {
+                            console.debug(propName, thiz[propName]);
+                        });
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
