@@ -124,12 +124,14 @@
             /* 先将所有的meta节点的name和content缓存下来, 缓存是为了提高查找效率, 不用每次都去遍历 */
             for (; i < len; i++) {
                 meta = metaNodes[i];
-                key = meta.name.toLowerCase();
-                content = core.string.trim(meta.content);
-                if (!metas[key]) {
-                    metas[key] = [];
+                if (meta.name) {
+                    key = meta.name.toLowerCase();
+                    content = core.string.trim(meta.content);
+                    if (!metas[key]) {
+                        metas[key] = [];
+                    }
+                    content && (metas[meta.name].push(content));
                 }
-                content && (metas[meta.name].push(content));
             }
             /* 拆解出name = ^sinaads_ 的key, 并得到真实的key值
              * 如果name=sinaads_key的content为空，则查找name=key的content作为内容
@@ -525,37 +527,34 @@
 
         content = content[0];
         element.style.cssText = 'position:absolute;top:-9999px';
-        if (content.src.length === 1) {
-            switch (content.type[0]) {
-                case 'js' :
-                    //富媒体供应商提供的js
-                    core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
-                    break;
-                case 'html' :
-                    core.dom.fill(element, content.src[0]);
-                    break;
-                default :
-                    break;
-            }
-        } else {
-            //是全屏广告，隐藏掉改区块
-            var FullScreenMediaData = {
-                type        : content.type[0] || '',
-                src         : content.src[0] || '',
-                link        : content.link[0] || '',
-                monitor     : content.monitor,
-                width       : width,
-                height      : height,
-                hasClose    : config.sinaads_fullscreen_close || 0,
-                delay       : config.sinaads_ad_delay || 0
-            };
-            if (core.FullscreenMedia) {
-                new core.FullscreenMedia(FullScreenMediaData);
-            } else {
-                core.sio.loadScript(RESOURCE_URL, function () {
+        switch (content.type[0]) {
+            case 'js' :
+                //富媒体供应商提供的js
+                core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
+                break;
+            case 'html' :
+                core.dom.fill(element, content.src[0]);
+                break;
+            default :
+                //是全屏广告，隐藏掉改区块
+                var FullScreenMediaData = {
+                    type        : content.type[0] || '',
+                    src         : content.src[0] || '',
+                    link        : content.link[0] || '',
+                    monitor     : content.monitor,
+                    width       : width,
+                    height      : height,
+                    hasClose    : config.sinaads_fullscreen_close || 0,
+                    delay       : config.sinaads_ad_delay || 0
+                };
+                if (core.FullscreenMedia) {
                     new core.FullscreenMedia(FullScreenMediaData);
-                });
-            }
+                } else {
+                    core.sio.loadScript(RESOURCE_URL, function () {
+                        new core.FullscreenMedia(FullScreenMediaData);
+                    });
+                }
+                break;
         }
     });
 

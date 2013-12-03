@@ -18,8 +18,8 @@
                             "pv":[""],
                             "pid":null,
                             "src":[
-                                'http://218.206.207.65/40/10/109/letv-gug/7934563-AVC-602284-AAC-32000-15040-1201203-e47e0a249a3922bdd1d772b79525a501-1383645513494.letv?crypt=49aa7f2e400&b=1100&nlh=3072&nlt=45&bf=29&gn=122&p2p=1&video_type=mp4&opck=1&check=0&tm=1385778000&key=b63b1fdce08e05900b3dab326b02f94f&proxy=1880689805,2071812442&cips=223.72.72.178&geo=CN-1-0-4&lgn=letv&gugtype=2&_r=0'
-                                //'http://218.206.207.65/40/10/109/letv-gug/7934563-AVC-602284-AAC-32000-15040-1201203-e47e0a249a3922bdd1d772b79525a501-1383645513494.letv?crypt=49aa7f2e400&b=1100&nlh=3072&nlt=45&bf=29&gn=122&p2p=1&video_type=mp4&opck=1&check=0&tm=1385778000&key=b63b1fdce08e05900b3dab326b02f94f&proxy=1880689805,2071812442&cips=223.72.72.178&geo=CN-1-0-4&lgn=letv&gugtype=2&_r=0'
+                                //"http://220.181.91.19/vmb.tc.qq.com/n0408hxlq00.mp4?vkey=88E9A8D9F565366E6C1328166C1E2B98DF576C203485949B332BF0746637C41335A4281788B501B5&br=71&platform=2&fmt=mp4&level=3&sdtfrom=v4010"
+                                                            //'http://d1.sina.com.cn/201312/02/525628_429011.mp4'
                             ]
                         }
                     ],
@@ -38,7 +38,7 @@
                             "pv":[""],
                             "pid":null,
                             "src":[
-                                'http://218.206.207.65/40/10/109/letv-gug/7934563-AVC-602284-AAC-32000-15040-1201203-e47e0a249a3922bdd1d772b79525a501-1383645513494.letv?crypt=49aa7f2e400&b=1100&nlh=3072&nlt=45&bf=29&gn=122&p2p=1&video_type=mp4&opck=1&check=0&tm=1385778000&key=b63b1fdce08e05900b3dab326b02f94f&proxy=1880689805,2071812442&cips=223.72.72.178&geo=CN-1-0-4&lgn=letv&gugtype=2&_r=0'
+                                "http://220.181.91.19/vmb.tc.qq.com/n0408hxlq00.mp4?vkey=88E9A8D9F565366E6C1328166C1E2B98DF576C203485949B332BF0746637C41335A4281788B501B5&br=71&platform=2&fmt=mp4&level=3&sdtfrom=v4010"
                             ]
                         }
                     ],
@@ -53,7 +53,15 @@
                     data[0].src.push(video.src);
 
                     var i = 0,
-                        adlen = data[0].src.length
+                        adlen = data[0].src.length;
+
+                    // while (data[0].src[i++]) {
+                    //     var script = document.createElement('script');
+                    //     script.type = "video/mp4";
+                    //     script.async = true;
+                    //     script.src = data[0].src[i++];
+                    //     document.body.appendChild(script);
+                    // }
 
                     onInit();
 
@@ -81,6 +89,10 @@
                             i++;
                         }
                     }
+
+                    sinaadToolkit.event.on(video, 'error', function () {
+                        console.log(video.error);
+                    });
 
 
                     function onPlay() {
@@ -130,7 +142,7 @@
         </script>
     </head>
     <body>
-        <video id="video" style="background:#000;" src="googleplex.mp4" width="500" height="300" controls>
+        <video id="video" style="background:#000;" src="http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4" width="500" height="300" controls>
             <source>无法播放</source>
         </video>
         <script async charset="utf-8" src="../release/sinaads.full.js"></script>
