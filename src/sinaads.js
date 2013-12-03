@@ -130,7 +130,7 @@
                     if (!metas[key]) {
                         metas[key] = [];
                     }
-                    content && (metas[meta.name].push(content));
+                    content && (metas[key].push(content));
                 }
             }
             /* 拆解出name = ^sinaads_ 的key, 并得到真实的key值
@@ -850,6 +850,7 @@
         //没有对应的ins元素, 获取一个待初始化的ins, 如果没有，抛出异常
         } else if (element = _getSinaAd(), !element) {
             core.debug("sinaads:Rendering of all elements in the queue is done.");
+            return;
         }
 
         //置成完成状态，下面开始渲染

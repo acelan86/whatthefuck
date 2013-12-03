@@ -2509,12 +2509,14 @@
             /* 先将所有的meta节点的name和content缓存下来, 缓存是为了提高查找效率, 不用每次都去遍历 */
             for (; i < len; i++) {
                 meta = metaNodes[i];
-                key = meta.name.toLowerCase();
-                content = core.string.trim(meta.content);
-                if (!metas[key]) {
-                    metas[key] = [];
+                if (meta.name) {
+                    key = meta.name.toLowerCase();
+                    content = core.string.trim(meta.content);
+                    if (!metas[key]) {
+                        metas[key] = [];
+                    }
+                    content && (metas[key].push(content));
                 }
-                content && (metas[meta.name].push(content));
             }
             /* 拆解出name = ^sinaads_ 的key, 并得到真实的key值
              * 如果name=sinaads_key的content为空，则查找name=key的content作为内容
@@ -3233,6 +3235,7 @@
         //没有对应的ins元素, 获取一个待初始化的ins, 如果没有，抛出异常
         } else if (element = _getSinaAd(), !element) {
             core.debug("sinaads:Rendering of all elements in the queue is done.");
+            return;
         }
 
         //置成完成状态，下面开始渲染
