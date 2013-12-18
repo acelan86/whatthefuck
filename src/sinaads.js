@@ -245,7 +245,8 @@
                     'dl'    : 'float',
                     'tip'   : 'tip',
                     'bt'    : 'bp',
-                    'sx'    : 'follow'
+                    'sx'    : 'follow',
+                    'kzdl'  : 'coupletExt'
                 }[ad.type]) || ad.type || 'embed';
 
                 ad.content[i] = content;
@@ -802,6 +803,7 @@
             link        = content.link[0] || '',
             src         = content.src[0] || '',
             pdps        = config.sinaads_ad_pdps,
+            tpl         = config.sinaads_ad_tpl || '',
             adContent;
 
         /**
@@ -819,7 +821,7 @@
         element.innerHTML = '<ins style="margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';"></ins>';
         element = element.getElementsByTagName('ins')[0];
 
-        adContent = src ? core.ad.createHTML(type, src, width, height, link, content.monitor) : ''; //广告内容， 如果没有src，则不渲染
+        adContent = src ? core.ad.createHTML(type, src, width, height, link, content.monitor, core.isFunction(tpl) ? tpl(0) : tpl) : ''; //广告内容， 如果没有src，则不渲染
 
         switch (type) {
             case 'text' :
@@ -841,7 +843,36 @@
         }
     });
 
-
+    viewModule.register('coupletExt', function (element, width, height, content, config) {
+        var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/CoupletExtMedia.js';
+        
+        content = content[0]; //只用第一个内容
+        //是对联，隐藏掉改区块
+        element.style.cssText = 'position:absolute;top:-9999px';
+        //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
+        if (content.src.length >= 4) {
+            //注入跨栏数据
+            var CoupletExtMediaData = {
+                src         : content.src,
+                type        : content.type,
+                link        : content.link,
+                width       : width,
+                height      : height,
+                offettop    : config.sinaads_coupletext_offettop || 100,
+                expandpos   : config.sinaads_coupletext_expandpos || 700,
+                smallsize   : config.sinaads_coupletext_smallsize,
+                bigsize     : config.sinaads_coupletext_bigsize,
+                monitor     : content.monitor || []
+            };
+            if (core.CoupletExtMediaData) {
+                new core.CoupletExtMedia(CoupletExtMediaData);
+            } else {
+                core.sio.loadScript(RESOURCE_URL, function () {
+                    new core.CoupletExtMedia(CoupletExtMediaData);
+                });
+            }
+        }
+    });
 
     /**
      * 初始化广告对象
