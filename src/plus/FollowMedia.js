@@ -43,6 +43,8 @@
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
         this.config = config;
+
+        this.isHideMini = !this.config.mini.src; //是否隐藏收起位
         
         var main = this.main = new sinaadToolkit.Box({
             width : width,
@@ -112,7 +114,6 @@
                 config = this.config;
 
             clearTimeout(this.timer);
-            this.miniContent.innerHTML = '';
             this.mainContent.innerHTML = sinaadToolkit.ad.createHTML(
                 config.main.type,
                 config.main.src,
@@ -122,6 +123,9 @@
                 config.monitor
             );
             this.main.show();
+
+
+            this.miniContent.innerHTML = '';
             this.mini.hide();
 
             this.deferred.resolve();
@@ -135,16 +139,18 @@
 
             clearTimeout(this.timer);
             this.mainContent.innerHTML = '';
-            this.mini.show();
             this.main.hide();
-            this.miniContent.innerHTML = sinaadToolkit.ad.createHTML(
-                config.mini.type,
-                config.mini.src,
-                25,
-                150,
-                config.mini.link,
-                config.monitor
-            );
+            if (!this.isHideMini) {
+                this.mini.show();
+                this.miniContent.innerHTML = sinaadToolkit.ad.createHTML(
+                    config.mini.type,
+                    config.mini.src,
+                    25,
+                    150,
+                    config.mini.link,
+                    config.monitor
+                );
+            }
         },
         //关闭标签
         getCloseMiniHandler : function () {

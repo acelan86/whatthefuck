@@ -44,6 +44,11 @@ module.exports = function(grunt) {
         files : [
           { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaads.js'] }
         ]
+      },
+      sinaadsTracking : {
+        files : [
+          { dest : 'release/sinaads.tracking.full.js', src : ['src/sinaadToolkit.tracking.js', 'src/sinaads.js'] }
+        ]
       }
     },
     jshint : {
@@ -134,6 +139,21 @@ module.exports = function(grunt) {
           { dest : 'release/sinaadToolkit.js', src : 'src/sinaadToolkit.js' }
         ]
       },
+      sinaadToolkitTracking: {
+        options : {
+          //preserveComments:'some',
+          banner : '/*!\n' + 
+                    ' * sinaadToolkit-tracking version\n' +
+                    ' * @author acelan <xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
+                    ' * @version 1.0.0\n' +
+                    '<%= logo %>' + 
+                    ' */\n',
+          sourceMap: 'sinaadToolkit.tracking.js.map'
+        },
+        files : [
+          { dest : 'release/sinaadToolkit.tracking.js', src : 'src/sinaadToolkit.tracking.js' }
+        ]
+      },
       sinaads : {
         options : {
           //preserveComments:'some',
@@ -147,6 +167,21 @@ module.exports = function(grunt) {
         },
         files : [
           { dest : 'release/sinaads.js', src : ['src/sinaadToolkit.js', 'src/sinaads.js'] }
+        ]
+      },
+      sinaadsTracking : {
+        options : {
+          //preserveComments:'some',
+          banner : '/*!\n' + 
+                    ' * sinaads-tracking version\n' +
+                    ' * @author acelan<xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
+                    ' * @version 1.0.0\n' +
+                    '<%= logo %>' + 
+                    ' */\n',
+          sourceMap: 'sinaads.tracking.js.map'
+        },
+        files : [
+          { dest : 'release/sinaads.tracking.js', src : ['src/sinaadToolkit.tracking.js', 'src/sinaads.js'] }
         ]
       },
       media : {

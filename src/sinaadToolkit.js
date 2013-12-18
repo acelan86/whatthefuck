@@ -914,6 +914,23 @@
             }
             return null;
         },
+        addClass : function (element, className) {
+            element = sinaadToolkit.dom.get(element);
+            var classArray = className.split(/\s+/),
+                result = element.className,
+                classMatch = " " + result + " ",
+                i = 0,
+                l = classArray.length;
+
+            for (; i < l; i++){
+                 if ( classMatch.indexOf( " " + classArray[i] + " " ) < 0 ) {
+                     result += (result ? ' ' : '') + classArray[i];
+                 }
+            }
+
+            element.className = result;
+            return element;
+        },
         /**
          * 获取某个dom节点所属的document
          * @param  {HTMLNodeElement} element 节点
@@ -1554,31 +1571,6 @@
     sinaadToolkit.swf = sinaadToolkit.swf || /** @lends sinaadToolkit.swf */{
         uid : 0,
         /**
-         * flash版本号
-         * @type {String}
-         */
-        version : (function () {
-            var n = navigator;
-            if (n.plugins && n.mimeTypes.length) {
-                var plugin = n.plugins["Shockwave Flash"];
-                if (plugin && plugin.description) {
-                    return plugin.description
-                            .replace(/([a-zA-Z]|\s)+/, "")
-                            .replace(/(\s)+r/, ".") + ".0";
-                }
-            } else if (window.ActiveXObject && !window.opera) {
-                for (var i = 12; i >= 2; i--) {
-                    try {
-                        var c = new window.ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + i);
-                        if (c) {
-                            var version = c.GetVariable("$version");
-                            return version.replace(/WIN/g, '').replace(/,/g, '.');
-                        }
-                    } catch (e) {}
-                }
-            }
-        })(),
-        /**
          * 获取当前flash对象
          * @param  {String} name    要获取的flash的id或name
          * @param  {Object} context 从哪个上下文对象中获取这个flash对象，默认从当前上下文
@@ -1602,12 +1594,13 @@
          * 创建flash的html
          * @param  {Object} options 选项
          * @return {String}         flash的html
+         * http://www.w3help.org/zh-cn/causes/HO8001  修改成仅用embed标签渲染flash
          */
         createHTML : function (options) {
             options = options || {};
-            var version = sinaadToolkit.swf.version,
-                needVersion = options.ver || '6.0.0',
-                vUnit1, vUnit2, i, k, len, item, tmpOpt = {},
+            var item,
+                k,
+                tmpOpt = {},
                 encodeHTML = sinaadToolkit.string.encodeHTML;
             
             // 复制options，避免修改原对象
@@ -1616,34 +1609,7 @@
             }
             options = tmpOpt;
             
-            // 浏览器支持的flash插件版本判断
-            if (version) {
-                version = version.split('.');
-                needVersion = needVersion.split('.');
-                for (i = 0; i < 3; i++) {
-                    vUnit1 = parseInt(version[i], 10);
-                    vUnit2 = parseInt(needVersion[i], 10);
-                    if (vUnit2 < vUnit1) {
-                        break;
-                    } else if (vUnit2 > vUnit1) {
-                        return ''; // 需要更高的版本号
-                    }
-                }
-            } else {
-                return ''; // 未安装flash插件
-            }
-            
-            var vars = options.vars,
-                objProperties = ['classid', 'codebase', 'id', 'width', 'height', 'align'];
-            
-            // 初始化object标签需要的classid、codebase属性值
-            options.name = options.id = options.id || 'sinaadtk_swf_uid_' + (sinaadToolkit.swf.uid++);
-            options.align = options.align || 'middle';
-            options.classid = 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000';
-            options.codebase = 'http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0';
-            options.movie = options.url || '';
-            delete options.vars;
-            delete options.url;
+            var vars = options.vars;
             
             // 初始化flashvars参数的值
             if ('string' === typeof vars) {
@@ -1657,53 +1623,19 @@
                 options.flashvars = fvars.join('&');
             }
             
-            // 构建IE下支持的object字符串，包括属性和参数列表
-            var str = ['<object '];
-            for (i = 0, len = objProperties.length; i < len; i++) {
-                item = objProperties[i];
-                str.push(' ', item, '="', encodeHTML(options[item]), '"');
-            }
-            str.push('>');
-            var params = {
-                'wmode'             : 1,
-                'scale'             : 1,
-                'quality'           : 1,
-                'play'              : 1,
-                'loop'              : 1,
-                'menu'              : 1,
-                'salign'            : 1,
-                'bgcolor'           : 1,
-                'base'              : 1,
-                'allowscriptaccess' : 1,
-                'allownetworking'   : 1,
-                'allowfullscreen'   : 1,
-                'seamlesstabbing'   : 1,
-                'devicefont'        : 1,
-                'swliveconnect'     : 1,
-                'flashvars'         : 1,
-                'movie'             : 1
-            };
-            
-            for (k in options) {
-                item = options[k];
-                k = k.toLowerCase();
-                if (params[k] && (item || item === false || item === 0)) {
-                    str.push('<param name="' + k + '" value="' + encodeHTML(item) + '" />');
-                }
-            }
-            
+            var str = ['<embed'];
             // 使用embed时，flash地址的属性名是src，并且要指定embed的type和pluginspage属性
-            options.src  = options.movie;
-            delete options.id;
-            delete options.movie;
-            delete options.classid;
-            delete options.codebase;
+            options.name = options.id || 'sinaadtk_swf_uid_' + (sinaadToolkit.swf.uid++);
+            options.align = options.align || 'middle';
+            options.src  = options.url || '';
             options.type = 'application/x-shockwave-flash';
             options.pluginspage = 'http://www.macromedia.com/go/getflashplayer';
+
+            delete options.id;
+            delete options.url;
+            delete options.vars;
             
             
-            // 构建embed标签的字符串
-            str.push('<embed');
             // 在firefox、opera、safari下，salign属性必须在scale属性之后，否则会失效
             // 经过讨论，决定采用BT方法，把scale属性的值先保存下来，最后输出
             var salign;
@@ -1722,7 +1654,7 @@
             if (salign) {
                 str.push(' salign="', encodeHTML(salign), '"');
             }
-            str.push('></embed></object>');
+            str.push('></embed>');
             
             return str.join('');
         }
@@ -1915,7 +1847,7 @@
         //     return html.join('');
         // },
         /**
-         * 创建点击监测
+         * 创建1*1点击监测
          * @param  {String} type    需要监测的对象的类型，如图片，链接，flash等
          * @param  {Array:String} monitor 监测url数组
          * @return {String}         返回监测的html片段
@@ -1950,6 +1882,29 @@
                 }
             });
             return ret.join(comma);
+        },
+        /**
+         * 创建二跳跟踪监测
+         * @param  {String} link    落地页
+         * @param  {Array:String} monitor 监测地址
+         * @return {String}         二跳监测地址
+         */
+        createTrackingMonitor : function (link, monitor) {
+            //如果没有link，就不生成二跳监测
+            if (!link) {
+                return '';
+            }
+
+            var _tmp = [link];
+            sinaadToolkit.array.each(monitor, function (url) {
+                _tmp.push(url);
+            });
+
+            var clickTAG = '';
+            sinaadToolkit.array.each(_tmp, function (url) {
+                clickTAG = sinaadToolkit.url.ensureURL(url) + encodeURIComponent(clickTAG);
+            });
+            return clickTAG;
         }
     };
 
@@ -2076,14 +2031,14 @@
                         _html = '<img border="0" src="' + sinaadToolkit.url.ensureURL(src) + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
                         //onclick与跳转同时发送会导致丢失移动端的监测
                         if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitor) {
-                            _html = link ? '<a href="javascript:;" onclick="try{' + monitor + '}catch(e){}finally{window.open(\'' + link +'\')}">' + _html + '</a>' : _html;
+                            _html = link ? '<a href="javascript:;" ontouch="try{' + monitor + '}catch(e){}finally{window.open(\'' + link +'\')}">' + _html + '</a>' : _html;
                         } else {
                             _html = link ? '<a href="' + link + '" target="_blank"' + (monitor ? ' onclick="try{' + monitor +'}catch(e){}"' : '') + '>' + _html + '</a>' : _html;
                         }
                         break;
                     case 'text' :
                         if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitor) {
-                            _html = link ? '<a href="javascript:;" onclick="try{' + monitor + '}catch(e){}finally{window.open(\'' + link +'\')}">' + src + '</a>' : src;
+                            _html = link ? '<a href="javascript:;" ontouch="try{' + monitor + '}catch(e){}finally{window.open(\'' + link +'\')}">' + src + '</a>' : src;
                         } else {
                             _html = link ? '<a href="' + link + '" target="_blank"' + (monitor ? ' onclick="try{' + monitor +'}catch(e){}"' : '') + '>' + src + '</a>' : src;
                         }

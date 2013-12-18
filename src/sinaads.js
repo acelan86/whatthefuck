@@ -441,6 +441,12 @@
 
         content = content[0];
         element.style.cssText = 'position:absolute;top:-9999px';
+
+
+        //暴露个变量供第三方使用监测链接
+        //WTF，如果多个video就shi了
+        window.sinaadsVideoWindowMonitor = content.monitor;
+
         switch (content.type[0]) {
             case 'js' :
                 core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
@@ -475,6 +481,11 @@
         content = content[0];
         //流媒体，隐藏掉该区块
         element.style.cssText = 'position:absolute;top:-9999px';
+
+        //暴露个变量供第三方使用监测链接
+        //WTF，如果多个video就shi了
+        window.sinaadsStreamMonitor = content.monitor;
+
         if (content.src.length === 1) {
             //生成一个用于渲染容器到页面中
             var streamContainer = document.createElement('div');
@@ -527,6 +538,7 @@
 
         content = content[0];
         element.style.cssText = 'position:absolute;top:-9999px';
+
         switch (content.type[0]) {
             case 'js' :
                 //富媒体供应商提供的js
@@ -885,15 +897,24 @@
         if (!core.storage.get(disableKey)) {
             modelModule.request(pdps, seed.get(frequence ? pdps : null))
                 .done(function () {
+                    //增加广告加载结束标志sinaads-done
+                    core.dom.addClass(element, 'sinaads-done');
+                    var adData = modelModule.get(config.sinaads_ad_pdps);
                     //如果有频率限制，则在成功时写入频率限制数据
                     if (frequence) {
                         core.storage.set(disableKey, 1, frequence * 1000);
                     }
-                    render(element, modelModule.get(config.sinaads_ad_pdps), config);
-                    core.isFunction(config.sinaads_success_handler) && config.sinaads_success_handler();
+                    render(element, adData, config);
+                    core.isFunction(config.sinaads_success_handler) && config.sinaads_success_handler(element, adData, config);
                 })
                 .fail(function () {
-                    core.isFunction(config.sinaads_fail_handler) && config.sinaads_fail_handler();
+                    core.dom.addClass(element, 'sinaads-fail');
+                    /* 广告位不能为空 */
+                    if (config.sinaads_cannot_empty) {
+                        //@todo 渲染默认数据
+                        core.debug('Use Default ad data.');
+                    }
+                    core.isFunction(config.sinaads_fail_handler) && config.sinaads_fail_handler(element, config);
                 });
         } else {
             core.isFunction(config.sinaads_fail_handler) && config.sinaads_fail_handler();
