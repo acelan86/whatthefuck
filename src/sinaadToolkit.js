@@ -1654,7 +1654,7 @@
             if (salign) {
                 str.push(' salign="', encodeHTML(salign), '"');
             }
-            str.push('></embed>');
+            str.push('/>');
             
             return str.join('');
         }
@@ -1895,20 +1895,23 @@
                 return '';
             }
 
-            var _tmp = [link];
+            var clickTAG = sinaadToolkit.url.ensureURL(link);
+            
             sinaadToolkit.array.each(monitor, function (url) {
-                _tmp.push(url);
-            });
-
-            var clickTAG = '';
-            sinaadToolkit.array.each(_tmp, function (url) {
-                clickTAG = sinaadToolkit.url.ensureURL(url) + encodeURIComponent(clickTAG);
+                url = sinaadToolkit.url.ensureURL(url);
+                if (url) {
+                    //hack start 暂时为sax的监测地址做特殊处理
+                    //window.alert(url);
+                    if (url.indexOf('sax.sina.com.cn\/click') !== -1 || url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1) {
+                        url = url.replace(/&url=$/, '') + '&url=';
+                    }
+                    //hack end
+                    clickTAG = url + encodeURIComponent(clickTAG);
+                }
             });
             return clickTAG;
         }
     };
-
-
 
     /**
      * @namespace sinaadToolkit.ad
@@ -1991,8 +1994,11 @@
             sinaadToolkit.array.each(src, function (_src, i) {
                 tmpData['src' + i] = _src;
                 tmpData['type' + i] = type[i] || sinaadToolkit.ad.getTypeBySrc(_src, type[i]);
-                tmpData['link' + i] = sinaadToolkit.url.ensureURL(link[i]) || '';
-                tmpData['monitor' + i] = sinaadToolkit.monitor.createClickMonitor(tmpData['type' + i], monitor);
+                //tmpData['link' + i] = sinaadToolkit.url.ensureURL(link[i]) || '';
+                //tmpData['monitor' + i] = sinaadToolkit.monitor.createClickMonitor(tmpData['type' + i], monitor);
+                tmpData['link' + i] = sinaadToolkit.monitor.createTrackingMonitor(link[i], monitor);
+                tmpData['monitor' + i] = '';
+                tmpData['monitor1_1_' + i] = sinaadToolkit.monitor.createClickMonitor(tmpData['type' + i], monitor);
             });
             tmpData.width = width;
             tmpData.height = height;
@@ -2000,6 +2006,7 @@
             tmpData.type = tmpData.type0 || '';
             tmpData.link = tmpData.link0 || '';
             tmpData.monitor = tmpData.monitor0 || '';
+            tmpData.monitor1_1 = tmpData.monitor1_1_0 || '';
 
 
             //如果提供了模版，则使用模版来渲染广告
@@ -2031,14 +2038,14 @@
                         _html = '<img border="0" src="' + sinaadToolkit.url.ensureURL(src) + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
                         //onclick与跳转同时发送会导致丢失移动端的监测
                         if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitor) {
-                            _html = link ? '<a href="javascript:;" ontouch="try{' + monitor + '}catch(e){}finally{window.open(\'' + link +'\')}">' + _html + '</a>' : _html;
+                            _html = link ? '<a href="' + link + '" ontouch="try{' + monitor + '}catch(e){}finally{}">' + _html + '</a>' : _html;
                         } else {
                             _html = link ? '<a href="' + link + '" target="_blank"' + (monitor ? ' onclick="try{' + monitor +'}catch(e){}"' : '') + '>' + _html + '</a>' : _html;
                         }
                         break;
                     case 'text' :
                         if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitor) {
-                            _html = link ? '<a href="javascript:;" ontouch="try{' + monitor + '}catch(e){}finally{window.open(\'' + link +'\')}">' + src + '</a>' : src;
+                            _html = link ? '<a href="' + link + '" ontouch="try{' + monitor + '}catch(e){}finally{}">' + src + '</a>' : src;
                         } else {
                             _html = link ? '<a href="' + link + '" target="_blank"' + (monitor ? ' onclick="try{' + monitor +'}catch(e){}"' : '') + '>' + src + '</a>' : src;
                         }
@@ -2048,7 +2055,10 @@
                             url : sinaadToolkit.url.ensureURL(src),
                             width : width,
                             height : height,
-                            wmode : opt_options.wmode || 'opaque'
+                            wmode : opt_options.wmode || 'opaque',
+                            vars : {
+                                clickTAG : link
+                            }
                         });
                         if (link) {
                             _html = [
@@ -2063,6 +2073,7 @@
                         config = {};
                         sinaadToolkit.iframe.init(config, width, height, false);
                         config.src = sinaadToolkit.url.ensureURL(src);
+                        monitor = tmpData['monitor1_1_' + i];
                         monitor && (config.name = monitor);
                         _html = sinaadToolkit.iframe.createHTML(config);
                         break;

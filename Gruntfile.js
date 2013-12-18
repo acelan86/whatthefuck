@@ -45,9 +45,9 @@ module.exports = function(grunt) {
           { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaads.js'] }
         ]
       },
-      sinaadsTracking : {
+      sinaadsDev : {
         files : [
-          { dest : 'release/sinaads.tracking.full.js', src : ['src/sinaadToolkit.tracking.js', 'src/sinaads.js'] }
+          { dest : 'release/sinaads.dev.full.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaads.js'] }
         ]
       }
     },
@@ -139,19 +139,19 @@ module.exports = function(grunt) {
           { dest : 'release/sinaadToolkit.js', src : 'src/sinaadToolkit.js' }
         ]
       },
-      sinaadToolkitTracking: {
+      sinaadToolkitDev: {
         options : {
           //preserveComments:'some',
           banner : '/*!\n' + 
-                    ' * sinaadToolkit-tracking version\n' +
+                    ' * sinaadToolkit-dev version\n' +
                     ' * @author acelan <xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
                     ' * @version 1.0.0\n' +
                     '<%= logo %>' + 
                     ' */\n',
-          sourceMap: 'sinaadToolkit.tracking.js.map'
+          sourceMap: 'sinaadToolkit.dev.js.map'
         },
         files : [
-          { dest : 'release/sinaadToolkit.tracking.js', src : 'src/sinaadToolkit.tracking.js' }
+          { dest : 'release/sinaadToolkit.dev.js', src : 'src/sinaadToolkit.dev.js' }
         ]
       },
       sinaads : {
@@ -169,19 +169,19 @@ module.exports = function(grunt) {
           { dest : 'release/sinaads.js', src : ['src/sinaadToolkit.js', 'src/sinaads.js'] }
         ]
       },
-      sinaadsTracking : {
+      sinaadsDev : {
         options : {
           //preserveComments:'some',
           banner : '/*!\n' + 
-                    ' * sinaads-tracking version\n' +
+                    ' * sinaads-dev version\n' +
                     ' * @author acelan<xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
                     ' * @version 1.0.0\n' +
                     '<%= logo %>' + 
                     ' */\n',
-          sourceMap: 'sinaads.tracking.js.map'
+          sourceMap: 'sinaads.dev.js.map'
         },
         files : [
-          { dest : 'release/sinaads.tracking.js', src : ['src/sinaadToolkit.tracking.js', 'src/sinaads.js'] }
+          { dest : 'release/sinaads.dev.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaads.js'] }
         ]
       },
       media : {
