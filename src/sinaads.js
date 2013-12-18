@@ -799,9 +799,9 @@
         content = content[0];
 
         var uid         = config.sinaads_uid,
-            type        = content.type[0] || '',
-            link        = content.link[0] || '',
-            src         = content.src[0] || '',
+            type        = content.type || '',
+            link        = content.link || '',
+            src         = content.src || '',
             pdps        = config.sinaads_ad_pdps,
             tpl         = config.sinaads_ad_tpl || '',
             adContent;
@@ -817,29 +817,33 @@
             height += 'px';
         }
 
-        element.style.cssText += ';display:block;overflow:hidden;';
-        element.innerHTML = '<ins style="margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';"></ins>';
+        element.style.cssText += ';display:block;overflow:hidden;text-decoration:none;';
+        element.innerHTML = '<ins style="text-decoration:none;margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';"></ins>';
         element = element.getElementsByTagName('ins')[0];
 
-        adContent = src ? core.ad.createHTML(type, src, width, height, link, content.monitor, core.isFunction(tpl) ? tpl(0) : tpl) : ''; //广告内容， 如果没有src，则不渲染
+        adContent = src ? core.ad.createHTML(type, src, width, height, link, content.monitor, core.isFunction(tpl) ? tpl(0) : tpl) : ''; //广告内容， 如果没有src，则不渲染 
 
-        switch (type) {
-            case 'text' :
-            case 'image' :
-            case 'url' :
-            case 'adbox' :
-            case 'flash' :
-                element.innerHTML = adContent;
-                break;
-            default :
-                //创建广告渲染的沙箱环境，并传递部分广告参数到沙箱中
-                core.sandbox.create(element, width, height, adContent, {
-                    sinaads_uid             : uid,
-                    sinaads_ad_pdps         : pdps,
-                    sinaads_ad_width        : width,
-                    sinaads_ad_height       : height
-                });
-                break;
+        if (tpl) {
+            element.innerHTML  = adContent; //广告内容， 如果没有src，则不渲染
+        } else {
+            switch (type[0]) {
+                case 'text' :
+                case 'image' :
+                case 'url' :
+                case 'adbox' :
+                case 'flash' :
+                    element.innerHTML = adContent;
+                    break;
+                default :
+                    //创建广告渲染的沙箱环境，并传递部分广告参数到沙箱中
+                    core.sandbox.create(element, width, height, adContent, {
+                        sinaads_uid             : uid,
+                        sinaads_ad_pdps         : pdps,
+                        sinaads_ad_width        : width,
+                        sinaads_ad_height       : height
+                    });
+                    break;
+            }
         }
     });
 

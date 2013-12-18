@@ -1430,6 +1430,7 @@
             scr = null;
         }
         return /** @lends sinaadToolkit.sio */{
+            IMG_1_1 : 'http://d00.sina.com.cn/a.gif',
             /**
              * 加载js模块
              * @param  {String} url          资源地址
@@ -1896,7 +1897,7 @@
             }
 
             var clickTAG = sinaadToolkit.url.ensureURL(link);
-            
+
             sinaadToolkit.array.each(monitor, function (url) {
                 url = sinaadToolkit.url.ensureURL(url);
                 if (url) {
@@ -1998,7 +1999,8 @@
                 //tmpData['monitor' + i] = sinaadToolkit.monitor.createClickMonitor(tmpData['type' + i], monitor);
                 tmpData['link' + i] = sinaadToolkit.monitor.createTrackingMonitor(link[i], monitor);
                 tmpData['monitor' + i] = '';
-                tmpData['monitor1_1_' + i] = sinaadToolkit.monitor.createClickMonitor(tmpData['type' + i], monitor);
+                tmpData['monitor1_1_' + i] = sinaadToolkit.monitor.createTrackingMonitor(sinaadToolkit.sio.IMG_1_1, monitor);
+                tmpData['monitor1_1_' + i] = tmpData['monitor1_1_' + i] === sinaadToolkit.sio.IMG_1_1 ? '' : tmpData['monitor1_1_' + i];
             });
             tmpData.width = width;
             tmpData.height = height;
@@ -2032,6 +2034,8 @@
                         config = {};
                         sinaadToolkit.iframe.init(config, width, height, false);
                         config.src = sinaadToolkit.url.ensureURL(src);
+                        monitor = tmpData['monitor1_1_' + i];
+                        monitor && (config.name = 'clickTAG=' + encodeURIComponent(monitor));
                         _html = sinaadToolkit.iframe.createHTML(config);
                         break;
                     case 'image' :
@@ -2057,7 +2061,7 @@
                             height : height,
                             wmode : opt_options.wmode || 'opaque',
                             vars : {
-                                clickTAG : link
+                                clickTAG : tmpData['monitor1_1_' + i]
                             }
                         });
                         if (link) {
@@ -2074,7 +2078,7 @@
                         sinaadToolkit.iframe.init(config, width, height, false);
                         config.src = sinaadToolkit.url.ensureURL(src);
                         monitor = tmpData['monitor1_1_' + i];
-                        monitor && (config.name = monitor);
+                        monitor && (config.name = 'api_exu=' + encodeURIComponent(monitor));
                         _html = sinaadToolkit.iframe.createHTML(config);
                         break;
                     case 'js' :
