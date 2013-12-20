@@ -169,6 +169,21 @@ module.exports = function(grunt) {
           { dest : 'release/sinaads.js', src : ['src/sinaadToolkit.js', 'src/sinaads.js'] }
         ]
       },
+      sinaadsMoHelper : {
+        options : {
+          //preserveComments:'some',
+          banner : '/*!\n' + 
+                    ' * sinaads monitor helper\n' +
+                    ' * @author fedeoo<zhangfei1[at]staff.sina.com.cn>\n' +
+                    ' * @version 1.0.0\n' +
+                    '<%= logo %>' + 
+                    ' */\n',
+          sourceMap: 'sinaadsMoHelper.js.map'
+        },
+        files : [
+          { dest : 'release/sinaadsMoHelper.js', src : ['src/sinaadsMoHelper.js'] }
+        ]
+      },
       sinaadsDev : {
         options : {
           //preserveComments:'some',

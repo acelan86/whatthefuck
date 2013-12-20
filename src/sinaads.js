@@ -24,6 +24,7 @@
   *
   * @info
   *    _sinaadsTargeting : 保存本页中的定向信息
+  *    _SINAADS_CONF_SAX_REQUEST_TIMEOUT = 10 //设置sax请求超时时间，单位秒
   */
  (function (window, core, undefined) {
     "use strict";
@@ -57,7 +58,7 @@
     //var IMPRESS_URL =  'http://123.126.53.109:5677/impress';
     //var IMPRESS_URL = 'http://sax.sina.com.cn/newimpress';
     var IMPRESS_URL = 'http://sax.sina.com.cn/newimpress';
-    var SAX_TIMEOUT = 30 * 1000; //请求数据超时时间
+    var SAX_TIMEOUT = parseInt(window._SINAADS_CONF_SAX_REQUEST_TIMEOUT || 30, 10) * 1000; //请求数据超时时间
 
     core.PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
 

@@ -2078,7 +2078,7 @@
                         sinaadToolkit.iframe.init(config, width, height, false);
                         config.src = sinaadToolkit.url.ensureURL(src);
                         monitor = tmpData['monitor1_1_' + i];
-                        monitor && (config.name = 'api_exu=' + encodeURIComponent(monitor));
+                        monitor && (config.name = 'api_exu=' + encodeURIComponent(monitor) + '&clickTAG=' + encodeURIComponent(monitor));
                         _html = sinaadToolkit.iframe.createHTML(config);
                         break;
                     case 'js' :
