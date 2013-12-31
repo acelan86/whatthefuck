@@ -166,6 +166,25 @@
                     window["eval"].call(window, data);
                 })(data);
             }
+        },
+
+        /**
+         * 在窗口后面弹出一个窗口
+         */
+        underPop : function (loc, name, width, height) {
+            function _popAd() {
+                var _pop = window.open('about:blank', name, 'width=' + width + ',height=' + height);
+                _pop.blur();
+                _pop.opener.focus();
+                _pop.location = loc;
+                sinaadToolkit.event.un(document.body, 'click', _popAd);
+            }
+            try {
+                _popAd();
+            } catch (e) {
+                sinaadToolkit.debug('sinaads:Cannot pop window, use click event.');
+                sinaadToolkit.event.on(document.body, 'click', _popAd);
+            }
         }
     };
 
@@ -185,7 +204,7 @@
         'http://d7.sina.com.cn/litong/zhitou/sinaads',
         'http://d8.sina.com.cn/litong/zhitou/sinaads',
         'http://d9.sina.com.cn/litong/zhitou/sinaads'
-        // '.'
+        //'.'
     ][sinaadToolkit.rand(0, 8)];
 
     /**
@@ -1835,18 +1854,18 @@
          * @param  {Array:String} pvs 曝光监控的url数组
          * @return {String}     返回创建曝光的iframe的html片段
          */
-        // createImpressMonitor : function (pvs) {
-        //     var html = [];
+        createImpressMonitor : function (pvs) {
+            var html = [];
 
-        //     sinaadToolkit.array.each(pvs, function (pv) {
-        //         var config = {};
-        //         sinaadToolkit.iframe.init(config, 1, 1, false);
-        //         config.src = pv;
-        //         config.style = 'display:none;';
-        //         html.push(sinaadToolkit.iframe.createHTML(config));
-        //     });
-        //     return html.join('');
-        // },
+            sinaadToolkit.array.each(pvs, function (pv) {
+                var config = {};
+                sinaadToolkit.iframe.init(config, 1, 1, false);
+                config.src = pv;
+                config.style = 'display:none;';
+                html.push(sinaadToolkit.iframe.createHTML(config));
+            });
+            return html.join('');
+        },
         /**
          * 创建1*1点击监测
          * @param  {String} type    需要监测的对象的类型，如图片，链接，flash等

@@ -3,46 +3,28 @@
 
 src/.DS_Store
 
-release/sinaads.dev.full.js
-
-release/sinaads.dev.full.js
-
-release/sinaads.dev.js
-
-release/sinaads.full.js
-
-release/sinaads.js
-
-release/sinaads.js
-
-release/sinaads.js.map
-
-release/sinaads.js.map
-
-sinaads.dev.js.map
+release/
+issue/
+test/
+release/plus/
 
 sinaads.dev.js.map
 
 sinaads.js.map
 
-sinaads.js.map
-
-release-bak/sinaads.js
-
-release-bak/sinaads.js
-
-release/plus/Media.js.map
-
-release/sinaadToolkit.js
-
-release/sinaadToolkit.js
-
-release/sinaadToolkit.js.map
+release-bak/
 
 sinaadToolkit.js.map
-
-sinaadToolkit.js.map
-
-release/sinaadsMoHelper.js
 
 sinaadsMoHelper.js.map
+release/plus/Media.js
+
+Media.js.map
+
+node_modules/
+
+tool/monitor/start.php
+
+tool/monitor/monitor.sql
+
+tool/monitor/network.js

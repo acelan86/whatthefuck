@@ -1,4 +1,4 @@
-(function (window, sinaadToolkit, undefined) {
+(function (window, sinaadToolkit, mediaControl, undefined) {
     "use strict";
     //常量定义
     var SIDE_CLOSE_BTN = 'http://d9.sina.com.cn/litong/zhitou/test/images/close-h.jpg',
@@ -61,7 +61,7 @@
         mainContent.style.cssText = 'width:' + config.mainWidth + 'px;height:' + config.mainHeight + 'px;overflow:hidden;margin:0px auto;position:relative;';
 
         var mainCloseBtn = this.mainCloseBtn = document.createElement('div');
-        mainCloseBtn.style.cssText = 'width:' + MAIN_CLOSE_BTN_SIZE[0] + 'px;height:' + MAIN_CLOSE_BTN_SIZE[1] + 'px;position:absolute;top:' + config.mainHeight + 'px;right:0px;background:url(' + MAIN_CLOSE_BTN + ') no-repeat;pointer:cursor;';
+        mainCloseBtn.style.cssText = 'width:' + MAIN_CLOSE_BTN_SIZE[0] + 'px;height:' + MAIN_CLOSE_BTN_SIZE[1] + 'px;position:absolute;top:' + config.mainHeight + 'px;right:0px;background:url(' + MAIN_CLOSE_BTN + ') no-repeat;cursor:pointer;';
 
         var leftContent = this.leftContent = document.createElement('div');
         leftContent.style.cssText = 'width:' + config.sideWidth + 'px;height:' + config.sideHeight + 'px;position:absolute;left:0px;top:0px;';
@@ -112,6 +112,7 @@
         //         THIS.show();
         //     }, config.delay * 1000);
         // }
+        try { mediaControl.setDoneState('couplet'); } catch(e) {}
     }
     CoupletMedia.prototype = {
         timer : null,
@@ -186,4 +187,4 @@
 
     sinaadToolkit.CoupletMedia = sinaadToolkit.CoupletMedia || CoupletMedia;
 
-})(window, window.sinaadToolkit);
+})(window, window.sinaadToolkit, window.sinaadsMediaControl);

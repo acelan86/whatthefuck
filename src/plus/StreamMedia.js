@@ -4,7 +4,7 @@
  * @param  {[type]} undefined [description]
  * @return {[type]}           [description]
  */
-(function (window, sinaadToolkit, undefined) {
+(function (window, sinaadToolkit, mediaControl, undefined) {
     "use strict";
 
     var MAIN_CLOSE_ICON1 = 'http://d4.sina.com.cn/d1images/lmt/cls_77x31.gif',
@@ -12,11 +12,17 @@
         REPLAY_ICON = 'http://d5.sina.com.cn/d1images/lmt/play.gif',
         MINI_CLOSE_ICON = 'http://d1.sina.com.cn/d1images/lmt/close1.jpg',
         MAIN_ZINDEX = 12000,
-        MIN_ZINDEX = 10000;
+        MIN_ZINDEX = 10000,
+        SHOW_COUNT = 2; //自动显示次数
 
     function StreamMedia(config) {
         var THIS = this;
         this.deferred = new sinaadToolkit.Deferred();
+
+        //频次控制，24小时内只能自动播放2次
+        var showCount = sinaadToolkit.storage.get('StreamMedia' + config.pdps);
+        showCount = showCount ? (parseInt(showCount, 10) + 1) : 1;
+        sinaadToolkit.storage.set('StreamMedia' + config.pdps, showCount, 24 * 60 * 60 * 1000);
 
         var width = this.width = config.main.width,
             height = this.height = config.main.height;
@@ -28,7 +34,7 @@
         var main = this.main = new sinaadToolkit.Box({
             width : width,
             height : height,
-            position : 'center ' + (config.main.top || 'center'),
+            position : 'center ' + (config.main.top || (width > 320 ? '46' : 'center')),
             follow : 1,
             zIndex : MAIN_ZINDEX
         });
@@ -79,10 +85,10 @@
 
         if (this.delay) {
             setTimeout(function () {
-                THIS.show();
+                showCount > SHOW_COUNT ? THIS.hide() : THIS.show();
             }, this.delay * 1000);
         } else {
-            this.show();
+            showCount > SHOW_COUNT ? this.hide() : this.show();
         }
 
     }
@@ -109,11 +115,9 @@
             this.main.show();
             this.mini.hide();
 
-            this.deferred.resolve();
-
             this.timer = setTimeout(function () {
                 THIS.hide();
-            },  config.duration || (this.width > 260 ? 8000 : 5000));
+            },  config.duration || (this.width > 300 ? 8000 : 5000));
         },
         hide : function () {
             var config = this.config;
@@ -130,6 +134,7 @@
                 config.mini.link || config.link,
                 config.monitor
             );
+            try { mediaControl.setDoneState('stream'); } catch(e) {}
         },
         //关闭标签
         getCloseMiniHandler : function () {
@@ -156,4 +161,4 @@
 
     sinaadToolkit.StreamMedia = sinaadToolkit.StreamMedia || StreamMedia;
 
-})(window, window.sinaadToolkit);
+})(window, window.sinaadToolkit, window.sinaadsMediaControl);

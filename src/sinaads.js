@@ -351,11 +351,127 @@
         };
     })();
 
+    var mediaControl = window.sinaadsMediaControl = window.sinaadsMediaControl || (function () {
+        var STATE_MAP = {
+            'INIT' : 0,
+            'READY' : 1,
+            'DOING' : 3,
+            'DONE' : 4
+        };
+        var CHECK_FREQUENCE = 1 * 1000;
+        var DONE_TIMEOUT = 20 * 1000;
+        //流媒体、对联、跨栏、前弹、背投，视窗, 没配置表示不要顺序
+        var DEFAULT_ORDER = [/*'fullscreen', 'stream', 'float', 'couplet', 'bp', 'videoWindow'*/];
+        var _state = {};
+        var _doneTimeout = {};
+        //该页面有什么类型的富媒体，若没有设置，则默认全部
+        var _order = window.sinaadsPageMediaOrder || DEFAULT_ORDER;
+
+        //初始化页面富媒体类型状态
+        var i = 0,
+            type;
+
+        while ((type = _order[i++])) {
+            _state[type] = STATE_MAP.INIT;
+        }
+
+        var _lazy = {};
+        var timer = null;
+
+        function canRender(type) {
+            for (var i = 0, len = _order.length; i < len; i++) {
+                if (
+                    type === _order[i] &&
+                    _state[type] === STATE_MAP.READY &&
+                    (!_order[i - 1] || (_state[_order[i - 1]] === STATE_MAP.DONE))
+                ) {
+                    _state[type] = STATE_MAP.DOING;
+                    //防止执行第三方出错导致的后续广告不出问题的时间控制
+                    _doneTimeout[type] = setTimeout(getTimeoutFunc(type), DONE_TIMEOUT);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function allDone() {
+            for (var i = 0, len = _order.length; i < len; i++) {
+                if (_state[_order[i]] !== STATE_MAP.DONE) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function getTimeoutFunc(type) {
+            return function () {
+                mediaControl.setDoneState(type);
+            };
+        }
+
+        function check() {
+            var handler,
+                i = 0,
+                _type,
+                data;
+
+            while ((_type = _order[i++])) {
+                if (
+                    canRender(_type) &&
+                    (data = _lazy[_type]) &&
+                    (handler = viewModule.handlerMap[_type]) &&
+                    'function' === typeof handler
+                ) {
+                    handler(data.element, data.width, data.height, data.content, data.config);
+                    delete _lazy[_type];
+                }
+            }
+            if (allDone()) {
+                timer && clearInterval(timer);
+            }
+        }
+
+        timer = setInterval(check, CHECK_FREQUENCE);
+
+        return {
+            isMedia : function (type) {
+                return type ? ('|' + _order.join('|') + '|').indexOf('|' + type + '|') !== -1 : false;
+            },
+            setReadyState : function (type, data) {
+                if (data) {
+                    _lazy[type] = data;
+                }
+                _state[type] = STATE_MAP.READY; //数据已经响应，还没有执行过
+            },
+            setDoneState : function (type) {
+                core.debug('mediaControl: Media ' + type + ' Play Done;');
+                _state[type] = STATE_MAP.DONE;
+
+                //清除默认的防止执行第三方出错导致的后续广告不出问题的时间控制
+                _doneTimeout[type] && clearTimeout(_doneTimeout[type]);
+                delete _doneTimeout[type];
+
+                //在order中踢除完成状态
+                _order = (function () {
+                    var tmp = [],
+                        i = 0,
+                        type;
+                    while ((type = _order[i++])) {
+                        if (_state[type] !== STATE_MAP.DONE) {
+                            tmp.push(type);
+                        }
+                    }
+                    return tmp;
+                })();
+            }
+        };
+    })();
     /**
      * 显示广告模块
      */
     var viewModule = (function () {
         var handlerMap = window.sinaadsRenderHandler = window.sinaadsRenderHandler || {};
+
 
         /**
          * 注册渲染方法
@@ -377,18 +493,26 @@
                  * 比如，一开始是couplet类型，当格式化后，让它按照embed方式来处理
                  */
                 _next;
-            if ('function' === typeof handler) {
-                _next = handler(element, width, height, content, config);
-            }
-            //上面的处理将媒体类型改变，按照新类型再执行一边render方法
-            if (_next && (_next.type !== type)) {
-                _render(_next.type, element, width, height, _next.content, config);
+
+            if (mediaControl.isMedia(type)) {
+                //塞入并检查是否执行
+                mediaControl.setReadyState(type, {
+                    element : element,
+                    width : width,
+                    height : height,
+                    content : content,
+                    config : config
+                });
+            } else {
+                if ('function' === typeof handler) {
+                    _next = handler(element, width, height, content, config);
+                }
+                //上面的处理将媒体类型改变，按照新类型再执行一边render方法
+                if (_next && (_next.type !== type)) {
+                    _render(_next.type, element, width, height, _next.content, config);
+                }
             }
         }
-
-        /**
-         * 注册一批方法
-         */
         
         return {
             render : _render, //渲染方法
@@ -399,7 +523,7 @@
 
     /** 注册一些常用的广告媒体类型显示方法 */
     viewModule.register('couplet', function (element, width, height, content, config) {
-        var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/CoupletMedia.js';
+        var RESOURCE_URL = core.PLUS_RESOURCE_URL || './src/plus/CoupletMedia.js';
         
         content = content[0]; //只用第一个内容
         //是跨栏，隐藏掉改区块
@@ -439,7 +563,8 @@
     });
 
     viewModule.register('videoWindow', function (element, width, height, content, config) {
-        var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/VideoWindowMedia.js';
+        core.debug('sinaads:Rendering videoWindow.');
+        var RESOURCE_URL = core.PLUS_RESOURCE_URL || './src/plus/VideoWindowMedia.js';
 
         content = content[0];
         element.style.cssText = 'position:absolute;top:-9999px';
@@ -447,7 +572,7 @@
 
         //暴露个变量供第三方使用监测链接
         //WTF，如果多个video就shi了
-        window.sinaadsVideoWindowMonitor = content.monitor;
+        window.sinaadsVideoWindowMonitor = [core.monitor.createTrackingMonitor(core.sio.IMG_1_1, content.monitor)];
 
         switch (content.type[0]) {
             case 'js' :
@@ -478,7 +603,8 @@
     });
 
     viewModule.register('stream', function (element, width, height, content, config) {
-        var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/StreamMedia.js';
+        core.debug('sinaads:Rendering stream.');
+        var RESOURCE_URL = core.PLUS_RESOURCE_URL || './src/plus/StreamMedia.js';
         
         content = content[0];
         //流媒体，隐藏掉该区块
@@ -486,7 +612,7 @@
 
         //暴露个变量供第三方使用监测链接
         //WTF，如果多个video就shi了
-        window.sinaadsStreamMonitor = content.monitor;
+        window.sinaadsStreamMonitor = [core.monitor.createTrackingMonitor(core.sio.IMG_1_1, content.monitor)];
 
         if (content.src.length === 1) {
             //生成一个用于渲染容器到页面中
@@ -514,13 +640,15 @@
                     src     : content.src[0] || '',
                     link    : content.link[0] || '',
                     width   : width,
-                    height  : height
+                    height  : height,
+                    top     : config.sinaads_top || 0
                 },
                 mini : {
                     src     : content.src[1] || '',
                     type    : content.type[1] || 'flash',
                     link    : content.link[1] || content.link[0] || ''
                 },
+                pdps: config.sinaads_ad_pdps,
                 monitor : content.monitor,
                 delay : config.sinaads_ad_delay || 0
             };
@@ -536,7 +664,8 @@
 
 
     viewModule.register('fullscreen', function (element, width, height, content, config) {
-        var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/FullscreenMedia.js';
+        core.debug('sinaads:Rendering fullscreen');
+        var RESOURCE_URL = core.PLUS_RESOURCE_URL || './src/plus/FullscreenMedia.js';
 
         content = content[0];
         element.style.cssText = 'position:absolute;top:-9999px';
@@ -573,6 +702,7 @@
     });
 
     viewModule.register('bp', function (element, width, height, content, config) {
+        core.debug('sinaads:Rendering bp.');
         /**
          * ie(null), firefox(null), safari(undefined)窗口拦截情况下window句柄
          * opera, chrome拦截情况下有window句柄
@@ -603,11 +733,19 @@
             par.pop();
         }
 
+        // core.underPop(
+        //     'http://d1.sina.com.cn/litong/zhitou/sinaads/release/pbv5.html?' + par.join('${}'),
+        //     'sinaads_bp_' + config.sinaads_ad_pdps,
+        //     width,
+        //     height
+        // );
         window.open(
             'http://d1.sina.com.cn/litong/zhitou/sinaads/release/pbv5.html?' + par.join('${}'),
             'sinaads_bp_' + config.sinaads_ad_pdps,
             'width=' + width + ',height=' + height
         );
+
+        mediaControl && mediaControl.setDoneState('bp');
         // var key = 'sinaads_bp_content_' + core.rnd();
         // window[key] = [
         //     '<!doctype html>',
@@ -653,7 +791,8 @@
     });
 
     viewModule.register('float', function (element, width, height, content, config) {
-        var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/FloatMedia.js';
+        core.debug('sinaads:Rendering float.');
+        var RESOURCE_URL = core.PLUS_RESOURCE_URL || './src/plus/FloatMedia.js';
 
         content = content[0];
         element.style.cssText = 'position:absolute;top:-99999px';
@@ -734,7 +873,7 @@
 
 
     viewModule.register('tip', function (element, width, height, content, config) {
-        var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/TipsMedia.js';
+        var RESOURCE_URL = core.PLUS_RESOURCE_URL || './src/plus/TipsMedia.js';
 
         content = content[0];
         var TipsMediaData = {
@@ -758,7 +897,7 @@
         }
     });
     viewModule.register('follow', function (element, width, height, content, config) {
-        var RESOURCE_URL = core.PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/FollowMedia.js';
+        var RESOURCE_URL = core.PLUS_RESOURCE_URL || './src/plus/FollowMedia.js';
 
         content = content[0];
         var FollowMediaData = {
@@ -797,6 +936,7 @@
      */
     viewModule.register('embed', function (element, width, height, content, config) {
         //暂时让embed只支持一个广告
+        content = core.array.ensureArray(content);
         content = content[0];
 
         var uid         = config.sinaads_uid,
@@ -855,7 +995,7 @@
         //是对联，隐藏掉改区块
         element.style.cssText = 'position:absolute;top:-9999px';
         //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
-        if (content.src.length >= 4) {
+        if (content.src.length >= 2) {
             //注入跨栏数据
             var CoupletExtMediaData = {
                 src         : content.src,
@@ -950,9 +1090,17 @@
                         //@todo 渲染默认数据
                         core.debug('Use Default ad data.');
                     }
+                    /* 设置富媒体广告为处理状态 */
+                    if (mediaControl.isMedia(config.sinaads_ad_type)) {
+                        mediaControl.setDoneState(config.sinaads_ad_type);
+                    }
                     core.isFunction(config.sinaads_fail_handler) && config.sinaads_fail_handler(element, config);
                 });
         } else {
+            /* 设置富媒体广告为处理状态 */
+            if (mediaControl.isMedia(config.sinaads_ad_type)) {
+                mediaControl.setDoneState(config.sinaads_ad_type);
+            }
             core.isFunction(config.sinaads_fail_handler) && config.sinaads_fail_handler();
         }
     }
@@ -1000,7 +1148,11 @@
                 }
             });
 
-            /* 解析曝光，并注入模版值，发送曝光 */
+            /* 解析曝光，并注入模版值，发送曝光 
+               曝光还是需要使用iframe进行处理，因为有些曝光是通过地址引入一段脚本实现，如果用img log的话没法执行脚本，会丢失曝光
+               比如allyes，在曝光连接会返回document.write('<img src="impress.log"/>')
+               这里需要修改方案
+            */
             core.array.each(pv, function (url, i) {
                 pv[i] = core.monitor.parseTpl(url, config);
                 core.debug('sinaads:Recording the impression of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);

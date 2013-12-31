@@ -4,14 +4,13 @@
  * @param  {[type]} undefined [description]
  * @return {[type]}           [description]
  */
-(function (window, sinaadToolkit, undefined) {
+(function (window, sinaadToolkit, mediaControl, undefined) {
     "use strict";
 
     var MAIN_CLOSE_BTN = 'http://d1.sina.com.cn/d1images/fullscreen/cls_77x31.gif',
         MINI_CLOSE_BTN = 'http://d3.sina.com.cn/d1images/fullscreen/close.gif',
         REPLAY_BTN = 'http://d1.sina.com.cn/shh/tianyi/fs/rplBtn_25x100.swf',
         height = 0;
-
 
     function FullscreenMedia(config) {
         var element = document.getElementById('FullScreenWrap');
@@ -129,6 +128,9 @@
             this.fold(this.transitionStep, function () {
                 THIS.main.style.display = 'none';
                 THIS.mini && (THIS.mini.style.display = 'block');
+
+
+                try { mediaControl.setDoneState('fullscreen'); } catch(e) {}
             });
         },
         expand : function (end, step, onexpandend) {
@@ -179,4 +181,4 @@
     };
 
     sinaadToolkit.FullscreenMedia = sinaadToolkit.FullscreenMedia || FullscreenMedia;
-})(window, window.sinaadToolkit);
+})(window, window.sinaadToolkit, window.sinaadsMediaControl);

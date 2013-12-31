@@ -11,6 +11,10 @@
             }
         </style>
     <script>
+        //设置本页面的富媒体类型的顺序
+        var sinaadsPageMediaOrder = ['fullscreen', 'stream', 'couplet', 'bp', 'videoWindow'];
+    </script>
+    <script>
         var _sinaadsCacheData = {
             'PDPS000000025949' : {
                 "type" : "follow",
@@ -131,6 +135,22 @@
                     });
                 </script>
             </div>
+
+            <h2>全屏</h2>
+            <script>
+                document.write('<span id="FullScreenWrap"></span>');
+            </script>
+            <div>
+                <ins class="sinaads" data-ad-pdps="PDPS000000000001" data-ad-type="fullscreen"></ins>
+                <script>
+                    (sinaads = window.sinaads || []).push({
+                        params : {
+                            sinaads_fullscreen_close : 0
+                        }
+                    });
+                </script>
+            </div>
+
             <h2>blog-tip广告</h2>
             <div>
                 <div style="width:120px;height:50px;overflow:hidden;float:left;">
@@ -223,21 +243,6 @@
                 </script>
             </div>
 
-            <h2>全屏</h2>
-            <script>
-                document.write('<span id="FullScreenWrap"></span>');
-            </script>
-            <div>
-                <ins class="sinaads" data-ad-pdps="PDPS000000000067" data-ad-delay="6"></ins>
-                <script>
-                    (sinaads = window.sinaads || []).push({
-                        params : {
-                            sinaads_fullscreen_close : 0
-                        }
-                    });
-                </script>
-            </div>
-
 
             <h2>乐居/普通-2轮播通栏1000*90</h2>
             <div>
@@ -247,13 +252,13 @@
                 </script>
             </div>
 
-            <!-- <h2>乐居/普通-2轮播跨栏1000*90</h2>
+            <h2>跨栏1000*90</h2>
             <div>
-                <ins class="sinaads" data-ad-pdps="PDPS000000006450"></ins>
+                <ins class="sinaads" data-ad-pdps="PDPS000000006450" data-ad-type="couplet"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({});
                 </script>
-            </div> -->
+            </div>
 
 
             <h2>画中画300*500</h2>
@@ -267,7 +272,7 @@
 
             <h2>背投</h2>
             <div>
-                <ins class="sinaads" data-ad-pdps="PDPS000000004993"></ins>
+                <ins class="sinaads" data-ad-pdps="PDPS000000049826" data-ad-type="bp"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({});
                 </script>
@@ -275,7 +280,7 @@
 
             <h2>对联</h2>
             <div>
-                <ins class="sinaads" data-ad-pdps="PDPS000000000070"></ins>
+                <ins class="sinaads" data-ad-pdps="PDPS000000000070" data-ad-type="float"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({
                         params : {
@@ -285,9 +290,9 @@
                 </script>
             </div>
 
-            <h2>流媒体</h2>
+            <!-- <h2>流媒体</h2>
             <div>
-                <ins class="sinaads" data-ad-pdps="PDPS000000000066" data-ad-delay="2"></ins>
+                <ins class="sinaads" data-ad-pdps="PDPS000000047192" data-ad-delay="2" data-ad-type="stream"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({
                         params : {
@@ -295,11 +300,11 @@
                         }
                     });
                 </script>
-            </div>
+            </div> -->
 
             <h2>视窗</h2>
             <div>
-                <ins class="sinaads" data-ad-pdps="PDPS000000000068" data-ad-delay="4"></ins>
+                <ins class="sinaads" data-ad-pdps="PDPS000000020282" data-ad-delay="4" data-ad-type="videoWindow"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({});
                 </script>
@@ -361,7 +366,7 @@
                 }
             });
         </script>
-        <script async charset="utf-8" src="./release/sinaads.js"></script>
+        <script async charset="utf-8" src="./release/sinaads.full.js"></script>
         
         <!--新闻中心轮播新浪视窗广告结束-->
     </body>

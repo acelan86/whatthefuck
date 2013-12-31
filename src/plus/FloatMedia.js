@@ -1,7 +1,7 @@
 /**
  * 对联
  */
-(function (window, sinaadToolkit, undefined) {
+(function (window, sinaadToolkit, mediaControl, undefined) {
     "use strict";
 
     //常量定义
@@ -94,12 +94,16 @@
         //         THIS.show();
         //     }, config.delay * 1000);
         // }
+        // 
+        //设置float类型媒体的Done状态
+        try { mediaControl.setDoneState('float'); } catch (e) {}
     }
     FloatMedia.prototype = {
         getCloseSideHandler : function () {
             var THIS = this;
             return function () {
-                sinaadToolkit.storage.set('FloatMedia' + THIS.config.pdps, '1', 24 * 60 * 60 * 1000);
+                //去掉频次
+                //sinaadToolkit.storage.set('FloatMedia' + THIS.config.pdps, '1', 24 * 60 * 60 * 1000);
                 THIS.left.hide();
                 THIS.right.hide();
             };
@@ -108,4 +112,4 @@
 
     sinaadToolkit.FloatMedia = sinaadToolkit.FloatMedia || FloatMedia;
 
-})(window, window.sinaadToolkit);
+})(window, window.sinaadToolkit, window.sinaadsMediaControl);
