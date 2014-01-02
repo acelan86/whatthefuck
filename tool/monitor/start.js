@@ -1,92 +1,61 @@
 var exec = require('child_process').exec,
-    mysql = require('mysql');
+    mysql = require('mysql'),
+    conf = require('./conf/config.js'),
+    monitor_list = require(conf.checklistPath).checklist;
 
+//连接数据库
 var connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: ""
+    host: conf.mysql.host,
+    port: conf.mysql.port,
+    user: conf.mysql.user,
+    password: conf.mysql.password
 });
 connection.connect();
+connection.query("use " + conf.mysql.dbname);
 
-connection.query("use monitor");
+var result = {},
+    i = 0;
 
-var monitor_list = [
-    //test
-    //"PDPS000000047200"
-    //sina.com.cn
-    "PDPS000000045825", "PDPS000000045976", "PDPS000000046154", "PDPS000000045978", "PDPS000000045979", "PDPS000000045980", "PDPS000000016827", "PDPS000000045982", "PDPS000000045983", "PDPS000000045984", "PDPS000000045985", "PDPS000000045986", "PDPS000000045987", "PDPS000000046010", "PDPS000000046011", "PDPS000000046013", "PDPS000000046012", "PDPS000000005494", "PDPS000000025252", "PDPS000000046014", "PDPS000000046015", "PDPS000000046016", "PDPS000000046017", "PDPS000000046018", "PDPS000000046021", "PDPS000000045990", "PDPS000000046022", "PDPS000000046023", "PDPS000000016990", "PDPS000000000001", "PDPS000000006450"
-    //news.sina.com.cn
-    ,"PDPS000000047200", "PDPS000000047259", "PDPS000000007977", "PDPS000000047261", "PDPS000000002101", "PDPS000000000054", "PDPS000000001152", "PDPS000000005677", "PDPS000000036632", "PDPS000000036610", "PDPS000000036600", "PDPS000000000057", "PDPS000000047211", "PDPS000000047263", "ZTZT000000000010", "PDPS000000047212", "PDPS000000047262", "PDPS000000047213", "PDPS000000047264", "PDPS000000047229", "PDPS000000047232", "PDPS000000002303", "PDPS000000002304", "PDPS000000002305", "PDPS000000002306", "PDPS000000002307", "PDPS000000002308", "PDPS000000047195", "PDPS000000047198", "PDPS000000049826"
-    //finance.sina.com.cn
-    ,"PDPS000000047012", "PDPS000000005532", "PDPS000000004889", "PDPS000000000486", "PDPS000000000485", "PDPS000000047014", "PDPS000000005650", "PDPS000000005533", "PDPS000000005538", "PDPS000000005540", "PDPS000000047015", "PDPS000000005539", "PDPS000000004437", "PDPS000000005555", "PDPS000000004439", "PDPS000000000258", "PDPS000000006452"
-    //tech.sina.com.cn
-    ,"PDPS000000051607", "PDPS000000051610", "PDPS000000010586", "PDPS000000010587", "PDPS000000051612", "PDPS000000051634", "PDPS000000051635", "PDPS000000051611", "PDPS000000051633", "PDPS000000051609", "PDPS000000049846"
-    //sports.sina.com.cn
-    ,"PDPS000000020291", "PDPS000000010108", "PDPS000000010590", "PDPS000000005557", "PDPS000000051254", "PDPS000000003881", "PDPS000000051253", "PDPS000000003882", "PDPS000000003883", "PDPS000000049432"
-    //ent.sina.com.cn
-    ,"PDPS000000005568", "PDPS000000000797", "PDPS000000046907", "PDPS000000004891", "PDPS000000005573", "PDPS000000046908", "PDPS000000002508", "PDPS000000005585", "PDPS000000005574", "PDPS000000003875", "PDPS000000051264", "PDPS000000005576", "PDPS000000003876", "PDPS000000000122", "PDPS000000006454", "PDPS000000049435"
-    //mil.sina.com.cn
-    ,"PDPS000000048826", "PDPS000000049606", "PDPS000000048821", "PDPS000000048824"
-    //auto.sina.com.cn
-    ,"PDPS000000005617", "PDPS000000017982", "PDPS000000025271", "PDPS000000025272", "PDPS000000028437", "PDPS000000028438", "PDPS000000014401", "PDPS000000014402", "PDPS000000028439", "PDPS000000028440", "PDPS000000010589", "PDPS000000010588", "PDPS000000011839", "PDPS000000011840", "PDPS000000040689", "PDPS000000011836", "PDPS000000005458", "PDPS000000005459", "PDPS000000028441", "PDPS000000028442", "PDPS000000005460"
-    //blog.sina.com.cn
-    ,"PDPS000000049441", "PDPS000000004898", "PDPS000000005004", "PDPS000000005486", "PDPS000000003468", "PDPS000000005339", "PDPS000000006460"
-    //video.sina.com.cn
-    ,"PDPS000000051579", "PDPS000000051583", "PDPS000000051584"
-    //book.sina.com.cn
-    ,"PDPS000000017966", "PDPS000000017965", "PDPS000000004514", "PDPS000000004510", "PDPS000000004509"
-    //edu.sina.com.cn
-    ,"PDPS000000001683", "PDPS000000051272", "PDPS000000001688", "PDPS000000002456", "PDPS000000002457", "PDPS000000002458", "PDPS000000004966", "PDPS000000002459", "PDPS000000014188", "PDPS000000002460", "PDPS000000002461", "PDPS000000002462", "PDPS000000002463", "PDPS000000004967", "PDPS000000001689", "PDPS000000001694", "PDPS000000051273", "PDPS000000009786", "PDPS000000009787", "PDPS000000047508", "PDPS000000047515", "PDPS000000047518", "PDPS000000047524", "PDPS000000047528", "PDPS000000047531", "PDPS000000047537"
-    //fasion.sina.com.cn
-    ,"PDPS000000047326", "PDPS000000047327", "PDPS000000047322", "PDPS000000047324", "PDPS000000047325", "PDPS000000047323"
-    //baby.sina.com.cn
-    ,"PDPS000000004569", "PDPS000000003943", "PDPS000000003944", "PDPS000000051171", "PDPS000000051168", "PDPS000000051172", "PDPS000000051169", "PDPS000000051173"
-];
+console.log('总计检查:' + monitor_list.length + '个，预计耗时' + monitor_list.length * conf.phantomjs.wait + '秒。');
 
-console.log('总计检查:' + monitor_list.length + '个，预计耗时' + monitor_list.length * 2 + '秒。');
 
-var result = {};
+function runPhantom() {
+    var pdps = monitor_list[i++];
+    if (pdps) {
+        console.log('Monitor:' + pdps);
+        exec([conf.phantomjs.path, conf.phantomjs.file, conf.pageurl + '?' + pdps, conf.phantomjs.wait].join(' '), function (error, stdout, stderr) {
+            var reqs = JSON.parse(stdout),
+                req,
+                info,
+                httpResult = '',
+                httpCode = 0;
 
-exec('rm log', function () {
-    var i = 0;
-    function runPhantom() {
-        var pdps = monitor_list[i++];
-        if (pdps) {
-            console.log('Monitor:' + pdps);
-            exec('phantomjs test.js ad.html?' + pdps, function (error, stdout, stderr) {
-                var reqs = JSON.parse(stdout),
-                    req,
-                    info,
-                    httpResult = '',
-                    httpCode = 0;
-
-                for (var url in reqs) {
-                    req = {};
-                    info = '成功';
-                    if (!reqs[url].end) {
-                        info = '失败：请求超时';
-                    } else {
-                        httpCode = reqs[url].end.status,
-                        httpResult = reqs[url].end.text || '';
-                        if (httpCode > 399) {
-                            info = '失败：状态码错误, ' + httpCode;
-                        }
+            for (var url in reqs) {
+                req = {};
+                info = '成功';
+                if (!reqs[url].end) {
+                    info = '失败：请求超时';
+                } else {
+                    httpCode = reqs[url].end.status,
+                    httpResult = reqs[url].end.text || '';
+                    if (httpCode > 399) {
+                        info = '失败：状态码错误, ' + httpCode;
                     }
-                    var sql = "INSERT INTO `monitor` (`pdps`, `url`, `http_code`, `description`, `http_result`) VALUES('" + pdps + "', '" + url + "', '" + httpCode + "', '" + info + "', '" + httpResult + "')";
-                    connection.query(sql, function (err, rows) {
-                        //console.log(err, rows);
-                    });
                 }
-                runPhantom();
-            });
-        } else {
-            connection.end();
-        }
+                var sql = "INSERT INTO `" + conf.mysql.tablename + "` (`pdps`, `url`, `http_code`, `description`, `http_result`) VALUES('" + pdps + "', '" + url + "', '" + httpCode + "', '" + info + "', '" + httpResult + "')";
+                //console.log(sql);
+                connection.query(sql, function (err, rows) {
+                    //console.log(err, rows);
+                });
+            }
+            runPhantom();
+        });
+    } else {
+        connection.end();
     }
+}
 
-    runPhantom();
-});
+runPhantom();
 
 
 

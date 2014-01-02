@@ -7,7 +7,8 @@ if (system.args.length === 1) {
     console.log('Usage: netlog.js <some URL>');
     phantom.exit(1);
 } else {
-    address = system.args[1];
+    address = system.args[1],
+    wait = system.args[2] || 2;
 
     page.onResourceRequested = function (request) {
         //console.log('requested: ' + JSON.stringify(request, undefined));
@@ -31,6 +32,6 @@ if (system.args.length === 1) {
         window.setTimeout(function () {
             console.log(JSON.stringify(data));
             phantom.exit();
-        }, 2000);
+        }, wait * 1000);
     });
 }
