@@ -226,7 +226,7 @@ module.exports = function(grunt) {
     watch: {
       script : {
         files: ['src/**/*.js'],
-        tasks: ['jshint', 'uglify']
+        tasks: ['jshint', 'concat', 'uglify', 'copy']
       }
     },
     connect: {

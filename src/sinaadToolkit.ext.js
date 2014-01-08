@@ -13,7 +13,7 @@
     }
 
     function FrequenceController(uid) {
-        this.uid = uid;
+        this.uid = uid || 'fc-uid' + (+new Date()).toString(36);
         this.list = {};
     }
     FrequenceController.prototype = {
@@ -39,6 +39,8 @@
     return FrequenceController;
 
 })(window, window.sinaadToolkit || window, window.sinaadToolkit);
+
+
 /**
  * [description]
  * @param  {[type]} window  [description]
@@ -129,7 +131,7 @@
         var options = opt_options || {},
             i = 0, type;
 
-        this._uid = 'oc-' + (+new Date()).toString(36); //唯一标识id
+        this._uid = 'oc-uid' + (+new Date()).toString(36); //唯一标识id
         this._state = {}; //状态记录器
         this._callback = {};  //每一种顺序类型的回调方法
         this._callbackArgs = {}; //回调的参数，在ready的时候可以传入
