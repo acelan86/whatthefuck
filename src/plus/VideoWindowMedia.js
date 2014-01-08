@@ -18,6 +18,7 @@
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
         this.config = config;
+        this.pdps = config.pdps;
         this.deferred = new sinaadToolkit.Deferred();
 
         var main = this.main = new sinaadToolkit.Box({
@@ -87,7 +88,10 @@
                     THIS.mainWrap.style.height = THIS.config.height + 'px';
                     clearInterval(THIS.aniTimer);
 
-                    try { mediaControl.setDoneState('videoWindow'); } catch(e) {}
+                    try {
+                        sinaadToolkit.debug('Media: In building videoWindow complete!');
+                        mediaControl.done(mediaControl.videoWindow);
+                    } catch(e) {}
                 }
             }, 20);
         },
@@ -105,4 +109,4 @@
     };
 
     sinaadToolkit.VideoWindowMedia = sinaadToolkit.VideoWindowMedia || VideoWindowMedia;
-})(window, window.sinaadToolkit, window.sinaadsMediaControl);
+})(window, window.sinaadToolkit, window.sinaadsROC);

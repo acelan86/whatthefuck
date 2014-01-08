@@ -28,6 +28,7 @@
         config.link = sinaadToolkit.array.ensureArray(config.link);
 
         this.config = config;
+        this.pdps = config.pdps;
 
         this.deferred = new sinaadToolkit.Deferred();
 
@@ -112,7 +113,10 @@
         //         THIS.show();
         //     }, config.delay * 1000);
         // }
-        try { mediaControl.setDoneState('couplet'); } catch(e) {}
+        try {
+            sinaadToolkit.debug('Media: In building couplet complete!');
+            mediaControl.done(mediaControl.couplet);
+        } catch(e) {}
     }
     CoupletMedia.prototype = {
         timer : null,
@@ -187,4 +191,4 @@
 
     sinaadToolkit.CoupletMedia = sinaadToolkit.CoupletMedia || CoupletMedia;
 
-})(window, window.sinaadToolkit, window.sinaadsMediaControl);
+})(window, window.sinaadToolkit, window.sinaadsROC);

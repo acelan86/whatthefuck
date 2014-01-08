@@ -8,7 +8,8 @@
     var //SIDE_CLOSE_BTN = "http://d1.sina.com.cn/d1images/lmt/close2.gif",
         SIDE_CLOSE_BTN = 'http://d9.sina.com.cn/litong/zhitou/test/images/close-h.jpg',
         SIDE_CLOSE_BTN_SIZE = [40, 18],
-        SIDE_SIZE = [120, 300];
+        SIDE_SIZE = [120, 300],
+        TOP = 100;
         
     /**
      * 对联广告
@@ -30,15 +31,16 @@
         config.src = sinaadToolkit.array.ensureArray(config.src);
         config.type = sinaadToolkit.array.ensureArray(config.type);
         config.link = sinaadToolkit.array.ensureArray(config.link);
-
+        config.top = config.top || TOP;
         this.config = config;
+        this.pdps = config.pdps;
 
         this.deferred = new sinaadToolkit.Deferred();
 
         var left = this.left = new sinaadToolkit.Box({
             width : config.sideWidth,
             height : config.sideHeight,
-            position : 'left ' + config.top || 0,
+            position : 'left ' + config.top,
             autoShow : 1,
             minViewportWidth : (config.contentWidth || 1000) + 2 * config.sideWidth,
             zIndex : 10500
@@ -47,7 +49,7 @@
         var right = this.right = new sinaadToolkit.Box({
             width : config.sideWidth,
             height : config.sideHeight,
-            position : 'right ' + config.top || 0,
+            position : 'right ' + config.top,
             autoShow : 1,
             minViewportWidth : (config.contentWidth || 1000) + 2 * config.sideWidth,
             zIndex : 10500
@@ -96,7 +98,10 @@
         // }
         // 
         //设置float类型媒体的Done状态
-        try { mediaControl.setDoneState('float'); } catch (e) {}
+        try {
+            sinaadToolkit.debug('Media: In building float complete!');
+            mediaControl.done(mediaControl['float']);
+        } catch (e) {}
     }
     FloatMedia.prototype = {
         getCloseSideHandler : function () {
@@ -112,4 +117,4 @@
 
     sinaadToolkit.FloatMedia = sinaadToolkit.FloatMedia || FloatMedia;
 
-})(window, window.sinaadToolkit, window.sinaadsMediaControl);
+})(window, window.sinaadToolkit, window.sinaadsROC);

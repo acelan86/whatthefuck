@@ -360,12 +360,12 @@
         };
         var CHECK_FREQUENCE = 1 * 1000;
         var DONE_TIMEOUT = 20 * 1000;
-        //流媒体、对联、跨栏、前弹、背投，视窗, 没配置表示不要顺序
+        //全屏、流媒体、对联、跨栏、前弹、背投，视窗, 没配置表示不要顺序
         var DEFAULT_ORDER = [/*'fullscreen', 'stream', 'float', 'couplet', 'bp', 'videoWindow'*/];
         var _state = {};
         var _doneTimeout = {};
         //该页面有什么类型的富媒体，若没有设置，则默认全部
-        var _order = window.sinaadsPageMediaOrder || DEFAULT_ORDER;
+        var _order = window._sinaadsPageMediaOrder || DEFAULT_ORDER;
 
         //初始化页面富媒体类型状态
         var i = 0,
@@ -1156,7 +1156,7 @@
             core.array.each(pv, function (url, i) {
                 pv[i] = core.monitor.parseTpl(url, config);
                 core.debug('sinaads:Recording the impression of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
-                pv[i] && core.sio.log(pv[i]);
+                pv[i] && core.sio.log(pv[i], 1);
             });
             /* 解析监控链接，注入模版， 后续使用*/
             core.array.each(monitor, function (url, i) {
@@ -1247,7 +1247,7 @@
                 ],
                 size : preview.size,
                 id : preview.pdps,
-                type : 'embed',
+                type : preview.adtype || 'embed',
                 highlight : preview.highlight || false
             });
         }

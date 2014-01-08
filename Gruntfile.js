@@ -47,7 +47,7 @@ module.exports = function(grunt) {
       },
       sinaadsDev : {
         files : [
-          { dest : 'release/sinaads.dev.full.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaads.js'] }
+          { dest : 'release/sinaads.dev.full.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
         ]
       }
     },
@@ -196,7 +196,7 @@ module.exports = function(grunt) {
           sourceMap: 'sinaads.dev.js.map'
         },
         files : [
-          { dest : 'release/sinaads.dev.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaads.js'] }
+          { dest : 'release/sinaads.dev.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
         ]
       },
       media : {

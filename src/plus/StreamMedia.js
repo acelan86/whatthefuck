@@ -30,6 +30,7 @@
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
         this.config = config;
+        this.pdps = config.pdps;
         
         var main = this.main = new sinaadToolkit.Box({
             width : width,
@@ -134,7 +135,10 @@
                 config.mini.link || config.link,
                 config.monitor
             );
-            try { mediaControl.setDoneState('stream'); } catch(e) {}
+            try {
+                sinaadToolkit.debug('Media: In building stream complete!');
+                mediaControl.done(mediaControl.stream);
+            } catch(e) {}
         },
         //关闭标签
         getCloseMiniHandler : function () {
@@ -161,4 +165,4 @@
 
     sinaadToolkit.StreamMedia = sinaadToolkit.StreamMedia || StreamMedia;
 
-})(window, window.sinaadToolkit, window.sinaadsMediaControl);
+})(window, window.sinaadToolkit, window.sinaadsROC);

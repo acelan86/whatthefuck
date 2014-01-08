@@ -12,7 +12,9 @@
         </style>
     <script>
         //设置本页面的富媒体类型的顺序
-        var sinaadsPageMediaOrder = ['fullscreen', 'stream', 'couplet', 'bp', 'videoWindow'];
+        var _SINAADS_CONF_PAGE_MEDIA_ORDER = ["PDPS000000000001", "PDPS000000002520", "PDPS000000000070", "PDPS000000006450", "PDPS000000049826", "PDPS000000004571"];
+        //var sinaadsPageMediaOrder = ['fullscreen', 'stream', 'float', 'couplet', 'bp', 'videoWindow'];
+        var _SINAADS_CONF_PAGE_MEDIA_DONE_TIMEOUT = 15;
     </script>
     <script>
         var _sinaadsCacheData = {
@@ -37,7 +39,27 @@
                 ],
                 "size":"140*150",
                 "id":"PDPS000000025949"
-            }
+            },
+              'PDPS000000002520' : {
+                "type":"stream",
+                "content":[
+                  {
+                    "monitor":[],
+                    "link":[
+                      "http://sina.com.cn",
+                      "http://sina.com.cn"
+                    ],
+                    "type":["flash", 'flash'],
+                    "pv":[],
+                    "src":[
+                      "http://d1.sina.com.cn/201401/02/532098.swf",
+                      "http://d1.sina.com.cn/201401/02/532097.swf"
+                    ]
+                  }
+                ],
+                "size":"1000*300",
+                "id":"PDPS000000002520"
+              }
         };
     </script>
     <!-- 配置特殊格式的广告媒体类型 -->
@@ -290,21 +312,17 @@
                 </script>
             </div>
 
-            <!-- <h2>流媒体</h2>
+            <h2>流媒体</h2>
             <div>
-                <ins class="sinaads" data-ad-pdps="PDPS000000047192" data-ad-delay="2" data-ad-type="stream"></ins>
+                <ins class="sinaads" data-ad-pdps="PDPS000000002520" data-ad-delay="2" data-ad-type="stream"></ins>
                 <script>
-                    (sinaads = window.sinaads || []).push({
-                        params : {
-                            sinaads_frequence : 30
-                        }
-                    });
+                    (sinaads = window.sinaads || []).push({});
                 </script>
-            </div> -->
+            </div>
 
             <h2>视窗</h2>
             <div>
-                <ins class="sinaads" data-ad-pdps="PDPS000000020282" data-ad-delay="4" data-ad-type="videoWindow"></ins>
+                <ins class="sinaads" data-ad-pdps="PDPS000000004571" data-ad-delay="4" data-ad-type="videoWindow"></ins>
                 <script>
                     (sinaads = window.sinaads || []).push({});
                 </script>
@@ -366,7 +384,7 @@
                 }
             });
         </script>
-        <script async charset="utf-8" src="./release/sinaads.full.js"></script>
+        <script async charset="utf-8" src="./release/sinaads.dev.full.js"></script>
         
         <!--新闻中心轮播新浪视窗广告结束-->
     </body>

@@ -31,6 +31,7 @@
         this.replaySrc = config.replaySrc || REPLAY_BTN;
         this.replaySrcType = config.replaySrcType || 'flash';
         this.duration = config.duration || (config.hasClose ? 5000 : 8000);
+        this.pdps = config.pdps;
 
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
@@ -130,7 +131,10 @@
                 THIS.mini && (THIS.mini.style.display = 'block');
 
 
-                try { mediaControl.setDoneState('fullscreen'); } catch(e) {}
+                try {
+                    sinaadToolkit.debug('Media: In building fullscreen complete!');
+                    mediaControl.done(mediaControl.fullscreen);
+                } catch(e) {}
             });
         },
         expand : function (end, step, onexpandend) {
@@ -181,4 +185,4 @@
     };
 
     sinaadToolkit.FullscreenMedia = sinaadToolkit.FullscreenMedia || FullscreenMedia;
-})(window, window.sinaadToolkit, window.sinaadsMediaControl);
+})(window, window.sinaadToolkit, window.sinaadsROC);

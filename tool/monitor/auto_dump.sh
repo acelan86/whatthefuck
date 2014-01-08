@@ -4,7 +4,7 @@
 MONITOR_ROOT='/Users/xiaobinlan/github/sinaads/tool/monitor/';
 MYSQL_DBNAME='monitor';
 MYSQL_TABLENAME='monitor';
-DBCONF_PATH=${MONITOR_ROOT}'conf/db.cnf';
+DBCONF_PATH=${MONITOR_ROOT}'conf/db.conf';
 MONITOR_DATA=${MONITOR_ROOT}'data/monitor_data.txt'
 DATA_RANGE=20;
 
