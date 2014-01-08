@@ -166,6 +166,25 @@
                     window["eval"].call(window, data);
                 })(data);
             }
+        },
+
+        /**
+         * 在窗口后面弹出一个窗口
+         */
+        underPop : function (loc, name, width, height) {
+            function _popAd() {
+                var _pop = window.open('about:blank', name, 'width=' + width + ',height=' + height);
+                _pop.blur();
+                _pop.opener.focus();
+                _pop.location = loc;
+                sinaadToolkit.event.un(document.body, 'click', _popAd);
+            }
+            try {
+                _popAd();
+            } catch (e) {
+                sinaadToolkit.debug('sinaads:Cannot pop window, use click event.');
+                sinaadToolkit.event.on(document.body, 'click', _popAd);
+            }
         }
     };
 
@@ -185,7 +204,7 @@
         'http://d7.sina.com.cn/litong/zhitou/sinaads',
         'http://d8.sina.com.cn/litong/zhitou/sinaads',
         'http://d9.sina.com.cn/litong/zhitou/sinaads'
-        // '.'
+        //'.'
     ][sinaadToolkit.rand(0, 8)];
 
     /**
@@ -861,6 +880,7 @@
          * 确保传入的字符串是一个url, 同时去除前后空格
          * iframe的src在ie下协议写错会导致刷新当前页面成iframe的src,
          * 判断是否有http或者https开头，如果没有直接认定添加http或者https
+         * @todo \n\r 去除
          */
         ensureURL : function (source) {
             source = sinaadToolkit.string.trim(source);
@@ -1430,6 +1450,7 @@
             scr = null;
         }
         return /** @lends sinaadToolkit.sio */{
+            IMG_1_1 : 'http://d00.sina.com.cn/a.gif',
             /**
              * 加载js模块
              * @param  {String} url          资源地址
@@ -1813,6 +1834,8 @@
             var reg = /\{__([a-zA-Z0-9]+(_*[a-zA-Z0-9])*)__\}/g;
 
             return function (monitorUrl, data) {
+                //增加timestamp参数替换
+                data.timestamp = data.timestamp || sinaadToolkit.now();
                 if (!monitorUrl) {
                     return '';
                 }
@@ -1834,18 +1857,18 @@
          * @param  {Array:String} pvs 曝光监控的url数组
          * @return {String}     返回创建曝光的iframe的html片段
          */
-        // createImpressMonitor : function (pvs) {
-        //     var html = [];
+        createImpressMonitor : function (pvs) {
+            var html = [];
 
-        //     sinaadToolkit.array.each(pvs, function (pv) {
-        //         var config = {};
-        //         sinaadToolkit.iframe.init(config, 1, 1, false);
-        //         config.src = pv;
-        //         config.style = 'display:none;';
-        //         html.push(sinaadToolkit.iframe.createHTML(config));
-        //     });
-        //     return html.join('');
-        // },
+            sinaadToolkit.array.each(pvs, function (pv) {
+                var config = {};
+                sinaadToolkit.iframe.init(config, 1, 1, false);
+                config.src = pv;
+                config.style = 'display:none;';
+                html.push(sinaadToolkit.iframe.createHTML(config));
+            });
+            return html.join('');
+        },
         /**
          * 创建1*1点击监测
          * @param  {String} type    需要监测的对象的类型，如图片，链接，flash等
@@ -1895,20 +1918,19 @@
                 return '';
             }
 
-            var _tmp = [link];
-            sinaadToolkit.array.each(monitor, function (url) {
-                _tmp.push(url);
-            });
+            var clickTAG = sinaadToolkit.url.ensureURL(link);
 
-            var clickTAG = '';
-            sinaadToolkit.array.each(_tmp, function (url) {
-                //hack start 暂时为sax的监测地址做特殊处理
-                //window.alert(url);
-                if (url.indexOf('sax.sina.com.cn\/click') !== -1 || url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1) {
-                    url = url.replace(/&url=$/, '') + '&url=';
+            sinaadToolkit.array.each(monitor, function (url) {
+                url = sinaadToolkit.url.ensureURL(url);
+                if (url) {
+                    //hack start 暂时为sax的监测地址做特殊处理
+                    //window.alert(url);
+                    if (url.indexOf('sax.sina.com.cn\/click') !== -1 || url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1) {
+                        url = url.replace(/&url=$/, '') + '&url=';
+                    }
+                    //hack end
+                    clickTAG = url + encodeURIComponent(clickTAG);
                 }
-                //hack end
-                clickTAG = sinaadToolkit.url.ensureURL(url) + encodeURIComponent(clickTAG);
             });
             return clickTAG;
         }
@@ -1999,7 +2021,8 @@
                 //tmpData['monitor' + i] = sinaadToolkit.monitor.createClickMonitor(tmpData['type' + i], monitor);
                 tmpData['link' + i] = sinaadToolkit.monitor.createTrackingMonitor(link[i], monitor);
                 tmpData['monitor' + i] = '';
-                tmpData['monitor1_1_' + i] = sinaadToolkit.monitor.createClickMonitor(tmpData['type' + i], monitor);
+                tmpData['monitor1_1_' + i] = sinaadToolkit.monitor.createTrackingMonitor(sinaadToolkit.sio.IMG_1_1, monitor);
+                tmpData['monitor1_1_' + i] = tmpData['monitor1_1_' + i] === sinaadToolkit.sio.IMG_1_1 ? '' : tmpData['monitor1_1_' + i];
             });
             tmpData.width = width;
             tmpData.height = height;
@@ -2033,6 +2056,8 @@
                         config = {};
                         sinaadToolkit.iframe.init(config, width, height, false);
                         config.src = sinaadToolkit.url.ensureURL(src);
+                        monitor = tmpData['monitor1_1_' + i];
+                        monitor && (config.name = 'clickTAG=' + encodeURIComponent(monitor));
                         _html = sinaadToolkit.iframe.createHTML(config);
                         break;
                     case 'image' :
@@ -2058,7 +2083,7 @@
                             height : height,
                             wmode : opt_options.wmode || 'opaque',
                             vars : {
-                                clickTAG : link
+                                clickTAG : tmpData['monitor1_1_' + i]
                             }
                         });
                         if (link) {
@@ -2075,7 +2100,7 @@
                         sinaadToolkit.iframe.init(config, width, height, false);
                         config.src = sinaadToolkit.url.ensureURL(src);
                         monitor = tmpData['monitor1_1_' + i];
-                        monitor && (config.name = monitor);
+                        monitor && (config.name = 'api_exu=' + encodeURIComponent(monitor) + '&clickTAG=' + encodeURIComponent(monitor));
                         _html = sinaadToolkit.iframe.createHTML(config);
                         break;
                     case 'js' :
