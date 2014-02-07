@@ -47,7 +47,7 @@ module.exports = function(grunt) {
       },
       sinaadsDev : {
         files : [
-          { dest : 'release/sinaads.dev.full.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
+          { dest : 'release/sinaads.dev.full.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
         ]
       }
     },
@@ -136,7 +136,7 @@ module.exports = function(grunt) {
           sourceMap: 'sinaadToolkit.js.map'
         },
         files : [
-          { dest : 'release/sinaadToolkit.js', src : 'src/sinaadToolkit.js' }
+          { dest : 'release/sinaadToolkit.js', src : 'src/sinaadToolkit.js'}
         ]
       },
       sinaadToolkitDev: {
@@ -166,7 +166,7 @@ module.exports = function(grunt) {
           sourceMap: 'sinaads.js.map'
         },
         files : [
-          { dest : 'release/sinaads.js', src : ['src/sinaadToolkit.js', 'src/sinaads.js'] }
+          { dest : 'release/sinaads.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.js'] }
         ]
       },
       sinaadsMoHelper : {
@@ -211,6 +211,16 @@ module.exports = function(grunt) {
         },
         files : [
           { dest : 'release/plus/Media.js',  src : 'src/plus/*.js' }
+        ]
+      },
+      specmedia : {
+        files : [
+          { dest : 'release/spec/QrcodeMedia.js',  src : 'src/spec/QrcodeMedia.js' }
+        ]
+      },
+      specad : {
+        files : [
+          { dest : 'release/spec/spec1.js',  src : 'src/spec/spec1.js' }
         ]
       }
     },

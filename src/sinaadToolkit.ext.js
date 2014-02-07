@@ -63,7 +63,7 @@
     };
 
     var CHECK_FREQUENCE = 1 * 1000; //默认轮询检查时间
-    var DONE_TIMEOUT = 20 * 1000; //默认前驱最长处理时间，如果前驱超出处理时间还没完成，后继会直接开始处理
+    var DONE_TIMEOUT = 12 * 1000; //默认前驱最长处理时间，如果前驱超出处理时间还没完成，后继会直接开始处理
 
     function _getDoneHandler(oc, type) {
         return function () {

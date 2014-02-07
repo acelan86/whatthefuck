@@ -880,6 +880,7 @@
          * 确保传入的字符串是一个url, 同时去除前后空格
          * iframe的src在ie下协议写错会导致刷新当前页面成iframe的src,
          * 判断是否有http或者https开头，如果没有直接认定添加http或者https
+         * @todo \n\r 去除
          */
         ensureURL : function (source) {
             source = sinaadToolkit.string.trim(source);
@@ -1833,6 +1834,8 @@
             var reg = /\{__([a-zA-Z0-9]+(_*[a-zA-Z0-9])*)__\}/g;
 
             return function (monitorUrl, data) {
+                //增加timestamp参数替换
+                data.timestamp = data.timestamp || sinaadToolkit.now();
                 if (!monitorUrl) {
                     return '';
                 }
@@ -1867,43 +1870,6 @@
             return html.join('');
         },
         /**
-         * 创建1*1点击监测
-         * @param  {String} type    需要监测的对象的类型，如图片，链接，flash等
-         * @param  {Array:String} monitor 监测url数组
-         * @return {String}         返回监测的html片段
-         */
-        createClickMonitor : function (type, monitor) {
-            if (!monitor) {
-                return;
-            }
-
-            var ret = [],
-                comma = '';
-
-            sinaadToolkit.array.each(monitor, function (url) {
-                var code = '';
-
-                if (url) {
-                    switch (type) {
-                    case 'image':
-                    case 'flash':
-                    case 'text':
-                        code = 'sinaadToolkit.sio.log(\'' + sinaadToolkit.url.ensureURL(url) + '\')';
-                        comma = ';';
-                        break;
-                    case 'adbox':
-                        code = 'api_exu=' + encodeURIComponent(sinaadToolkit.url.ensureURL(url));
-                        comma = '&';
-                        break;
-                    default:
-                        break;
-                    }
-                    code && ret.push(code);
-                }
-            });
-            return ret.join(comma);
-        },
-        /**
          * 创建二跳跟踪监测
          * @param  {String} link    落地页
          * @param  {Array:String} monitor 监测地址
@@ -1920,12 +1886,6 @@
             sinaadToolkit.array.each(monitor, function (url) {
                 url = sinaadToolkit.url.ensureURL(url);
                 if (url) {
-                    //hack start 暂时为sax的监测地址做特殊处理
-                    //window.alert(url);
-                    if (url.indexOf('sax.sina.com.cn\/click') !== -1 || url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1) {
-                        url = url.replace(/&url=$/, '') + '&url=';
-                    }
-                    //hack end
                     clickTAG = url + encodeURIComponent(clickTAG);
                 }
             });
@@ -1998,7 +1958,8 @@
 
             src = sinaadToolkit.array.ensureArray(src),
             type = sinaadToolkit.array.ensureArray(type),
-            link = sinaadToolkit.array.ensureArray(link);
+            link = sinaadToolkit.array.ensureArray(link),
+            monitor = sinaadToolkit.array.ensureArray(monitor);
 
             width += sinaadToolkit.isNumber(width) ? 'px' : '',
             height += sinaadToolkit.isNumber(height) ? 'px' : '';
@@ -2014,9 +1975,7 @@
             sinaadToolkit.array.each(src, function (_src, i) {
                 tmpData['src' + i] = _src;
                 tmpData['type' + i] = type[i] || sinaadToolkit.ad.getTypeBySrc(_src, type[i]);
-                //tmpData['link' + i] = sinaadToolkit.url.ensureURL(link[i]) || '';
-                //tmpData['monitor' + i] = sinaadToolkit.monitor.createClickMonitor(tmpData['type' + i], monitor);
-                tmpData['link' + i] = sinaadToolkit.monitor.createTrackingMonitor(link[i], monitor);
+                tmpData['link' + i] = link[i];
                 tmpData['monitor' + i] = '';
                 tmpData['monitor1_1_' + i] = sinaadToolkit.monitor.createTrackingMonitor(sinaadToolkit.sio.IMG_1_1, monitor);
                 tmpData['monitor1_1_' + i] = tmpData['monitor1_1_' + i] === sinaadToolkit.sio.IMG_1_1 ? '' : tmpData['monitor1_1_' + i];
@@ -2046,58 +2005,42 @@
                 src = tmpData['src' + i];
                 type = tmpData['type' + i];
                 link = tmpData['link' + i];
-                monitor = tmpData['monitor' + i];
+                monitor = monitor.join('|');
 
                 switch (type) {
-                    case 'url' :
-                        config = {};
-                        sinaadToolkit.iframe.init(config, width, height, false);
-                        config.src = sinaadToolkit.url.ensureURL(src);
-                        monitor = tmpData['monitor1_1_' + i];
-                        monitor && (config.name = 'clickTAG=' + encodeURIComponent(monitor));
-                        _html = sinaadToolkit.iframe.createHTML(config);
-                        break;
                     case 'image' :
                         _html = '<img border="0" src="' + sinaadToolkit.url.ensureURL(src) + '" style="width:' + width + ';height:' + height + ';border:0" alt="' + src + '"/>';
                         //onclick与跳转同时发送会导致丢失移动端的监测
-                        if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitor) {
-                            _html = link ? '<a href="' + link + '" ontouch="try{' + monitor + '}catch(e){}finally{}">' + _html + '</a>' : _html;
-                        } else {
-                            _html = link ? '<a href="' + link + '" target="_blank"' + (monitor ? ' onclick="try{' + monitor +'}catch(e){}"' : '') + '>' + _html + '</a>' : _html;
-                        }
+                        _html = link ? '<a href="' + link + '" target="_blank">' + _html + '</a>' : _html;
                         break;
                     case 'text' :
-                        if ((sinaadToolkit.browser.phone || sinaadToolkit.browser.tablet) && monitor) {
-                            _html = link ? '<a href="' + link + '" ontouch="try{' + monitor + '}catch(e){}finally{}">' + src + '</a>' : src;
-                        } else {
-                            _html = link ? '<a href="' + link + '" target="_blank"' + (monitor ? ' onclick="try{' + monitor +'}catch(e){}"' : '') + '>' + src + '</a>' : src;
-                        }
+                        _html = link ? '<a href="' + link + '" target="_blank">' + src + '</a>' : src;
                         break;
                     case 'flash' :
+                        var vars = {};
+                        link && (vars.clickTAG = link);
                         _html = sinaadToolkit.swf.createHTML({
                             url : sinaadToolkit.url.ensureURL(src),
                             width : width,
                             height : height,
                             wmode : opt_options.wmode || 'opaque',
-                            vars : {
-                                clickTAG : tmpData['monitor1_1_' + i]
-                            }
+                            vars : vars
                         });
                         if (link) {
                             _html = [
                                 '<div style="width:' + width + ';height:' + height + ';position:relative;overflow:hidden;">',
                                     _html,
-                                    '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="_blank"' + (monitor ? ' onclick="try{' + monitor + '}catch(e){}"' : '') + '></a>',
+                                    '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + width + ';height:' + height + ';left:0;top:0" href="' + link + '" target="_blank"></a>',
                                 '</div>'
                             ].join('');
                         }
                         break;
                     case 'adbox' :
+                    case 'url' :
                         config = {};
                         sinaadToolkit.iframe.init(config, width, height, false);
                         config.src = sinaadToolkit.url.ensureURL(src);
-                        monitor = tmpData['monitor1_1_' + i];
-                        monitor && (config.name = 'api_exu=' + encodeURIComponent(monitor) + '&clickTAG=' + encodeURIComponent(monitor));
+                        monitor && (config.name = 'clickTAG=' + encodeURIComponent(monitor));
                         _html = sinaadToolkit.iframe.createHTML(config);
                         break;
                     case 'js' :

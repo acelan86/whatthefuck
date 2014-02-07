@@ -12,6 +12,9 @@
     function VideoWindowMedia(config) {
         var THIS = this;
 
+        config.innerWidth = config.width;
+        config.innerHeight = config.height;
+
         config.height = MAIN_HEIGHT;
         config.width = MAIN_WIDTH;
 
@@ -26,7 +29,7 @@
             height : config.height,
             position : 'right bottom',
             follow : 1,
-            zIndex : MAIN_ZINDEX
+            zIndex : config.zIndex || MAIN_ZINDEX
         });
 
         var mainWrap = this.mainWrap = document.createElement('div');
@@ -78,7 +81,8 @@
                 this.config.height,
                 '',
                 this.config.monitor
-            );
+            //增加一个遮罩层
+            ) + (this.config.link ? '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + this.config.innerWidth + 'px;height:' + this.config.innerHeight + 'px;left:0;top:24px" href="' + this.config.link + '" target="_blank"></a>' : '');
             this.tmpHeight = 0;
             this.aniTimer = setInterval(function () {
                 if (THIS.tmpHeight < THIS.config.height) {

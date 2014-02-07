@@ -8,14 +8,14 @@
     <body style="margin:0;padding:0">
     <script>
         var par = location.search.substr(1),
-            ary = par.split("${}"),
-            monitor = ary.slice(5) || [];
+            ary = par.split("${}");
 
         var type = ary[0],
-            src = sinaadToolkit.string.encodeHTML(ary[1]),
-            link = sinaadToolkit.url.ensureURL(ary[2]),
+            src = sinaadToolkit.string.encodeHTML(decodeURIComponent(ary[1])),
+            link = sinaadToolkit.url.ensureURL(decodeURIComponent(ary[2])),
             width = ary[3] + 'px',
-            height = ary[4] + 'px';
+            height = ary[4] + 'px',
+            monitor = decodeURIComponent(ary[5]);
 
         var srcAllowDomain = ['sina\\.com\\.cn','weibo\\.com','sinaimg\\.cn'],
             urlAllowDomain = ['sina\\.com\\.cn','weibo\\.com','allyes\\.com', 'admaster\\.com\\.cn', 'miaozhen\\.com'];
@@ -32,7 +32,7 @@
                 width,
                 height,
                 link,
-                monitor
+                monitor ? monitor.split('|') : []
             ));
         }
         window.blur();

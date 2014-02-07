@@ -10,6 +10,19 @@
                 margin:0px;
             }
         </style>
+
+    <!-- 乐居广告脚本 begin-->
+    <script charset="UTF-8" src="http://d5.sina.com.cn/litong/zhitou/leju/leju.js"></script>
+    <script>
+        //正式数据路径，把这个路径改成404地址可以请求默认数据，测试容错
+        leju.conf.url = 'http://adm.leju.sina.com.cn/get_ad_list/PG_514AC419D66F33';
+        //容错数据路径
+        leju.conf.defaultUrl = 'http://staticadm.leju.sina.com.cn/get_ad_list/PG_514AC419D66F33.js';
+        //获取数据
+        var lejuMedia = leju.getData();
+    </script>
+    <!-- 乐居广告脚本 end-->
+
     <script>
         //设置本页面的富媒体类型的顺序
         var _SINAADS_CONF_PAGE_MEDIA_ORDER = ["PDPS000000000001", "PDPS000000002520", "PDPS000000000070", "PDPS000000006450", "PDPS000000049826", "PDPS000000004571"];
@@ -18,6 +31,27 @@
     </script>
     <script>
         var _sinaadsCacheData = {
+            'PDPS000000049826' : {
+                "type" : "bp",
+                "content" : [
+                    {
+                        "monitor":[
+                            "http:\/\/sax.sina.com.cn\/click?type=3&t=MjAxMy0xMi0wOSAxMjo0OTo1NQk2MS4xMzUuMTUyLjIxOAkxMC4yMDkuMi44OV8xMzg2NTY0NTAyLjEyMTcyMglodHRwOi8vYmxvZy5zaW5hLmNvbS5jbi9zL2Jsb2dfNDc2Y2YxM2UwMTAyZTNzby5odG1sP3RqPTEJUERQUzAwMDAwMDAyNTk0OQkwNGU5ODBkOS0xMTdhLTRhNDctYWQ4Ni02NGU5ZjZlNmFiZmYJRkQ2MThENjY4NUUyCUZENjE4RDY2ODVFMgktCS0JMzAyMDAwfDMwMjAwMAlGRDYxOEQ2Njg1RTIJTkIxMzExMDI3NwkJRkQ2MThENjY4NUUyCUFFCS0JNQkt"
+                        ],
+                        "link":['http://sina.com.cn'],
+                        "type":[
+                            "flash"
+                        ],
+                        "pv":[],
+                        "pid":null,
+                        "src":[
+                            "http://d1.sina.com.cn/201401/03/532368_BT-950-450-0103-LYYM.swf"
+                        ]
+                    }
+                ],
+                "size":"950*450",
+                "id":"PDPS000000049826"
+            },
             'PDPS000000025949' : {
                 "type" : "follow",
                 "content" : [
@@ -384,7 +418,7 @@
                 }
             });
         </script>
-        <script async charset="utf-8" src="./release/sinaads.dev.full.js"></script>
+        <script async charset="utf-8" src="./release/sinaads.js"></script>
         
         <!--新闻中心轮播新浪视窗广告结束-->
     </body>
