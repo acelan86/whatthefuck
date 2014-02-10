@@ -184,6 +184,22 @@ module.exports = function(grunt) {
           { dest : 'release/sinaadsMoHelper.js', src : ['src/sinaadsMoHelper.js'] }
         ]
       },
+      //压缩服务端预览全局变量附加脚本
+      sinaadsServerPreviewSlots : {
+        options : {
+          //preserveComments:'some',
+          banner : '/*!\n' + 
+                    ' * sinaads monitor helper\n' +
+                    ' * @author acelan<xiaobin8[at]staff.sina.com.cn>\n' +
+                    ' * @version 1.0.0\n' +
+                    '<%= logo %>' + 
+                    ' */\n',
+          sourceMap: 'sinaadsServerPreviewSlots.js.map'
+        },
+        files : [
+          { dest : 'release/sinaadsServerPreviewSlots.js', src : ['src/sinaadsServerPreviewSlots.js'] }
+        ]
+      },
       sinaadsDev : {
         options : {
           //preserveComments:'some',
@@ -229,7 +245,9 @@ module.exports = function(grunt) {
         files:[
           {dest: 'release/plus/', src: 'Media.js.map'},
           {dest: 'release/', src: 'sinaads.js.map'},
-          {dest: 'release/', src: 'sinaadToolkit.js.map'}
+          {dest: 'release/', src: 'sinaadToolkit.js.map'},
+          {dest: 'release/', src: 'sinaadsServerPreviewSlots.js.map'},
+          {dest: 'release/', src: 'sinaadsMoHelper.js.map'}
         ]
       }
     },

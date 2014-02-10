@@ -28,6 +28,7 @@
   *    _SINAADS_CONF_PAGE_MEDIA_ORDER = [] //广告展现顺序配置，PDPS列表
   *    _SINAADS_CONF_PRELOAD = [] //预加载的广告pdps列表
   */
+ 
  window._sinaadsIsInited = window._sinaadsIsInited || (function (window, core, undefined) {
     "use strict";
 
@@ -36,12 +37,15 @@
     //页面url转换成唯一hash值，用于标记页面唯一的广告位
     var UUID = 1;
     var PAGE_HASH = 'sinaads_' + core.hash(window.location.host.split('.')[0] + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')));
-    var IMPRESS_URL = 'http://sax.sina.com.cn/newimpress';
+    var IMPRESS_URL = 'http://sax.sina.com.cn/newimpress'; //向广告引擎请求正式广告的地址
+    var SERVER_PREVIEW_IMPRESS_URL = 'http://sax.sina.com.cn/preview'; //向广告引擎请求服务端预览广告的地址
     var PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
-    //PLUS_RESOURCE_URL = '';
+    //PLUS_RESOURCE_URL = ''; //测试富媒体分文件用
     var SAX_TIMEOUT = parseInt(window._SINAADS_CONF_SAX_REQUEST_TIMEOUT || 30, 10) * 1000; //请求数据超时时间
     var PAGE_MEDIA_ORDER = window._SINAADS_CONF_PAGE_MEDIA_ORDER || []; //渲染顺序配置
     var PAGE_MEDIA_DONE_TIMEOUT = (window._SINAADS_CONF_PAGE_MEDIA_DONE_TIMEOUT || 20) * 1000; //渲染媒体执行超时时间
+    
+
     /**
      * 频次控制模块
      */
@@ -79,9 +83,23 @@
      * @return {[type]} [description]
      */
     var modelModule = (function () {
-        var _cache = window._sinaadsCacheData || {};
+        var _cache = {};
+        var serverPreviewSlots = {};
         var targeting;
         var enterTime = core.now();
+
+        /**
+         * 根据是否是服务端预览的广告位来确定使用预览引擎地址还是正式引擎地址
+         * @param  {String} pdps 需要判断的pdps字符串，如果是批量加载的pdps，必然是pdps,pdps,pdps格式，因此批量加载的不允许为预览位置，预览位置一定是单个请求
+         * @return {String}      请求地址
+         */
+        function _getImpressURL(pdps) {
+            if (serverPreviewSlots[pdps]) {
+                core.debug('sinaads: ' + pdps + ' is server preview slot.');
+                return SERVER_PREVIEW_IMPRESS_URL;
+            }
+            return IMPRESS_URL;
+        }
 
         /**
          * 获取定向关键词, 全局只获取一次
@@ -231,99 +249,186 @@
             return ad;
         }
 
-        return {
-            data : _cache,
-            targeting : targeting,
-            /**
-             * 获取广告数据
-             * @param  {Array} pdps 广告pdps
-             * @return {Deferred}      promise调用对象
-             */
-            request : function (pdps, rotateCount) {
-                var start = core.now(),
-                    deferred = new core.Deferred(),
-                    params = [],
-                    isLoaded = false,
-                    _pdps = [];
+        function _request(pdps, rotateCount) {
+            var start = core.now(),
+                deferred = new core.Deferred(),
+                params = [],
+                isLoaded = false,
+                _pdps = [];
 
-                //判断pdps相关数据是否存在，如果存在，直接返回，否则，请求后渲染
-                core.array.each(pdps, function (str) {
-                    isLoaded = !!_cache[str];
-                    if (isLoaded) {
-                        core.debug('sinaads:current pdps data is loaded, render immedietly. ', str, _cache[str]);
-                    } else {
-                        _pdps.push(str);
-                    }
-                });
-
+            //判断pdps相关数据是否存在，如果存在，直接返回，否则，请求后渲染
+            core.array.each(pdps, function (str) {
+                isLoaded = !!_cache[str];
                 if (isLoaded) {
-                    deferred.resolve();
+                    core.debug('sinaads:current pdps data is loaded, render immedietly. ', str, _cache[str]);
                 } else {
-                    var targeting = _getTargeting();
+                    _pdps.push(str);
+                }
+            });
 
-                    core.debug('sinaads:current pdps data is unload, load immedietly. ' + _pdps.join(), _cache);
-                    
-                    params = [
-                        'adunitid=' + _pdps.join(','),                                  //pdps数组
-                        'rotate_count=' + rotateCount,                                  //轮播数
-                        'TIMESTAMP=' + enterTime.toString(36),           //时间戳
-                        'referral=' + encodeURIComponent(core.url.top)                  //当前页面url
-                    ];
+            if (isLoaded) {
+                deferred.resolve();
+            } else {
+                var targeting = _getTargeting();
+
+                core.debug('sinaads:current pdps data is unload, load immedietly. ' + _pdps.join(), _cache);
+                
+                params = [
+                    'adunitid=' + _pdps.join(','),                                  //pdps数组
+                    'rotate_count=' + rotateCount,                                  //轮播数
+                    'TIMESTAMP=' + enterTime.toString(36),           //时间戳
+                    'referral=' + encodeURIComponent(core.url.top),                  //当前页面url
+                    'date=' + core.date.format(new Date(), 'yyyyMMddHH') //请求广告的本地时间, 格式2014020709
+                ];
 
 
-                    for (var key in targeting) {
-                        params.push('tg' + key + '=' + encodeURIComponent(targeting[key]));
-                    }
-
-                    core.sio.jsonp(IMPRESS_URL + '?' + params.join('&'), function (data) {
-                        if (data === 'nodata') {
-                            core.debug('sinaads:' + _pdps.join() + '. No register in SAX. ');
-                            deferred.reject();
-                        } else {
-                            core.debug('sinaads:request data ready. ', params, core.now(), core.now() - start, data);
-                            //缓存数据到list中
-                            //这里每次循环都reject可能会有问题
-                            var notAllContentNull = false; //是否此次请求所有的广告都没有内容
-                            core.array.each(data.ad, function (ad) {
-                                ad = _adapter ? _adapter(ad) : ad;
-                                if (ad.content instanceof Array && ad.content.length > 0) {
-                                    _cache[ad.id] = ad;
-                                    notAllContentNull = true;
-                                } else {
-                                    core.debug('sinaads:' + ad.id + '. cannot found data. ');
-                                }
-                            });
-                            /**
-                             * cookie mapping
-                             * 每次请求如果有mapping需要对应就发送请求
-                             * @type {Number}
-                             */
-                            core.array.each(data.mapUrl, function (url) {
-                                core.debug('sinaads:data ready, send cookie mapping. ' + url, params, core.now());
-                                url && core.sio.log(url, 1);
-                            });
-                            if (notAllContentNull) {
-                                deferred.resolve();
-                            } else {
-                                deferred.reject();
-                            }
-                        }
-                    }, {
-                        timeout : SAX_TIMEOUT,
-                        onfailure : function () {
-                            core.debug('sinaads:request timeout, via ' + _pdps.join());
-                            deferred.reject();
-                        }
-                    });
+                for (var key in targeting) {
+                    params.push('tg' + key + '=' + encodeURIComponent(targeting[key]));
                 }
 
-                return deferred;
-            },
+                core.sio.jsonp(_getImpressURL(_pdps.join(',')) + '?' + params.join('&'), function (data) {
+                    if (data === 'nodata') {
+                        core.debug('sinaads:' + _pdps.join() + '. No register in SAX. ');
+                        deferred.reject();
+                    } else {
+                        core.debug('sinaads:request data ready. ', params, core.now(), core.now() - start, data);
+                        //缓存数据到list中
+                        //这里每次循环都reject可能会有问题
+                        var notAllContentNull = false; //是否此次请求所有的广告都没有内容
+                        core.array.each(data.ad, function (ad) {
+                            ad = _adapter ? _adapter(ad) : ad;
+                            if (ad.content instanceof Array && ad.content.length > 0) {
+                                _cache[ad.id] = ad;
+                                notAllContentNull = true;
+                            } else {
+                                core.debug('sinaads:' + ad.id + '. cannot found data. ');
+                            }
+                        });
+                        /**
+                         * cookie mapping
+                         * 每次请求如果有mapping需要对应就发送请求
+                         * @type {Number}
+                         */
+                        core.array.each(data.mapUrl, function (url) {
+                            core.debug('sinaads:data ready, send cookie mapping. ' + url, params, core.now());
+                            url && core.sio.log(url, 1);
+                        });
+                        if (notAllContentNull) {
+                            deferred.resolve();
+                        } else {
+                            deferred.reject();
+                        }
+                    }
+                }, {
+                    timeout : SAX_TIMEOUT,
+                    onfailure : function () {
+                        core.debug('sinaads:request timeout, via ' + _pdps.join());
+                        deferred.reject();
+                    }
+                });
+            }
+
+            return deferred;
+        }
+
+        /**
+         * 初始化页面广告原始数据
+         */
+        function _init(oninit) {
+            //1、将页面上默认存在的数据填充到数据缓存中
+            _cache = window._sinaadsCacheData || {};
+
+            /**
+             * 2、将本地预览的数据填充到_cache中，url.hash，本地预览只支持一个广告位
+             */
+            (function () {
+                var query = window.location.hash.substring(1).split('&'),
+                    preview = {},
+                    keys = ['pdps', 'src', 'size'], //必需有的key
+                    i = 0,
+                    key,
+                    q;
+                while ((q = query[i++])) {
+                    q = q.split('=');
+                    if (q[0].indexOf('sinaads_preview_') === 0) {
+                        key = q[0].replace('sinaads_preview_', '');
+                        if (key && q[1] && !preview[key]) {
+                            preview[key] = q[1];
+                            core.array.remove(keys, key);
+                        }
+                    }
+                }
+                //只有满足三个参数齐全才进行预览数据填充
+                if (keys.length === 0) {
+                    core.debug('sinaads:Ad Unit ' + preview.pdps +  ' is for preview only. ', preview);
+                    //构造一个符合展现格式的数据放入到初始化数据缓存中
+                    _cache[preview.pdps] = {
+                        content : [
+                            {
+                                src : preview.src.split('|'),
+                                link : (preview.link || '').split('|'),
+                                monitor : (preview.monitor || '').split('|'),
+                                pv : (preview.pv || '').split('|'),
+                                type : (preview.type || '').split('|')
+                            }
+                        ],
+                        size : preview.size,
+                        id : preview.pdps,
+                        type : preview.adtype || 'embed',
+                        highlight : preview.highlight || false
+                    };
+                }
+            })();
+
+            /**
+             * 3、获取服务端预览的广告位pdps列表
+             * #sinaads_server_preview=PDPS000000000001&sinaads_server_preview=PDPS000000000002
+             */
+            serverPreviewSlots = (function () {
+                var query = window.location.hash.substring(1).split('&'),
+                    slots = {},
+                    key = 'sinaads_server_preview', //必需有的key
+                    i = 0,
+                    q;
+                while ((q = query[i++])) {
+                    q = q.split('=');
+                    if (q[0].indexOf(key) === 0) {
+                        slots[q[1]] = 1;
+                    }
+                }
+                return slots;
+            })();
+
+
+            /**
+             * 4、预加载的服务端数据
+             */
+            var preloadData = [],
+                originPreloadData = window._SINAADS_CONF_PRELOAD || [],
+                i = 0,
+                pdps;
+
+            //@todo 从预加载列表里面去除需要服务端预览的数据
+            while ((pdps = originPreloadData[i++])) {
+                if (!serverPreviewSlots[pdps]) {
+                    preloadData.push(pdps);
+                }
+            }
+
+            if (preloadData.length > 0) {
+                core.debug('sinaads:Data preload of bulk requests. ' + preloadData.join(','));
+                //预加载不允许加载频率不为0的请求，比如视窗，这个需要人工控制
+                _request(preloadData, seed.get()).done(oninit).fail(oninit);
+            } else {
+                oninit();
+            }
+        }
+
+        return {
+            init : _init,
+            request : _request,
             get : function (pdps) {
-                return _cache[pdps];
-            },
-            add : function (pdps, data) {
-                _cache[pdps] = data;
+                return (pdps ? _cache[pdps] : _cache);
             }
         };
     })();
@@ -619,48 +724,6 @@
             core.debug('Media: In building bp complete!');
             window.sinaadsROC.done(window.sinaadsROC.bp);
         } catch (e) {}
-        // var key = 'sinaads_bp_content_' + core.rnd();
-        // window[key] = [
-        //     '<!doctype html>',
-        //     '<html>',
-        //         '<head>',
-        //             '<meta charset="utf-8">',
-        //             '<title>新浪广告</title>',
-        //             '<', 'script src="' + core.TOOLKIT_URL + '"></', 'script>',
-        //         '</head>',
-        //         '<body style="margin:0;padding:0;">',
-        //             core.ad.createHTML(
-        //                 content.type[0],
-        //                 content.src[0],
-        //                 width,
-        //                 height,
-        //                 content.link[0],
-        //                 monitor
-        //             ),
-        //         '</body>',
-        //     '</html>'
-        // ].join('');
-
-        // var contentEncode = content.replace('\'', '\\\''),
-        //     win, doc;
-        // //如果内容在2000个字节以下
-        // if (contentEncode.length <= 2000) {
-        //     core.debug('sinaads:资源长度小于2000, 直接渲染');
-        //     window.open("javascript:'" + contentEncode + "'", 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
-        // } else {
-        //     win = window.open('about:blank', 'sinaads_bp_' + config.sinaads_ad_pdps, 'width=' + width + ',height=' + height);
-        //     try {
-        //         doc = win.document;
-        //         if (doc) {
-        //             core.debug('sinaads:采用document.write方式渲染');
-        //             doc.write(content);
-        //         } else {
-        //             window.alert('xxxx');
-        //         }
-        //     } catch (e) {
-        //         window.alert('catch' + e.message);
-        //     }
-        // }
     });
 
     viewModule.register('float', function (element, width, height, content, config) {
@@ -896,6 +959,7 @@
         }
     });
 
+    
     /**
      * 初始化方法
      * @return {[type]} [description]
@@ -1149,55 +1213,11 @@
         };
     })(frequenceController, orderController);
 
-
     /**
-     * 查找是否有需要填充的预览数据，一次只允许预览一个广告位
-     */
-    (function (modelModule) {
-        var query = window.location.hash.substring(1).split('&'),
-            preview = {},
-            keys = ['pdps', 'src', 'size'], //必需有的key
-            i = 0,
-            key,
-            q;
-        while ((q = query[i++])) {
-            q = q.split('=');
-            if (q[0].indexOf('sinaads_preview_') === 0) {
-                key = q[0].replace('sinaads_preview_', '');
-                if (key && q[1] && !preview[key]) {
-                    preview[key] = q[1];
-                    core.array.remove(keys, key);
-                }
-            }
-        }
-        //只有满足三个参数齐全才进行预览数据填充
-        if (keys.length === 0) {
-            core.debug('sinaads:Ad Unit ' + preview.pdps +  ' is for preview only. ', preview);
-            //构造一个符合展现格式的数据放入到初始化数据缓存中
-            modelModule.add(preview.pdps, {
-                content : [
-                    {
-                        src : preview.src.split('|'),
-                        link : (preview.link || '').split('|'),
-                        monitor : (preview.monitor || '').split('|'),
-                        pv : (preview.pv || '').split('|'),
-                        type : (preview.type || '').split('|')
-                    }
-                ],
-                size : preview.size,
-                id : preview.pdps,
-                type : preview.adtype || 'embed',
-                highlight : preview.highlight || false
-            });
-        }
-    })(modelModule);
-
-
-    /**
-     * 初始化方法，处理js加载成功之前压入延迟触发的广告位，
+     * 初始化数据模型，并在初始化完成后处理js加载成功之前压入延迟触发的广告位，
      * 并将后续广告压入方法置成内部初始化方法
      */
-    function init() {
+    modelModule.init(function () {
         core.debug('sinaads:Begin to scan and render all ad placeholders.' + core.now());
 
         /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
@@ -1209,29 +1229,13 @@
         }
         //在脚本加载之后，sinaad重新定义，并赋予push方法为初始化方法
         window.sinaads = {push : _init};
-    }
-
-    /* 
-        判断是否有需要预加载的数据，加载完成后执行初始化操作，否则执行初始化操作 
-        依赖frequenceController, 回调方法
-    */
-    (function (seed, onpreload) {
-        var preloadData = window._SINAADS_CONF_PRELOAD || [];
-
-        if (preloadData.length > 0) {
-            core.debug('sinaads:Data preload of bulk requests. ' + preloadData.join(','));
-            //预加载不允许加载频率不为0的请求，比如视窗，这个需要人工控制
-            modelModule.request(preloadData, seed.get()).done(onpreload).fail(onpreload);
-        } else {
-            onpreload();
-        }
-    })(seed, init);
+    });
 
 
-
+    //导出一些变量
     window.sinaadsROC = orderController;
     window.sinaadsRFC = frequenceController;
-    window._sinaadsCacheData = modelModule.data;
+    window._sinaadsCacheData = modelModule.get();
     window.sinaadsRenderHandler = viewModule.handlerMap;
 
 
