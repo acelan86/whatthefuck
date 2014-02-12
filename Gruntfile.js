@@ -39,6 +39,12 @@ module.exports = function(grunt) {
     //   }
     // },
     // 
+    smash: {
+      bundle: {
+        src: 'sinaads/main.js',
+        dest: 'sinaads/sinaads.js'
+      }
+    },
     concat : {
       sinaads : {
         files : [
@@ -267,6 +273,7 @@ module.exports = function(grunt) {
   });
 
   // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-smash');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -275,7 +282,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'copy', 'connect', 'watch']);
+  grunt.registerTask('default', ['smash', 'jshint', 'concat', 'uglify', 'copy', 'connect', 'watch']);
   grunt.registerTask('nouglify', ['jshint', 'concat', 'connect']);
   grunt.registerTask('nowatch', ['jshint', 'concat', 'uglify', 'connect']);
 
