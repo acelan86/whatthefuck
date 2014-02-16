@@ -9,7 +9,7 @@
 
     var MAIN_CLOSE_BTN = 'http://d1.sina.com.cn/d1images/fullscreen/cls_77x31.gif',
         MINI_CLOSE_BTN = 'http://d3.sina.com.cn/d1images/fullscreen/close.gif',
-        REPLAY_BTN = 'http://d1.sina.com.cn/shh/tianyi/fs/rplBtn_25x100.swf',
+        REPLAY_BTN = 'http://d2.sina.com.cn/litong/zhitou/sinaads/release/fullscreen_replay_btn.swf',
         height = 0;
 
     function FullscreenMedia(config) {
@@ -23,6 +23,7 @@
 
         this.width = config.width;
         this.height = config.height + (config.hasClose ? 40 : 0);
+        this.contentHeight = config.height;
         this.src = config.src;
         this.link = config.link;
         this.type = config.type;
@@ -32,6 +33,8 @@
         this.replaySrcType = config.replaySrcType || 'flash';
         this.duration = config.duration || (config.hasClose ? 5000 : 8000);
         this.pdps = config.pdps;
+        this.replayFuncName = "fullscreenReplayFunc" + config.pdps;
+
 
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
@@ -49,7 +52,7 @@
 
         if (config.hasClose) {
             var mainCloseBtn = this.mainCloseBtn = document.createElement('div');
-            mainCloseBtn.style.cssText = 'cursor:pointer;position:absolute;width:77px;height:31px;right:0px;top:' + this.height + 'px;background:url(' + MAIN_CLOSE_BTN + ') no-repeat;margin:0;padding:0;';
+            mainCloseBtn.style.cssText = 'cursor:pointer;position:absolute;width:77px;height:31px;right:0px;top:' + this.contentHeight + 'px;background:url(' + MAIN_CLOSE_BTN + ') no-repeat;margin:0;padding:0;';
 
             var mini = this.mini = document.createElement('div');
             mini.style.cssText = 'width:25px;height:117px;position:absolute;left:' + this.width + 'px;top:0px;margin:0;padding:0;overflow:hidden;';
@@ -57,30 +60,47 @@
             var miniContent = this.miniContent = document.createElement('div');
             miniContent.style.cssText = 'position:absolute;left:0px;top:0px;width:25px;height:100px;overflow:hidden;margin:0;padding:0';
             
-            var replayBtn = this.replayBtn = document.createElement('div');
-            replayBtn.style.cssText = 'cursor:pointer;position:absolute;left:0px;top:0px;width:25px;height:100px;overflow:hidden;margin:0;padding:0;background:#fff;opacity:0;*filter:alpha(opacity=0);';
-
             var miniCloseBtn = this.miniCloseBtn = document.createElement('div');
             miniCloseBtn.style.cssText = 'cursor:pointer;width:25px;height:17px;position:absolute;right:0px;top:100px;background:url(' + MINI_CLOSE_BTN + ') no-repeat right;margin:0;padding:0;';
             
-            miniContent.innerHTML = sinaadToolkit.ad.createHTML(
-                this.replaySrcType,
-                this.replaySrc,
-                25,
-                100
-            );
-            
             main.appendChild(mainCloseBtn);
-
             mini.appendChild(miniContent);
-            mini.appendChild(replayBtn);
-            mini.appendChild(miniCloseBtn);
 
+
+            //根据是否传入replay元素来判断使用默认还是使用传入的replay元素进行关闭，如果是传入的，使用mask遮罩的方式进行点击事件挂接
+            if (config.replaySrc) {
+                var closeMask = document.createElement('div');
+                closeMask.style.cssText = 'cursor:pointer;position:absolute;left:0px;top:0px;width:25px;height:100px;overflow:hidden;margin:0;padding:0;background:#fff;opacity:0;*filter:alpha(opacity=0);';
+
+                miniContent.innerHTML = sinaadToolkit.ad.createHTML(
+                    this.replaySrcType,
+                    this.replaySrc,
+                    25,
+                    100
+                );
+                mini.appendChild(closeMask);
+                sinaadToolkit.event.on(closeMask, 'click', this.getReplayHandler());
+            } else {
+                //使用默认的replay按钮
+                window[this.replayFuncName] = this.getReplayHandler();
+                miniContent.innerHTML = sinaadToolkit.swf.createHTML({
+                    url : REPLAY_BTN,
+                    width : 25,
+                    height : 100,
+                    wmode : 'transparent',
+                    allowScriptAccess : 'always',
+                    vars : {
+                        'replayFunc' : this.replayFuncName
+                    }
+                });
+            }
+
+
+            mini.appendChild(miniCloseBtn);
             container.appendChild(mini);
 
             sinaadToolkit.event.on(this.mainCloseBtn, 'click', this.getCloseMainHandler());
             sinaadToolkit.event.on(this.miniCloseBtn, 'click', this.getCloseMiniHandler());
-            sinaadToolkit.event.on(this.replayBtn, 'click', this.getReplayHandler());
         }
 
         if (this.delay) {
@@ -105,7 +125,7 @@
                 this.type,
                 this.src,
                 this.width,
-                this.height,
+                this.contentHeight,
                 this.link,
                 this.monitor
             );

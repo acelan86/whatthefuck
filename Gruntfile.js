@@ -41,8 +41,8 @@ module.exports = function(grunt) {
     // 
     smash: {
       bundle: {
-        src: 'sinaads/main.js',
-        dest: 'sinaads/sinaads.js'
+        src: 'src/sinaads/main.js',
+        dest: 'src/sinaads.js'
       }
     },
     concat : {
@@ -120,7 +120,7 @@ module.exports = function(grunt) {
         "maxdepth": 10,
         //"indent": 4
       },
-      files: ['src/**/*.js'],
+      files: ['src/*.js', 'src/plus/*.js', 'src/spec/*.js'],
     },
     uglify: {
       options : {
@@ -253,7 +253,9 @@ module.exports = function(grunt) {
           {dest: 'release/', src: 'sinaads.js.map'},
           {dest: 'release/', src: 'sinaadToolkit.js.map'},
           {dest: 'release/', src: 'sinaadsServerPreviewSlots.js.map'},
-          {dest: 'release/', src: 'sinaadsMoHelper.js.map'}
+          {dest: 'release/', src: 'sinaadsMoHelper.js.map'},
+          {dest: 'release/', src: 'src/pbv5.html'},
+          {dest: 'release/', src: 'src/picshow_new.swf'}
         ]
       }
     },
