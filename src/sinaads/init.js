@@ -201,9 +201,11 @@ var _init = (function (core, model, view, controller) {
         if (element) {
             if (!_isPenddingSinaad(element) && (element = element.id && _getSinaAd(element.id), !element)) {
                 core.debug("sinaads:Rendering of this element has been done. Stop rendering.", element);
+                return;
             }
             if (!("innerHTML" in element)) {
                 core.debug("sinaads:Cannot render this element.", element);
+                return;
             }
         //没有对应的ins元素, 获取一个待初始化的ins, 如果没有，抛出异常
         } else if (element = _getSinaAd(), !element) {

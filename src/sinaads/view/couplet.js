@@ -59,7 +59,7 @@
                 link        : content.link,
                 width       : width,
                 height      : height,
-                offettop    : config.sinaads_coupletext_offettop || 100,
+                offsettop    : config.sinaads_coupletext_offsettop || 100,
                 expandpos   : config.sinaads_coupletext_expandpos || 700,
                 smallsize   : config.sinaads_coupletext_smallsize,
                 bigsize     : config.sinaads_coupletext_bigsize,

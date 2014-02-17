@@ -24,7 +24,7 @@
         config.type = sinaadToolkit.array.ensureArray(config.type);
         config.link = sinaadToolkit.array.ensureArray(config.link);
 
-        config.offettop = config.offettop || OFFSET_TOP;
+        config.offsettop = config.offsettop || OFFSET_TOP;
         config.expandpos = config.expandpos || SCROLL_TOP;
         var smallsize = config.smallsize = config.smallsize || SMALL_SIDE_SIZE;
         var bigsize = config.bigsize = config.bigsize || BIG_SIDE_SIZE;
@@ -41,7 +41,7 @@
             monitor : config.monitor
         });
         var leftSmallCloseBtn = this.leftSmallCloseBtn = createCloseBtn('small');
-        var leftSmall = this.leftSmall = createContainer('small', 'left ' + config.offettop);
+        var leftSmall = this.leftSmall = createContainer('small', 'left ' + config.offsettop);
         fillContainer(leftSmallContent, leftSmallCloseBtn, leftSmall);
 
         //*********************************左侧宽对联
@@ -52,7 +52,7 @@
             monitor : config.monitor
         });
         var leftBigCloseBtn = this.leftBigCloseBtn = createCloseBtn('big');
-        var leftBig = this.leftBig = createContainer('big', 'left ' + config.offettop);
+        var leftBig = this.leftBig = createContainer('big', 'left ' + config.offsettop);
         fillContainer(leftBigContent, leftBigCloseBtn, leftBig);
 
         //*********************************右侧窄对联
@@ -63,7 +63,7 @@
             monitor : config.monitor
         });
         var rightSmallCloseBtn = this.rightSmallCloseBtn = createCloseBtn('small');
-        var rightSmall = this.rightSmall = createContainer('small', 'right ' + config.offettop);
+        var rightSmall = this.rightSmall = createContainer('small', 'right ' + config.offsettop);
         fillContainer(rightSmallContent, rightSmallCloseBtn, rightSmall);
 
         //*********************************右侧宽对联
@@ -74,7 +74,7 @@
             monitor : config.monitor
         });
         var rightBigCloseBtn = this.rightBigCloseBtn = createCloseBtn('big');
-        var rightBig = this.rightBig = createContainer('big', 'right ' + config.offettop);
+        var rightBig = this.rightBig = createContainer('big', 'right ' + config.offsettop);
         fillContainer(rightBigContent, rightBigCloseBtn, rightBig);
 
 
