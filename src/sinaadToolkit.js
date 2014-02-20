@@ -2259,7 +2259,7 @@
      * @constructor
      */
     function Box(config) {
-        this.uid = 'sinaadToolkitBox' + Box.uid++;
+        this.uid = config.uid || ('sinaadToolkitBox' + Box.uid++);
         this.width = config.width || 0;
         this.height = config.height || 'auto';
         this.position = config.position || "center center";
@@ -2275,9 +2275,10 @@
         document.body.insertBefore(element, document.body.firstChild);
 
         this.setPosition();
-        sinaadToolkit.event.on(window, 'resize', this.getResetPositionHandler());
+        this.resetPositionHandler = this.getResetPositionHandler();
+        sinaadToolkit.event.on(window, 'resize', this.resetPositionHandler);
         if (this.follow && !sinaadToolkit.browser.isSupportFixed) {
-            sinaadToolkit.event.on(window, 'scroll', this.getResetPositionHandler());
+            sinaadToolkit.event.on(window, 'scroll', this.resetPositionHandler);
         }
     }
     Box.uid = 0;
@@ -2357,6 +2358,15 @@
          */
         hide : function () {
             this.getMain().style.display = 'none';
+        },
+        remove : function () {
+            var element = this.getMain();
+            if (element.parentNode) {
+                element.parentNode.removeChild(element);
+            }
+            element = null;
+            sinaadToolkit.event.un(window, 'scroll', this.resetPositionHandler);
+            sinaadToolkit.event.un(window, 'resize', this.resetPositionHandler);
         }
     };
     sinaadToolkit.Box = sinaadToolkit.Box || Box;

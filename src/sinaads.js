@@ -37,7 +37,7 @@ window._sinaadsIsInited = window._sinaadsIsInited || (function (window, core, un
 var UUID = 1;
 var PAGE_HASH = 'sinaads_' + core.hash(window.location.host.split('.')[0] + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')));
 var IMPRESS_URL = 'http://sax.sina.com.cn/newimpress'; //向广告引擎请求正式广告的地址
-var SERVER_PREVIEW_IMPRESS_URL = 'http://sax.sina.com.cn/preview'; //向广告引擎请求服务端预览广告的地址
+var SERVER_PREVIEW_IMPRESS_URL = 'http://123.126.53.109:7099/preview'; //向广告引擎请求服务端预览广告的地址
 var PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
 //PLUS_RESOURCE_URL = ''; //测试富媒体分文件用
 var SAX_TIMEOUT = parseInt(window._SINAADS_CONF_SAX_REQUEST_TIMEOUT || 30, 10) * 1000; //请求数据超时时间
@@ -82,6 +82,16 @@ var modelModule = (function (core, controller, uid) {
         }
         return seed[seedkey];
     }
+
+    // //** test 
+    // window.removeSeed = function (key) {
+    //     delete seed[uid + (controller.frequenceController.has(key) ? key : '')];
+    // };
+
+    // window.refreshEnterTime = function () {
+    //     enterTime = core.now();
+    // };
+    // //test end
 
 
     /**
@@ -178,6 +188,7 @@ var modelModule = (function (core, controller, uid) {
             size = ad.size.split('*'),
             engineType = ad.engineType;
 
+        //旧格式数据，需要适配成新格式
         if (!ad.content && ad.value) {
             core.debug('sinaads:Old data format, need adapter(pdps)', ad.id);
             ad.content = [];
@@ -199,6 +210,30 @@ var modelModule = (function (core, controller, uid) {
             delete ad.value;
         }
 
+        //对新格式数据进行过滤，过滤掉content.src没有内容的广告
+        ad.content = (function (contents) {
+            var r = [];
+            core.array.each(contents, function (content, i) {
+                //如果src没有内容，则为空广告位
+                var nullSrc = core.array.ensureArray(content.src).length <= 0 ? true : false;
+                //如果src有内容，判断内容中是否有某个元素是空字符串，如果有，也判断广告位为空
+                core.array.each(content.src, function (src) {
+                    if (!core.string.trim(src)) {
+                        nullSrc = true;
+                        return false;
+                    }
+                });
+                //如果广告素材不为空，那么这是一个正常可用数据，进入过滤后的列表
+                if (!nullSrc) {
+                    r.push(content);
+                } else {
+                    core.debug('sinaads: The' + i + ' Ad Content src is null, via ' + ad.id);
+                }
+            });
+            return r;
+        })(ad.content);
+
+        //对类型进行匹配
         core.array.each(ad.content, function (content, i) {
             var type, link;
 
@@ -334,23 +369,37 @@ var modelModule = (function (core, controller, uid) {
         //1、将页面上默认存在的数据填充到数据缓存中
         _cache = window._sinaadsCacheData || {};
 
+
+        /**
+         * 当广告位在iframe中是docuemnt.referrer获取不到hash的值，因此这里使用获取hash跟query的方法来进行保证
+         */
+        var _hash = (core.url.top.split('#')[1] || '').split('?')[0] || '',
+            _query = (core.url.top.split('?')[1] || '').split('#')[0] || '',
+            par = (_hash + '&' + _query)
+                .replace(/</g, '')
+                .replace(/>/g, '')
+                .replace(/"/g, '')
+                .replace(/'/g, '');
+
         /**
          * 2、将本地预览的数据填充到_cache中，url.hash，本地预览只支持一个广告位
          */
         (function () {
-            var query = window.location.hash.substring(1).split('&'),
+            var query = par.split('&'),
                 preview = {},
                 keys = ['pdps', 'src', 'size'], //必需有的key
-                i = 0,
                 key,
                 q;
-            while ((q = query[i++])) {
-                q = q.split('=');
-                if (q[0].indexOf('sinaads_preview_') === 0) {
-                    key = q[0].replace('sinaads_preview_', '');
-                    if (key && q[1] && !preview[key]) {
-                        preview[key] = q[1];
-                        core.array.remove(keys, key);
+
+            for (var i = 0, len = query.length; i < len; i++) {
+                if ((q = query[i])) {
+                    q = q.split('=');
+                    if (q[0].indexOf('sinaads_preview_') === 0) {
+                        key = q[0].replace('sinaads_preview_', '');
+                        if (key && q[1] && !preview[key]) {
+                            preview[key] = q[1];
+                            core.array.remove(keys, key);
+                        }
                     }
                 }
             }
@@ -361,8 +410,8 @@ var modelModule = (function (core, controller, uid) {
                 _cache[preview.pdps] = {
                     content : [
                         {
-                            src : preview.src.split('|'),
-                            link : (preview.link || '').split('|'),
+                            src : decodeURIComponent(preview.src).split('|'),
+                            link : (decodeURIComponent(preview.link) || '').split('|'),
                             monitor : (preview.monitor || '').split('|'),
                             pv : (preview.pv || '').split('|'),
                             type : (preview.type || '').split('|')
@@ -381,15 +430,16 @@ var modelModule = (function (core, controller, uid) {
          * #sinaads_server_preview=PDPS000000000001&sinaads_server_preview=PDPS000000000002
          */
         serverPreviewSlots = (function () {
-            var query = window.location.hash.substring(1).split('&'),
+            var query = par.split('&'),
                 slots = {},
                 key = 'sinaads_server_preview', //必需有的key
-                i = 0,
                 q;
-            while ((q = query[i++])) {
-                q = q.split('=');
-                if (q[0].indexOf(key) === 0) {
-                    slots[q[1]] = 1;
+            for (var i = 0, len = query.length; i < len; i++) {
+                if ((q = query[i])) {
+                    q = q.split('=');
+                    if (q[0].indexOf(key) === 0) {
+                        slots[q[1]] = 1;
+                    }
                 }
             }
             return slots;
@@ -590,7 +640,7 @@ var viewModule = (function () {
                 link        : content.link,
                 width       : width,
                 height      : height,
-                offettop    : config.sinaads_coupletext_offettop || 100,
+                offsettop    : config.sinaads_coupletext_offsettop || 100,
                 expandpos   : config.sinaads_coupletext_expandpos || 700,
                 smallsize   : config.sinaads_coupletext_smallsize,
                 bigsize     : config.sinaads_coupletext_bigsize,
@@ -672,6 +722,7 @@ var viewModule = (function () {
     });
 })(core, viewModule);
 (function (core, view) {
+    var fmManager = window.sinaadsFloatMediaManager || {};
     view.register('float', function (element, width, height, content, config) {
         core.debug('sinaads:Rendering float.');
         var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/FloatMedia.js';
@@ -680,24 +731,30 @@ var viewModule = (function () {
 
         content = content[0];
         element.style.cssText = 'position:absolute;top:-99999px';
-        var FloatMediaData = {
-            type : content.type,
-            src : content.src,
-            top : config.sinaads_float_top || 0,
-            monitor : content.monitor,
-            link : content.link,
-            sideWidth : width,
-            sideHeight : height,
-            pdps : config.sinaads_ad_pdps
-        };
-        if (core.FloatMedia) {
-            new core.FloatMedia(FloatMediaData);
+        if (content.src.length === 1 && 'js' === content.type[0]) {
+            core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
+            window.sinaadsROC.done(window.sinaadsROC['float']);
         } else {
-            core.sio.loadScript(RESOURCE_URL, function () {
-                new core.FloatMedia(FloatMediaData);
-            });
+            var FloatMediaData = {
+                type : content.type,
+                src : content.src,
+                top : config.sinaads_float_top || 0,
+                monitor : content.monitor,
+                link : content.link,
+                sideWidth : width,
+                sideHeight : height,
+                pdps : config.sinaads_ad_pdps
+            };
+            if (core.FloatMedia) {
+                fmManager[config.sinaads_ad_pdps] = new core.FloatMedia(FloatMediaData);
+            } else {
+                core.sio.loadScript(RESOURCE_URL, function () {
+                    fmManager[config.sinaads_ad_pdps] = new core.FloatMedia(FloatMediaData);
+                });
+            }
         }
     });
+    window.sinaadsFloatMediaManager = fmManager;
 })(core, viewModule);
 (function (core, view) {
     view.register('follow', function (element, width, height, content, config) {
@@ -1168,9 +1225,11 @@ var _init = (function (core, model, view, controller) {
         if (element) {
             if (!_isPenddingSinaad(element) && (element = element.id && _getSinaAd(element.id), !element)) {
                 core.debug("sinaads:Rendering of this element has been done. Stop rendering.", element);
+                return;
             }
             if (!("innerHTML" in element)) {
                 core.debug("sinaads:Cannot render this element.", element);
+                return;
             }
         //没有对应的ins元素, 获取一个待初始化的ins, 如果没有，抛出异常
         } else if (element = _getSinaAd(), !element) {

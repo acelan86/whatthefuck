@@ -244,6 +244,11 @@ module.exports = function(grunt) {
         files : [
           { dest : 'release/spec/spec1.js',  src : 'src/spec/spec1.js' }
         ]
+      },
+      taobaofloat : {
+        files : [
+          { dest : 'release/spec/tanx.float.js',  src : 'src/spec/tanx.float.js' }
+        ]
       }
     },
     copy: {

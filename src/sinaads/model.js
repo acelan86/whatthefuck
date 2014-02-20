@@ -24,6 +24,16 @@ var modelModule = (function (core, controller, uid) {
         return seed[seedkey];
     }
 
+    // //** test 
+    // window.removeSeed = function (key) {
+    //     delete seed[uid + (controller.frequenceController.has(key) ? key : '')];
+    // };
+
+    // window.refreshEnterTime = function () {
+    //     enterTime = core.now();
+    // };
+    // //test end
+
 
     /**
      * 根据是否是服务端预览的广告位来确定使用预览引擎地址还是正式引擎地址
@@ -119,6 +129,7 @@ var modelModule = (function (core, controller, uid) {
             size = ad.size.split('*'),
             engineType = ad.engineType;
 
+        //旧格式数据，需要适配成新格式
         if (!ad.content && ad.value) {
             core.debug('sinaads:Old data format, need adapter(pdps)', ad.id);
             ad.content = [];
@@ -140,6 +151,30 @@ var modelModule = (function (core, controller, uid) {
             delete ad.value;
         }
 
+        //对新格式数据进行过滤，过滤掉content.src没有内容的广告
+        ad.content = (function (contents) {
+            var r = [];
+            core.array.each(contents, function (content, i) {
+                //如果src没有内容，则为空广告位
+                var nullSrc = core.array.ensureArray(content.src).length <= 0 ? true : false;
+                //如果src有内容，判断内容中是否有某个元素是空字符串，如果有，也判断广告位为空
+                core.array.each(content.src, function (src) {
+                    if (!core.string.trim(src)) {
+                        nullSrc = true;
+                        return false;
+                    }
+                });
+                //如果广告素材不为空，那么这是一个正常可用数据，进入过滤后的列表
+                if (!nullSrc) {
+                    r.push(content);
+                } else {
+                    core.debug('sinaads: The' + i + ' Ad Content src is null, via ' + ad.id);
+                }
+            });
+            return r;
+        })(ad.content);
+
+        //对类型进行匹配
         core.array.each(ad.content, function (content, i) {
             var type, link;
 
@@ -275,23 +310,37 @@ var modelModule = (function (core, controller, uid) {
         //1、将页面上默认存在的数据填充到数据缓存中
         _cache = window._sinaadsCacheData || {};
 
+
+        /**
+         * 当广告位在iframe中是docuemnt.referrer获取不到hash的值，因此这里使用获取hash跟query的方法来进行保证
+         */
+        var _hash = (core.url.top.split('#')[1] || '').split('?')[0] || '',
+            _query = (core.url.top.split('?')[1] || '').split('#')[0] || '',
+            par = (_hash + '&' + _query)
+                .replace(/</g, '')
+                .replace(/>/g, '')
+                .replace(/"/g, '')
+                .replace(/'/g, '');
+
         /**
          * 2、将本地预览的数据填充到_cache中，url.hash，本地预览只支持一个广告位
          */
         (function () {
-            var query = window.location.hash.substring(1).split('&'),
+            var query = par.split('&'),
                 preview = {},
                 keys = ['pdps', 'src', 'size'], //必需有的key
-                i = 0,
                 key,
                 q;
-            while ((q = query[i++])) {
-                q = q.split('=');
-                if (q[0].indexOf('sinaads_preview_') === 0) {
-                    key = q[0].replace('sinaads_preview_', '');
-                    if (key && q[1] && !preview[key]) {
-                        preview[key] = q[1];
-                        core.array.remove(keys, key);
+
+            for (var i = 0, len = query.length; i < len; i++) {
+                if ((q = query[i])) {
+                    q = q.split('=');
+                    if (q[0].indexOf('sinaads_preview_') === 0) {
+                        key = q[0].replace('sinaads_preview_', '');
+                        if (key && q[1] && !preview[key]) {
+                            preview[key] = q[1];
+                            core.array.remove(keys, key);
+                        }
                     }
                 }
             }
@@ -302,8 +351,8 @@ var modelModule = (function (core, controller, uid) {
                 _cache[preview.pdps] = {
                     content : [
                         {
-                            src : preview.src.split('|'),
-                            link : (preview.link || '').split('|'),
+                            src : decodeURIComponent(preview.src).split('|'),
+                            link : (decodeURIComponent(preview.link) || '').split('|'),
                             monitor : (preview.monitor || '').split('|'),
                             pv : (preview.pv || '').split('|'),
                             type : (preview.type || '').split('|')
@@ -322,15 +371,16 @@ var modelModule = (function (core, controller, uid) {
          * #sinaads_server_preview=PDPS000000000001&sinaads_server_preview=PDPS000000000002
          */
         serverPreviewSlots = (function () {
-            var query = window.location.hash.substring(1).split('&'),
+            var query = par.split('&'),
                 slots = {},
                 key = 'sinaads_server_preview', //必需有的key
-                i = 0,
                 q;
-            while ((q = query[i++])) {
-                q = q.split('=');
-                if (q[0].indexOf(key) === 0) {
-                    slots[q[1]] = 1;
+            for (var i = 0, len = query.length; i < len; i++) {
+                if ((q = query[i])) {
+                    q = q.split('=');
+                    if (q[0].indexOf(key) === 0) {
+                        slots[q[1]] = 1;
+                    }
                 }
             }
             return slots;

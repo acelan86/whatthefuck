@@ -19,10 +19,10 @@
      * @return {[type]}          [description]
      */
     function FloatMedia(config) {
-        if (sinaadToolkit.storage.get('FloatMedia' + config.pdps)) {
-            sinaadToolkit.debug('sinaadToolkit.FloatMedia:对联广告已经关闭过，' + sinaadToolkit.storage.get('FloatMedia' + config.pdps));
-            return;
-        }
+        // if (sinaadToolkit.storage.get('FloatMedia' + config.pdps)) {
+        //     sinaadToolkit.debug('sinaadToolkit.FloatMedia:对联广告已经关闭过，' + sinaadToolkit.storage.get('FloatMedia' + config.pdps));
+        //     return;
+        // }
 
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
@@ -34,8 +34,6 @@
         config.top = config.top || TOP;
         this.config = config;
         this.pdps = config.pdps;
-
-        this.deferred = new sinaadToolkit.Deferred();
 
         var left = this.left = new sinaadToolkit.Box({
             width : config.sideWidth,
@@ -88,15 +86,12 @@
         right.getMain().appendChild(rightContent);
         right.getMain().appendChild(rightCloseBtn);
 
-        sinaadToolkit.event.on(leftCloseBtn, 'click', this.getCloseSideHandler());
-        sinaadToolkit.event.on(rightCloseBtn, 'click', this.getCloseSideHandler());
 
-        // if (config.delay) {
-        //     setTimeout(function () {
-        //         THIS.show();
-        //     }, config.delay * 1000);
-        // }
-        // 
+        this.closeSideHandler = this.getCloseSideHandler();
+
+        sinaadToolkit.event.on(leftCloseBtn, 'click', this.closeSideHandler);
+        sinaadToolkit.event.on(rightCloseBtn, 'click', this.closeSideHandler);
+
         //设置float类型媒体的Done状态
         try {
             sinaadToolkit.debug('Media: In building float complete!');
@@ -112,6 +107,12 @@
                 THIS.left.hide();
                 THIS.right.hide();
             };
+        },
+        destory : function () {
+            sinaadToolkit.event.un(this.leftCloseBtn, 'click', this.closeSideHandler);
+            sinaadToolkit.event.un(this.rightCloseBtn, 'click', this.closeSideHandler);
+            this.left.remove();
+            this.right.remove();
         }
     };
 
