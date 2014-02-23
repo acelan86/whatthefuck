@@ -265,14 +265,15 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      script : {
-        files: ['src/**/*.js'],
-        tasks: ['jshint', 'concat', 'uglify', 'copy']
-      }
+      // script : {
+      //   files: ['src/**/*.js'],
+      //   tasks: ['jshint', 'concat', 'uglify', 'copy']
+      // }
     },
     connect: {
       server: {
         options: {
+          hostname: '*',
           port: 1234
         }
       }
