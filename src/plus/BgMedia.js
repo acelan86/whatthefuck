@@ -22,7 +22,7 @@
         midBg.style.cssText += ';position:relative;height: ' + config.headHeight + 'px;width: ' + config.midWidth + 'px;margin:0 auto;';
         midBg.innerHTML = '<a href="' + config.link + '" target="_blank" style="display:block;height:' + config.headHeight + 'px;width: ' + config.midWidth + 'px;"></a>';
 
-        if (config.asideClickable) {
+        if (config.asideClickable) {//该变量应该是只读的，应该有更好的写法
             //左右可点击
             var leftAd = this.leftAd = document.createElement('a');
             leftAd.setAttribute('href', config.link);
