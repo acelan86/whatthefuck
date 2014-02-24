@@ -128,6 +128,8 @@ var modelModule = (function (core, controller, uid) {
                 ip;
 
             targeting = {};
+            /* 在meta中加入固定的keywords, 记录用户平台，屏幕尺寸，浏览器类型，是否移动端*/
+            metas.keywords = [];
             /* 先将所有的meta节点的name和content缓存下来, 缓存是为了提高查找效率, 不用每次都去遍历 */
             for (; i < len; i++) {
                 meta = metaNodes[i];
@@ -215,11 +217,11 @@ var modelModule = (function (core, controller, uid) {
             var r = [];
             core.array.each(contents, function (content, i) {
                 //如果src没有内容，则为空广告位
-                var nullSrc = core.array.ensureArray(content.src).length <= 0 ? true : false;
+                var nullSrc = true;
                 //如果src有内容，判断内容中是否有某个元素是空字符串，如果有，也判断广告位为空
                 core.array.each(content.src, function (src) {
-                    if (!core.string.trim(src)) {
-                        nullSrc = true;
+                    if (core.string.trim(src)) {
+                        nullSrc = false;
                         return false;
                     }
                 });

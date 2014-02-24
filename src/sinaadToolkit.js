@@ -338,6 +338,16 @@
 
     })(navigator.userAgent);
 
+    /**
+     * 获取系统信息
+     * @type {Object}
+     */
+    sinaadToolkit.systemInfo = {
+        screenSize : window.screen ? (window.screen.width + "x" + window.screen.height) : '-',
+        language : navigator.systemLanguage || navigator.browserLanguage || navigator.language || navigator.userLanguage || '-',
+        platform : '-'
+    };
+
 
     /**
      * @namespace sinaadToolkit.array
