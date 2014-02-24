@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title></title>
+    <script type="text/javascript" src='../src/sinaadToolkit.js'></script>
+    <script type="text/javascript" src='../src/sinaadToolkit.ext.js'></script>
+    <script type="text/javascript" src='../src/sinaads.js'></script>
+    <script type="text/javascript" src='../src/plus/bgMedia.js'></script>
+    <script type="text/javascript">
+        _sinaadsCacheData = window._sinaadsCacheData || {};
+
+        /**
+         *  测试数据填充区域
+         */
+        _sinaadsCacheData["PDPS000000006450"] = {
+            size : "1600*600",
+            type : 'bg',
+            content : [{
+                src: 'http://d1.sina.com.cn/201312/11/527511.jpg',
+                monitor : ["http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id="],
+                link : ['http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id=']
+            }]
+        };
+    </script>
+</head>
+<body style='height:300px;'>
+    <div id='bgAdWrap'></div>
+    <ins class="sinaads" data-ad-pdps="PDPS000000006450"></ins>
+    <script>
+        (sinaads = window.sinaads || []).push({
+            params: {
+                sinaads_bg_midWidth: 1000,
+                sinaads_bg_headHeight: 30,
+                sinaads_bg_top: 120
+            }
+        });
+    </script>
+</body>
+</html>

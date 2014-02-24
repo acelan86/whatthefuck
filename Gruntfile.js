@@ -265,14 +265,17 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      script : {
-        files: ['src/**/*.js'],
-        tasks: ['jshint', 'concat', 'uglify', 'copy']
-      }
+      // 在mac node version v0.10.21 下有下面的设置时，会报错，信息：Waiting...[3]    1252 segmentation fault (core dumped)  grunt
+      // 导致watch 终止，connect任务结束 所以调试时注释掉。added by fedeoo 
+      // script : {
+      //   files: ['src/**/*.js'],
+      //   tasks: ['jshint', 'concat', 'uglify', 'copy']
+      // }
     },
     connect: {
       server: {
         options: {
+          hostname: '*',//设置所有的host都能访问
           port: 1234
         }
       }
