@@ -4,9 +4,9 @@
         content = content[0];
         var bgMediaData = {
             pdps : config.sinaads_ad_pdps,
-            src : content.src[0] || '',
-            type : content.type || '',
-            link : content.link[0] || '',
+            src : content.src,
+            type : content.type,
+            link : content.link,
             width : width || 1600,
             height : height || config.sinaads_bg_height,
             midWidth : config.sinaads_bg_midWidth || 1000,
