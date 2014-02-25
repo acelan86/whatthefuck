@@ -31,3 +31,5 @@ tool/monitor/monitor.sql
 tool/monitor/network.js
 
 tool/monitor/third_party/
+
+demo/.DS_Store

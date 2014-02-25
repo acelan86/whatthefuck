@@ -1,0 +1,64 @@
+<canvas id="canvas"></canvas>
+<canvas id="canvas2"></canvas>
+<script>
+    var img = new Image();
+    var result = {
+        'logo' : [],
+        'other' : []
+    };
+    img.onload = function () {
+        var w = img.width,
+            y = 620;
+        var col = 82;
+        var row = 70;
+        var stepx = w / col;
+        var stepy = y / row;
+
+        var canvas = document.getElementById('canvas');
+        var canvas2 = document.getElementById('canvas2');
+        canvas.width = canvas2.width = w;
+        canvas.height = canvas2.height = 620;
+        var ctx = canvas.getContext('2d');
+        var ctx2 = canvas2.getContext('2d');
+        ctx.drawImage(img, 0, 56, 710, 620, 0, 0, 710, 620);
+        ctx2.drawImage(img, 0, 696, 710, 620, 0, 0, 710, 620);
+        var black = ctx.createImageData(1, 1);
+        black.data[0] = 0;
+        black.data[1] = 0;
+        black.data[2] = 0;
+        black.data[3] = 255
+
+        var white = ctx.createImageData(5, 5);
+        for (var i=0;i<white.data.length;i+=4){
+          white.data[i+0]=255;
+          white.data[i+1]=0;
+          white.data[i+2]=0;
+          white.data[i+3]=255;
+        }
+
+        for (var i = 0, len = col; i < len; i++) {
+            for (var j = 0, jlen = row; j < jlen; j++) {
+                var pos = {
+                    x : stepx / 2 + stepx * i,
+                    y : stepx / 2 + stepy * j
+                };
+
+                var imgdata = ctx.getImageData(stepx / 2 + stepx * i, stepy / 2 + stepy * j, 1, 1).data;
+                var imgdata2 = ctx2.getImageData(stepx / 2 + stepx * i, stepy / 2 + stepy * j, 1, 1).data;
+                //console.log(i, j, imgdata[0], imgdata[1], imgdata[2], imgdata2[0], imgdata2[1], imgdata2[2]);
+                ctx.putImageData(black, pos.x, pos.y);
+                ctx2.putImageData(black, pos.x, pos.y);
+                if (!(Math.abs(imgdata[0] - imgdata2[0]) <= 100 && Math.abs(imgdata[1] - imgdata2[1]) <= 100 && Math.abs(imgdata[2] - imgdata2[2]) <= 100)) {
+                    //if (!(i > 53 && j > row - 8)) {
+                        result.other.push([i, j, imgdata[0] - imgdata2[0], imgdata[1] - imgdata2[1], imgdata[2]- imgdata2[2]]);
+                        ctx.putImageData(white, pos.x, pos.y);
+                        ctx2.putImageData(white, pos.x, pos.y);
+                        //alert('有问题的坐标为第' + i + '行，第' + j + '列');
+                    //}
+                }
+            }
+        }
+
+    };
+    img.src = 'mofang.jpg';
+</script>

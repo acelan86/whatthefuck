@@ -1034,7 +1034,7 @@ var viewModule = (function () {
             link : content.link[0] || '',
             width : width || 1600,
             height : height || config.sinaads_bg_height,
-            midWidth : config.sinaads_bg_midWidth,
+            midWidth : config.sinaads_bg_midWidth || 1000,
             headHeight : config.sinaads_bg_headHeight || 30,
             top : config.sinaads_bg_top || 120,
             asideClickable: config.sinaads_bg_asideClick || true,

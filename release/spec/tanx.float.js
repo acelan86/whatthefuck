@@ -1,0 +1,1 @@
+!function(a){"use strict";var b="mm_26632206_2690592_13334931",c=a.createElement("a");c.style.display="none",c.id="tanx-a-"+b,a.body.appendChild(c);var d=a.createElement("script");d.type="text/javascript",d.charset="gbk",d.id="tanx-s-"+b,d.async=!0,d.src="http://p.tanx.com/ex?i="+b;var e=a.getElementsByTagName("head")[0];e&&e.insertBefore(d,e.firstChild)}(document);

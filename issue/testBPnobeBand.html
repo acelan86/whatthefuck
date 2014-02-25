@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title> 测试背投不被拦截方案 </title>
+    </head>
+    <body>
+        <div style="height:1000px"></div>
+        <script>
+            window.onscroll = function () {
+                window.onscroll = null;
+                window.open('http://baidu.com');
+            };
+        </script>
+    </body>
+</html>

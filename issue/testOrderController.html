@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf=8" />
+        <title> 测试OrderController </title>
+        <script src="../src/sinaadToolkit.OrderController.js"></script>
+    </head>
+    <body>
+        <script>
+            consolelog = function (msg) {
+                console.log(msg + '\t\t\t\t\t\t\t' + (+new Date));
+            };
+
+
+            var oc = new OrderController(['type1', 'type2', 'type3', 'type4']);
+            
+            setTimeout(function () {
+                consolelog('type1 ready')
+                oc.ready('type1', function () {
+                    consolelog('type1 doing')
+                    setTimeout(function () {
+                        consolelog('type1 done');
+                        oc.done('type1');
+                    }, 30000);
+                });
+            }, 2000);
+
+            setTimeout(function () {
+                consolelog('type2 ready');
+                oc.ready('type2', function () {
+                    consolelog('type2 doing')
+                    setTimeout(function () {
+                        consolelog('type2 done');
+                        oc.done('type2');
+                    }, 5000);
+                });
+            }, 1000);
+
+            setTimeout(function () {
+                consolelog('type3 ready');
+                oc.ready('type3', function () {
+                    consolelog('type3 doing')
+                    setTimeout(function () {
+                        consolelog('type3 done');
+                        oc.done('type3');
+                    }, 5000);
+                });
+            }, 20000);
+
+            setTimeout(function () {
+                consolelog('type4 ready');
+                oc.ready('type4', function () {
+                    consolelog('type4 doing')
+                    setTimeout(function () {
+                        consolelog('type4 done');
+                        oc.done('type4');
+                    }, 5000);
+                });
+            }, 3000);
+
+        </script>
+    </body>
+</html>

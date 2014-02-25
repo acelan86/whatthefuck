@@ -4,7 +4,6 @@
     var MAIN_CLOSE_BTN = 'http://d1.sina.com.cn/shh/tianyi/bg/audi_zty_cls1.jpg';//40×18
 
     function BgMedia (config) {
-
         var cookie = sinaadToolkit.cookie.get('bgAdCookie' + config.pdps);
         if (cookie === '0') { //关闭后一天不再显示
             return ;
