@@ -7,7 +7,7 @@
         storage,
         api = {},
         uid = window.location.hostname,
-        pageDomain = doc.domain;
+        pageDomain = doc.domain; //引用页面的domain
 
     function getStorage() {
         if (storage) {
@@ -119,7 +119,7 @@
         set : function (key, value, opt_options) {
             var options = opt_options || {},
                 domain = options.domain || pageDomain,
-                expires = options.expires ? Number(expires) : 0;
+                expires = options.expires ? Number(options.expires) : 0;
             api.set(key + '@' + domain, value + (expires ? ('; expires=' + expires) : ''));
         },
         /**
