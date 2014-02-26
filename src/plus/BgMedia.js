@@ -20,7 +20,7 @@
         //如果之前的cssText不以;结尾，在IE8下 样式显示不正确。
         body.style.cssText += ';background:url(' + config.src[0] + ') no-repeat center ' + config.top + 'px;margin:0px;';
 
-        midBg.style.cssText += ';position:relative;height: ' + config.headHeight + 'px;width: ' + config.midWidth + 'px;margin:0 auto;';
+        midBg.style.cssText += ';position:relative;display:block;height: ' + config.headHeight + 'px;width: ' + config.midWidth + 'px;margin:0 auto;';
         midBg.innerHTML = '<a href="' + config.link[0] + '" target="_blank" style="display:block;height:' + config.headHeight + 'px;width: ' + config.midWidth + 'px;"></a>';
 
         var  halfWidth = (config.width - config.midWidth) / 2;
