@@ -1,4 +1,4 @@
-(function (window, sinaadToolkit, undefined) {
+(function (window, sinaadToolkit, mediaControl, undefined) {
     "use strict";
 
     var MAIN_CLOSE_BTN = 'http://d1.sina.com.cn/shh/tianyi/bg/audi_zty_cls1.jpg';//40×18
@@ -96,6 +96,11 @@
         this.closeHandler = this.getResizeHandler(); //保存下来，为了解绑window上的事件
         sinaadToolkit.event.on(window, 'resize', this.closeHandler);
         sinaadToolkit.event.on(closeBtn, 'click', this.getCloseHandler());
+
+        try {
+            sinaadToolkit.debug('Media: In building bg complete!');
+            mediaControl.done(mediaControl.bg);
+        } catch(e) {}
     }
 
     BgMedia.prototype = {
@@ -128,4 +133,4 @@
 
     sinaadToolkit.BgMedia = sinaadToolkit.BgMedia || BgMedia;
 
-})(window, window.sinaadToolkit);
+})(window, window.sinaadToolkit, window.sinaadsROC);

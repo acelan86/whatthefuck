@@ -33,3 +33,11 @@ tool/monitor/network.js
 tool/monitor/third_party/
 
 demo/.DS_Store
+
+*.map
+
+Media.js.map
+
+release/plus/Media.js
+
+Media.js.map

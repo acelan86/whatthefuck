@@ -1,7 +1,11 @@
 (function (core, view) {
     view.register('bg', function (element, width, height, content, config) {
+        core.debug('sinaads:Rendering bp.');
         var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/BgMedia.js';
         content = content[0];
+
+        window.sinaadsROC.bg = config.sinaads_ad_pdps;
+
         var bgMediaData = {
             pdps : config.sinaads_ad_pdps,
             src : content.src,

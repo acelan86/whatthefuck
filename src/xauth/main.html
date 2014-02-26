@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title> </title>
+    </head>
+    <body>
+        <script>
+        /**
+         * 跨子域存储，ie6,7使用user data存储，其它浏览器使用localstorage
+         * @example
+         *      // sina.com.cn域,数据存在news.sina.com.cn下
+         *      var Store = window.___CrossDomainStorage___;
+         *      Store..ready(function(st){
+         *          st.set('key','value');
+         *          var data = st.get('key');
+         *      });
+         *      // 如果用于非sina.com.cn域，需要设置，如
+         *      Store.config({
+         *          // 设置顶级域
+         *          domain:'weibo.com',
+         *          // 发布和http://news.sina.com.cn/iframe/87/store.html一样的代理页面，以后数据都存在data.weibo.com下
+         *          url:'data.weibo.com/xx/xx/store.html'
+         *      }).ready(function(st){
+         *          st.set('key','value');
+         *          var data = st.get('key');
+         *      });
+         */
+        ;(function(exports,name) {
+            var fns = [];
+            var isReady = 0;
+            var iframeStore = null;
+            var EXPORTNAME = name||'___CrossDomainStorage___';
+            var HANDLE = EXPORTNAME + '.onReady';
+            var opt = {
+                domain: 'sina.com.cn',
+                url: 'http://news.sina.com.cn/iframe/87/store.html'
+            };
+            var ERROR = {
+                domain: 'fail to set domain!'
+            };
+            var loadStore = function() {
+                if(iframeStore){
+                    return;
+                }
+                try {
+                    document.domain = opt.domain;
+                } catch (e) {
+                    throw new Error(ERROR.domain);
+                    return;
+                }
+                var node = document.getElementById(EXPORTNAME);
+                if(node){
+                    node.parentNode.removeChild(node);
+                }
+                var iframeWrap = document.createElement('div');
+                var doc = document.body;
+                var iframe = '<iframe src="' + opt.url + '?handle=' + HANDLE + '&domain=' + opt.domain + '" frameborder="0"></iframe>';
+                var px = '-'+1e5+'em';
+                iframeWrap.style.position = 'absolute';
+                iframeWrap.style.left = px;
+                iframeWrap.style.top = px;
+                iframeWrap.className = 'hidden';
+                iframeWrap.id = EXPORTNAME;
+                iframeWrap.innerHTML = iframe;
+                doc.insertBefore(iframeWrap, doc.childNodes[0]);
+            };
+
+            var checkReady = function() {
+                if (!isReady) {
+                    loadStore();
+                }
+                return isReady;
+            };
+            var CrossDomainStorage = {};
+            CrossDomainStorage.ready = function(fn) {
+                if (!checkReady()) {
+                    //ifrmae还没加载
+                    fns.push(fn);
+                    return;
+                }
+                fn(iframeStore);
+            };
+            CrossDomainStorage.onReady = function(store) {
+                if (isReady) {
+                    return
+                }
+                isReady = 1;
+                iframeStore = store;
+                if (fns) {
+                    while (fns.length) {
+                        fns.shift()(store);
+                    }
+                }
+                fns = null
+            };
+            CrossDomainStorage.config = function(o) {
+                if (!o) {
+                    return
+                }
+                for (var i in o) {
+                    if (o.hasOwnProperty(i)) {
+                        opt[i] = o[i] || opt[i];
+                    }
+                }
+                return this;
+            };
+            exports[EXPORTNAME] = CrossDomainStorage;
+        })(window);
+        </script>
+    </body>
+</html>

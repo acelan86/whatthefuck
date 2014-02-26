@@ -2606,7 +2606,7 @@ var modelModule = (function (core, controller, uid) {
             core.array.each(contents, function (content, i) {
                 //如果src没有内容，则为空广告位
                 var nullSrc = true;
-                //如果src有内容，判断内容中是否有某个元素是空字符串，如果有，也判断广告位为空
+                //如果src有内容，判断内容中是否有某个元素非空字符串，有非空即为非空字符串
                 core.array.each(content.src, function (src) {
                     if (core.string.trim(src)) {
                         nullSrc = false;
@@ -3413,13 +3413,17 @@ var viewModule = (function () {
 })(core, viewModule);
 (function (core, view) {
     view.register('bg', function (element, width, height, content, config) {
+        core.debug('sinaads:Rendering bp.');
         var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/BgMedia.js';
         content = content[0];
+
+        window.sinaadsROC.bg = config.sinaads_ad_pdps;
+
         var bgMediaData = {
             pdps : config.sinaads_ad_pdps,
-            src : content.src[0] || '',
-            type : content.type || '',
-            link : content.link[0] || '',
+            src : content.src,
+            type : content.type,
+            link : content.link,
             width : width || 1600,
             height : height || config.sinaads_bg_height,
             midWidth : config.sinaads_bg_midWidth || 1000,
