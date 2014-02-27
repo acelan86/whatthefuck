@@ -6,6 +6,39 @@
     </head>
     <body>
         <script>
+        window.sinaadToolkit = window.sinaadToolkit || {};
+        (function (window, Deferred, exports, undefined) {
+            function createXDomainStorage(config) {
+                var deferred = new Deferred,
+                    domain = config.domain,
+                    dataServer = config.dataServer;
+                try {
+                    document.domain = domain;
+                } catch (e) {}
+
+                return deferred;
+            }
+
+
+            function XDomainStorage(config) {
+                this.storage = createXDomainStorage(config.domain, config.dataServer);
+            }
+            XDomainStorage.prototype = {
+                get : function () {
+
+                }
+            }
+
+            exports.XDomainStorage = createXDomainStorage;
+        })(window, window.sinaadToolkit.Deferred, window.sinaadToolkit);
+
+        var xDomainStorage = sinaadToolkit.XDomainStorage({
+
+        });
+        xDomainStorage.then(function () {
+
+        });
+
         /**
          * 跨子域存储，ie6,7使用user data存储，其它浏览器使用localstorage
          * @example
@@ -26,7 +59,7 @@
          *          var data = st.get('key');
          *      });
          */
-        ;(function(exports,name) {
+        (function(exports,name) {
             var fns = [];
             var isReady = 0;
             var iframeStore = null;

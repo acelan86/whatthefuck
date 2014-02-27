@@ -48,14 +48,15 @@ module.exports = function(grunt) {
     concat : {
       sinaads : {
         files : [
-          { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaads.js'] }
-        ]
-      },
-      sinaadsDev : {
-        files : [
-          { dest : 'release/sinaads.dev.full.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
+          { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.js'] }
         ]
       }
+      // ,
+      // sinaadsDev : {
+      //   files : [
+      //     { dest : 'release/sinaads.dev.full.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
+      //   ]
+      // }
     },
     jshint : {
       options : {
