@@ -1321,7 +1321,7 @@ modelModule.init(function () {
     /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
     var preloadAds = window.sinaads;
     if (preloadAds && preloadAds.shift) {
-        for (var ad, len = 100; (ad = preloadAds.shift()) && 0 < len--;) {
+        for (var ad, len = 60; (ad = preloadAds.shift()) && 0 < len--;) {
             _init(ad);
         }
     }
