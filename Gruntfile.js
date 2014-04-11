@@ -293,8 +293,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task.
-  grunt.registerTask('default', ['smash', 'jshint', 'concat', 'uglify', 'copy', 'connect', 'watch']);
-  grunt.registerTask('nouglify', ['jshint', 'concat', 'connect']);
-  grunt.registerTask('nowatch', ['jshint', 'concat', 'uglify', 'connect']);
+  grunt.registerTask('default', ['smash', 'jshint', 'concat', 'uglify', 'copy', 'watch']);
+  grunt.registerTask('nouglify', ['jshint', 'concat']);
+  grunt.registerTask('nowatch', ['jshint', 'concat', 'uglify']);
 
 };
