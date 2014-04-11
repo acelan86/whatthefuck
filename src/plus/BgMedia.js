@@ -104,10 +104,14 @@
             return function () {
                 var midWidth = me.config.midWidth;
                 var midX = sinaadToolkit.dom.getPosition(document.getElementById('bgAdWrap')).left;
-
                 var  halfWidth = (me.config.width - me.config.midWidth) / 2;
                 me.leftAd.style.left = (midX - halfWidth) + 'px';
                 me.rightAd.style.left = (midX + midWidth) + 'px';
+                var remainWidth = document.body.clientWidth - me.config.midWidth;
+                if (remainWidth < 0) {
+                    remainWidth = 0;
+                }
+                me.rightAd.style.width = Math.floor(remainWidth / 2) + 'px';
             };
         },
         getCloseHandler: function () {
