@@ -21,7 +21,7 @@
                 sideWidth : width,
                 sideHeight : height,
                 pdps : config.sinaads_ad_pdps,
-                contentWidth : config.sinaads_float_contentWidth //当小于这个值时候对联两边隐藏
+                contentWidth : config.sinaads_ad_contentWidth //当小于这个值时候对联两边隐藏
             };
             if (core.FloatMedia) {
                 fmManager[config.sinaads_ad_pdps] = new core.FloatMedia(FloatMediaData);
