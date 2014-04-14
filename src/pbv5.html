@@ -13,9 +13,9 @@
         var type = ary[0],
             src = sinaadToolkit.string.encodeHTML(decodeURIComponent(ary[1])),
             link = sinaadToolkit.url.ensureURL(decodeURIComponent(ary[2])),
-            width = ary[3] + 'px',
-            height = ary[4] + 'px',
-            monitor = decodeURIComponent(ary[5]);
+            width = parseInt(ary[3], 10) + 'px',
+            height = parseInt(ary[4], 10) + 'px',
+            monitor = ary[5] ? decodeURIComponent(ary[5]).replace(/</g, '').replace(/>/g, '') : '';
 
         var srcAllowDomain = ['sina\\.com\\.cn','weibo\\.com','sinaimg\\.cn'],
             urlAllowDomain = ['sina\\.com\\.cn','weibo\\.com','allyes\\.com', 'admaster\\.com\\.cn', 'miaozhen\\.com'];

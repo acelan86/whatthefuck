@@ -62,23 +62,51 @@
         return '{' + str.join(',') + '}';
     }
 
+    var top = (function () {
+            var top;
+            try {
+                top = window.top.location.href;
+            } catch (e) {}
+            top = top || ((window.top === window.self) ?  window.location.href : window.document.referrer);
+            return top;
+        })(),
+        _hash = (top.split('#')[1] || '').split('?')[0] || '',
+        _query = (top.split('?')[1] || '').split('#')[0] || '',
+        par = (_hash + '&' + _query)
+            .replace(/</g, '')
+            .replace(/>/g, '')
+            .replace(/"/g, '')
+            .replace(/'/g, '');
 
-    var date = formatDate(new Date(), 'yyyyMMddHH');
 
     var sinaadsServerPreviewSlots = (function () {
-        var query = window.location.hash.substring(1).split('&'),
+        var query = par.split('&'),
             slots = {},
             key = 'sinaads_server_preview', //必需有的key
+            dateKey = 'sinaads_preview_date', //预览日期
+            q,
             i = 0,
-            q;
-        while ((q = query[i++])) {
-            q = q.split('=');
-            if (q[0].indexOf(key) === 0) {
-                slots[q[1]] = date;
+            len = 0,
+            date = formatDate(new Date(), 'yyyyMMddHH');
+        for (i = 0, len = query.length; i < len; i++) {
+            if ((q = query[i])) {
+                q = q.split('=');
+                if (q[0] === dateKey) {
+                    q[1] && (date = q[1]);
+                }
+            }
+        }
+        for (i = 0, len = query.length; i < len; i++) {
+            if ((q = query[i])) {
+                q = q.split('=');
+                if (q[0] === key) {
+                    slots[q[1]] = date;
+                }
             }
         }
         return slots;
     })();
+
 
     window.getSinaadsServerPreviewSlots = function () {
         return stringify(sinaadsServerPreviewSlots);

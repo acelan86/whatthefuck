@@ -1947,10 +1947,12 @@
 
             sinaadToolkit.array.each(monitor, function (url) {
                 url = sinaadToolkit.url.ensureURL(url);
+                
                 if (url) {
                     clickTAG = url + encodeURIComponent(clickTAG);
                 }
             });
+
             return clickTAG;
         }
     };
