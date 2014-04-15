@@ -250,6 +250,12 @@ module.exports = function(grunt) {
         files : [
           { dest : 'release/spec/tanx.float.js',  src : 'src/spec/tanx.float.js' }
         ]
+      },
+      //获取博客id及博文id
+      exParamsForBlog : {
+        files : [
+          { dest : 'release/spec/getSinaadsExParamsForBlog.js',  src : 'src/spec/getSinaadsExParamsForBlog.js' }
+        ]
       }
     },
     copy: {

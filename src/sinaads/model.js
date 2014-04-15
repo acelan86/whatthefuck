@@ -49,6 +49,18 @@ var modelModule = (function (core, controller, uid) {
     }
 
     /**
+     * 获取外部定义额外参数的请求串
+     */
+    function getExParamsQueryString() {
+        var params = window.sinaadsExParams || {},
+            str = [];
+        for (var key in params) {
+            str.push(key + '=' + encodeURIComponent(params[key]));
+        }
+        return str.join('&');
+    }
+
+    /**
      * 判断是否是服务端预览广告位
      * @param  {String}  pdps 广告位pdps
      * @return {Boolean}      是否
@@ -270,6 +282,12 @@ var modelModule = (function (core, controller, uid) {
                 params.push('date=' + _serverPreviewDate); //请求广告的本地时间, 格式2014020709
             }
 
+            //如果有额外的传递参数，请求时传入
+            var _exParams = getExParamsQueryString();
+            if (_exParams) {
+                params.push(_exParams);
+            }
+
             for (var key in targeting) {
                 params.push('tg' + key + '=' + encodeURIComponent(targeting[key]));
             }
@@ -444,6 +462,7 @@ var modelModule = (function (core, controller, uid) {
         request : _request,
         get : function (pdps) {
             return (pdps ? _cache[pdps] : _cache);
-        }
+        },
+        getExParamsQueryString : getExParamsQueryString
     };
 })(core, controllerModule, PAGE_HASH);

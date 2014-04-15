@@ -108,6 +108,18 @@ var modelModule = (function (core, controller, uid) {
     }
 
     /**
+     * 获取外部定义额外参数的请求串
+     */
+    function getExParamsQueryString() {
+        var params = window.sinaadsExParams || {},
+            str = [];
+        for (var key in params) {
+            str.push(key + '=' + encodeURIComponent(params[key]));
+        }
+        return str.join('&');
+    }
+
+    /**
      * 判断是否是服务端预览广告位
      * @param  {String}  pdps 广告位pdps
      * @return {Boolean}      是否
@@ -329,6 +341,12 @@ var modelModule = (function (core, controller, uid) {
                 params.push('date=' + _serverPreviewDate); //请求广告的本地时间, 格式2014020709
             }
 
+            //如果有额外的传递参数，请求时传入
+            var _exParams = getExParamsQueryString();
+            if (_exParams) {
+                params.push(_exParams);
+            }
+
             for (var key in targeting) {
                 params.push('tg' + key + '=' + encodeURIComponent(targeting[key]));
             }
@@ -503,7 +521,8 @@ var modelModule = (function (core, controller, uid) {
         request : _request,
         get : function (pdps) {
             return (pdps ? _cache[pdps] : _cache);
-        }
+        },
+        getExParamsQueryString : getExParamsQueryString
     };
 })(core, controllerModule, PAGE_HASH);
 /**
@@ -1176,15 +1195,24 @@ var _init = (function (core, model, view, controller) {
             // });
             // 
             var _dspMonitorURL,
-                _saxMonitorURL;
+                _saxMonitorURL,
+                _exParams = model.getExParamsQueryString();
 
             core.array.each(content.monitor, function (url) {
                 //为sax monitor兼容一定是二跳的方案
                 if (url && url.indexOf('sax.sina.com.cn\/click') !== -1) {
-                    url = url.replace(/&url=$/, '') + '&url=';
+                    url = url.replace(/&url=$/, '');
+                    //增加额外参数
+                    _exParams && (url += '&' + _exParams);
+                    //加上&url=
+                    url += '&url=';
                     _saxMonitorURL = core.monitor.parseTpl(url, config);
                 } else if (url && url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1) {
-                    url = url.replace(/&url=$/, '') + '&url=';
+                    url = url.replace(/&url=$/, '');
+                    //增加额外参数
+                    _exParams && (url += '&' + _exParams);
+                    //加上&url=
+                    url += '&url=';
                     _dspMonitorURL = core.monitor.parseTpl(url, config);
                 } else {
                     url = core.monitor.parseTpl(url, config);
@@ -1193,9 +1221,9 @@ var _init = (function (core, model, view, controller) {
                 core.debug('sinaads:Processing the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
             });
 
-            _dspMonitorURL && monitor.push(_dspMonitorURL);
-            _saxMonitorURL && monitor.push(_saxMonitorURL);
             //_dspMonitorURL && monitor.push(_dspMonitorURL);
+            _saxMonitorURL && monitor.push(_saxMonitorURL);
+            _dspMonitorURL && monitor.push(_dspMonitorURL);
 
 
             //如果存在pid为每个link加上pid
