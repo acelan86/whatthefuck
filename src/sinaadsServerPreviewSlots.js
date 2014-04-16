@@ -6,6 +6,61 @@
 
     "use strict";
 
+    var cookie = {
+        _isValidKey : function (key) {
+            return (new RegExp("^[^\\x00-\\x20\\x7f\\(\\)<>@,;:\\\\\\\"\\[\\]\\?=\\{\\}\\/\\u0080-\\uffff]+\x24")).test(key);
+        },
+        _getRaw : function (key) {
+            if (cookie._isValidKey(key)) {
+                var reg = new RegExp("(^| )" + key + "=([^;]*)(;|\x24)"),
+                    result = reg.exec(document.cookie);
+                     
+                if (result) {
+                    return result[2] || null;
+                }
+            }
+            return null;
+        },
+        _setRaw : function (key, value, options) {
+            if (!cookie._isValidKey(key)) {
+                return;
+            }
+             
+            options = options || {};
+
+            // 计算cookie过期时间
+            var expires = options.expires;
+            if ('number' === typeof options.expires) {
+                expires = new Date();
+                expires.setTime(expires.getTime() + options.expires);
+            }
+             
+            document.cookie =
+                key + "=" + value +
+                (options.path ? "; path=" + options.path : "") +
+                (expires ? "; expires=" + expires.toGMTString() : "") +
+                (options.domain ? "; domain=" + options.domain : "") +
+                (options.secure ? "; secure" : '');
+
+        },
+        get : function (key) {
+            var value = cookie._getRaw(key);
+            if ('string' === typeof value) {
+                value = decodeURIComponent(value);
+                return value;
+            }
+            return null;
+        },
+        set : function (key, value, options) {
+            cookie._setRaw(key, encodeURIComponent(value), options);
+        },
+        remove : function (key, options) {
+            options = options || {};
+            options.expires = new Date(0);
+            cookie._setRaw(key, '', options);
+        }
+    };
+
     function padNumber(source, length) {
         var pre = "",
             negative = (source < 0),
@@ -78,6 +133,7 @@
             .replace(/"/g, '')
             .replace(/'/g, '');
 
+    //cookie.set('sinaads_ip', '111.111.111.111');
 
     var sinaadsServerPreviewSlots = (function () {
         var query = par.split('&'),
@@ -87,7 +143,9 @@
             q,
             i = 0,
             len = 0,
-            date = formatDate(new Date(), 'yyyyMMddHH');
+            date = formatDate(new Date(), 'yyyyMMddHH'),
+            ip = cookie.get('sinaads_ip');
+
         for (i = 0, len = query.length; i < len; i++) {
             if ((q = query[i])) {
                 q = q.split('=');
@@ -100,7 +158,7 @@
             if ((q = query[i])) {
                 q = q.split('=');
                 if (q[0] === key) {
-                    slots[q[1]] = date;
+                    slots[q[1]] = date + (ip ? '&tgip=' + ip : '');
                 }
             }
         }
