@@ -2,3 +2,6 @@
 .DS_Store
 
 src/.DS_Store
+
+release/
+node-module/
