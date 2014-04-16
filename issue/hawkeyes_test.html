@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title> 宝洁鹰眼测试页面 </title>
+    </head>
+    <body>
+        <script>
+            //模拟数据，正式投放会去掉，直接从sax请求
+            var _sinaadsCacheData = window._sinaadsCacheData || {};
+            _sinaadsCacheData['hawkeye_test'] = {
+                "type" : "embed",
+                "content" : [
+                    {
+                        "type":["url"],
+                        "src":[
+                            "http://js.miaozhen.com/mzad_iframe_sina.html?_srv=MZHKY&l=2247"
+                        ]
+                    }
+                ],
+                "size":"300*200",
+                "id":"hawkeye_test"
+            };
+        </script>
+        <!-- 广告埋点 -->
+        <script async charset="utf-8" src="http://d1.sina.com.cn/litong/zhitou/sinaads/release/sinaads.js"></script>
+        <ins class="sinaads" data-ad-pdps="hawkeye_test"></ins>
+        <script>(sinaads = window.sinaads || []).push({});</script>
+        <!-- end -->
+    </body>
+</html>
