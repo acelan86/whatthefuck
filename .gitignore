@@ -3,5 +3,6 @@
 
 src/.DS_Store
 
-release/
-node-module/
+release
+node-module
+src/sinaads.js
