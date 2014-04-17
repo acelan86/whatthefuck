@@ -114,6 +114,12 @@ var _init = (function (core, model, view, controller) {
                         '&url=';                             //加上&url=
 
                     _dspMonitorURL = core.monitor.parseTpl(url, config);
+                } else if (url && url.indexOf('sax.sina.com.cn\/mfp\/click') !== -1) {
+                    url = url.replace(/&url=$/, '') +
+                        (_exParams ? '&' + _exParams : '') + //增加额外参数
+                        '&url=';                             //加上&url=
+
+                    _saxMonitorURL = core.monitor.parseTpl(url, config);
                 } else {
                     url = core.monitor.parseTpl(url, config);
                     url && monitor.push(url);
@@ -121,9 +127,9 @@ var _init = (function (core, model, view, controller) {
                 core.debug('sinaads:Processing the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
             });
 
-            //_dspMonitorURL && monitor.push(_dspMonitorURL);
-            _saxMonitorURL && monitor.push(_saxMonitorURL);
             _dspMonitorURL && monitor.push(_dspMonitorURL);
+            _saxMonitorURL && monitor.push(_saxMonitorURL);
+            //_dspMonitorURL && monitor.push(_dspMonitorURL);
 
 
             //如果存在pid为每个link加上pid
