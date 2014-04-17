@@ -401,7 +401,7 @@ var modelModule = (function (core, controller, uid) {
      */
     function _init(oninit) {
         //1、将页面上默认存在的数据填充到数据缓存中
-        _cache = window._sinaadsCacheData || {};
+        _cache = window._sinaadsCacheData = window._sinaadsCacheData || {};
 
 
         /**
