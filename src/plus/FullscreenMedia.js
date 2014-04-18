@@ -10,7 +10,8 @@
     var MAIN_CLOSE_BTN = 'http://d1.sina.com.cn/d1images/fullscreen/cls_77x31.gif',
         MINI_CLOSE_BTN = 'http://d3.sina.com.cn/d1images/fullscreen/close.gif',
         REPLAY_BTN = 'http://d2.sina.com.cn/litong/zhitou/sinaads/release/fullscreen_replay_btn.swf',
-        height = 0;
+        height = 0,
+        SHOW_COUNT = 2; //自动显示次数;
 
     function FullscreenMedia(config) {
         var element = document.getElementById('FullScreenWrap');
@@ -20,6 +21,11 @@
         var THIS = this;
 
         this.deferred = new sinaadToolkit.Deferred();
+
+        //频次控制，24小时内只能自动播放2次
+        var showCount = sinaadToolkit.storage.get('FullscreenMedia' + config.pdps);
+        showCount = showCount ? (parseInt(showCount, 10) + 1) : 1;
+        sinaadToolkit.storage.set('FullscreenMedia' + config.pdps, showCount, 24 * 60 * 60 * 1000);
 
         this.width = config.width;
         this.height = config.height + (config.hasClose ? 40 : 0);
@@ -105,12 +111,11 @@
 
         if (this.delay) {
             setTimeout(function () {
-                THIS.show();
+                (config.hasClose && showCount > SHOW_COUNT) ? THIS.hide() : THIS.show();
             }, this.delay * 1000);
         } else {
             this.show();
         }
-
     }
 
     FullscreenMedia.prototype = {
