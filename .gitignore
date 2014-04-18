@@ -6,4 +6,5 @@ src/.DS_Store
 release
 node-module
 src/sinaads.js
+Media.js.map
 sinaads.js.map
