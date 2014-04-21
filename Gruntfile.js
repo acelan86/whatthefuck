@@ -46,6 +46,11 @@ module.exports = function(grunt) {
       }
     },
     concat : {
+      media : {
+        files : [
+          { dest : 'release/plus/Media.full.js',  src : 'src/plus/*.js' }
+        ]
+      },
       sinaads : {
         files : [
           { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.js'] }
@@ -233,7 +238,7 @@ module.exports = function(grunt) {
           sourceMap: 'Media.js.map'
         },
         files : [
-          { dest : 'release/plus/Media.js',  src : 'src/plus/*.js' }
+          { dest : 'release/plus/Media.js',  src : 'release/plus/Media.full.js' }
         ]
       },
       specmedia : {
