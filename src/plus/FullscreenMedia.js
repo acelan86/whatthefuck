@@ -114,7 +114,7 @@
                 (config.hasClose && showCount > SHOW_COUNT) ? THIS.hide() : THIS.show();
             }, this.delay * 1000);
         } else {
-            this.show();
+            (config.hasClose && showCount > SHOW_COUNT) ? THIS.hide() : THIS.show();
         }
     }
 
