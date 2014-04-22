@@ -48,6 +48,9 @@
         ].join(';');
 
         element.style.cssText += ';display:block;padding-top:' + mainPadding + 'px';
+        main.getMain().appendChild(button);
+        main.getMain().appendChild(element);
+
         element.innerHTML = sinaadToolkit.ad.createHTML(
             config.type,
             config.src,
@@ -56,9 +59,6 @@
             config.link,
             config.monitor
         );
-
-        main.getMain().appendChild(button);
-        main.getMain().appendChild(element);
 
         sinaadToolkit.event.on(button, 'click', this._getCloseHandler());
     }
