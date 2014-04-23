@@ -7,7 +7,8 @@
     var MAIN_CLOSE_ICON_FOR_CENTER = 'http://d2.sina.com.cn/d1images/lmt/cls_66x22.gif',
         MAIN_CLOSE_ICON_FOR_OTHER = 'http://d1.sina.com.cn/shh/ws/2012/09/29/1/close1.gif',
         MAIN_ZINDEX = 11000,
-        CLOSE_ZINDEX = 11010;
+        CLOSE_ZINDEX = 11010,
+        UID = 0;
 
 
     function PopMedia(element, config) {
@@ -47,20 +48,48 @@
             'cursor:pointer'
         ].join(';');
 
-        element.style.cssText += ';display:block;padding-top:' + mainPadding + 'px';
+
         main.getMain().appendChild(button);
         main.getMain().appendChild(element);
 
-        element.innerHTML = sinaadToolkit.ad.createHTML(
+        element.style.cssText += ';display:block;overflow:hidden;text-decoration:none;padding-top:' + mainPadding + 'px';
+        element.innerHTML = '<ins style="text-decoration:none;margin:0px auto;display:block;overflow:hidden;width:' + config.width + 'px;height:' + config.height + 'px;"></ins>';
+        element = element.getElementsByTagName('ins')[0];
+
+        var adContent = config.src ? sinaadToolkit.ad.createHTML(
             config.type,
             config.src,
             config.width,
             config.height,
             config.link,
             config.monitor
-        );
+        ) : '';   //广告内容， 如果没有src，则不渲染 
+
+        switch (config.type[0]) {
+            case 'text' :
+            case 'image' :
+            case 'url' :
+            case 'adbox' :
+            case 'flash' :
+                element.innerHTML = adContent;
+                break;
+            default :
+                //创建广告渲染的沙箱环境，并传递部分广告参数到沙箱中
+                sinaadToolkit.sandbox.create(element, config.width + 'px', config.height + 'px', adContent, {
+                    sinaads_uid             : 'PopMediaSandbox' + UID++,
+                    sinaads_ad_pdps         : config.pdps,
+                    sinaads_ad_width        : config.width,
+                    sinaads_ad_height       : config.height
+                });
+                break;
+        }
 
         sinaadToolkit.event.on(button, 'click', this._getCloseHandler());
+
+        try {
+            sinaadToolkit.debug('Media: In building pop(' + config.pdps + ')complete!');
+            mediaControl.done(config.pdps);
+        } catch (e) {}
     }
 
     PopMedia.prototype = {
