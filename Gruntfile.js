@@ -151,21 +151,21 @@ module.exports = function(grunt) {
           { dest : 'release/sinaadToolkit.js', src : 'src/sinaadToolkit.js'}
         ]
       },
-      sinaadToolkitDev: {
-        options : {
-          //preserveComments:'some',
-          banner : '/*!\n' + 
-                    ' * sinaadToolkit-dev version\n' +
-                    ' * @author acelan <xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
-                    ' * @version 1.0.0\n' +
-                    '<%= logo %>' + 
-                    ' */\n',
-          sourceMap: 'sinaadToolkit.dev.js.map'
-        },
-        files : [
-          { dest : 'release/sinaadToolkit.dev.js', src : 'src/sinaadToolkit.dev.js' }
-        ]
-      },
+      // sinaadToolkitDev: {
+      //   options : {
+      //     //preserveComments:'some',
+      //     banner : '/*!\n' + 
+      //               ' * sinaadToolkit-dev version\n' +
+      //               ' * @author acelan <xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
+      //               ' * @version 1.0.0\n' +
+      //               '<%= logo %>' + 
+      //               ' */\n',
+      //     sourceMap: 'sinaadToolkit.dev.js.map'
+      //   },
+      //   files : [
+      //     { dest : 'release/sinaadToolkit.dev.js', src : 'src/sinaadToolkit.dev.js' }
+      //   ]
+      // },
       sinaads : {
         options : {
           //preserveComments:'some',
@@ -212,21 +212,21 @@ module.exports = function(grunt) {
           { dest : 'release/sinaadsServerPreviewSlots.js', src : ['src/sinaadsServerPreviewSlots.js'] }
         ]
       },
-      sinaadsDev : {
-        options : {
-          //preserveComments:'some',
-          banner : '/*!\n' + 
-                    ' * sinaads-dev version\n' +
-                    ' * @author acelan<xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
-                    ' * @version 1.0.0\n' +
-                    '<%= logo %>' + 
-                    ' */\n',
-          sourceMap: 'sinaads.dev.js.map'
-        },
-        files : [
-          { dest : 'release/sinaads.dev.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
-        ]
-      },
+      // sinaadsDev : {
+      //   options : {
+      //     //preserveComments:'some',
+      //     banner : '/*!\n' + 
+      //               ' * sinaads-dev version\n' +
+      //               ' * @author acelan<xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
+      //               ' * @version 1.0.0\n' +
+      //               '<%= logo %>' + 
+      //               ' */\n',
+      //     sourceMap: 'sinaads.dev.js.map'
+      //   },
+      //   files : [
+      //     { dest : 'release/sinaads.dev.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
+      //   ]
+      // },
       media : {
         options : {
           banner : '/*!\n' + 
@@ -241,21 +241,21 @@ module.exports = function(grunt) {
           { dest : 'release/plus/Media.js',  src : 'release/plus/Media.full.js' }
         ]
       },
-      specmedia : {
-        files : [
-          { dest : 'release/spec/QrcodeMedia.js',  src : 'src/spec/QrcodeMedia.js' }
-        ]
-      },
-      specad : {
-        files : [
-          { dest : 'release/spec/spec1.js',  src : 'src/spec/spec1.js' }
-        ]
-      },
-      taobaofloat : {
-        files : [
-          { dest : 'release/spec/tanx.float.js',  src : 'src/spec/tanx.float.js' }
-        ]
-      },
+      // specmedia : {
+      //   files : [
+      //     { dest : 'release/spec/QrcodeMedia.js',  src : 'src/spec/QrcodeMedia.js' }
+      //   ]
+      // },
+      // specad : {
+      //   files : [
+      //     { dest : 'release/spec/spec1.js',  src : 'src/spec/spec1.js' }
+      //   ]
+      // },
+      // taobaofloat : {
+      //   files : [
+      //     { dest : 'release/spec/tanx.float.js',  src : 'src/spec/tanx.float.js' }
+      //   ]
+      // },
       //获取博客id及博文id
       exParamsForBlog : {
         files : [
