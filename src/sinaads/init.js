@@ -286,6 +286,20 @@ var _init = (function (core, model, view, controller) {
 
 
         var pdps = config.sinaads_ad_pdps;
+
+        //本地轮播数据
+        var localData = config.sinaads_ad_data,
+            rotateCount = 0;
+        if (localData) {
+            //如果localData不是数组，把内容作为数组元素
+            if (!localData instanceof Array) {
+                localData = [localData];
+            }
+            rotateCount = localData.length <= 1 ? 0 : (model.getSeed(pdps) % localData.length);
+            model.add(pdps, localData[rotateCount]);
+            core.debug('sinaads: Use local data in count ' + rotateCount);
+        }
+        
         //注册一个频率控制器
         controller.frequenceController.register(pdps, config.sinaads_frequence || 0);
 
