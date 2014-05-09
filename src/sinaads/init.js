@@ -287,7 +287,7 @@ var _init = (function (core, model, view, controller) {
 
         var pdps = config.sinaads_ad_pdps;
 
-        //本地轮播数据
+        /* 处理本地轮播数据2014-04-29 acelan*/
         var localData = config.sinaads_ad_data,
             rotateCount = 0;
         if (localData) {
@@ -297,6 +297,7 @@ var _init = (function (core, model, view, controller) {
             model.add(pdps, localData[rotateCount]);
             core.debug('sinaads: Use local data in count ' + rotateCount);
         }
+
 
         //注册一个频率控制器
         controller.frequenceController.register(pdps, config.sinaads_frequence || 0);
