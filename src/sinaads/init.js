@@ -98,6 +98,7 @@ var _init = (function (core, model, view, controller) {
             // });
             // 
             var _dspMonitorURL,
+                _mfpMonitorURL,
                 _saxMonitorURL;
 
             core.array.each(content.monitor, function (url) {
@@ -119,7 +120,7 @@ var _init = (function (core, model, view, controller) {
                         (_exParams ? '&' + _exParams : '') + //增加额外参数
                         '&url=';                             //加上&url=
 
-                    _saxMonitorURL = core.monitor.parseTpl(url, config);
+                    _mfpMonitorURL = core.monitor.parseTpl(url, config);
                 } else {
                     url = core.monitor.parseTpl(url, config);
                     url && monitor.push(url);
@@ -127,8 +128,8 @@ var _init = (function (core, model, view, controller) {
                 core.debug('sinaads:Processing the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
             });
 
-            //_dspMonitorURL && monitor.push(_dspMonitorURL);
             _saxMonitorURL && monitor.push(_saxMonitorURL);
+            _mfpMonitorURL && monitor.push(_mfpMonitorURL);
             _dspMonitorURL && monitor.push(_dspMonitorURL);
 
 
