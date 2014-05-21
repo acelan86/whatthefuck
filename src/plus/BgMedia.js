@@ -8,10 +8,7 @@
         if (cookie === '0') { //关闭后一天不再显示
             return ;
         }
-        var midBg = this.midBg = document.getElementById('bgAdWrap');
-        if (!midBg) {
-            return;
-        }
+        
         //body 设置背景
         this.config = config;
 
@@ -20,7 +17,12 @@
         //如果之前的cssText不以;结尾，在IE8下 样式显示不正确。
         body.style.cssText += ';background:url(' + config.src[0] + ') no-repeat center ' + config.top + 'px;margin:0px;';
 
-        midBg.style.cssText += ';position:relative;height: ' + config.headHeight + 'px;width: ' + config.midWidth + 'px;margin:0 auto;';
+        var midBg = this.midBg = document.getElementById('bgAdWrap');
+        if (!midBg) {
+            return;
+        }
+        
+        midBg.style.cssText += ';position:relative;display:block;height: ' + config.headHeight + 'px;width: ' + config.midWidth + 'px;margin:0 auto;';
         midBg.innerHTML = '<a href="' + config.link[0] + '" target="_blank" style="display:block;height:' + config.headHeight + 'px;width: ' + config.midWidth + 'px;"></a>';
 
         var  halfWidth = (config.width - config.midWidth) / 2;
@@ -93,8 +95,8 @@
         //初始调整大小
         this.getResizeHandler()();
 
-        this.closeHandler = this.getResizeHandler(); //保存下来，为了解绑window上的事件
-        sinaadToolkit.event.on(window, 'resize', this.closeHandler);
+        this.resizeHandler = this.getResizeHandler(); //保存下来，为了解绑window上的事件
+        sinaadToolkit.event.on(window, 'resize', this.resizeHandler);
         sinaadToolkit.event.on(closeBtn, 'click', this.getCloseHandler());
 
         try {
