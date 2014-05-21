@@ -127,9 +127,9 @@ var _init = (function (core, model, view, controller) {
                 core.debug('sinaads:Processing the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
             });
 
-            _dspMonitorURL && monitor.push(_dspMonitorURL);
-            _saxMonitorURL && monitor.push(_saxMonitorURL);
             //_dspMonitorURL && monitor.push(_dspMonitorURL);
+            _saxMonitorURL && monitor.push(_saxMonitorURL);
+            _dspMonitorURL && monitor.push(_dspMonitorURL);
 
 
             //如果存在pid为每个link加上pid
