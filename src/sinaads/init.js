@@ -98,6 +98,7 @@ var _init = (function (core, model, view, controller) {
             // });
             // 
             var _dspMonitorURL,
+                _mfpMonitorURL,
                 _saxMonitorURL;
 
             core.array.each(content.monitor, function (url) {
@@ -119,7 +120,7 @@ var _init = (function (core, model, view, controller) {
                         (_exParams ? '&' + _exParams : '') + //增加额外参数
                         '&url=';                             //加上&url=
 
-                    _saxMonitorURL = core.monitor.parseTpl(url, config);
+                    _mfpMonitorURL = core.monitor.parseTpl(url, config);
                 } else {
                     url = core.monitor.parseTpl(url, config);
                     url && monitor.push(url);
@@ -127,9 +128,9 @@ var _init = (function (core, model, view, controller) {
                 core.debug('sinaads:Processing the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
             });
 
-            _dspMonitorURL && monitor.push(_dspMonitorURL);
             _saxMonitorURL && monitor.push(_saxMonitorURL);
-            //_dspMonitorURL && monitor.push(_dspMonitorURL);
+            _mfpMonitorURL && monitor.push(_mfpMonitorURL);
+            _dspMonitorURL && monitor.push(_dspMonitorURL);
 
 
             //如果存在pid为每个link加上pid
@@ -286,6 +287,19 @@ var _init = (function (core, model, view, controller) {
 
 
         var pdps = config.sinaads_ad_pdps;
+
+        /* 处理本地轮播数据2014-04-29 acelan*/
+        var localData = config.sinaads_ad_data,
+            rotateCount = 0;
+        if (localData) {
+            //如果localData不是数组，把内容作为数组元素
+            localData = core.array.ensureArray(localData);
+            rotateCount = localData.length <= 1 ? 0 : (model.getSeed(pdps) % localData.length);
+            model.add(pdps, localData[rotateCount]);
+            core.debug('sinaads: Use local data in count ' + rotateCount);
+        }
+
+
         //注册一个频率控制器
         controller.frequenceController.register(pdps, config.sinaads_frequence || 0);
 
@@ -311,7 +325,7 @@ modelModule.init(function () {
     /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
     var preloadAds = window.sinaads;
     if (preloadAds && preloadAds.shift) {
-        for (var ad, len = 60; (ad = preloadAds.shift()) && 0 < len--;) {
+        for (var ad, len = 100; (ad = preloadAds.shift()) && 0 < len--;) {
             _init(ad);
         }
     }

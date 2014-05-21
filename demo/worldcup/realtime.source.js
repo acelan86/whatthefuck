@@ -38,33 +38,25 @@
 
     var KEY = 'sinaads_rtw_';
 
-    var logos = {
+    var LOGOS = [
             //总赞 ：素材地址， 曝光地址，连接地址，投放时间，展现次数
-            'zz' : [
+            [
                 'http://d1.sina.com.cn/litong/zhitou/sinaads/demo/lianghui2014/whh.png',
                 'http://sax.sina.com.cn/click?type=1',
                 '',
-                ['2014-3-5 0:0:0~2014-3-5 23:59:59', '2014-3-12 0:0:0~2014-3-12 23:59:59'],
-                1
+                ['2014-3-12 0:0:0~2015-3-11 23:59:59'],
+                9999999
             ],
             //深度 ： 素材地址，曝光地址，链接地址，投放时间
-            'sd' : [
+            [
                 'http://d1.sina.com.cn/litong/zhitou/sinaads/demo/lianghui2014/gl.png',
                 'http://sax.sina.com.cn/click?type=2',
                 '',
-                ['2014-3-4 0:0:0~2014-3-4 23:59:59', '2014-3-10 0:0:0~2014-3-10 23:59:59'],
-                1
+                ['2014-3-12 0:0:0~2015-3-11 23:59:59'],
+                9999999
             ]
-            //聚焦 ： 素材地址，曝光地址，连接地址，投放时间
-            //'jj' : [
-            //  'http://d1.sina.com.cn/litong/zhitou/sinaads/demo/lianghui2014/3.jpg',
-            //  'http://sax.sina.com.cn/click?type=3',
-            //  'http://sina.com.cn',
-            //  '2014-2-27 0:0:0~2014-2-30 23:59:59',
-            //  1
-            //]
-        },
-        imgs = [];
+        ],
+        imgs = []; //预加载图片列表;
 
     /**
      * 广告日程判断
@@ -275,53 +267,74 @@
     var XDomainStorage = window.___SinaadsCrossDomainStorage___;
 
 
+    //开始广告逻辑
     try {
         document.execCommand('BackgroundImageCache', false, true);
     } catch(e) {}
 
-    for (var i = 0, len = logos.length; i < len, imgs[i]; i++) {
+    for (var i = 0, len = LOGOS.length; i < len; i++) {
         imgs[i] = new Image();
-        imgs[i].src = logos[i][0];
+        imgs[i].src = LOGOS[i][0];
     }
 
     window.sinaadsRealtimeWindowAD = {
         get : function (cb) {
             XDomainStorage.ready(function(storage){
-                var logo,
+                var seed = storage.get(KEY + 'seed'),
+                    logo,
+                    logos = [], //存储过滤有效时间后的素材列表
                     now = new Date(),
                     nowMonth = now.getMonth(),
                     nowDate = now.getDate();
 
-                for (var key in logos) {
-                    logo = logos[key];
-                    //是否在投放期内
-                    if (!new Schedule(logo[3]).check()) {
-                        logo = [];
-                        continue;
-                    }
-                    //是否今天展现过
-                    var lastshow = storage.get(KEY + key),
-                        show = new Date(),
-                        showMonth,
-                        showDate,
-                        lastshowTime,
-                        lastshowCount = 0;
-                    if (lastshow) {
-                        lastshowTime = parseInt((lastshow + '').split('|')[0], 10);
-                        show.setTime(lastshowTime);
-                        showMonth = show.getMonth();
-                        showDate = show.getDate();
-                        if (showMonth === nowMonth && showDate === nowDate) {
-                            lastshowCount = parseInt((lastshow + '').split('|')[1], 10) || 1;
-                            if (lastshowCount >= (parseInt(logo[4], 10) || 1)) {
-                                logo = [];
-                                continue;
-                            }
-                        }
-                    }
-                    storage.set(KEY + key, +new Date() + '|' + (++lastshowCount));
-                    break;
+                if (isNaN(parseInt(seed, 10))) {
+                    seed = 0;
+                } else {
+                    seed = parseInt(seed, 10) + 1;
                 }
+                storage.set(KEY + 'seed', seed);
+
+                for (var i = 0, len = LOGOS.length; i < len; i++) {
+                    logo = LOGOS[i];
+                    //是否在投放期内
+                    if (new Schedule(logo[3]).check()) {
+                        logos.push(logo);
+                    }
+                }
+
+                logo = logos[logos.length <= 1 ? 1 : (seed % logos.length)];
+
+                // for (var key in logos) {
+                //     logo = logos[key];
+                //     //是否在投放期内
+                //     if (!new Schedule(logo[3]).check()) {
+                //         logo = [];
+                //         continue;
+                //     }
+                //     //是否今天展现过
+                //     var lastshow = storage.get(KEY + key),
+                //         show = new Date(),
+                //         showMonth,
+                //         showDate,
+                //         lastshowTime,
+                //         lastshowCount = 0;
+                //     if (lastshow) {
+                //         lastshowTime = parseInt((lastshow + '').split('|')[0], 10);
+                //         show.setTime(lastshowTime);
+                //         showMonth = show.getMonth();
+                //         showDate = show.getDate();
+                //         if (showMonth === nowMonth && showDate === nowDate) {
+                //             lastshowCount = parseInt((lastshow + '').split('|')[1], 10) || 1;
+                //             if (lastshowCount >= (parseInt(logo[4], 10) || 1)) {
+                //                 logo = [];
+                //                 continue;
+                //             }
+                //         }
+                //     }
+                //     storage.set(KEY + key, +new Date() + '|' + (++lastshowCount));
+                //     break;
+                // }
+                
                 cb && cb(logo);
             });
         }
@@ -909,9 +922,12 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                     (this._closeIntervalId) && (clearInterval(this._closeIntervalId));
                     if (this.showing) {
                         this._close.call(this, true);
-                        this._renderDOM.call(this, title, url, msg, c_id);
+                    }
+                    //如果是世界杯相关，增加广告赞助
+                    if (9 === parseInt(info.t, 10)) {
+                        this._renderDOMWithAD.call(this, title, url, msg, c_id);
                     } else {
-                        this._renderDOM.call(this, title, url, msg, c_id);
+                        this.__renderDOM.call(this, title, url, msg, c_id);
                     }
                     env.setCookie(env.COOKIE_KEY_STATUS, time + '_o', 100, '/', '.sina.com.cn');
                     this._closeIntervalId = setInterval(function(){
@@ -955,19 +971,24 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                         });
                     };
                 },
-                _renderDOM : function (title, url, msg, c_id) {
+                _renderDOMWithAD : function (title, url, msg, c_id) {
                     var THIS = this;
                     try {
                         window.sinaadsRealtimeWindowAD.get(function (ad) {
                             THIS.__renderDOM(title, url, msg, c_id, ad);
                         }); 
                     } catch(e) {
-                        THIS.__renderDOM(title, url, msg, c_id, []);
-                    }      
+                        THIS.__renderDOM(title, url, msg, c_id);
+                    }
                 },
-                __renderDOM: function (title, url, msg ,c_id, ad) {
-                    var that = this, i, clickA;
+                __renderDOM: function (title, url, msg, c_id, ad) {
+                    var that = this,
+                        i,
+                        clickA,
+                        ad = ad || [];
+
                     var html = [];
+
                     title = env.encodeHTML(title);
                     //version b dom here goes...
                     html.push('<div class="rtw2-in rtw2-cfx">');

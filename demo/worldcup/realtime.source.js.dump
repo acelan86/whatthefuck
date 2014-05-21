@@ -1,87 +1,79 @@
 // 201402111553
-//version 2.0.1 ¿ìÑ¶Ç°logoÔŞÖú¹ã¸æ 201402271428  xiaobin8@
-//version 2.0.0 Ê¹ÓÃIO.WebPush3(WebSockets)¼ÓÔØÊı¾İ 201401061547 daichang
-//version 1.8.6 (¿ÉÉÏÏß)Ìí¼Ó isrightmsg ÔÚÄ³Ğ©ÆµµÀÏÂ×èÖ¹µ¯´°,20130329Ìí¼Ó¸ü¶àÆµµÀ @ÍõöÎ
-//version 1.8.5 (¿ÉÉÏÏß)Ìí¼Ó_preventTanChuang_¿ª¹Ø
-//version 1.8.4 (¿ÉÉÏÏß)ĞŞ¸´safari bug
-//version 1.8.3 (¿ÉÉÏÏß)×Ô¶¯¼ÆËã¿í¶È£¬²¢Ôö¼ÓÁË5pxµÄÓàÁ¿
-//version 1.8.2 (¿ÉÉÏÏß)È¥µôµ¯´°ÃèÊö±ØÌîµÄÏŞÖÆ
-//version 1.8.1 (¿ÉÉÏÏß)ÒÔB°æÍêÈ«ÉÏÏß£¬µ«Ê±¼ä½ôÆÈ£¬ËùÒÔ´úÂëÉĞÎ´ÖØ¹¹
-//version 1.8   (¿ÉÉÏÏß)Ôö¼ÓA,B°æ²âÊÔ´úÂë£¬A,B¸÷50%¼¸ÂÊ£¬ÓÃ.sina.com.cn ¼¶±ğcookie¼ÇÂ¼£¬ cookieµÄÓĞĞ§ÆÚÒ»Äê£¬Ö®ºó»á×öÇå³ı´¦Àí
-//version 1.7.2 Ôö¼Óµ¥»÷±êÌâ¡¢ÄÚÈİ¡¢ÏêÏ¸£¬µ¯³öä¯ÀÀÆ÷ĞÂ´°¿ÚÍ¬Ê±£¬¹Ø±ÕĞÂÎÅ¿ìÑ¶µ¯¿ò by xiaolong1
-//version 1.7.1 ĞŞ¸ÄÑùÊ½£¬°ëÍ¸Ã÷ÒõÓ°£¬°´Å¥µÈ
-//version 1.7 ĞŞ¸ÄÑùÊ½,Ìí¼ÓsudaÍ³¼Æ´úÂë daichang add 20121210
-//version 1.6     ÇĞ»»½Ó¿ÚµØÖ·£¬ÆäËüÎ´±ä
-//version 1.5.1   Ôö¼ÓÇ¿ÖÆjsË¢ĞÂµÄ±êÊ¶; expose env
+//version 2.0.1 å¿«è®¯å‰logoèµåŠ©å¹¿å‘Š 201402271428  xiaobin8@
+//version 2.0.0 ä½¿ç”¨IO.WebPush3(WebSockets)åŠ è½½æ•°æ® 201401061547 daichang
+//version 1.8.6 (å¯ä¸Šçº¿)æ·»åŠ  isrightmsg åœ¨æŸäº›é¢‘é“ä¸‹é˜»æ­¢å¼¹çª—,20130329æ·»åŠ æ›´å¤šé¢‘é“ @ç‹é‘«
+//version 1.8.5 (å¯ä¸Šçº¿)æ·»åŠ _preventTanChuang_å¼€å…³
+//version 1.8.4 (å¯ä¸Šçº¿)ä¿®å¤safari bug
+//version 1.8.3 (å¯ä¸Šçº¿)è‡ªåŠ¨è®¡ç®—å®½åº¦ï¼Œå¹¶å¢åŠ äº†5pxçš„ä½™é‡
+//version 1.8.2 (å¯ä¸Šçº¿)å»æ‰å¼¹çª—æè¿°å¿…å¡«çš„é™åˆ¶
+//version 1.8.1 (å¯ä¸Šçº¿)ä»¥Bç‰ˆå®Œå…¨ä¸Šçº¿ï¼Œä½†æ—¶é—´ç´§è¿«ï¼Œæ‰€ä»¥ä»£ç å°šæœªé‡æ„
+//version 1.8   (å¯ä¸Šçº¿)å¢åŠ A,Bç‰ˆæµ‹è¯•ä»£ç ï¼ŒA,Bå„50%å‡ ç‡ï¼Œç”¨.sina.com.cn çº§åˆ«cookieè®°å½•ï¼Œ cookieçš„æœ‰æ•ˆæœŸä¸€å¹´ï¼Œä¹‹åä¼šåšæ¸…é™¤å¤„ç†
+//version 1.7.2 å¢åŠ å•å‡»æ ‡é¢˜ã€å†…å®¹ã€è¯¦ç»†ï¼Œå¼¹å‡ºæµè§ˆå™¨æ–°çª—å£åŒæ—¶ï¼Œå…³é—­æ–°é—»å¿«è®¯å¼¹æ¡† by xiaolong1
+//version 1.7.1 ä¿®æ”¹æ ·å¼ï¼ŒåŠé€æ˜é˜´å½±ï¼ŒæŒ‰é’®ç­‰
+//version 1.7 ä¿®æ”¹æ ·å¼,æ·»åŠ sudaç»Ÿè®¡ä»£ç  daichang add 20121210
+//version 1.6     åˆ‡æ¢æ¥å£åœ°å€ï¼Œå…¶å®ƒæœªå˜
+//version 1.5.1   å¢åŠ å¼ºåˆ¶jsåˆ·æ–°çš„æ ‡è¯†; expose env
 //version 1.4.9.9 try line 300
-//version 1.4.9.8 ĞŞ¸ÄÂÖÑ¯µÄbug
+//version 1.4.9.8 ä¿®æ”¹è½®è¯¢çš„bug
 //version 1.4.9.7 suda + pageview url
-//version 1.4.9.6 suda + url  ... ¿ÉÉÏÏß(9.17 16:45)
-//version 1.4.9.5 sudaĞŞ¸Ä
-//version 1.4.9  ¼ÓsudaÍ³¼Æ´úÂë
-//version 1.4.8  5·ÖÖÓºóË¢ĞÂÊ±¼ä±äÎªÔ­À´µÄ150Ãë£¬2Ğ¡Ê±ºóÍ£Ö¹Ë¢ĞÂ, ²»É¾flash
+//version 1.4.9.6 suda + url  ... å¯ä¸Šçº¿(9.17 16:45)
+//version 1.4.9.5 sudaä¿®æ”¹
+//version 1.4.9  åŠ sudaç»Ÿè®¡ä»£ç 
+//version 1.4.8  5åˆ†é’Ÿååˆ·æ–°æ—¶é—´å˜ä¸ºåŸæ¥çš„150ç§’ï¼Œ2å°æ—¶ååœæ­¢åˆ·æ–°, ä¸åˆ flash
 //version 1.4.3
 //log
-//  ÉÏÏßÇ°¹¤×÷:DEBUG, ¿ª¹Ø, KEY, temp, toremove, ÇåÍ¨µÀ, version, ÖĞÎÄ, console.log, alert
+//  ä¸Šçº¿å‰å·¥ä½œ:DEBUG, å¼€å…³, KEY, temp, toremove, æ¸…é€šé“, version, ä¸­æ–‡, console.log, alert
 //
 //
 /*!
 * sina.com.cn/license
-* svn:../ui/task/others/12Q3/0829_ÊµÊ±µ¯´°/
+* svn:../ui/task/others/12Q3/0829_å®æ—¶å¼¹çª—/
 * 201401061526
 * [${p_id},${t_id},${d_id}] published at ${publishdate} ${publishtime}
 */
 
-//¹ã¸æÊı¾İ
+//å¹¿å‘Šæ•°æ®
 ;(function () {
     "use strict";
 
     var KEY = 'sinaads_rtw_';
 
-    var logos = {
-            //×ÜÔŞ £ºËØ²ÄµØÖ·£¬ ÆØ¹âµØÖ·£¬Á¬½ÓµØÖ·£¬Í¶·ÅÊ±¼ä£¬Õ¹ÏÖ´ÎÊı
-            'zz' : [
+    var LOGOS = [
+            //æ€»èµ ï¼šç´ æåœ°å€ï¼Œ æ›å…‰åœ°å€ï¼Œè¿æ¥åœ°å€ï¼ŒæŠ•æ”¾æ—¶é—´ï¼Œå±•ç°æ¬¡æ•°
+            [
                 'http://d1.sina.com.cn/litong/zhitou/sinaads/demo/lianghui2014/whh.png',
                 'http://sax.sina.com.cn/click?type=1',
                 '',
-                ['2014-3-5 0:0:0~2014-3-5 23:59:59', '2014-3-12 0:0:0~2014-3-12 23:59:59'],
-                1
+                ['2014-3-12 0:0:0~2015-3-11 23:59:59'],
+                9999999
             ],
-            //Éî¶È £º ËØ²ÄµØÖ·£¬ÆØ¹âµØÖ·£¬Á´½ÓµØÖ·£¬Í¶·ÅÊ±¼ä
-            'sd' : [
+            //æ·±åº¦ ï¼š ç´ æåœ°å€ï¼Œæ›å…‰åœ°å€ï¼Œé“¾æ¥åœ°å€ï¼ŒæŠ•æ”¾æ—¶é—´
+            [
                 'http://d1.sina.com.cn/litong/zhitou/sinaads/demo/lianghui2014/gl.png',
                 'http://sax.sina.com.cn/click?type=2',
                 '',
-                ['2014-3-4 0:0:0~2014-3-4 23:59:59', '2014-3-10 0:0:0~2014-3-10 23:59:59'],
-                1
+                ['2014-3-12 0:0:0~2015-3-11 23:59:59'],
+                9999999
             ]
-            //¾Û½¹ £º ËØ²ÄµØÖ·£¬ÆØ¹âµØÖ·£¬Á¬½ÓµØÖ·£¬Í¶·ÅÊ±¼ä
-            //'jj' : [
-            //  'http://d1.sina.com.cn/litong/zhitou/sinaads/demo/lianghui2014/3.jpg',
-            //  'http://sax.sina.com.cn/click?type=3',
-            //  'http://sina.com.cn',
-            //  '2014-2-27 0:0:0~2014-2-30 23:59:59',
-            //  1
-            //]
-        },
-        imgs = [];
+        ],
+        imgs = []; //é¢„åŠ è½½å›¾ç‰‡åˆ—è¡¨;
 
     /**
-     * ¹ã¸æÈÕ³ÌÅĞ¶Ï
-     * @param {Mix} ranges ÅÅÆÚÊ±¼ä¶Î£¬¿ÉÒÔÊÇÒ»¸ö×Ö·û´®£¬»òÕßÒ»¸öÊı¾İ£¬±íÊ¾¶à¸öÊ±¼ä¶ÎÀıÈç:
+     * å¹¿å‘Šæ—¥ç¨‹åˆ¤æ–­
+     * @param {Mix} ranges æ’æœŸæ—¶é—´æ®µï¼Œå¯ä»¥æ˜¯ä¸€ä¸ªå­—ç¬¦ä¸²ï¼Œæˆ–è€…ä¸€ä¸ªæ•°æ®ï¼Œè¡¨ç¤ºå¤šä¸ªæ—¶é—´æ®µä¾‹å¦‚:
      * [
-     *   '2013-6-21',                              //2013-6-21È«Ìì
-     *   '2013-6-22~2013-6-23',                    //2013-6-22µ½2013-6-23È«Ìì
-     *   '2013-6-24 12:3:4~2013-6-25 12:13:20',    //2013-6-24 12:3:4µ½2013-6-25 12:13:20
-     *   '9:00:00~12:59:59',                       //Ã¿Ìì9:00:00µ½12:59:59
-     *   '9:00:00~8:59:59'                         //9:00:00 µ½µÚ¶şÌìÔçÉÏ 8:59:59
-     * ] »òÕß
-     * ÆäÖĞÒ»¸ö×Ö·û´®µ±²ÎÊı
+     *   '2013-6-21',                              //2013-6-21å…¨å¤©
+     *   '2013-6-22~2013-6-23',                    //2013-6-22åˆ°2013-6-23å…¨å¤©
+     *   '2013-6-24 12:3:4~2013-6-25 12:13:20',    //2013-6-24 12:3:4åˆ°2013-6-25 12:13:20
+     *   '9:00:00~12:59:59',                       //æ¯å¤©9:00:00åˆ°12:59:59
+     *   '9:00:00~8:59:59'                         //9:00:00 åˆ°ç¬¬äºŒå¤©æ—©ä¸Š 8:59:59
+     * ] æˆ–è€…
+     * å…¶ä¸­ä¸€ä¸ªå­—ç¬¦ä¸²å½“å‚æ•°
      *
      * @usage
      *   var schedule = new Schedule(ranges);
-     *   ¼ì²éÊÇ·ñÔÚÅÅÆÚÄÚµÄ·½·¨
-     *   schedule.check('2013-06-21 6:0:0');  Ò»¸öDate¶ÔÏó»òÕßÈÕÆÚ×Ö·û´®¼´¿É 
+     *   æ£€æŸ¥æ˜¯å¦åœ¨æ’æœŸå†…çš„æ–¹æ³•
+     *   schedule.check('2013-06-21 6:0:0');  ä¸€ä¸ªDateå¯¹è±¡æˆ–è€…æ—¥æœŸå­—ç¬¦ä¸²å³å¯ 
      */
 
     function Schedule(ranges) {
@@ -122,7 +114,7 @@
             start = +this.parse(start);
             end = +this.parse(end);
 
-            //ºóÃæµÄÊ±¼ä±ÈÇ°ÃæµÄĞ¡£¬Ôò±íÃ÷¿çÌì£¬Ôö¼ÓÒ»ÌìÊ±¼ä
+            //åé¢çš„æ—¶é—´æ¯”å‰é¢çš„å°ï¼Œåˆ™è¡¨æ˜è·¨å¤©ï¼Œå¢åŠ ä¸€å¤©æ—¶é—´
             if (end <= start) {
                 end += 1000 * 60 * 60 * 24;
             }
@@ -133,9 +125,9 @@
 
     Schedule.prototype = {
         /**
-         * ¼ì²éÊÇ·ñÔÚÈÕ³Ì·¶Î§ÄÚ
-         * @param  {String | Date} time Òª¼ì²éµÄÈÕÆÚ
-         * @return {Boolean}            ÊÇ·ñÔÚÈÕ³ÌÄÚ
+         * æ£€æŸ¥æ˜¯å¦åœ¨æ—¥ç¨‹èŒƒå›´å†…
+         * @param  {String | Date} time è¦æ£€æŸ¥çš„æ—¥æœŸ
+         * @return {Boolean}            æ˜¯å¦åœ¨æ—¥ç¨‹å†…
          */
         check : function (time) {
             var ranges = this.ranges,
@@ -143,7 +135,7 @@
                 range,
                 result = ranges.length <= 0;
 
-            time = time ? (+this.parse(time)) : (+new Date());//Ã»¸øÊ±¼ä£¬Ê¹ÓÃµ±Ç°Ê±¼ä¼ì²é
+            time = time ? (+this.parse(time)) : (+new Date());//æ²¡ç»™æ—¶é—´ï¼Œä½¿ç”¨å½“å‰æ—¶é—´æ£€æŸ¥
 
             while (!result && (range = ranges[i++])) {
                 result = time >= range[0] && time <= range[1];
@@ -151,7 +143,7 @@
             return result;
         },
         /**
-         * ½âÎö·½·¨
+         * è§£ææ–¹æ³•
          * @tangram T.date.parse
          */
         parse : function (time) {
@@ -182,11 +174,11 @@
     //usage
     //test 2013-6-21
     var schedule = new Schedule([
-        //'2013-6-21',                              //2013-6-21È«Ìì
-        //'2013-6-22~2013-6-23',                    //2013-6-22µ½2013-6-23È«Ìì
-        //'2013-6-24 12:3:4~2013-6-25 12:13:20',    //2013-6-24 12:3:4µ½2013-6-25 12:13:20
-        //'9:00:00~12:59:59',                        //Ã¿Ìì9:00:00µ½12:59:59
-        '9:00:00~8:59:59'                         //9:00:00 µ½µÚ¶şÌìÔçÉÏ 8:59:59
+        //'2013-6-21',                              //2013-6-21å…¨å¤©
+        //'2013-6-22~2013-6-23',                    //2013-6-22åˆ°2013-6-23å…¨å¤©
+        //'2013-6-24 12:3:4~2013-6-25 12:13:20',    //2013-6-24 12:3:4åˆ°2013-6-25 12:13:20
+        //'9:00:00~12:59:59',                        //æ¯å¤©9:00:00åˆ°12:59:59
+        '9:00:00~8:59:59'                         //9:00:00 åˆ°ç¬¬äºŒå¤©æ—©ä¸Š 8:59:59
     ]);
     schedule.check(+new Date('2013/6/21 8:0:0'));
     */
@@ -239,7 +231,7 @@
         var CrossDomainStorage = {};
         CrossDomainStorage.ready = function(fn) {
             if (!checkReady()) {
-                //ifrmae»¹Ã»¼ÓÔØ
+                //ifrmaeè¿˜æ²¡åŠ è½½
                 fns.push(fn);
                 return;
             }
@@ -275,53 +267,74 @@
     var XDomainStorage = window.___SinaadsCrossDomainStorage___;
 
 
+    //å¼€å§‹å¹¿å‘Šé€»è¾‘
     try {
         document.execCommand('BackgroundImageCache', false, true);
     } catch(e) {}
 
-    for (var i = 0, len = logos.length; i < len, imgs[i]; i++) {
+    for (var i = 0, len = LOGOS.length; i < len; i++) {
         imgs[i] = new Image();
-        imgs[i].src = logos[i][0];
+        imgs[i].src = LOGOS[i][0];
     }
 
     window.sinaadsRealtimeWindowAD = {
         get : function (cb) {
             XDomainStorage.ready(function(storage){
-                var logo,
+                var seed = storage.get(KEY + 'seed'),
+                    logo,
+                    logos = [], //å­˜å‚¨è¿‡æ»¤æœ‰æ•ˆæ—¶é—´åçš„ç´ æåˆ—è¡¨
                     now = new Date(),
                     nowMonth = now.getMonth(),
                     nowDate = now.getDate();
 
-                for (var key in logos) {
-                    logo = logos[key];
-                    //ÊÇ·ñÔÚÍ¶·ÅÆÚÄÚ
-                    if (!new Schedule(logo[3]).check()) {
-                        logo = [];
-                        continue;
-                    }
-                    //ÊÇ·ñ½ñÌìÕ¹ÏÖ¹ı
-                    var lastshow = storage.get(KEY + key),
-                        show = new Date(),
-                        showMonth,
-                        showDate,
-                        lastshowTime,
-                        lastshowCount = 0;
-                    if (lastshow) {
-                        lastshowTime = parseInt((lastshow + '').split('|')[0], 10);
-                        show.setTime(lastshowTime);
-                        showMonth = show.getMonth();
-                        showDate = show.getDate();
-                        if (showMonth === nowMonth && showDate === nowDate) {
-                            lastshowCount = parseInt((lastshow + '').split('|')[1], 10) || 1;
-                            if (lastshowCount >= (parseInt(logo[4], 10) || 1)) {
-                                logo = [];
-                                continue;
-                            }
-                        }
-                    }
-                    storage.set(KEY + key, +new Date() + '|' + (++lastshowCount));
-                    break;
+                if (isNaN(parseInt(seed, 10))) {
+                    seed = 0;
+                } else {
+                    seed = parseInt(seed, 10) + 1;
                 }
+                storage.set(KEY + 'seed', seed);
+
+                for (var i = 0, len = LOGOS.length; i < len; i++) {
+                    logo = LOGOS[i];
+                    //æ˜¯å¦åœ¨æŠ•æ”¾æœŸå†…
+                    if (new Schedule(logo[3]).check()) {
+                        logos.push(logo);
+                    }
+                }
+
+                logo = logos[logos.length <= 1 ? 1 : (seed % logos.length)];
+
+                // for (var key in logos) {
+                //     logo = logos[key];
+                //     //æ˜¯å¦åœ¨æŠ•æ”¾æœŸå†…
+                //     if (!new Schedule(logo[3]).check()) {
+                //         logo = [];
+                //         continue;
+                //     }
+                //     //æ˜¯å¦ä»Šå¤©å±•ç°è¿‡
+                //     var lastshow = storage.get(KEY + key),
+                //         show = new Date(),
+                //         showMonth,
+                //         showDate,
+                //         lastshowTime,
+                //         lastshowCount = 0;
+                //     if (lastshow) {
+                //         lastshowTime = parseInt((lastshow + '').split('|')[0], 10);
+                //         show.setTime(lastshowTime);
+                //         showMonth = show.getMonth();
+                //         showDate = show.getDate();
+                //         if (showMonth === nowMonth && showDate === nowDate) {
+                //             lastshowCount = parseInt((lastshow + '').split('|')[1], 10) || 1;
+                //             if (lastshowCount >= (parseInt(logo[4], 10) || 1)) {
+                //                 logo = [];
+                //                 continue;
+                //             }
+                //         }
+                //     }
+                //     storage.set(KEY + key, +new Date() + '|' + (++lastshowCount));
+                //     break;
+                // }
+                
                 cb && cb(logo);
             });
         }
@@ -706,7 +719,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                 },
                 onMsgFn: null,
 
-                _curTimeStamp: 0, //µ¯´°¿ÚÊµÊ±Ê±¼ä´Á,ÓÃÓÚĞ£×¼£¬±ÜÃâ³öÏÖÕâ¸ö´°¿ÚµÄµ¯³ö¿ò¹ØÉÏºó£¬ÔÚÎ´ÉèÖÃcookieÖ®Ç°£¬ĞÂÊı¾İ½øÀ´ÁË£¬¾ÍÓÖµ¯´°ÁË¡£
+                _curTimeStamp: 0, //å¼¹çª—å£å®æ—¶æ—¶é—´æˆ³,ç”¨äºæ ¡å‡†ï¼Œé¿å…å‡ºç°è¿™ä¸ªçª—å£çš„å¼¹å‡ºæ¡†å…³ä¸Šåï¼Œåœ¨æœªè®¾ç½®cookieä¹‹å‰ï¼Œæ–°æ•°æ®è¿›æ¥äº†ï¼Œå°±åˆå¼¹çª—äº†ã€‚
                 _msg: function (msg) {
                     env.log('blackbox data in'+((new Date()).getTime()));
                     var lastTimeStamp, that = this,
@@ -821,7 +834,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                         $fx(this.container).fxAdd({type:'bottom', from: -49, to:0, step: 2, delay:12}).fxRun();
                     }
                     env.getSuda.ready(function(){
-                        env.log('suda pageview!');//¼ÓÔØ´¥·¢µÄsuda
+                        env.log('suda pageview!');//åŠ è½½è§¦å‘çš„suda
                         env.uaTrack('newspopnew', 'pageview_'+c_id, url);
                     });
                 },
@@ -873,21 +886,21 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                     return function(info){
                         var index = info.c;
                         var channel = dict[index];
-                        //²»ÔÚ×ÖµäµÄ²»µ¯´°
+                        //ä¸åœ¨å­—å…¸çš„ä¸å¼¹çª—
                         if(typeof channel=='undeinfed'){
-                            //²»ÔÚÁĞ±íµÄÎªÆäËüÆµµÀ
+                            //ä¸åœ¨åˆ—è¡¨çš„ä¸ºå…¶å®ƒé¢‘é“
                             return false;
                         }else if(channel=='all'){
-                            //ĞÂÎÅÖĞĞÄ
+                            //æ–°é—»ä¸­å¿ƒ
                             return true;
                         }else{
-                            //¼ì²éÊÇ·ñ¸ÃÆµµÀÒ³Ãæ
+                            //æ£€æŸ¥æ˜¯å¦è¯¥é¢‘é“é¡µé¢
                             return isRightChannel(channel);
                         }
                     };
                 }(),
                 _render: function (info) {
-                    //²»ÊÇºÏÊÊµÄÆµµÀĞÅÏ¢²»ÏÔÊ¾
+                    //ä¸æ˜¯åˆé€‚çš„é¢‘é“ä¿¡æ¯ä¸æ˜¾ç¤º
                     if(!this._isRightMsg(info)){
                         return;
                     }
@@ -909,9 +922,12 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                     (this._closeIntervalId) && (clearInterval(this._closeIntervalId));
                     if (this.showing) {
                         this._close.call(this, true);
-                        this._renderDOM.call(this, title, url, msg, c_id);
+                    }
+                    //å¦‚æœæ˜¯ä¸–ç•Œæ¯ç›¸å…³ï¼Œå¢åŠ å¹¿å‘ŠèµåŠ©
+                    if (9 === parseInt(info.t, 10)) {
+                        this._renderDOMWithAD.call(this, title, url, msg, c_id);
                     } else {
-                        this._renderDOM.call(this, title, url, msg, c_id);
+                        this.__renderDOM.call(this, title, url, msg, c_id);
                     }
                     env.setCookie(env.COOKIE_KEY_STATUS, time + '_o', 100, '/', '.sina.com.cn');
                     this._closeIntervalId = setInterval(function(){
@@ -928,7 +944,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
                     //version b goes here
                     var sudaKey = 'newspopnew';
-                    env.dom.byId(that.idPre + 'CloseBtn').onclick = function(){//µã»÷¹Ø±Õ´¥·¢µÄsuda
+                    env.dom.byId(that.idPre + 'CloseBtn').onclick = function(){//ç‚¹å‡»å…³é—­è§¦å‘çš„suda
                         that._close.call(that);
                         env.getSuda.ready(function(){
                             env.log('suda close!');
@@ -937,7 +953,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
                         });
                     };
-                    env.dom.byId(that.idPre + 'Title').onclick = function(){//µã»÷±êÌâ´¥·¢µÄsuda
+                    env.dom.byId(that.idPre + 'Title').onclick = function(){//ç‚¹å‡»æ ‡é¢˜è§¦å‘çš„suda
                         that._close.call(that);
                         env.getSuda.ready(function(){
                             env.log('suda title!');
@@ -946,7 +962,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                             env.uaTrack(sudaKey, 'title_'+c_id, url);
                         });
                     };
-                    env.dom.byId(that.idPre + 'Detail').onclick = function(){//µã»÷ÏêÏ¸´¥·¢µÄsuda
+                    env.dom.byId(that.idPre + 'Detail').onclick = function(){//ç‚¹å‡»è¯¦ç»†è§¦å‘çš„suda
                         that._close.call(that);
                         env.getSuda.ready(function(){
                             env.log('suda details!');
@@ -955,23 +971,28 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                         });
                     };
                 },
-                _renderDOM : function (title, url, msg, c_id) {
+                _renderDOMWithAD : function (title, url, msg, c_id) {
                     var THIS = this;
                     try {
                         window.sinaadsRealtimeWindowAD.get(function (ad) {
                             THIS.__renderDOM(title, url, msg, c_id, ad);
                         }); 
                     } catch(e) {
-                        THIS.__renderDOM(title, url, msg, c_id, []);
-                    }      
+                        THIS.__renderDOM(title, url, msg, c_id);
+                    }
                 },
-                __renderDOM: function (title, url, msg ,c_id, ad) {
-                    var that = this, i, clickA;
+                __renderDOM: function (title, url, msg, c_id, ad) {
+                    var that = this,
+                        i,
+                        clickA,
+                        ad = ad || [];
+
                     var html = [];
+
                     title = env.encodeHTML(title);
                     //version b dom here goes...
                     html.push('<div class="rtw2-in rtw2-cfx">');
-                        //ÕâÀï¸ù¾İÆµµÀ½øĞĞÇø·Ö¹ã¸æ9===ÌåÓıÆµµÀ
+                        //è¿™é‡Œæ ¹æ®é¢‘é“è¿›è¡ŒåŒºåˆ†å¹¿å‘Š9===ä½“è‚²é¢‘é“
                         ad[0] && html.push(
                             '<div class="rtw2-ad">',
                                 ad[1] ? '<iframe src="' + ad[1] + '" width=1 height=1 marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling=no bordercolor="#000000" style="position:absolute;top:-1px;"></iframe>' : '',
@@ -983,7 +1004,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
                         html.push('<div class="rtw2-md" id="' + this.idPre + 'Md">');
                             html.push('<a class="rtw2-md-title" hidefocus id="' + this.idPre + 'Title" href="' + url + '" target="_blank">' + title + '</a>');
-                            html.push('<a class="rtw2-md-detail" hidefocus id="' + this.idPre + 'Detail" href="' + url + '" target="_blank">ÏêÏ¸&gt;&gt;</a>');
+                            html.push('<a class="rtw2-md-detail" hidefocus id="' + this.idPre + 'Detail" href="' + url + '" target="_blank">è¯¦ç»†&gt;&gt;</a>');
                         html.push('</div>');
                         html.push('<div class="rtw2-close" >');
                             html.push('<a id="' + this.idPre + 'CloseBtn"  class="rtw2-close-btn" href="javascript:void(0);" hidefocus></a>');
@@ -1029,11 +1050,11 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
                         newStyle.push('.real-time-window .rtw2-in { height:50px; line-height:50px; }');
                         newStyle.push('.real-time-window .rtw2-lt { display:inline; float:left; width:61px; height:50px; background:url(http://i3.sinaimg.cn/dy/deco/2013/0331/mmx_tc_ico_main.png) 0 0 no-repeat #f9f5ec; zoom:1; }');
                         newStyle.push('.real-time-window .rtw2-md { display:inline; float:left; background:#f9f5ec; height:48px; line-height:48px; zoom:1; border-top:1px solid #f6e3c9;border-bottom:1px solid #f6e3c9;}');
-                        newStyle.push('.real-time-window a.rtw2-md-title { font-family:"Microsoft YaHei","Î¢ÈíÑÅºÚ","SimHei","ºÚÌå" !important; display:inline-block; height:48px; line-height:48px; padding:0 5px; font-size:16px; }');
+                        newStyle.push('.real-time-window a.rtw2-md-title { font-family:"Microsoft YaHei","å¾®è½¯é›…é»‘","SimHei","é»‘ä½“" !important; display:inline-block; height:48px; line-height:48px; padding:0 5px; font-size:16px; }');
                         newStyle.push('.real-time-window a.rtw2-md-title:link { color:#122E67 !important; text-decoration:none !important; }');
                         newStyle.push('.real-time-window a.rtw2-md-title:hover { color:#ff8400 !important; text-decoration:underline !important; }');
                         newStyle.push('.real-time-window a.rtw2-md-title:visited { color:#52687e !important; text-decoration:none !important; }');
-                        newStyle.push('.real-time-window a.rtw2-md-detail {font-family:"SimSun","ËÎÌå","Arial Narrow" !important; display:inline-block; height:48px; line-height:48px; padding:0 5px; font-size:16px; display:none;}');
+                        newStyle.push('.real-time-window a.rtw2-md-detail {font-family:"SimSun","å®‹ä½“","Arial Narrow" !important; display:inline-block; height:48px; line-height:48px; padding:0 5px; font-size:16px; display:none;}');
                         newStyle.push('.real-time-window a.rtw2-md-detail:link { color:#22c4ff; text-decoration:none; }');
                         newStyle.push('.real-time-window a.rtw2-md-detail:hover { color:#22c4ff; text-decoration:underline !important; }');
                         newStyle.push('.real-time-window a.rtw2-md-detail:visited { color:#22c4ff; text-decoration:none; }');

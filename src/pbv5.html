@@ -12,10 +12,10 @@
 
         var type = ary[0],
             src = sinaadToolkit.string.encodeHTML(decodeURIComponent(ary[1])),
-            link = sinaadToolkit.url.ensureURL(decodeURIComponent(ary[2])),
+            link = sinaadToolkit.string.encodeHTML(sinaadToolkit.url.ensureURL(decodeURIComponent(ary[2]))),
             width = parseInt(ary[3], 10) + 'px',
             height = parseInt(ary[4], 10) + 'px',
-            monitor = ary[5] ? decodeURIComponent(ary[5]).replace(/</g, '').replace(/>/g, '') : '';
+            monitor = ary[5] ? sinaadToolkit.string.encodeHTML(decodeURIComponent(ary[5]).replace(/</g, '').replace(/>/g, '')) : '';
 
         var srcAllowDomain = ['sina\\.com\\.cn','weibo\\.com','sinaimg\\.cn'],
             urlAllowDomain = ['sina\\.com\\.cn','weibo\\.com','allyes\\.com', 'admaster\\.com\\.cn', 'miaozhen\\.com'];

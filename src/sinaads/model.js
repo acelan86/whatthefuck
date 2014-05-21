@@ -236,7 +236,8 @@ var modelModule = (function (core, controller, uid) {
                 'tip'   : 'tip',
                 'bt'    : 'bp',
                 'sx'    : 'follow',
-                'kzdl'  : 'coupletExt'
+                'kzdl'  : 'coupletExt',
+                'fc1'   : 'pop'
             }[ad.type]) || ad.type || 'embed';
 
             ad.content[i] = content;
@@ -460,6 +461,10 @@ var modelModule = (function (core, controller, uid) {
     return {
         init : _init,
         request : _request,
+        getSeed : _getSeed,
+        add : function (pdps, data) {
+            _cache[pdps] = data;
+        },
         get : function (pdps) {
             return (pdps ? _cache[pdps] : _cache);
         },

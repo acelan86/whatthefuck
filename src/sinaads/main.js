@@ -51,6 +51,7 @@ window._sinaadsIsInited = window._sinaadsIsInited || (function (window, core, un
     import "view/turning";
     import "view/videoWindow";
     import "view/bg";
+    import "view/pop";
 
     import "init";
 
