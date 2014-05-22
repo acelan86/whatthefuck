@@ -24,6 +24,16 @@
         //     return;
         // }
 
+        /* 移动端不出广告 */
+        if (sinaadToolkit.browser.mobile) {
+            try {
+                sinaadToolkit.debug('Media: In building float complete!');
+                mediaControl.done(mediaControl['float']);
+            } catch (e) {}
+
+            return;
+        }
+
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
         config.sideWidth = config.sideWidth || SIDE_SIZE[0];

@@ -323,6 +323,8 @@
             }
         } catch (e) {}
 
+        browser.mobile = browser.tablet || browser.phone || browser.touchpad;
+
         /**
          * 如果是safari浏览器，返回safari版本号
          * @type {Number}
