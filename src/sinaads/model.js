@@ -86,8 +86,7 @@ var modelModule = (function (core, controller, uid) {
                 content,
                 len = metaNodes.length,
                 i = 0,
-                entry,
-                ip;
+                entry;
 
             targeting = {};
             /* 在meta中加入固定的keywords, 记录用户平台，屏幕尺寸，浏览器类型，是否移动端*/
@@ -129,12 +128,12 @@ var modelModule = (function (core, controller, uid) {
                 });
             }
 
-            /* 模拟ip定向 */
-            if ((ip = core.cookie.get('sinaads_ip') || core.storage.get('sinaads_ip'))) {
-                targeting.ip = ip;
-                core.cookie.remove('sinaads_ip');
-                core.storage.remove('sinaads_ip');
-            }
+            // /* 模拟ip定向 */
+            // if ((ip = core.cookie.get('sinaads_ip') || core.storage.get('sinaads_ip'))) {
+            //     targeting.ip = ip;
+            //     core.cookie.remove('sinaads_ip');
+            //     core.storage.remove('sinaads_ip');
+            // }
 
             core.debug('sinaads:Targeting init,', targeting);
         }
@@ -277,10 +276,10 @@ var modelModule = (function (core, controller, uid) {
                 'referral=' + encodeURIComponent(core.url.top)                  //当前页面url
             ];
 
-            //如果是预览位置，增加date参数,从url上获取，如果获取不到使用本地时间
-            var _serverPreviewDate = _isServerPreviewSlot(_pdps.join(','));
-            if (_serverPreviewDate) {
-                params.push('date=' + _serverPreviewDate); //请求广告的本地时间, 格式2014020709
+            //如果是预览位置，增加预览相关参数
+            var _serverPreviewParams = _isServerPreviewSlot(_pdps.join(','));
+            if (_serverPreviewParams) {
+                params.push(_serverPreviewParams);
             }
 
             //如果有额外的传递参数，请求时传入
@@ -409,24 +408,33 @@ var modelModule = (function (core, controller, uid) {
             var query = par.split('&'),
                 slots = {},
                 key = 'sinaads_server_preview', //必需有的key
-                dateKey = 'sinaads_preview_date', //预览日期
                 q,
                 i = 0,
                 len = 0,
-                date = core.date.format(new Date(), 'yyyyMMddHH');
+                date = core.date.format(new Date(), 'yyyyMMddHH'),
+                ip = '',
+                deliveryId = '',
+                pdps = '';
+
             for (i = 0, len = query.length; i < len; i++) {
                 if ((q = query[i])) {
                     q = q.split('=');
-                    if (q[0] === dateKey) {
-                        q[1] && (date = q[1]);
-                    }
-                }
-            }
-            for (i = 0, len = query.length; i < len; i++) {
-                if ((q = query[i])) {
-                    q = q.split('=');
-                    if (q[0] === key) {
-                        slots[q[1]] = date;
+
+                    if (q[0] === key && q[1]) {
+                        q = decodeURIComponent(q[1]).split('|');
+
+                        pdps = q[0] || pdps;
+                        date = q[1] || date;
+                        ip = q[2] || ip;
+                        deliveryId = q[3] || deliveryId;
+
+                        if (pdps) {
+                            slots[pdps] = [];
+                            date && slots[pdps].push('date=' + encodeURIComponent(date));
+                            ip && slots[pdps].push('tgip=' + encodeURIComponent(ip));
+                            deliveryId && slots[pdps].push('deid=' + encodeURIComponent(deliveryId));
+                            slots[pdps] = slots[pdps].join('&');
+                        }
                     }
                 }
             }
