@@ -2090,7 +2090,8 @@
                             width : width,
                             height : height,
                             wmode : opt_options.wmode || 'opaque',
-                            vars : vars
+                            vars : vars,
+                            id : opt_options.id || ''
                         });
                         if (link) {
                             _html = [
