@@ -19,7 +19,7 @@ var modelModule = (function (core, controller, uid) {
         if (!seed[seedkey]) {
             seed[seedkey] = parseInt(core.storage.get(seedkey), 10) || core.rand(1, 100);
             //大于1000就从0开始，防止整数过大
-            core.storage.set(seedkey, _cache[seedkey] > 1000 ? 1 : ++seed[seedkey], 30 * 24 * 60 * 60 * 1000); //默认一个月过期
+            core.storage.set(seedkey, seed[seedkey] > 1000 ? 1 : ++seed[seedkey], 30 * 24 * 60 * 60 * 1000); //默认一个月过期
         }
         return seed[seedkey];
     }
