@@ -321,7 +321,6 @@ var _init = (function (core, model, view, controller) {
  */
 modelModule.init(function () {
     core.debug('sinaads:Begin to scan and render all ad placeholders.' + core.now());
-
     /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
     var preloadAds = window.sinaads;
     if (preloadAds && preloadAds.shift) {

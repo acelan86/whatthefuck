@@ -688,7 +688,7 @@ function _dc_video_get_rotation(pos, is_get_cur) {
           rotation_id=parseInt(bodyRotation_id.value);
     }
     _dc_video_cur_rotation[pos] = rotation_id;
-    return 'function' === typeof window.sinaadsGetSeed ? (window.sinaadsGetSeed() % 4 + 1) : _dc_video_cur_rotation[pos];
+    return 'function' === typeof window.sinaadsGetSeed ? (window.sinaadsGetSeed() % 4 === 0 ? 4 : window.sinaadsGetSeed() % 4) : _dc_video_cur_rotation[pos];
 }
 //function _get_current_url () {
 //  return location.href;
