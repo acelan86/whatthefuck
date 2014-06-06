@@ -49,6 +49,7 @@
         element.appendChild(container);
 
         var main = this.main = document.createElement('div');
+        main.className = 'sinaads-fullscreen-main';
         main.style.cssText = 'display:none;';
 
         var mainContent = this.mainContent = document.createElement('div');

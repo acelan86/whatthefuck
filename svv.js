@@ -690,9 +690,9 @@ function _dc_video_get_rotation(pos, is_get_cur) {
     _dc_video_cur_rotation[pos] = rotation_id;
     return 'function' === typeof window.sinaadsGetSeed ? (window.sinaadsGetSeed() % 4 + 1) : _dc_video_cur_rotation[pos];
 }
-//function _get_current_url () {
-//  return location.href;
-//}
+function _get_current_url () {
+ return location.href;
+}
 // set iask info
 var dc_video_iask_info = {}; // iask_info
 function dc_video_set_iask_info(vid, srctp, srcid, subid, cid) {
