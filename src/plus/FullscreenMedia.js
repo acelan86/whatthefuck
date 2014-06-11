@@ -37,7 +37,7 @@
         this.transitionStep = config.hasClose ? 90 : 98;
         this.replaySrc = config.replaySrc || REPLAY_BTN;
         this.replaySrcType = config.replaySrcType || 'flash';
-        this.duration = config.duration || (config.hasClose ? 5000 : 8000);
+        this.duration = config.duration || (config.hasClose ? 8000 : 5000);
         this.pdps = config.pdps;
         this.replayFuncName = "fullscreenReplayFunc" + config.pdps;
 
