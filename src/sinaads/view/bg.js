@@ -15,7 +15,7 @@
             height : height || config.sinaads_bg_height,
             midWidth : config.sinaads_bg_midWidth || 1000,
             headHeight : config.sinaads_bg_headHeight || 30,
-            top : config.sinaads_bg_top || 46,
+            top : 'undefined' !== typeof config.sinaads_bg_top ? config.sinaads_bg_top : 46,
             asideClickable: config.sinaads_bg_asideClick,
             monitor : content.monitor || []
         };

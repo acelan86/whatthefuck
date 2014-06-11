@@ -335,7 +335,7 @@ if (p != undefined) {
         var v_area = '';
         for(i = 0; i < _metas.length; i++ ) {
             v_area = _metas[i].getAttribute("content");
-            v_area = v_area ? v_area.match(/地区:([^;]+);/) : null;
+            v_area = v_area ? v_area.match(/鍦板尯:([^;]+);/) : null;
             if(v_area != null) {
                 v_region = v_area[1];
                 break;
@@ -344,7 +344,7 @@ if (p != undefined) {
     }
 
     // korea
-    if(v_region == "韩国") {
+    if(v_region == "闊╁浗") {
         return 'korea_movie';
     }
 
@@ -689,10 +689,13 @@ function _dc_video_get_rotation(pos, is_get_cur) {
     }
     _dc_video_cur_rotation[pos] = rotation_id;
     return 'function' === typeof window.sinaadsGetSeed ? (window.sinaadsGetSeed() % 4 === 0 ? 4 : window.sinaadsGetSeed() % 4) : _dc_video_cur_rotation[pos];
+<<<<<<< HEAD
+=======
 }
-//function _get_current_url () {
-//  return location.href;
-//}
+function _get_current_url () {
+ return location.href;
+>>>>>>> master
+}
 // set iask info
 var dc_video_iask_info = {}; // iask_info
 function dc_video_set_iask_info(vid, srctp, srcid, subid, cid) {

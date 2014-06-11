@@ -41,7 +41,7 @@
         this.transitionStep = config.hasClose ? 90 : 98;
         this.replaySrc = config.replaySrc || REPLAY_BTN;
         this.replaySrcType = config.replaySrcType || 'flash';
-        this.duration = config.duration || (config.hasClose ? 5000 : 8000);
+        this.duration = config.duration || (config.hasClose ? 8000 : 5000);
         this.pdps = config.pdps;
         this.replayFuncName = "fullscreenReplayFunc" + config.pdps;
 
@@ -53,6 +53,7 @@
         element.appendChild(container);
 
         var main = this.main = document.createElement('div');
+        main.className = 'sinaads-fullscreen-main';
         main.style.cssText = 'display:none;';
 
         var mainContent = this.mainContent = document.createElement('div');
