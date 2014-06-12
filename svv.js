@@ -689,12 +689,9 @@ function _dc_video_get_rotation(pos, is_get_cur) {
     }
     _dc_video_cur_rotation[pos] = rotation_id;
     return 'function' === typeof window.sinaadsGetSeed ? (window.sinaadsGetSeed() % 4 === 0 ? 4 : window.sinaadsGetSeed() % 4) : _dc_video_cur_rotation[pos];
-<<<<<<< HEAD
-=======
 }
 function _get_current_url () {
  return location.href;
->>>>>>> master
 }
 // set iask info
 var dc_video_iask_info = {}; // iask_info
@@ -889,7 +886,7 @@ function dc_video_set_iask_info(vid, srctp, srcid, subid, cid) {
 
                     if (pdps) {
                         slots[pdps] = [];
-                        date && slots[pdps].push('date=' + encodeURIComponent(date));
+                        date && slots[pdps].push(encodeURIComponent(date));
                         ip && slots[pdps].push('tgip=' + encodeURIComponent(ip));
                         deliveryId && slots[pdps].push('deid=' + encodeURIComponent(deliveryId));
                         slots[pdps] = slots[pdps].join('&');
