@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title> </title>
+    </head>
+    <body>
+        <script>
+            window.glo = {};
+            alert('window.glo is defined?' + ('undefined' !== typeof window.glo)); //true
+        </script>
+
+        <script>
+            glo;
+            alert('window.glo is defined?' + ('undefined' !== typeof window.glo)); //ie false, other true;
+        </script>
+        <script>
+        </script>
+    </body>
+</html>

@@ -127,7 +127,7 @@
             var me = this;
             return function () {
                 sinaadToolkit.cookie.set('bgAdCookie' + me.config.pdps, 0 , 24 * 60 * 60 * 1000);
-                sinaadToolkit.event.un(window, 'resize', me.closeHandler);
+                sinaadToolkit.event.un(window, 'resize', me.resizeHandler);
                 document.body.style.cssText += ';background:none;';
                 me.midBg.style.display = 'none';
                 

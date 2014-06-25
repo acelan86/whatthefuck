@@ -302,7 +302,7 @@
                     }
                 }
 
-                logo = logos[logos.length <= 1 ? 1 : (seed % logos.length)];
+                logo = logos[logos.length <= 1 ? 0 : (seed % logos.length)];
 
                 // for (var key in logos) {
                 //     logo = logos[key];

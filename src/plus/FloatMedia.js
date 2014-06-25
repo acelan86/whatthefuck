@@ -51,7 +51,8 @@
             position : 'left ' + config.top,
             autoShow : 1,
             minViewportWidth : (config.contentWidth || 1000) + 2 * config.sideWidth,
-            zIndex : 10500
+            zIndex : 10500,
+            follow : config.follow || 0
         });
 
         var right = this.right = new sinaadToolkit.Box({
@@ -60,7 +61,8 @@
             position : 'right ' + config.top,
             autoShow : 1,
             minViewportWidth : (config.contentWidth || 1000) + 2 * config.sideWidth,
-            zIndex : 10500
+            zIndex : 10500,
+            follow : config.follow || 0
         });
 
         var leftContent = this.leftContent = document.createElement('div');
