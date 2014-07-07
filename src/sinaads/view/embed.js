@@ -18,6 +18,14 @@
             tpl         = config.sinaads_ad_tpl || '',
             adContent;
 
+        //如果是ios设备且类型为flash 退出，不渲染广告，但这里有曝光已经发送
+        // if (core.browser.iphone && core.browser.ipad && 'flash' === type) {
+        //     //保证嵌入式广告的顺序也可以被控制
+        //     try {
+        //         window.sinaadsROC.done(pdps);
+        //     } catch (e) {}
+        //     return;
+        // }
         /**
          * 自适应宽度, 针对图片和flash
          */
