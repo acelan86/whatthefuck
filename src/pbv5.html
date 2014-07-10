@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html>
     <head>
@@ -48,7 +49,7 @@
             return url ? reg.test(domain) : true;
         }
 
-        if ((type === 'flash' || type === 'image' || type === 'adbox') && checkDomain(link, urlAllowDomain) && checkDomain(src, srcAllowDomain)) {
+        if ((type === 'flash' || type === 'image' || type === 'adbox') && checkDomain(src, srcAllowDomain)) {
             document.write(sinaadToolkit.ad.createHTML(
                 type,
                 src,

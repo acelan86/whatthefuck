@@ -269,6 +269,7 @@ var _init = (function (core, model, view, controller) {
         element.setAttribute('data-ad-offset-left', pos.left);
         element.setAttribute('data-ad-offset-top', pos.top);
 
+
         //全局唯一id标识，用于后面为容器命名
         config.sinaads_uid = UUID++;
 
@@ -285,8 +286,13 @@ var _init = (function (core, model, view, controller) {
         //获取page_url 广告所在页面url
         config.sinaads_page_url = core.url.top;
 
-
         var pdps = config.sinaads_ad_pdps;
+
+        //保存pdps的坐标到全局
+        try {
+            window._sinaadsADPosition = window._sinaadsADPosition || {};
+            window._sinaadsADPosition[pdps] = [pos.left, pos.top];
+        } catch (e) {}
 
         /* 处理本地轮播数据2014-04-29 acelan*/
         var localData = config.sinaads_ad_data,
