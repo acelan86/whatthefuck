@@ -1,6 +1,7 @@
 'use strict';
 var sinaadToolkit;
 var sinaadsRenderHandler;
+var sinaadsRFC;
 sinaadsRenderHandler = window.sinaadsRenderHandler || {};
 sinaadsRenderHandler.blogbf = function (element, width, height, content, config) {
 
@@ -41,6 +42,8 @@ sinaadsRenderHandler.blogbf = function (element, width, height, content, config)
             container.hide();
             timer && clearInterval(timer);
             isClosed = true;
+            //关闭之后 15分钟不再显示。FrequenceController.disable没有暴露参数。
+            sinaadToolkit.storage.set(sinaadsRFC.uid + config.pdps + '_disabled', 1, 15 * 60 * 1000);
         });
 
         sinaadToolkit.event.on(window, 'scroll', function () {
@@ -95,8 +98,8 @@ sinaadsRenderHandler.blogbf = function (element, width, height, content, config)
         link: content.link,
         type: content.type,
         monitor: content.monitor || [],
-        top : config.sinaads_blogdf_top || 600 //滚动到top值时显示
-
+        top : config.sinaads_blogdf_top || 600, //滚动到top值时显示
+        pdps: config.sinaads_ad_pdps
     };
 
 

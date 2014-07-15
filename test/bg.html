@@ -9,21 +9,25 @@
         /**
          *  测试数据填充区域
          */
-        _sinaadsCacheData["PDPS000000006458"] = {
+        _sinaadsCacheData["PDPS000000006450"] = {
             size : "1600*600",
             type : 'bg',
             content : [{
                 src: 'http://d1.sina.com.cn/201312/11/527511.jpg',
                 monitor : ["http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id="],
-                link : ['http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id=']
+                link : ['http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id='],
+                type: ['image']
             }],
-            id : "PDPS000000006458"
+            id : "PDPS000000006450"
         };
     </script>
 </head>
 <body style='height:300px;'>
     <div id='bgAdWrap'></div>
-    <script src="/release/sinaads.js"></script>
+    <script type="text/javascript" src='../src/sinaadToolkit.js'></script>
+    <script type="text/javascript" src='../src/sinaadToolkit.ext.js'></script>
+    <script type="text/javascript" src='../src/sinaads.js'></script>
+    <script type="text/javascript" src='../src/plus/bgMedia.js'></script>
     <ins class="sinaads" data-ad-pdps="PDPS000000006450"></ins>
     <script>
         (sinaads = window.sinaads || []).push({
@@ -33,6 +37,11 @@
                 sinaads_bg_top: 120
             }
         });
+    </script>
+
+    <ins class="sinaads" data-ad-pdps="PDPS000000006450"></ins>
+    <script type="text/javascript">
+        (sinaads = window.sinaads || []).push({});
     </script>
 </body>
 </html>

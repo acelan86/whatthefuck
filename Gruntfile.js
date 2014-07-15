@@ -51,6 +51,11 @@ module.exports = function(grunt) {
           { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.js'] }
         ]
       },
+      medias : {
+        files : [
+          { dest : 'release/plus/Media.full.js',  src : 'src/plus/*.js' }
+        ]
+      },
       sinaadsDev : {
         files : [
           { dest : 'release/sinaads.dev.full.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
@@ -267,10 +272,10 @@ module.exports = function(grunt) {
     watch: {
       // 在mac node version v0.10.21 下有下面的设置时，会报错，信息：Waiting...[3]    1252 segmentation fault (core dumped)  grunt
       // 导致watch 终止，connect任务结束 所以调试时注释掉。added by fedeoo 
-      script : {
-        files: ['src/**/*.js'],
-        tasks: ['jshint', 'concat', 'uglify', 'copy']
-      }
+      // script : {
+      //   files: ['src/**/*.js'],
+      //   tasks: ['jshint', 'concat', 'uglify', 'copy']
+      // }
     },
     connect: {
       server: {

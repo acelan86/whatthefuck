@@ -185,10 +185,10 @@
             }
 
             if(this.scrollTop > this.config.expandpos && this.clientWidth > MIN_EXPAND_WIDTH){
-                this.leftSmall.hide();
-                this.rightSmall.hide();
                 this.leftBig.show();
                 this.rightBig.show();
+                this.leftSmall.hide();
+                this.rightSmall.hide();
             }else{
                 this.leftSmall.show();
                 this.rightSmall.show();
