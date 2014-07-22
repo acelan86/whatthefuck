@@ -21,7 +21,8 @@
                 sideHeight : height,
                 pdps : config.sinaads_ad_pdps,
                 contentWidth : config.sinaads_ad_contentWidth, //当小于这个值时候对联两边隐藏
-                follow : config.sinaads_ad_follow || 0
+                follow : config.sinaads_ad_follow || 0,
+                showPos : config.sinaads_float_show_pos
             };
             if (core.FloatMedia) {
                 new core.FloatMedia(FloatMediaData);
