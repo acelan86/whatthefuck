@@ -13,11 +13,12 @@
             ary = par.split("${}");
 
         var type = ary[0],
-            src = cleanUrl(sinaadToolkit.string.encodeHTML(decodeURIComponent(ary[1])), 'url'),
-            link = cleanUrl(sinaadToolkit.string.encodeHTML(sinaadToolkit.url.ensureURL(decodeURIComponent(ary[2]))), 'url'),
+            src = cleanUrl(decodeURIComponent(ary[1]).replace(/</g, '').replace(/>/g, ''), 'url'),
+            link = cleanUrl(sinaadToolkit.url.ensureURL(decodeURIComponent(ary[2]).replace(/</g, '').replace(/>/g, '')), 'url'),
             width = parseInt(ary[3], 10) + 'px',
             height = parseInt(ary[4], 10) + 'px',
-            monitor = ary[5] ? sinaadToolkit.string.encodeHTML(decodeURIComponent(ary[5]).replace(/</g, '').replace(/>/g, '')) : '';
+            monitor = ary[5] ? decodeURIComponent(ary[5]).replace(/</g, '').replace(/>/g, '') : '',
+            pv = ary[6] ? decodeURIComponent(ary[6]).replace(/</g, '').replace(/>/g, '') : '';
 
         var srcAllowDomain = ['\\.sina\\.com\\.cn','\\.weibo\\.com','\\.sinaimg\\.cn', '^weibo\\.com'],
             urlAllowDomain = ['\\.sina\\.com\\.cn','\\.weibo\\.com','\\.allyes\\.com', '\\.admaster\\.com\\.cn', '\\.miaozhen\\.com', '^weibo\\.com'];
@@ -50,6 +51,10 @@
         }
 
         if ((type === 'flash' || type === 'image' || type === 'adbox') && checkDomain(src, srcAllowDomain)) {
+            //发送曝光
+            sinaadToolkit.array.each(pv.split('|'), function (url) {
+                url && sinaadToolkit.sio.log(url);
+            });
             document.write(sinaadToolkit.ad.createHTML(
                 type,
                 src,

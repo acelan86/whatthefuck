@@ -41,7 +41,7 @@
         element.innerHTML = '<ins style="text-decoration:none;margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';"></ins>';
         element = element.getElementsByTagName('ins')[0];
 
-        adContent = src ? core.ad.createHTML(type, src, width, height, link, content.monitor, core.isFunction(tpl) ? tpl(0) : tpl) : ''; //广告内容， 如果没有src，则不渲染 
+        adContent = src ? core.ad.createHTML(type, src, width, height, link, content.monitor, core.isFunction(tpl) ? tpl(0, type, src, width, height, link, content.monitor) : tpl) : ''; //广告内容， 如果没有src，则不渲染 
 
         if (tpl) {
             element.innerHTML  = adContent; //广告内容， 如果没有src，则不渲染
