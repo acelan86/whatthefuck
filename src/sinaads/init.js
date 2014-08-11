@@ -84,7 +84,8 @@ var _init = (function (core, model, view, controller) {
                 //后面的内容当作跳转连接传递，造成allyes.com/url=http://d00.sina.com.cn/a.gif&_sio_kdflkf请求跳转后为http://d00.sina.com.cn/a.gif&_sio_kdflkf，这个连接是个404的请求
                 //如果是背投，先不发送曝光
                 //如果不加随机数，会造成曝光缓存
-                ('bp' !== mediaType) && pv[i] && core.sio.log(pv[i]);
+                //('bp' !== mediaType) && pv[i] && core.sio.log(pv[i]);
+                pv[i] && core.sio.log(pv[i]);
             });
             /**
              * 解析监控链接，注入模版， 后续使用

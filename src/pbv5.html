@@ -51,10 +51,10 @@
         }
 
         if ((type === 'flash' || type === 'image' || type === 'adbox') && checkDomain(src, srcAllowDomain)) {
-            //发送曝光
-            sinaadToolkit.array.each(pv.split('|'), function (url) {
-                url && sinaadToolkit.sio.log(url);
-            });
+            // //发送曝光
+            // sinaadToolkit.array.each(pv.split('|'), function (url) {
+            //     url && sinaadToolkit.sio.log(url);
+            // });
             document.write(sinaadToolkit.ad.createHTML(
                 type,
                 src,
