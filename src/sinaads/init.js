@@ -283,7 +283,8 @@ var _init = (function (core, model, view, controller) {
             var attr = attrs[i];
             if (/data-/.test(attr.nodeName)) {
                 var key = attr.nodeName.replace("data", "sinaads").replace(/-/g, "_");
-                config.hasOwnProperty(key) || (config[key] = attr.nodeValue);
+                //fix alert for nodeValue -> value
+                config.hasOwnProperty(key) || (config[key] = attr.value);
             }
         }
 
