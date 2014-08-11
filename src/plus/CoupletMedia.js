@@ -29,8 +29,8 @@
 
         config.mainWidth = config.mainWidth || MAIN_SIZE[0];
         config.mainHeight = config.mainHeight || MAIN_SIZE[1];
-        config.sideWidth = SIDE_SIZE[0];
-        config.sideHeight = SIDE_SIZE[1];
+        config.sideWidth = config.sideWidth || SIDE_SIZE[0];
+        config.sideHeight = config.sideHeight || SIDE_SIZE[1];
 
 
         config.src = sinaadToolkit.array.ensureArray(config.src);
@@ -86,7 +86,7 @@
         );
 
         var leftCloseBtn = this.leftCloseBtn = document.createElement('div');
-        leftCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat right center #ebebeb;cursor:pointer';
+        leftCloseBtn.style.cssText = 'width:' + config.sideWidth + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat right center #ebebeb;cursor:pointer';
 
         var rightContent = this.rightContent = document.createElement('div');
         rightContent.style.cssText = 'width:' + config.sideWidth + 'px;height:' + config.sideHeight + 'px;position:absolute;left:0px;top:0px;';
@@ -100,7 +100,7 @@
         );
 
         var rightCloseBtn = this.rightCloseBtn = document.createElement('div');
-        rightCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat left center #ebebeb;cursor:pointer';
+        rightCloseBtn.style.cssText = 'width:' + config.sideWidth + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat left center #ebebeb;cursor:pointer';
 
 
         main.getMain().appendChild(mainContent);
