@@ -54,7 +54,8 @@
             autoShow : 1,
             minViewportWidth : (config.contentWidth || 1000) + 2 * config.sideWidth,
             zIndex : 10500,
-            follow : this.follow
+            follow : this.follow,
+            className : 'sinaads-float sinaads-float-left'
         });
 
         var right = this.right = new sinaadToolkit.Box({
@@ -64,7 +65,8 @@
             autoShow : 1,
             minViewportWidth : (config.contentWidth || 1000) + 2 * config.sideWidth,
             zIndex : 10500,
-            follow : this.follow
+            follow : this.follow,
+            className : 'sinaads-float sinaads-float-right'
         });
 
         var leftContent = this.leftContent = document.createElement('div');
@@ -79,6 +81,7 @@
         );
 
         var leftCloseBtn = this.leftCloseBtn = document.createElement('div');
+        leftCloseBtn.className = 'sinaads-float-close';
         leftCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;right:0px;top:0px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat right center #ebebeb;cursor:pointer';
 
         var rightContent = this.rightContent = document.createElement('div');
@@ -93,6 +96,7 @@
         );
 
         var rightCloseBtn = this.rightCloseBtn = document.createElement('div');
+        rightCloseBtn.className = 'sinaads-float-close';
         rightCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:0px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat left center #ebebeb;cursor:pointer';
 
         left.getMain().appendChild(leftContent);

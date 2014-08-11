@@ -2287,6 +2287,7 @@
 
         var element = document.createElement('div');
         element.id = this.uid;
+        config.className && (element.className = config.className);
         element.style.cssText += 'position:' + this.positionStyle + ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:' + this.zIndex + ';display:' + (config.autoShow ? 'block' : 'none');
         document.body.insertBefore(element, document.body.firstChild);
 
