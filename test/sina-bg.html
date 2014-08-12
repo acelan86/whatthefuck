@@ -91,22 +91,39 @@
         type : 'stream',
         content : [{
             type : ['js'],
-            src: ['http://d8.sina.com.cn/litong/zhitou/sinaads/release/spec/lmt.js'],
+            src: ['../src/spec/lmt.js'],
             monitor : ["http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id="],
             link : ['http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id=']
         }],
         id : "PDPS000000002520"
     };
+    _sinaadsCacheData["PDPS000000045825"] = {
+        size : "1000*90",
+        type : 'embed',
+        content : [{
+            type : ['flash'],
+            src: ['http://d1.sina.com.cn/shh/lechan/20140219sina/1000-90.swf'],
+            monitor : ["http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id="],
+            link : ['http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id=']
+        }],
+        id : "PDPS0000000045825"
+    };
+    
+    _sinaadsCacheData["PDPS000000004571"] = {
+        size : "300*300",
+        type : 'videoWindow',
+        content : [{
+            type : ['flash'],
+            src: ['http://d1.sina.com.cn/shh/lechan/20140219sina/300x250_cs3.swf'],
+            monitor : ["http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id="],
+            link : ['http://www.taobao.com/go/market/2013/1212/main.php?spm=a1z15.613.2515.6205&ad_id=10010753134105cd24d8&am_id=&cm_id=&pm_id=']
+        }],
+        id : "PDPS0000000004571"
+    };
 </script>
 
 <script>
-    //设置本页面的富媒体类型的顺序
-    function Schedule(e){e="string"==typeof e?[e]:e||[],this.ranges=[];var t,n=0,r=e.length,i,s,o=new Date,u=o.getFullYear()+"/"+(o.getMonth()+1)+"/"+o.getDate();for(;n<r;n++)t=e[n].replace(/\-/g,"/").split("~"),i=t[0],s=t[1]?t[1]:t[0],i.indexOf(":")===-1&&(i+=" 0:0:0"),s.indexOf(":")===-1&&(s+=" 0:0:0"),i.indexOf("/")===-1&&(i=u+" "+i),s.indexOf("/")===-1&&(s=u+" "+s),i=+this.parse(i),s=+this.parse(s),s<=i&&(s+=864e5),this.ranges[n]=[i,s]}Schedule.prototype={check:function(e){var t=this.ranges,n=0,r,i=t.length<=0,e=e?+this.parse(e):+(new Date);while(!i&&(r=t[n++]))i=e>=r[0]&&e<=r[1];return i},parse:function(e){var t=new RegExp("^\\d+(\\-|\\/)\\d+(\\-|\\/)\\d+$");if("string"==typeof e){if(t.test(e)||isNaN(Date.parse(e))){var n=e.split(/ |T/),r=n.length>1?n[1].split(/[^\d]/):[0,0,0],i=n[0].split(/[^\d]/);return new Date(i[0]-0,i[1]-1,i[2]-0,r[0]-0,r[1]-0,r[2]-0)}return new Date(e)}return e}}
-    if ((new Schedule('2014-2-14 9:0:0~2014-2-14 13:0:0')).check()) {
-        var _SINAADS_CONF_PAGE_MEDIA_ORDER = ["PDPS000000002520","PDPS000000000001","PDPS000000006450", "PDPS000000051826", "PDPS000000004571"];
-    } else {
-        var _SINAADS_CONF_PAGE_MEDIA_ORDER = ["PDPS000000000001","PDPS000000002520", "PDPS000000006458", "PDPS000000006450", "PDPS000000051826", "PDPS000000004571"];
-    }
+    var _SINAADS_CONF_PAGE_MEDIA_ORDER = ["PDPS000000000001", "PDPS000000002520", "PDPS000000006458", "PDPS000000006450", "PDPS000000051826", "PDPS000000004571"];
 
     //var sinaadsPageMediaOrder = ['fullscreen', 'stream', 'couplet', 'bp', 'videoWindow'];
 </script>
@@ -304,7 +321,7 @@
 
         /*---------------------------------- top-search.css*/
         /*头部搜索模块*/
-        .top-search-wrap{height: 58px;padding-top: 60px;width: 100%;min-width: 1000px;}
+        .top-search-wrap{padding-top: 60px;width: 100%;min-width: 1000px;}
         .top-search-wrap .top-search-frame{width: 1000px;margin: 0 auto;}
         .top-search-wrap .sina-logo, .top-search-wrap .top-search, .top-search-wrap .now-wea-wrap{float: left;display: inline;}
         .top-search-wrap .sina-logo{width:111px;height:47px;margin-left:120px;background-image:url(http://i1.sinaimg.cn/dy/deco/2013/0329/logo/LOGO_1x.png);
@@ -1073,9 +1090,19 @@ document.domain = "sina.com.cn";
                 </div>
             </div>
     <!-- 头部 bar end -->
+<<<<<<< HEAD
+=======
+
+>>>>>>> 82b6de55654b53982635bd8a4a6593301cc79cb0
     <!-- 头部搜索 begin -->
-    <div><div class="top-search-wrap">
-        <div class="top-search-frame clearfix">
+    <div>
+        <div class="top-search-wrap clearfix" style="margin-top:46px;padding-top:0px">
+        <!--_SINA_ADS_BEGIN_-->
+        <!--背景广告 begin-->
+        <script type="text/javascript">document.write('<div id="bgAdWrap"></div>');</script>
+        <!--背景广告 end-->
+        <!--_SINA_ADS_END_-->
+        <div class="top-search-frame clearfix" style="padding-top:20px;background-color:#fff;height:58px;">
             <a class="sina-logo" href="http://sina.com.cn"></a>
             <div class="top-search clearfix">
                 <form name="SearchEcho" onsubmit="return SearchSubmit()">
@@ -1162,11 +1189,6 @@ document.domain = "sina.com.cn";
     <!--ad end-->
 
 <!--XstartX-->
-<!--_SINA_ADS_BEGIN_-->
-<!--背景广告 begin-->
-<script type="text/javascript">document.write('<span id="bgAdWrap"></span>');</script>
-<!--背景广告 end-->
-<!--_SINA_ADS_END_-->
 <!--XendX-->
 
     <!-- main begin -->
@@ -5897,8 +5919,12 @@ class="linkRed01">孤独行者黑马杜比松</a></li>
                     <p><a href="http://www.sina.com.cn/license/rtppl2009.html" target="_blank">广播电视节目制作经营许可证（京）字第828号</a> <a href="http://www.sina.com.cn/license/map2011.html" target="_blank">甲测资字11002019</a> 京公网安备110000000016号</p>
                     </div>
                 <!-- footer end -->
-            </div>
             <!-- main end -->
+<<<<<<< HEAD
+=======
+        </div>
+    </div>
+>>>>>>> 82b6de55654b53982635bd8a4a6593301cc79cb0
     <script type="text/javascript">
 //        var ORDER_MAP = {'10100' : 'SI_Order_A', '10200' : 'SI_Order_B', '10300' : 'SI_Order_C', '10400' : 'SI_Order_D', '10500' : 'SI_Order_E', '10600' : 'SI_Order_F', '10700' : 'SI_Order_G', '10800' : 'SI_Order_H', '10900' : 'SI_Order_I', '11000' : 'SI_Order_J', '11100' : 'SI_Order_K', '11200' : 'SI_Order_L', '11500' : 'SI_Order_O', '11600' : 'SI_Order_P', '11700' : 'SI_Order_Q', '11800' : 'SI_Order_R', '11900' : 'SI_Order_S', '12000' : 'SI_Order_T', '12100' : 'SI_Order_U', '12200' : 'SI_Order_V', '12300' : 'SI_Order_W', '12400' : 'SI_Order_X'};
         jsLoader({
@@ -6321,7 +6347,11 @@ var isIE6 = navigator.appVersion.indexOf("MSIE 6") != -1 ? true: false;
 
 <!--加载流媒体 begin-->
 <span id="SteamMediaWrap"></span>
-<script async charset="utf-8" src="http://d9.sina.com.cn/litong/zhitou/sinaads/release/sinaads.js"></script><ins class="sinaads" data-ad-pdps="PDPS000000002520" data-ad-type="stream"></ins><script>var SteamMediaData=new Array();(sinaads = window.sinaads || []).push({});</script>
+<script async charset="utf-8" src="http://d9.sina.com.cn/litong/zhitou/sinaads/release/sinaads.js"></script><ins class="sinaads" data-ad-pdps="PDPS000000002520" data-ad-type="stream"></ins>
+<script>
+    var SteamMediaData=new Array();
+    (sinaads = window.sinaads || []).push({});
+</script>
 <!--加载流媒体 end-->
 
 <!--加载跨栏 begin-->
@@ -6335,11 +6365,7 @@ var isIE6 = navigator.appVersion.indexOf("MSIE 6") != -1 ? true: false;
 
 <!-- CPM视窗广告 开始 -->
 <span id="videoWindowWrap"></span>
-<script async charset="utf-8" src="http://d9.sina.com.cn/litong/zhitou/sinaads/release/sinaads.js"></script><ins class="sinaads" data-ad-pdps="PDPS000000004571" data-ad-type="videoWindow"></ins><script>(sinaads = window.sinaads || []).push({
-    params : {
-         sinaads_frequence : 60 * 10
-    }
-});</script>
+<script async charset="utf-8" src="http://d9.sina.com.cn/litong/zhitou/sinaads/release/sinaads.js"></script><ins class="sinaads" data-ad-pdps="PDPS000000004571" data-ad-type="videoWindow"></ins><script>(sinaads = window.sinaads || []).push({});</script>
 <!-- CPM视窗广告 结束 -->
 
 <!--Adforward Begin:-->

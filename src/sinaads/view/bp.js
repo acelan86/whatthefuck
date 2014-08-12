@@ -18,8 +18,8 @@
         element.style.cssText = 'position:absolute;top:-9999px';
         var par = [
             content.type[0],
-            encodeURIComponent(content.src[0]),
-            encodeURIComponent(content.link[0]),
+            content.src[0] ? encodeURIComponent(content.src[0]) : '',
+            content.link[0] ? encodeURIComponent(content.link[0]) : '',
             width,
             height
         ];

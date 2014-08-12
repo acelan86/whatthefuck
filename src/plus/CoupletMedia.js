@@ -15,6 +15,16 @@
      * @return {[type]}          [description]
      */
     function CoupletMedia(config) {
+        /* 移动端不出广告 */
+        if (sinaadToolkit.browser.mobile) {
+            try {
+                sinaadToolkit.debug('Media: In building couplet complete!');
+                mediaControl.done(mediaControl.couplet);
+            } catch(e) {}
+
+            return;
+        }
+
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
         config.mainWidth = config.mainWidth || MAIN_SIZE[0];

@@ -49,6 +49,27 @@ var modelModule = (function (core, controller, uid) {
     }
 
     /**
+     * 获取外部定义额外参数的请求串
+     */
+    function getExParamsQueryString() {
+        var params = window.sinaadsExParams || {},
+            str = [];
+        for (var key in params) {
+            str.push(key + '=' + encodeURIComponent(params[key]));
+        }
+        return str.join('&');
+    }
+
+    /**
+     * 判断是否是服务端预览广告位
+     * @param  {String}  pdps 广告位pdps
+     * @return {Boolean}      是否
+     */
+    function _isServerPreviewSlot(pdps) {
+        return serverPreviewSlots[pdps];
+    }
+
+    /**
      * 获取定向关键词, 全局只获取一次
      */
     function _getTargeting() {
@@ -128,12 +149,13 @@ var modelModule = (function (core, controller, uid) {
                 '4' : 'http://d3.sina.com.cn/litong/zhitou/union/baidu.html?pid=',
                 '5' : 'http://js.miaozhen.com/mzad_iframe.html?_srv=MZHKY&l='
             },
-            size = ad.size.split('*'),
+            size,
             engineType = ad.engineType;
 
         //旧格式数据，需要适配成新格式
         if (!ad.content && ad.value) {
             core.debug('sinaads:Old data format, need adapter(pdps)', ad.id);
+            size = ad.size.split('*');
             ad.content = [];
             core.array.each(ad.value, function (value) {
                 if (engineType === 'network') {
@@ -214,7 +236,8 @@ var modelModule = (function (core, controller, uid) {
                 'tip'   : 'tip',
                 'bt'    : 'bp',
                 'sx'    : 'follow',
-                'kzdl'  : 'coupletExt'
+                'kzdl'  : 'coupletExt',
+                'fc1'   : 'pop'
             }[ad.type]) || ad.type || 'embed';
 
             ad.content[i] = content;
@@ -251,10 +274,20 @@ var modelModule = (function (core, controller, uid) {
                 'adunitid=' + _pdps.join(','),                                 //pdps数组
                 'rotate_count=' + _getSeed(_pdps.length > 1 ? '' : _pdps[0]),   //轮播数，批量加载使用普通rotator
                 'TIMESTAMP=' + enterTime.toString(36),           //时间戳
-                'referral=' + encodeURIComponent(core.url.top),                  //当前页面url
-                'date=' + core.date.format(new Date(), 'yyyyMMddHH') //请求广告的本地时间, 格式2014020709
+                'referral=' + encodeURIComponent(core.url.top)                  //当前页面url
             ];
 
+            //如果是预览位置，增加date参数,从url上获取，如果获取不到使用本地时间
+            var _serverPreviewDate = _isServerPreviewSlot(_pdps.join(','));
+            if (_serverPreviewDate) {
+                params.push('date=' + _serverPreviewDate); //请求广告的本地时间, 格式2014020709
+            }
+
+            //如果有额外的传递参数，请求时传入
+            var _exParams = getExParamsQueryString();
+            if (_exParams) {
+                params.push(_exParams);
+            }
 
             for (var key in targeting) {
                 params.push('tg' + key + '=' + encodeURIComponent(targeting[key]));
@@ -310,7 +343,7 @@ var modelModule = (function (core, controller, uid) {
      */
     function _init(oninit) {
         //1、将页面上默认存在的数据填充到数据缓存中
-        _cache = window._sinaadsCacheData || {};
+        _cache = window._sinaadsCacheData = window._sinaadsCacheData || {};
 
 
         /**
@@ -376,12 +409,24 @@ var modelModule = (function (core, controller, uid) {
             var query = par.split('&'),
                 slots = {},
                 key = 'sinaads_server_preview', //必需有的key
-                q;
-            for (var i = 0, len = query.length; i < len; i++) {
+                dateKey = 'sinaads_preview_date', //预览日期
+                q,
+                i = 0,
+                len = 0,
+                date = core.date.format(new Date(), 'yyyyMMddHH');
+            for (i = 0, len = query.length; i < len; i++) {
                 if ((q = query[i])) {
                     q = q.split('=');
-                    if (q[0].indexOf(key) === 0) {
-                        slots[q[1]] = 1;
+                    if (q[0] === dateKey) {
+                        q[1] && (date = q[1]);
+                    }
+                }
+            }
+            for (i = 0, len = query.length; i < len; i++) {
+                if ((q = query[i])) {
+                    q = q.split('=');
+                    if (q[0] === key) {
+                        slots[q[1]] = date;
                     }
                 }
             }
@@ -416,8 +461,13 @@ var modelModule = (function (core, controller, uid) {
     return {
         init : _init,
         request : _request,
+        getSeed : _getSeed,
+        add : function (pdps, data) {
+            _cache[pdps] = data;
+        },
         get : function (pdps) {
             return (pdps ? _cache[pdps] : _cache);
-        }
+        },
+        getExParamsQueryString : getExParamsQueryString
     };
 })(core, controllerModule, PAGE_HASH);

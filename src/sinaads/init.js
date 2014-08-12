@@ -49,7 +49,8 @@ var _init = (function (core, model, view, controller) {
         var start = core.now(),
             size    = data.size.split('*'),
             width   = config.sinaads_ad_width || (config.sinaads_ad_width = Number(size[0])) || 0,
-            height  = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])) || 0;
+            height  = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])) || 0,
+            _exParams = model.getExParamsQueryString(); //获取额外参数
 
         core.array.each(data.content, function (content, i) {
             core.debug('sinaads:Processing the impression of the ' + (i + 1) + ' creative of ad unit ' + config.sinaads_ad_pdps);
@@ -59,7 +60,7 @@ var _init = (function (core, model, view, controller) {
             content.type   = core.array.ensureArray(content.type);
             //content.sinaads_content_index = i;  //带入该内容在广告中的序号
             
-            var monitor = content.monitor,
+            var monitor = [],
                 pv = content.pv,
                 link = content.link;
                 //pid = content.pid ? 'sudapid=' + content.pid : '';
@@ -71,21 +72,66 @@ var _init = (function (core, model, view, controller) {
                这里需要修改方案
             */
             core.array.each(pv, function (url, i) {
+                //增加额外参数
+                if (_exParams && url && (url.indexOf('sax.sina.com.cn\/view') !== -1 || url.indexOf('sax.sina.com.cn\/dsp\/view') !== -1)) {
+                    url += (url.indexOf('?') !== -1 ? '&' : '?') + _exParams;
+                }
+
                 pv[i] = core.monitor.parseTpl(url, config);
                 core.debug('sinaads:Recording the impression of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
                 //修改下这里的曝光监测的log, 不需要使用随机参数发送，而是在曝光值替换的时候将{__timestamp__} 替换成当前值，因为可能有些第三方监测会直接把url
                 //后面的内容当作跳转连接传递，造成allyes.com/url=http://d00.sina.com.cn/a.gif&_sio_kdflkf请求跳转后为http://d00.sina.com.cn/a.gif&_sio_kdflkf，这个连接是个404的请求
                 pv[i] && core.sio.log(pv[i], 1);
             });
-            /* 解析监控链接，注入模版， 后续使用*/
-            core.array.each(monitor, function (url, i) {
+            /**
+             * 解析监控链接，注入模版， 后续使用
+             * 增加过滤出saxclick和saxdspclick链接，并按照逆序方式压入，先saxclick后saxdspclick
+             * 由于后续拼接需要逆序进行包裹，所以这里实际需要dspclick在前面则需要dspclick后压入
+             */
+            // core.array.each(monitor, function (url, i) {
+            //     //为sax monitor兼容一定是二跳的方案
+            //     if (url && (url.indexOf('sax.sina.com.cn\/click') !== -1 || url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1)) {
+            //         url = url.replace(/&url=$/, '') + '&url=';
+            //     }
+            //     monitor[i] = core.monitor.parseTpl(url, config);
+            //     core.debug('sinaads:Processing the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
+            // });
+            // 
+            var _dspMonitorURL,
+                _mfpMonitorURL,
+                _saxMonitorURL;
+
+            core.array.each(content.monitor, function (url) {
                 //为sax monitor兼容一定是二跳的方案
-                if (url && (url.indexOf('sax.sina.com.cn\/click') !== -1 || url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1)) {
-                    url = url.replace(/&url=$/, '') + '&url=';
+                if (url && url.indexOf('sax.sina.com.cn\/click') !== -1) {
+                    url = url.replace(/&url=$/, '') +
+                        (_exParams ? '&' + _exParams : '') + //增加额外参数
+                        '&url=';                             //加上&url=
+
+                    _saxMonitorURL = core.monitor.parseTpl(url, config);
+                } else if (url && url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1) {
+                    url = url.replace(/&url=$/, '') +
+                        (_exParams ? '&' + _exParams : '') + //增加额外参数
+                        '&url=';                             //加上&url=
+
+                    _dspMonitorURL = core.monitor.parseTpl(url, config);
+                } else if (url && url.indexOf('sax.sina.com.cn\/mfp\/click') !== -1) {
+                    url = url.replace(/&url=$/, '') +
+                        (_exParams ? '&' + _exParams : '') + //增加额外参数
+                        '&url=';                             //加上&url=
+
+                    _mfpMonitorURL = core.monitor.parseTpl(url, config);
+                } else {
+                    url = core.monitor.parseTpl(url, config);
+                    url && monitor.push(url);
                 }
-                monitor[i] = core.monitor.parseTpl(url, config);
                 core.debug('sinaads:Processing the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
             });
+
+            _saxMonitorURL && monitor.push(_saxMonitorURL);
+            _mfpMonitorURL && monitor.push(_mfpMonitorURL);
+            _dspMonitorURL && monitor.push(_dspMonitorURL);
+
 
             //如果存在pid为每个link加上pid
             core.array.each(link, function (url, i) {
@@ -103,6 +149,8 @@ var _init = (function (core, model, view, controller) {
                 //     link[i] = left + (left.indexOf('?') !== -1 ? '&' : '?') + pid + hash;
                 // }
             });
+
+            content.monitor = monitor;
         });
 
         /** 
@@ -239,6 +287,19 @@ var _init = (function (core, model, view, controller) {
 
 
         var pdps = config.sinaads_ad_pdps;
+
+        /* 处理本地轮播数据2014-04-29 acelan*/
+        var localData = config.sinaads_ad_data,
+            rotateCount = 0;
+        if (localData) {
+            //如果localData不是数组，把内容作为数组元素
+            localData = core.array.ensureArray(localData);
+            rotateCount = localData.length <= 1 ? 0 : (model.getSeed(pdps) % localData.length);
+            model.add(pdps, localData[rotateCount]);
+            core.debug('sinaads: Use local data in count ' + rotateCount);
+        }
+
+
         //注册一个频率控制器
         controller.frequenceController.register(pdps, config.sinaads_frequence || 0);
 
@@ -264,7 +325,7 @@ modelModule.init(function () {
     /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
     var preloadAds = window.sinaads;
     if (preloadAds && preloadAds.shift) {
-        for (var ad, len = 50; (ad = preloadAds.shift()) && 0 < len--;) {
+        for (var ad, len = 100; (ad = preloadAds.shift()) && 0 < len--;) {
             _init(ad);
         }
     }

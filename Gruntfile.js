@@ -46,21 +46,22 @@ module.exports = function(grunt) {
       }
     },
     concat : {
-      sinaads : {
-        files : [
-          { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.js'] }
-        ]
-      },
-      medias : {
+      media : {
         files : [
           { dest : 'release/plus/Media.full.js',  src : 'src/plus/*.js' }
         ]
       },
-      sinaadsDev : {
+      sinaads : {
         files : [
-          { dest : 'release/sinaads.dev.full.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
+          { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.js'] }
         ]
       }
+      // ,
+      // sinaadsDev : {
+      //   files : [
+      //     { dest : 'release/sinaads.dev.full.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
+      //   ]
+      // }
     },
     jshint : {
       options : {
@@ -150,21 +151,21 @@ module.exports = function(grunt) {
           { dest : 'release/sinaadToolkit.js', src : 'src/sinaadToolkit.js'}
         ]
       },
-      sinaadToolkitDev: {
-        options : {
-          //preserveComments:'some',
-          banner : '/*!\n' + 
-                    ' * sinaadToolkit-dev version\n' +
-                    ' * @author acelan <xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
-                    ' * @version 1.0.0\n' +
-                    '<%= logo %>' + 
-                    ' */\n',
-          sourceMap: 'sinaadToolkit.dev.js.map'
-        },
-        files : [
-          { dest : 'release/sinaadToolkit.dev.js', src : 'src/sinaadToolkit.dev.js' }
-        ]
-      },
+      // sinaadToolkitDev: {
+      //   options : {
+      //     //preserveComments:'some',
+      //     banner : '/*!\n' + 
+      //               ' * sinaadToolkit-dev version\n' +
+      //               ' * @author acelan <xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
+      //               ' * @version 1.0.0\n' +
+      //               '<%= logo %>' + 
+      //               ' */\n',
+      //     sourceMap: 'sinaadToolkit.dev.js.map'
+      //   },
+      //   files : [
+      //     { dest : 'release/sinaadToolkit.dev.js', src : 'src/sinaadToolkit.dev.js' }
+      //   ]
+      // },
       sinaads : {
         options : {
           //preserveComments:'some',
@@ -211,21 +212,21 @@ module.exports = function(grunt) {
           { dest : 'release/sinaadsServerPreviewSlots.js', src : ['src/sinaadsServerPreviewSlots.js'] }
         ]
       },
-      sinaadsDev : {
-        options : {
-          //preserveComments:'some',
-          banner : '/*!\n' + 
-                    ' * sinaads-dev version\n' +
-                    ' * @author acelan<xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
-                    ' * @version 1.0.0\n' +
-                    '<%= logo %>' + 
-                    ' */\n',
-          sourceMap: 'sinaads.dev.js.map'
-        },
-        files : [
-          { dest : 'release/sinaads.dev.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
-        ]
-      },
+      // sinaadsDev : {
+      //   options : {
+      //     //preserveComments:'some',
+      //     banner : '/*!\n' + 
+      //               ' * sinaads-dev version\n' +
+      //               ' * @author acelan<xiaobin8[at]staff.sina.com.cn> zhouyi<zhouyi3[at]staff.sina.com.cn>\n' +
+      //               ' * @version 1.0.0\n' +
+      //               '<%= logo %>' + 
+      //               ' */\n',
+      //     sourceMap: 'sinaads.dev.js.map'
+      //   },
+      //   files : [
+      //     { dest : 'release/sinaads.dev.js', src : ['src/sinaadToolkit.dev.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.dev.js'] }
+      //   ]
+      // },
       media : {
         options : {
           banner : '/*!\n' + 
@@ -237,22 +238,28 @@ module.exports = function(grunt) {
           sourceMap: 'Media.js.map'
         },
         files : [
-          { dest : 'release/plus/Media.js',  src : 'src/plus/*.js' }
+          { dest : 'release/plus/Media.js',  src : 'release/plus/Media.full.js' }
         ]
       },
-      specmedia : {
+      // specmedia : {
+      //   files : [
+      //     { dest : 'release/spec/QrcodeMedia.js',  src : 'src/spec/QrcodeMedia.js' }
+      //   ]
+      // },
+      // specad : {
+      //   files : [
+      //     { dest : 'release/spec/spec1.js',  src : 'src/spec/spec1.js' }
+      //   ]
+      // },
+      // taobaofloat : {
+      //   files : [
+      //     { dest : 'release/spec/tanx.float.js',  src : 'src/spec/tanx.float.js' }
+      //   ]
+      // },
+      //获取博客id及博文id
+      exParamsForBlog : {
         files : [
-          { dest : 'release/spec/QrcodeMedia.js',  src : 'src/spec/QrcodeMedia.js' }
-        ]
-      },
-      specad : {
-        files : [
-          { dest : 'release/spec/spec1.js',  src : 'src/spec/spec1.js' }
-        ]
-      },
-      taobaofloat : {
-        files : [
-          { dest : 'release/spec/tanx.float.js',  src : 'src/spec/tanx.float.js' }
+          { dest : 'release/spec/getSinaadsExParamsForBlog.js',  src : 'src/spec/getSinaadsExParamsForBlog.js' }
         ]
       }
     },
@@ -297,8 +304,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task.
-  grunt.registerTask('default', ['smash', 'jshint', 'concat', 'uglify', 'copy', 'connect', 'watch']);
-  grunt.registerTask('nouglify', ['jshint', 'concat', 'connect']);
-  grunt.registerTask('nowatch', ['jshint', 'concat', 'uglify', 'connect']);
+  grunt.registerTask('default', ['smash', 'jshint', 'concat', 'uglify', 'copy', 'watch']);
+  grunt.registerTask('nouglify', ['jshint', 'concat']);
+  grunt.registerTask('nowatch', ['jshint', 'concat', 'uglify']);
 
 };
