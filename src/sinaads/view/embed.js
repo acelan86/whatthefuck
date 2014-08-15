@@ -18,6 +18,14 @@
             tpl         = config.sinaads_ad_tpl || '',
             adContent;
 
+        //如果是ios设备且类型为flash 退出，不渲染广告，但这里有曝光已经发送
+        // if (core.browser.iphone && core.browser.ipad && 'flash' === type) {
+        //     //保证嵌入式广告的顺序也可以被控制
+        //     try {
+        //         window.sinaadsROC.done(pdps);
+        //     } catch (e) {}
+        //     return;
+        // }
         /**
          * 自适应宽度, 针对图片和flash
          */
@@ -33,7 +41,7 @@
         element.innerHTML = '<ins style="text-decoration:none;margin:0px auto;display:block;overflow:hidden;width:' + width + ';height:' + height + ';"></ins>';
         element = element.getElementsByTagName('ins')[0];
 
-        adContent = src ? core.ad.createHTML(type, src, width, height, link, content.monitor, core.isFunction(tpl) ? tpl(0) : tpl) : ''; //广告内容， 如果没有src，则不渲染 
+        adContent = src ? core.ad.createHTML(type, src, width, height, link, content.monitor, core.isFunction(tpl) ? tpl(0, type, src, width, height, link, content.monitor) : tpl) : ''; //广告内容， 如果没有src，则不渲染 
 
         if (tpl) {
             element.innerHTML  = adContent; //广告内容， 如果没有src，则不渲染

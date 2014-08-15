@@ -37,14 +37,16 @@
             height : height,
             position : 'center ' + (config.main.top || (width > 320 ? '46' : 'center')),
             follow : 1,
-            zIndex : MAIN_ZINDEX
+            zIndex : MAIN_ZINDEX,
+            className : 'sinaads-stream-main'
         });
         var mini = this.mini = new sinaadToolkit.Box({
             width : 25,
             height : 219,
             position : 'right bottom',
             follow : 1,
-            zIndex : MIN_ZINDEX
+            zIndex : MIN_ZINDEX,
+            className : 'sinaads-stream-side'
         });
 
         var mainCloseBtn = this.mainCloseBtn = document.createElement('div');

@@ -16,6 +16,10 @@
     function FullscreenMedia(config) {
         var element = document.getElementById('FullScreenWrap');
         if (!element) {
+            try {
+                sinaadToolkit.debug('Media: In building fullscreen complete!');
+                mediaControl.done(mediaControl.fullscreen);
+            } catch(e) {}
             return;
         }
         var THIS = this;

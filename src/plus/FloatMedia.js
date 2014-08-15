@@ -9,7 +9,7 @@
         SIDE_CLOSE_BTN = 'http://d9.sina.com.cn/litong/zhitou/test/images/close-h.jpg',
         SIDE_CLOSE_BTN_SIZE = [40, 18],
         SIDE_SIZE = [120, 300],
-        TOP = 100;
+        TOP = 100; //如果是follow，指定当位置再滚动某个地方的时候展现
         
     /**
      * 对联广告
@@ -42,6 +42,8 @@
         config.type = sinaadToolkit.array.ensureArray(config.type);
         config.link = sinaadToolkit.array.ensureArray(config.link);
         config.top = config.top || TOP;
+        this.showPos = config.showPos || 0;
+        this.follow = config.follow || this.showPos || 0;
         this.config = config;
         this.pdps = config.pdps;
 
@@ -51,7 +53,9 @@
             position : 'left ' + config.top,
             autoShow : 1,
             minViewportWidth : (config.contentWidth || 1000) + 2 * config.sideWidth,
-            zIndex : 10500
+            zIndex : 10500,
+            follow : this.follow,
+            className : 'sinaads-float sinaads-float-left'
         });
 
         var right = this.right = new sinaadToolkit.Box({
@@ -60,7 +64,9 @@
             position : 'right ' + config.top,
             autoShow : 1,
             minViewportWidth : (config.contentWidth || 1000) + 2 * config.sideWidth,
-            zIndex : 10500
+            zIndex : 10500,
+            follow : this.follow,
+            className : 'sinaads-float sinaads-float-right'
         });
 
         var leftContent = this.leftContent = document.createElement('div');
@@ -75,6 +81,7 @@
         );
 
         var leftCloseBtn = this.leftCloseBtn = document.createElement('div');
+        leftCloseBtn.className = 'sinaads-float-close';
         leftCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;right:0px;top:0px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat right center #ebebeb;cursor:pointer';
 
         var rightContent = this.rightContent = document.createElement('div');
@@ -89,6 +96,7 @@
         );
 
         var rightCloseBtn = this.rightCloseBtn = document.createElement('div');
+        rightCloseBtn.className = 'sinaads-float-close';
         rightCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:0px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat left center #ebebeb;cursor:pointer';
 
         left.getMain().appendChild(leftContent);
@@ -101,7 +109,12 @@
 
         sinaadToolkit.event.on(leftCloseBtn, 'click', this.closeSideHandler);
         sinaadToolkit.event.on(rightCloseBtn, 'click', this.closeSideHandler);
-
+        
+        //设置滚动出现距离事件
+        if (config.showPos) {
+           this.getScrollHandler()();
+           sinaadToolkit.event.on(window, 'scroll', this.getScrollHandler());
+        }
         //设置float类型媒体的Done状态
         try {
             sinaadToolkit.debug('Media: In building float complete!');
@@ -114,6 +127,7 @@
             return function () {
                 //去掉频次
                 //sinaadToolkit.storage.set('FloatMedia' + THIS.config.pdps, '1', 24 * 60 * 60 * 1000);
+                THIS.isClose = true;
                 THIS.left.hide();
                 THIS.right.hide();
             };
@@ -123,6 +137,25 @@
             sinaadToolkit.event.un(this.rightCloseBtn, 'click', this.closeSideHandler);
             this.left.remove();
             this.right.remove();
+        },
+        decideShow : function() {
+            if (this.isClose) {
+                return;
+            }
+            if (this.scrollTop > this.showPos) {
+                this.left.show();
+                this.right.show();
+            } else {
+                this.left.hide();
+                this.right.hide();
+            }
+        },
+        getScrollHandler : function () {
+            var THIS = this;
+            return function () {
+                THIS.scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                THIS.decideShow();
+            };
         }
     };
 

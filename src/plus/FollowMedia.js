@@ -130,9 +130,11 @@
 
             this.deferred.resolve();
 
-            this.timer = setTimeout(function () {
-                THIS.hide();
-            },  config.duration * 1000 || 8000);
+            if (!this.isHideMini) {
+                this.timer = setTimeout(function () {
+                    THIS.hide();
+                },  config.duration * 1000 || 8000);
+            }
         },
         hide : function () {
             var config = this.config;

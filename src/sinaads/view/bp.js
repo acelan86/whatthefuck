@@ -36,6 +36,18 @@
             par.push(monitor);
         }
 
+        var pv = [];
+        core.array.each(content.pv, function (url) {
+            if (url) {
+                pv.push(url);
+            }
+        });
+
+        pv = encodeURIComponent(pv.join('|'));
+        if (par.join('${}').length + pv.length < 2000) {
+            par.push(pv);
+        }
+
         // core.underPop(
         //     'http://d1.sina.com.cn/litong/zhitou/sinaads/release/pbv5.html?' + par.join('${}'),
         //     'sinaads_bp_' + config.sinaads_ad_pdps,

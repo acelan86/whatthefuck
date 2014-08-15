@@ -46,7 +46,8 @@ var _init = (function (core, model, view, controller) {
             core.debug('sinaads:' + config.sinaads_ad_pdps + ', Cannot render this element because the data is unavilable.');
             return;
         }
-        var start = core.now(),
+        var mediaType = config.sinaads_ad_type || data.type,
+            start = core.now(),
             size    = data.size.split('*'),
             width   = config.sinaads_ad_width || (config.sinaads_ad_width = Number(size[0])) || 0,
             height  = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])) || 0,
@@ -81,7 +82,10 @@ var _init = (function (core, model, view, controller) {
                 core.debug('sinaads:Recording the impression of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
                 //修改下这里的曝光监测的log, 不需要使用随机参数发送，而是在曝光值替换的时候将{__timestamp__} 替换成当前值，因为可能有些第三方监测会直接把url
                 //后面的内容当作跳转连接传递，造成allyes.com/url=http://d00.sina.com.cn/a.gif&_sio_kdflkf请求跳转后为http://d00.sina.com.cn/a.gif&_sio_kdflkf，这个连接是个404的请求
-                pv[i] && core.sio.log(pv[i], 1);
+                //如果是背投，先不发送曝光
+                //如果不加随机数，会造成曝光缓存
+                //('bp' !== mediaType) && pv[i] && core.sio.log(pv[i]);
+                pv[i] && core.sio.log(pv[i]);
             });
             /**
              * 解析监控链接，注入模版， 后续使用
@@ -157,7 +161,7 @@ var _init = (function (core, model, view, controller) {
          * 按照媒体类型渲染广告
          */
         view.render(
-            config.sinaads_ad_type || data.type,
+            mediaType,
             element,
             width,
             height,
@@ -269,6 +273,7 @@ var _init = (function (core, model, view, controller) {
         element.setAttribute('data-ad-offset-left', pos.left);
         element.setAttribute('data-ad-offset-top', pos.top);
 
+
         //全局唯一id标识，用于后面为容器命名
         config.sinaads_uid = UUID++;
 
@@ -278,15 +283,21 @@ var _init = (function (core, model, view, controller) {
             var attr = attrs[i];
             if (/data-/.test(attr.nodeName)) {
                 var key = attr.nodeName.replace("data", "sinaads").replace(/-/g, "_");
-                config.hasOwnProperty(key) || (config[key] = attr.nodeValue);
+                //fix alert for nodeValue -> value
+                config.hasOwnProperty(key) || (config[key] = attr.value);
             }
         }
 
         //获取page_url 广告所在页面url
         config.sinaads_page_url = core.url.top;
 
-
         var pdps = config.sinaads_ad_pdps;
+
+        //保存pdps的坐标到全局
+        try {
+            window._sinaadsADPosition = window._sinaadsADPosition || {};
+            window._sinaadsADPosition[pdps] = [pos.left, pos.top];
+        } catch (e) {}
 
         /* 处理本地轮播数据2014-04-29 acelan*/
         var localData = config.sinaads_ad_data,
@@ -321,7 +332,6 @@ var _init = (function (core, model, view, controller) {
  */
 modelModule.init(function () {
     core.debug('sinaads:Begin to scan and render all ad placeholders.' + core.now());
-
     /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
     var preloadAds = window.sinaads;
     if (preloadAds && preloadAds.shift) {

@@ -139,26 +139,33 @@
         var query = par.split('&'),
             slots = {},
             key = 'sinaads_server_preview', //必需有的key
-            dateKey = 'sinaads_preview_date', //预览日期
             q,
             i = 0,
             len = 0,
             date = formatDate(new Date(), 'yyyyMMddHH'),
-            ip = cookie.get('sinaads_ip');
+            ip = '',
+            deliveryId = '',
+            pdps = '';
 
         for (i = 0, len = query.length; i < len; i++) {
             if ((q = query[i])) {
                 q = q.split('=');
-                if (q[0] === dateKey) {
-                    q[1] && (date = q[1]);
-                }
-            }
-        }
-        for (i = 0, len = query.length; i < len; i++) {
-            if ((q = query[i])) {
-                q = q.split('=');
-                if (q[0] === key) {
-                    slots[q[1]] = date + (ip ? '&tgip=' + ip : '');
+
+                if (q[0] === key && q[1]) {
+                    q = decodeURIComponent(q[1]).split('|');
+
+                    pdps = q[0] || pdps;
+                    date = q[1] || date;
+                    ip = q[2] || ip;
+                    deliveryId = q[3] || deliveryId;
+
+                    if (pdps) {
+                        slots[pdps] = [];
+                        date && slots[pdps].push('date=' + encodeURIComponent(date));
+                        ip && slots[pdps].push('tgip=' + encodeURIComponent(ip));
+                        deliveryId && slots[pdps].push('deid=' + encodeURIComponent(deliveryId));
+                        slots[pdps] = slots[pdps].join('&');
+                    }
                 }
             }
         }

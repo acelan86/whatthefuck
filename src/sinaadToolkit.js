@@ -2090,7 +2090,8 @@
                             width : width,
                             height : height,
                             wmode : opt_options.wmode || 'opaque',
-                            vars : vars
+                            vars : vars,
+                            id : opt_options.id || ''
                         });
                         if (link) {
                             _html = [
@@ -2277,6 +2278,7 @@
         this.width = config.width || 0;
         this.height = config.height || 'auto';
         this.position = config.position || "center center";
+        // this.smartPosition = {my : '', at : '', of : ''}; //同jq的position
         this.follow = config.follow || 0;
         this.zIndex = config.zIndex || 99999;
         this.minViewportWidth = config.minViewportWidth || 0;  //容器最小宽度
@@ -2285,6 +2287,7 @@
 
         var element = document.createElement('div');
         element.id = this.uid;
+        config.className && (element.className = config.className);
         element.style.cssText += 'position:' + this.positionStyle + ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:' + this.zIndex + ';display:' + (config.autoShow ? 'block' : 'none');
         document.body.insertBefore(element, document.body.firstChild);
 
