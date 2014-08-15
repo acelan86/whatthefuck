@@ -486,15 +486,18 @@
 
                 hashList = [];
 
-                //需要有截断规则, domain + 两段path + 最后一段path
+                //www.sina.com.cn/bar1/bar2/ => globalid@sina.com.cn_bar1_bar2
+                //foo.sina.com.cn/bar1/bar2/ => globalid@sina.com.cn_foo_bar1
+                //foo1.foo2.sina.com.cn/bar1/bar2 => globalid@sina.com.cn_foo2_foo1
+                //foo1.foo2.bar/bar1/bar2 => globalid@foo1.foo2.bar_bar1_bar2
                 var a = document.createElement('a'),
                     path = '',
                     key = '',
                     segs;
 
                 a.href = core.url.top;
-                //解析出domain和子域部分
-                segs = parseDomain(a.host.replace(/^www\./, ''));
+                //解析出domain和子域部分, 去掉www和端口，ie下获取可能会有端口
+                segs = parseDomain(a.host.replace(/^www\./, '').split(':')[0]);
 
                 //往解析出的内容中再添加两级path
                 path = a.pathname.split('/');
