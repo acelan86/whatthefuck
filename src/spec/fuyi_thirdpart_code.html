@@ -497,7 +497,7 @@
                 //获取三项作为key
                 key = sinaglobal + '@' + segs.reverse().splice(0, 3).join('_');
 
-                console.log('visit:' + key);
+                alert('visit:' + key);
 
                 currentHash = core.hash(key);
 
@@ -512,7 +512,7 @@
                         '&ref=' + encodeURIComponent(core.url.top)
                         //'&ck=' + encodeURIComponent(sinaglobal)
                     );
-                    console.log('record!');
+                    alert('record!');
                     //保存一天的请求
                     core.storage.set(HASH_LIST_KEY, hashList.join(split) + '$' + today, 48 * 60 * 60 * 1000);
                 }
