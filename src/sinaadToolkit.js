@@ -68,6 +68,19 @@
             if (sinaadToolkit.mode === 'debug') {
                 throw new Error(msg + (e ? ':' + e.message : ''));
             }
+            try {
+                sinaadToolkit.sio.log('//d00.sina.com.cn/a.gif?' + [
+                    'type=' + 'sinaads_error',
+                    'msg=' + encodeURIComponent(msg ? msg : e ? e.message : 'unknow'),
+                    'ref=' + encodeURIComponent(sinaadToolkit.url.top),
+                    'ja=' + (navigator.javaEnabled() ? 1 : 0),
+                    'ck=' + (navigator.cookieEnabled ? 1 : 0),
+                    'ds=' + (window.screen.width + "x" + window.screen.height),
+                    'ua=' + encodeURIComponent(navigator.appVersion),
+                    'pf=' + navigator.platform,
+                    'ts=' + sinaadToolkit.now()
+                ].join('&'));
+            } catch (e) {}
         },
         /**
          * 获取当前时间戳
