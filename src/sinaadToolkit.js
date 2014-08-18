@@ -65,9 +65,6 @@
          * 错误信息
          */
         error : function (msg, e) {
-            if (sinaadToolkit.mode === 'debug') {
-                throw new Error(msg + (e ? ':' + e.message : ''));
-            }
             try {
                 sinaadToolkit.sio.log('//d00.sina.com.cn/a.gif?' + [
                     'type=' + 'sinaads_error',
@@ -81,6 +78,10 @@
                     'ts=' + sinaadToolkit.now()
                 ].join('&'));
             } catch (e) {}
+
+            if (sinaadToolkit.mode === 'debug') {
+                throw new Error(msg + (e ? ':' + e.message : ''));
+            }
         },
         /**
          * 获取当前时间戳
