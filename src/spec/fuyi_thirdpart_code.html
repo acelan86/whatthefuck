@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html>
     <head>
@@ -58,6 +57,24 @@
                     return Math.abs(hash).toString(36);
                 }
             };
+
+            /**
+             * @namespace sinaadToolkit.browser
+             */
+            sinaadToolkit.browser = sinaadToolkit.browser || (function (ua) {
+                /**
+                 * @lends sinaadToolkit.browser
+                 */
+                var browser = {
+                    /**
+                     * 如果是ie返回ie当前版本号
+                     * @type {Number}
+                     */
+                    ie : /msie (\d+\.\d+)/i.test(ua) ? (document.documentMode || + RegExp.$1) : undefined
+                };
+                return browser;
+
+            })(navigator.userAgent);
 
             /**
              * @namespace sinaadToolkit.event
@@ -423,6 +440,8 @@
                     today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(),
                     sinaglobal = core.cookie.get('SINAGLOBAL');
 
+                alert(document.cookie);
+
                 
                 
                 function inArray(item, arr) {
@@ -490,9 +509,12 @@
                 segs = parseDomain(a.host.replace(/^www\./, '').split(':')[0]);
 
                 //往解析出的内容中再添加两级path
-                path = a.pathname.split('/');
-                path[1] && segs.unshift(path[1]);
-                path[2] && segs.unshift(path[2]);
+                path = a.pathname.split('/'); //注意在ie下pathname拿到的最开始没有‘/’
+                for (var i = 0, len = path.length; i < len ; i++) {
+                    if (path[i]) {
+                        segs.unshift(path[i]);
+                    }
+                }
 
                 //获取三项作为key
                 key = sinaglobal + '@' + segs.reverse().splice(0, 3).join('_');
