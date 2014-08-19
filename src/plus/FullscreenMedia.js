@@ -27,9 +27,7 @@
         this.deferred = new sinaadToolkit.Deferred();
 
         //频次控制，24小时内只能自动播放2次
-        var showCount = sinaadToolkit.storage.get('FullscreenMedia' + config.pdps);
-        showCount = showCount ? (parseInt(showCount, 10) + 1) : 1;
-        sinaadToolkit.storage.set('FullscreenMedia' + config.pdps, showCount, 24 * 60 * 60 * 1000);
+        var showMain = sinaadToolkit.ad.getTimesInRange('FullscreenMedia' + config.pdps, SHOW_COUNT, 24 * 60 * 60 * 1000);
 
         this.width = config.width;
         this.height = config.height + (config.hasClose ? 40 : 0);
@@ -116,10 +114,10 @@
 
         if (this.delay) {
             setTimeout(function () {
-                (config.hasClose && showCount > SHOW_COUNT) ? THIS.hide() : THIS.show();
+                (config.hasClose && !showMain) ? THIS.hide() : THIS.show();
             }, this.delay * 1000);
         } else {
-            (config.hasClose && showCount > SHOW_COUNT) ? THIS.hide() : THIS.show();
+            (config.hasClose && !showMain) ? THIS.hide() : THIS.show();
         }
     }
 

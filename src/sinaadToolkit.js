@@ -1978,6 +1978,37 @@
      */
     sinaadToolkit.ad = sinaadToolkit.ad || /** @lends sinaadToolkit.ad */{
         /**
+         * 获取某个存储值在某段时间内的次数，0为超出次数
+         * @param  {String}  key   存储标识
+         * @param  {Number}  times 次数
+         * @param  {Number}  range 时间范围毫秒数
+         * @return {Number}        当前次数，0为超出
+         *
+         * storage   time::timestamp
+         */
+        getTimesInRange : function (key, times, range) {
+            key = 'sinaads_tc_' + key,
+            range = range || 0;
+
+            var time = (sinaadToolkit.storage.get(key) || '').split('::'),
+                timestamp,
+                now = sinaadToolkit.now();
+
+            timestamp = time[1] ? parseInt(time[1], 10) : (now + range);
+
+            //未过期
+            if (timestamp - now >= 0) {
+                time = time[0] ? parseInt(time[0], 10) + 1 : 1;
+            } else {
+                time = 1;
+                timestamp = now + range;
+                sinaadToolkit.storage.remove(key);
+            }
+            sinaadToolkit.storage.set(key, time + '::' + timestamp, now + range);
+
+            return time > times ? 0 : time;
+        },
+        /**
          * 通过src地址获取资源类型
          * @param  {String} src 资源地址
          * @return {String}     类型
