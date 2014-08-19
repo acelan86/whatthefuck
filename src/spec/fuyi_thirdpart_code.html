@@ -511,9 +511,7 @@
                 //往解析出的内容中再添加两级path
                 path = a.pathname.split('/'); //注意在ie下pathname拿到的最开始没有‘/’
                 for (var i = 0, len = path.length; i < len ; i++) {
-                    if (path[i]) {
-                        segs.unshift(path[i]);
-                    }
+                    path[i] && segs.unshift(path[i]);
                 }
 
                 //获取三项作为key
