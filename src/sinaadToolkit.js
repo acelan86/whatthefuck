@@ -2070,7 +2070,7 @@
             src = sinaadToolkit.array.ensureArray(src),
             type = sinaadToolkit.array.ensureArray(type),
             link = sinaadToolkit.array.ensureArray(link),
-            monitor = sinaadToolkit.array.ensureArray(monitor);
+            //monitor = sinaadToolkit.array.ensureArray(monitor);
 
             width += sinaadToolkit.isNumber(width) ? 'px' : '',
             height += sinaadToolkit.isNumber(height) ? 'px' : '';
@@ -2087,17 +2087,17 @@
                 tmpData['src' + i] = _src;
                 tmpData['type' + i] = type[i] || sinaadToolkit.ad.getTypeBySrc(_src, type[i]);
                 tmpData['link' + i] = link[i];
-                tmpData['monitor' + i] = '';
-                tmpData['monitor1_1_' + i] = sinaadToolkit.monitor.createTrackingMonitor(sinaadToolkit.sio.IMG_1_1, monitor);
-                tmpData['monitor1_1_' + i] = tmpData['monitor1_1_' + i] === sinaadToolkit.sio.IMG_1_1 ? '' : tmpData['monitor1_1_' + i];
+                // tmpData['monitor' + i] = '';
+                // tmpData['monitor1_1_' + i] = sinaadToolkit.monitor.createTrackingMonitor(sinaadToolkit.sio.IMG_1_1, monitor);
+                // tmpData['monitor1_1_' + i] = tmpData['monitor1_1_' + i] === sinaadToolkit.sio.IMG_1_1 ? '' : tmpData['monitor1_1_' + i];
             });
             tmpData.width = width;
             tmpData.height = height;
             tmpData.src = tmpData.src0 || '';
             tmpData.type = tmpData.type0 || '';
             tmpData.link = tmpData.link0 || '';
-            tmpData.monitor = tmpData.monitor0 || '';
-            tmpData.monitor1_1 = tmpData.monitor1_1_0 || '';
+            // tmpData.monitor = tmpData.monitor0 || '';
+            // tmpData.monitor1_1 = tmpData.monitor1_1_0 || '';
 
 
             //如果提供了模版，则使用模版来渲染广告
@@ -2116,7 +2116,7 @@
                 src = tmpData['src' + i];
                 type = tmpData['type' + i];
                 link = tmpData['link' + i];
-                monitor = monitor.join('|');
+                //monitor = monitor.join('|');
 
                 switch (type) {
                     case 'image' :
@@ -2152,16 +2152,20 @@
                         config = {};
                         sinaadToolkit.iframe.init(config, width, height, false);
                         config.src = sinaadToolkit.url.ensureURL(src);
-                        monitor && (config.name = 'clickTAG=' + encodeURIComponent(monitor));
+                        monitor && (config.name = 'clickTAG=' + monitor);
                         _html = sinaadToolkit.iframe.createHTML(config);
                         break;
                     case 'js' :
                         _html = [
-                            '<', 'script charset="utf-8" src="', sinaadToolkit.url.ensureURL(src), '"></', 'script>'
+                                '<', 'script>var clickTAG=\"' + monitor + '\";</', 'script>',
+                                '<', 'script charset="utf-8" src="', sinaadToolkit.url.ensureURL(src), '"></', 'script>'
                             ].join('');
                         break;
                     default :
-                        _html = src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>');
+                        _html = [
+                                '<', 'script>var clickTAG=\"' + monitor + '\";</', 'script>',
+                                src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>')
+                            ].join('');
                         break;
                 }
                 html.push(_html);

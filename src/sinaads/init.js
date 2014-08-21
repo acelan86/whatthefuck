@@ -62,6 +62,7 @@ var _init = (function (core, model, view, controller) {
             //content.sinaads_content_index = i;  //带入该内容在广告中的序号
             
             var monitor = [],
+                origin_monitor = [],
                 pv = content.pv,
                 link = content.link;
                 //pid = content.pid ? 'sudapid=' + content.pid : '';
@@ -135,6 +136,23 @@ var _init = (function (core, model, view, controller) {
             _saxMonitorURL && monitor.push(_saxMonitorURL);
             _mfpMonitorURL && monitor.push(_mfpMonitorURL);
             _dspMonitorURL && monitor.push(_dspMonitorURL);
+
+
+            /**
+             * 20140820 增加origin_monitor传递给第三方需要用到的监测链接
+             * url类型： iframe name="clickTAG=encodeURIComponent(monitor1)|encodeURIComponent(monitor2)|encodeURIComponent(monitor3)"
+             * html片段类型： <script>var clickTAG = encodeURIComponent(monitor1)|encodeURIComponent(monitor2)|encodeURIComponent(monitor3)</script>
+             * js类型： 同上
+             * 页面上的富媒体类型: var sinaads_pdps_clickTAG = 'encodeURIComponent(monitor1)|encodeURIComponent(monitor2)|encodeURIComponent(monitor3)';
+             * 处理模板变量
+             */
+            //for test;
+            content.origin_monitor = content.monitor;
+            core.array.each(content.origin_monitor, function (om) {
+                om = core.monitor.parseTpl(om, config);
+                om = origin_monitor.push(encodeURIComponent(om));
+            });
+            content.origin_monitor = origin_monitor.join('|');
 
 
             //如果存在pid为每个link加上pid
