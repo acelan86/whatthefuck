@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * sinaads
  * 新浪统一商业广告脚本
  * 负责使用pdps(新浪广告资源管理码)向广告引擎请求数据并处理广告渲染
@@ -6,8 +6,7 @@
  * @version 1.0.0
  * @date 2013-08-08
  */
-
- /** 
+/**
   * @useage
   *     window.sinaadsPreloadData = [pdps1, pdps2, pdps3, ..., pdpsn]; 批量加载的代码
   *     (window.sinaads = window.sinaads || []).push({}); 投放一个位置
