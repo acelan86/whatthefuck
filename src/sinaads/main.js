@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * sinaads
  * 新浪统一商业广告脚本
  * 负责使用pdps(新浪广告资源管理码)向广告引擎请求数据并处理广告渲染
@@ -52,6 +52,7 @@ window._sinaadsIsInited = window._sinaadsIsInited || (function (window, core, un
     import "view/videoWindow";
     import "view/bg";
     import "view/pop";
+    import "view/skyscraper.js";	
 
     import "init";
 
