@@ -17,13 +17,34 @@
             link = cleanUrl(sinaadToolkit.url.ensureURL(decodeURIComponent(ary[2]).replace(/</g, '').replace(/>/g, '')), 'url'),
             width = parseInt(ary[3], 10) + 'px',
             height = parseInt(ary[4], 10) + 'px',
-            monitor = ary[5] ? decodeURIComponent(ary[5]).replace(/</g, '').replace(/>/g, '') : '',
-            pv = ary[6] ? decodeURIComponent(ary[6]).replace(/</g, '').replace(/>/g, '') : '';
+            monitor = [],
+            pv = [];
+
+        if (ary[5]) {
+            var monitors = ary[5].split('|');
+            sinaadToolkit.array.each(monitors, function (om) {
+                om = decodeURIComponent(om).replace(/</g, '').replace(/>/g, '');
+                om && monitor.push(encodeURIComponent(om));
+            });
+        }
+        monitor = monitor.join('|');
+
+        if (ary[6]) {
+            var pvs = ary[6].split('|');
+            sinaadToolkit.array.each(pvs, function (op) {
+                op = decodeURIComponent(op).replace(/</g, '').replace(/>/g, '');
+                op && pv.push(encodeURIComponent(op));
+            });
+        }
+
 
         var srcAllowDomain = ['\\.sina\\.com\\.cn','\\.weibo\\.com','\\.sinaimg\\.cn', '^weibo\\.com'],
             urlAllowDomain = ['\\.sina\\.com\\.cn','\\.weibo\\.com','\\.allyes\\.com', '\\.admaster\\.com\\.cn', '\\.miaozhen\\.com', '^weibo\\.com'];
 
         function cleanUrl(url, type) {
+            if (!url) {
+                return '';
+            }
             var tmp = document.createElement('a');
             //由于ie支持各种协议，这里限制一下
             if(url.indexOf("http://") !== 0 && url.indexOf("https://") !== 0) {
@@ -61,7 +82,7 @@
                 width,
                 height,
                 link,
-                monitor ? monitor.split('|') : []
+                monitor
             ));
         }
         window.blur();

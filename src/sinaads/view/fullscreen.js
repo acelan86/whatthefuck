@@ -8,7 +8,7 @@
         content = content[0];
         element.style.cssText = 'position:absolute;top:-9999px';
 
-        window.sinaadsFullscreenMonitor = [core.monitor.createTrackingMonitor(core.sio.IMG_1_1, content.monitor)];
+        window.sinaadsFullscreenMonitor = config.origin_monitor || [];
 
         switch (content.type[0]) {
             case 'js' :
@@ -25,7 +25,7 @@
                     type        : content.type[0] || '',
                     src         : content.src[0] || '',
                     link        : content.link[0] || '',
-                    monitor     : content.monitor,
+                    monitor     : content.origin_monitor,
                     width       : width,
                     height      : height,
                     hasClose    : config.sinaads_fullscreen_close || ('flash' === content.type[0] ? 1 : 0)

@@ -10,7 +10,7 @@
 
         //暴露个变量供第三方使用监测链接
         //WTF，如果多个video就shi了
-        window.sinaadsVideoWindowMonitor = [core.monitor.createTrackingMonitor(core.sio.IMG_1_1, content.monitor)];
+        window.sinaadsVideoWindowMonitor = content.origin_monitor || [];
 
         switch (content.type[0]) {
             case 'js' :
@@ -27,7 +27,7 @@
                     width   : width,
                     height  : height,
                     link    : content.link[0],
-                    monitor : content.monitor,
+                    monitor : content.origin_monitor || [],
                     zIndex  : config.sinaads_ad_zindex
                 };
                 if (core.VideoWindowMedia) {

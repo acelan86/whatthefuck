@@ -15,7 +15,7 @@
                 type : content.type,
                 src : content.src,
                 top : config.sinaads_float_top || 0,
-                monitor : content.monitor,
+                monitor : content.origin_monitor || [],
                 link : content.link,
                 sideWidth : width,
                 sideHeight : height,

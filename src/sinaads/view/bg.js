@@ -17,7 +17,7 @@
             headHeight : config.sinaads_bg_headHeight || 30,
             top : 'undefined' !== typeof config.sinaads_bg_top ? config.sinaads_bg_top : 46,
             asideClickable: config.sinaads_bg_asideClick,
-            monitor : content.monitor || []
+            monitor : content.origin_monitor || []
         };
         if (core.BgMedia) {
             new core.BgMedia(bgMediaData);

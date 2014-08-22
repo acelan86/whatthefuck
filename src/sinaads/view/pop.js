@@ -17,7 +17,7 @@
                     width : width || 300,
                     height : height || 250,
                     position : config.sinaads_pop_position || 'center center',
-                    monitor : content.monitor || []
+                    monitor : content.origin_monitor || []
                 };
 
                 if (core.PopMedia) {

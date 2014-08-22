@@ -63,10 +63,7 @@ var _init = (function (core, model, view, controller) {
             
             var monitor = [],
                 origin_monitor = [],
-                pv = content.pv,
-                link = content.link;
-                //pid = content.pid ? 'sudapid=' + content.pid : '';
-                //pid = ''; //暂时封闭功能
+                pv = content.pv;
 
             /* 解析曝光，并注入模版值，发送曝光 
                曝光还是需要使用iframe进行处理，因为有些曝光是通过地址引入一段脚本实现，如果用img log的话没法执行脚本，会丢失曝光
@@ -137,6 +134,13 @@ var _init = (function (core, model, view, controller) {
             _mfpMonitorURL && monitor.push(_mfpMonitorURL);
             _dspMonitorURL && monitor.push(_dspMonitorURL);
 
+            //拼接二跳
+            var link = content.link;
+            core.array.each(link, function (url, i) {
+                //link增加monitor处理
+                link[i] = core.monitor.createTrackingMonitor(url, monitor);
+            });
+
 
             /**
              * 20140820 增加origin_monitor传递给第三方需要用到的监测链接
@@ -149,30 +153,10 @@ var _init = (function (core, model, view, controller) {
             //for test;
             content.origin_monitor = content.monitor;
             core.array.each(content.origin_monitor, function (om) {
-                om = core.monitor.parseTpl(om, config);
-                om = origin_monitor.push(encodeURIComponent(om));
+                om && origin_monitor.push(core.monitor.parseTpl(om, config));
             });
-            content.origin_monitor = origin_monitor.join('|');
+            content.origin_monitor = origin_monitor;
 
-
-            //如果存在pid为每个link加上pid
-            core.array.each(link, function (url, i) {
-                //link增加monitor处理
-                link[i] = core.monitor.createTrackingMonitor(url, monitor);
-                // var hashFlag,
-                //     hash = '',
-                //     left = url;
-                // if (pid && url) {
-                //     hashFlag = url.indexOf('#');
-                //     if (hashFlag !== -1) {
-                //         hash = url.substr(hashFlag);
-                //         left = url.substr(0, hashFlag);
-                //     }
-                //     link[i] = left + (left.indexOf('?') !== -1 ? '&' : '?') + pid + hash;
-                // }
-            });
-
-            content.monitor = monitor;
         });
 
         /** 

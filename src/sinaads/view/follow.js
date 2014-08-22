@@ -18,7 +18,7 @@
                     link : content.link[1] || content.link[0] || '',
                     top : config.sinaads_follow_mini_top || 'bottom'
                 },
-                monitor : content.monitor,
+                monitor : content.origin_monitor || [],
                 duration : config.sinaads_ad_duration || 5
             };
         if (core.FollowMedia) {

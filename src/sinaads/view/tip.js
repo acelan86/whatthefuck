@@ -9,7 +9,7 @@
                 src : content.src,
                 type : content.type,
                 link : content.link,
-                monitor : content.monitor,
+                monitor : content.origin_monitor || [],
                 autoShow : 1,
                 top : config.sinaads_tip_top || 0,
                 left : config.sinaads_tip_left || 0,

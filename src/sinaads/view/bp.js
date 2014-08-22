@@ -24,25 +24,12 @@
             height
         ];
 
-        var monitor = config.origin_monitor || '';
-        // core.array.each(content.origin_monitor, function (url) {
-        //     if (url) {
-        //         monitor.push(url);
-        //     }
-        // });
-
-        // monitor = encodeURIComponent(monitor.join('|'));
-
+        var monitor = core.monitor.stringify(content.origin_monitor);
         if (par.join('${}').length + monitor.length < 2000) {
             par.push(monitor);
         }
 
-        var pv = [];
-        core.array.each(content.pv, function (url) {
-            url && pv.push(encodeURIComponent(url));
-        });
-
-        pv = pv.join('|');
+        var pv = core.monitor.stringify(content.pv);
         if (par.join('${}').length + pv.length < 2000) {
             par.push(pv);
         }

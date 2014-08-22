@@ -1970,6 +1970,23 @@
             });
 
             return clickTAG;
+        },
+        //[monitor1, monitor2, ..]  =>  'encodeURIComponent(monitor1)|encodeURLComponent(monitor2)|...'
+        stringify : function (arr_monitor) {
+            var str = [];
+            sinaadToolkit.array.each(arr_monitor, function (m) {
+                m && str.push(encodeURIComponent(m));
+            });
+            return str.join('|');
+        },
+        //'encodeURIComponent(monitor1)|encodeURLComponent(monitor2)|...'  => [monitor1, monitor2, ..]
+        parse : function (str_monitor) {
+            var arr = [],
+                monitor = (str_monitor || '').split('|');
+            sinaadToolkit.array.each(monitor, function (m) {
+                m && arr.push(decodeURIComponent(m));
+            });
+            return arr;
         }
     };
 
@@ -2070,7 +2087,7 @@
             src = sinaadToolkit.array.ensureArray(src),
             type = sinaadToolkit.array.ensureArray(type),
             link = sinaadToolkit.array.ensureArray(link),
-            //monitor = sinaadToolkit.array.ensureArray(monitor);
+            monitor = sinaadToolkit.monitor.stringify(sinaadToolkit.array.ensureArray(monitor));
 
             width += sinaadToolkit.isNumber(width) ? 'px' : '',
             height += sinaadToolkit.isNumber(height) ? 'px' : '';
@@ -2087,17 +2104,12 @@
                 tmpData['src' + i] = _src;
                 tmpData['type' + i] = type[i] || sinaadToolkit.ad.getTypeBySrc(_src, type[i]);
                 tmpData['link' + i] = link[i];
-                // tmpData['monitor' + i] = '';
-                // tmpData['monitor1_1_' + i] = sinaadToolkit.monitor.createTrackingMonitor(sinaadToolkit.sio.IMG_1_1, monitor);
-                // tmpData['monitor1_1_' + i] = tmpData['monitor1_1_' + i] === sinaadToolkit.sio.IMG_1_1 ? '' : tmpData['monitor1_1_' + i];
             });
             tmpData.width = width;
             tmpData.height = height;
             tmpData.src = tmpData.src0 || '';
             tmpData.type = tmpData.type0 || '';
             tmpData.link = tmpData.link0 || '';
-            // tmpData.monitor = tmpData.monitor0 || '';
-            // tmpData.monitor1_1 = tmpData.monitor1_1_0 || '';
 
 
             //如果提供了模版，则使用模版来渲染广告
