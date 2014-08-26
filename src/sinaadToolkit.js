@@ -2110,6 +2110,7 @@
             tmpData.src = tmpData.src0 || '';
             tmpData.type = tmpData.type0 || '';
             tmpData.link = tmpData.link0 || '';
+            tmpData.monitor = monitor || '';
 
 
             //如果提供了模版，则使用模版来渲染广告

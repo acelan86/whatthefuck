@@ -3,13 +3,10 @@
         var src = [],
             link = [],
             monitor = [],
-            mo,
             len = content.length;
         core.array.each(content, function (content) {
             content.src && content.src[0] && (src.push(content.src[0]));
             content.link && content.link[0] && (link.push(content.link[0]));
-            mo = content.origin_monitor.join('|');
-            mo && monitor.push(mo);
         });
         content = [
             {

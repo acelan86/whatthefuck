@@ -150,8 +150,9 @@ var _init = (function (core, model, view, controller) {
              * 页面上的富媒体类型: var sinaads_pdps_clickTAG = 'encodeURIComponent(monitor1)|encodeURIComponent(monitor2)|encodeURIComponent(monitor3)';
              * 处理模板变量
              */
-            //for test;
-            content.origin_monitor = content.monitor;
+            core.array.each(content.monitor, function (m) {
+                m && origin_monitor.push(core.monitor.parseTpl(m, config));
+            });
             core.array.each(content.origin_monitor, function (om) {
                 om && origin_monitor.push(core.monitor.parseTpl(om, config));
             });

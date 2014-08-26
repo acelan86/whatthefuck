@@ -24,16 +24,15 @@
             var monitors = ary[5].split('|');
             sinaadToolkit.array.each(monitors, function (om) {
                 om = decodeURIComponent(om).replace(/</g, '').replace(/>/g, '');
-                om && monitor.push(encodeURIComponent(om));
+                om && monitor.push(om);
             });
         }
-        monitor = monitor.join('|');
 
         if (ary[6]) {
             var pvs = ary[6].split('|');
             sinaadToolkit.array.each(pvs, function (op) {
                 op = decodeURIComponent(op).replace(/</g, '').replace(/>/g, '');
-                op && pv.push(encodeURIComponent(op));
+                op && pv.push(op);
             });
         }
 
