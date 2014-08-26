@@ -426,24 +426,8 @@
                 })()
             };
 
+            /* retargeting */
             (function (core) {
-                //sina fuyi retargeting
-                var HASH_LIST_KEY = 'sfy_rt',
-                    RECORD_URL = '//r.sax.sina.com.cn/visit?',
-                    hashList = core.storage.get(HASH_LIST_KEY),
-                    split = '|',
-                    uid = window.location.search.substring(1),
-                    hashMap = {},
-                    i,
-                    hash,
-                    now = new Date(),
-                    today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(),
-                    sinaglobal = core.cookie.get('SINAGLOBAL');
-
-                alert(document.cookie);
-
-                
-                
                 function inArray(item, arr) {
                     for (var i = 0, len = arr.length; i < len; i++) {
                         if (item === arr[i]) {
@@ -478,65 +462,125 @@
                     return pos === segs.length - 1 ? [result.join('.')] : result; //如果匹配的第一段就匹配不上，使用整个域名当作主域名
                 }
 
-                if (hashList) {
-                    hashList = hashList.split('$');
-                    hashList[1] = hashList[1] || 0;
-                    if (now - parseInt(hashList[1], 10) > 24 * 60 * 60 * 1000) {
-                        core.storage.remove(HASH_LIST_KEY);
-                        hashList = [];
+                function parseURL(url) {
+                    var a = document.createElement('a'),
+                        path,
+                        host;
+
+                    a.href = url;
+                    path = a.pathname || '';
+                    host = (a.host || '').split(':');
+                    path = (path.substring(0, 1) !== '/' ? '/' : '') + path;
+
+                    return {
+                        //ie下拿到的host包含端口号，需要去掉
+                        host : host[0],
+                        port : host[1] || 80,
+                        //注意在ie下pathname拿到的最开始没有‘/’
+                        pathname : path
+                    };
+                }
+
+                function getSinaGlobal(callback) {
+                    var key = 'SINAGLOBAL',
+                        value;
+
+                    if (value = core.cookie.get(key)) {
+                        callback(value);
                     } else {
-                        hashList = hashList[0].split(split);
-                    }
-                    i = hashList.length;
-                    while(hash = hashList[--i]) {
-                        hashMap[hash] = 1;
+                        //获取不到cookie值，比如受到P3P影响
+                        //那么就创建suda iframe用来从beacon.sina.com.cn的storage中获取
+                        var suda = document.createElement('iframe'),
+                            script = document.getElementsByTagName('script')[0],
+                            timer,
+                            timeout = 5000; //超时5s没有返回suda的值即认为不成功
+
+                        document.domain = 'sina.com.cn';
+                        suda.src = '//beacon.sina.com.cn/data.html?' + (+new Date());
+                        script.parentNode.insertBefore(suda, script);
+                        //循环判断是否需要
+                        timer = setInterval(function () {
+                            if (suda.contentWindow && suda.contentWindow.storage) {
+                                clearInterval(timer);
+                                callback(suda.contentWindow.storage.get(key) || '');
+                            }
+                        }, 500);
+                        setTimeout(function () {
+                            clearInterval(timer);
+                        }, timeout);
                     }
                 }
 
-                hashList = [];
+                getSinaGlobal(function (sinaglobal) {
+                    var HASH_LIST_KEY = 'sfy_rt',
+                        RECORD_URL = '//r.sax.sina.com.cn/visit?',
+                        hashList = core.storage.get(HASH_LIST_KEY),
+                        split = '|',
+                        uid = window.location.search.substring(1),
+                        hashMap = {},
+                        hash,
+                        now = new Date(),
+                        today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
 
-                //www.sina.com.cn/bar1/bar2/ => globalid@sina.com.cn_bar1_bar2
-                //foo.sina.com.cn/bar1/bar2/ => globalid@sina.com.cn_foo_bar1
-                //foo1.foo2.sina.com.cn/bar1/bar2 => globalid@sina.com.cn_foo2_foo1
-                //foo1.foo2.bar/bar1/bar2 => globalid@foo1.foo2.bar_bar1_bar2
-                var a = document.createElement('a'),
-                    path = '',
-                    key = '',
-                    segs;
 
-                a.href = core.url.top;
-                //解析出domain和子域部分, 去掉www和端口，ie下获取可能会有端口
-                segs = parseDomain(a.host.replace(/^www\./, '').split(':')[0]);
-
-                //往解析出的内容中再添加两级path
-                path = a.pathname.split('/'); //注意在ie下pathname拿到的最开始没有‘/’
-                for (var i = 0, len = path.length; i < len ; i++) {
-                    path[i] && segs.unshift(path[i]);
-                }
-
-                //获取三项作为key
-                key = sinaglobal + '@' + segs.reverse().splice(0, 3).join('_');
-
-                alert('visit:' + key);
-
-                currentHash = core.hash(key);
-
-                //访问过sina, 有sinaglobal且此sinaglobal没有访问过该url
-                if (uid && sinaglobal && !hashMap[currentHash]) {
-                    hashList.push(currentHash);
-                    for (var hash in hashMap) {
-                        hashList.push(hash);
+                    if (hashList) {
+                        hashList = hashList.split('$');
+                        hashList[1] = hashList[1] || 0;
+                        if (now - parseInt(hashList[1], 10) > 24 * 60 * 60 * 1000) {
+                            core.storage.remove(HASH_LIST_KEY);
+                            hashList = [];
+                        } else {
+                            hashList = hashList[0].split(split);
+                        }
+                        i = hashList.length;
+                        while(hash = hashList[--i]) {
+                            hashMap[hash] = 1;
+                        }
                     }
-                    core.sio.log(RECORD_URL +
-                        'cid=' + encodeURIComponent(uid) +
-                        '&ref=' + encodeURIComponent(core.url.top)
-                        //'&ck=' + encodeURIComponent(sinaglobal)
-                    );
-                    alert('record!');
-                    //保存一天的请求
-                    core.storage.set(HASH_LIST_KEY, hashList.join(split) + '$' + today, 48 * 60 * 60 * 1000);
-                }
-                
+                    hashList = [];
+
+                    //www.sina.com.cn/bar1/bar2/ => globalid@sina.com.cn_bar1_bar2
+                    //foo.sina.com.cn/bar1/bar2/ => globalid@sina.com.cn_foo_bar1
+                    //foo1.foo2.sina.com.cn/bar1/bar2 => globalid@sina.com.cn_foo2_foo1
+                    //foo1.foo2.bar/bar1/bar2 => globalid@foo1.foo2.bar_bar1_bar2
+                    var url,
+                        path,
+                        key,
+                        segs;
+
+                    //解析url
+                    url = parseURL(core.url.top);
+                    //去掉www, 解析出domain和子域部分
+                    segs = parseDomain(url.host.replace(/^www\./, ''));
+                    //往解析出的内容中再添加两级path
+                    path = url.pathname.split('/');
+                    for (var i = 0, len = path.length; i < len ; i++) {
+                        path[i] && segs.unshift(path[i]);
+                    }
+
+                    //获取三项作为key
+                    key = sinaglobal + '@' + segs.reverse().splice(0, 3).join('_');
+
+                    alert('visit:' + key);
+
+                    var currentHash = core.hash(key);
+
+                    //访问过sina, 有sinaglobal且此sinaglobal没有访问过该url
+                    if (uid && sinaglobal && !hashMap[currentHash]) {
+                        hashList.push(currentHash);
+                        for (var hash in hashMap) {
+                            hashList.push(hash);
+                        }
+                        core.sio.log(RECORD_URL +
+                            'cid=' + encodeURIComponent(uid) +
+                            '&ref=' + encodeURIComponent(core.url.top) +
+                            '&ck=' + encodeURIComponent(sinaglobal)
+                        );
+                        alert('record!');
+                        //保存一天的请求
+                        core.storage.set(HASH_LIST_KEY, hashList.join(split) + '$' + today, 48 * 60 * 60 * 1000);
+                    }
+                }); 
             })(sinaadToolkit);
         </script>
     </body>

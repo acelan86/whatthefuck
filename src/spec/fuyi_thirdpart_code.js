@@ -1,6 +1,6 @@
 (function (d, s, id) {
     var uid = "woshiacelanaacelan";
-    var code = "//r.sax.sina.com.cn/fuyi_thirdpart_code.html?" + uid;
+    var code = "//d5.sina.com.cn/litong/zhitou/sinaads/src/spec/fuyi_small_thirdpart_code.html?" + uid;
     if (document.getElementById(id)) return;
     var iframe = document.createElement('iframe');
     iframe.src = code;
