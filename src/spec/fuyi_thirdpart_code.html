@@ -492,6 +492,7 @@
                         //那么就创建suda iframe用来从beacon.sina.com.cn的storage中获取
                         var suda = document.createElement('iframe'),
                             script = document.getElementsByTagName('script')[0],
+                            value,
                             timer,
                             timeout = 5000; //超时5s没有返回suda的值即认为不成功
 
@@ -502,7 +503,8 @@
                         timer = setInterval(function () {
                             if (suda.contentWindow && suda.contentWindow.storage) {
                                 clearInterval(timer);
-                                callback(suda.contentWindow.storage.get(key) || '');
+                                value = suda.contentWindow.storage.get(key);
+                                value && value !== 'null' && callback(value);
                             }
                         }, 500);
                         setTimeout(function () {
