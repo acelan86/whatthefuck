@@ -211,25 +211,16 @@
                 config = this.config;
             var left = this.config.left;
             return function() {
-                if (document.body.clientWidth < config.midWidth + (THIS.width + left) * 2) {
-                    THIS.hide();
-                    THIS.hideMini();
-                } else if (THIS.isMainClosed) { // 关闭过，再次显示小的
-                    THIS.hide();
-                    THIS.showMini();
-                } else {
-                    var showCount = _getShowCount(config.pdps, false);
-                    if (showCount.showCount >= SHOW_COUNT + 1) {
-                        THIS.showMini();
+                THIS.resizeTimer && clearTimeout(THIS.resizeTimer);
+                THIS.resizeTimer = setTimeout(function() {
+                    if (document.body.clientWidth < config.midWidth + (THIS.width + left) * 2) {
+                        THIS.hide();
+                        THIS.hideMini();
                     } else {
-                        sinaadToolkit.cookie.set(COUNT_PREFIX + config.pdps, showCount.showCount, {
-                            expires: new Date(parseInt(showCount.expires, 10))
-                        });
-                        THIS.show();
+                        THIS.hide();
+                        THIS.showMini();
                     }
-
-                }
-
+                }, 10);
             };
         },
         getCloseHandler: function() {
