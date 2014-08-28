@@ -1,0 +1,137 @@
+//商广adbox
+{
+    "type":"embed",
+    "content":[{
+        "monitor":[
+            "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoxNjoxOAk2MS4xMzUuMTUyLjIxOAkxMC4yMDkuMC4xMDVfMTQwOTAyNzA3OS43NzA1NjQJaHR0cDovL3d3dy5zaW5hLmNvbS5jbi8JUERQUzAwMDAwMDA0NTgyNQk5YzVmY2U4Ni04MTg1LTRlZWYtOTBlYi1kOTQ3YjI5Y2E4Y2EJQjcxODM2RjY1Rjc3CUI3MTgzNkY2NUY3NwktCS0JMzAyMDAwfDMwMjAwMAlCNzE4MzZGNjVGNzcJaW52CQlCNzE4MzZGNjVGNzcJQUUJMjIzMTQ0MDk1NQkxCS0JLQktCS0JLQktCS0JLQkx"
+        ],
+        "pvBegin":null,
+        "size":null,
+        "pvEnd":null,
+        "len":null,
+        "pid":null,
+        "link":[],
+        "adId":"B71836F65F77",
+        "type":["url"],
+        "volume":null,
+        "src":["http://d1.sina.com.cn/201408/25/568819.html"],
+        "pv":[],
+        "origin_monitor":[
+            "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoxNjoxOAk2MS4xMzUuMTUyLjIxOAkxMC4yMDkuMC4xMDVfMTQwOTAyNzA3OS43NzA1NjQJaHR0cDovL3d3dy5zaW5hLmNvbS5jbi8JUERQUzAwMDAwMDA0NTgyNQk5YzVmY2U4Ni04MTg1LTRlZWYtOTBlYi1kOTQ3YjI5Y2E4Y2EJQjcxODM2RjY1Rjc3CUI3MTgzNkY2NUY3NwktCS0JMzAyMDAwfDMwMjAwMAlCNzE4MzZGNjVGNzcJaW52CQlCNzE4MzZGNjVGNzcJQUUJMjIzMTQ0MDk1NQkxCS0JLQktCS0JLQktCS0JLQkx"
+        ]
+    }],
+    "size":"1000*90",
+    "id":"PDPS000000045825"
+}
+//普通嵌入广告
+{
+    "type":"embed",
+    "content":[{
+        "monitor":[
+            "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoxNjoxOAk2MS4xMzUuMTUyLjIxOAkxMC4yMDkuMC4xMDVfMTQwOTAyNzA3OS43NzA1NjQJaHR0cDovL3d3dy5zaW5hLmNvbS5jbi8JUERQUzAwMDAwMDAyNTI1Ngk4NTFmYzQ0MC03MTllLTRjMDEtYTI5Ny1iOWFjMWJiOGExYWIJOUM5NkNDMzQyQjc0CTlDOTZDQzM0MkI3NAktCS0JMzAyMDAwfDMwMjAwMAk5Qzk2Q0MzNDJCNzQJTkIxNDA4MDAzOAkJOUM5NkNDMzQyQjc0CUFFCTIyMzE0NDA5NTUJMQktCS0JLQktCS0JLQktCS0JMQ%3D%3D"
+        ],
+        "pvBegin":null,
+        "size":null,
+        "pvEnd":null,
+        "len":null,
+        "pid":null,
+        "link":["http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoxNjoxOAk2MS4xMzUuMTUyLjIxOAkxMC4yMDkuMC4xMDVfMTQwOTAyNzA3OS43NzA1NjQJaHR0cDovL3d3dy5zaW5hLmNvbS5jbi8JUERQUzAwMDAwMDAyNTI1Ngk4NTFmYzQ0MC03MTllLTRjMDEtYTI5Ny1iOWFjMWJiOGExYWIJOUM5NkNDMzQyQjc0CTlDOTZDQzM0MkI3NAktCS0JMzAyMDAwfDMwMjAwMAk5Qzk2Q0MzNDJCNzQJTkIxNDA4MDAzOAkJOUM5NkNDMzQyQjc0CUFFCTIyMzE0NDA5NTUJMQktCS0JLQktCS0JLQktCS0JMQ%3D%3D&url=http%3A%2F%2Fe.cn.miaozhen.com%2Fr.gif%3Fk%3D1015209%26p%3D4-ZEy0%26vv%3D1%26o%3Dhttp%3A%2F%2Fsale.suning.com%2Fimages%2Fadvertise%2F011007%2F20140825cd%2Findex.html%3Fad_sp%3D3216%26utm_source%3Ddl-huay-sina%26utm_medium%3Dtl01"],
+        "adId":"9C96CC342B74",
+        "type":["flash"],
+        "volume":null,
+        "src":["http://d1.sina.com.cn/201408/25/568840_sytl01-1000x90-0825-2.swf"],
+        "pv":[],
+        "origin_monitor":[
+            "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoxNjoxOAk2MS4xMzUuMTUyLjIxOAkxMC4yMDkuMC4xMDVfMTQwOTAyNzA3OS43NzA1NjQJaHR0cDovL3d3dy5zaW5hLmNvbS5jbi8JUERQUzAwMDAwMDAyNTI1Ngk4NTFmYzQ0MC03MTllLTRjMDEtYTI5Ny1iOWFjMWJiOGExYWIJOUM5NkNDMzQyQjc0CTlDOTZDQzM0MkI3NAktCS0JMzAyMDAwfDMwMjAwMAk5Qzk2Q0MzNDJCNzQJTkIxNDA4MDAzOAkJOUM5NkNDMzQyQjc0CUFFCTIyMzE0NDA5NTUJMQktCS0JLQktCS0JLQktCS0JMQ%3D%3D"
+        ]
+    }],
+    "size":"1000*90",
+    "id":"PDPS000000025256"
+}
+//翻牌广告
+{
+    "type":"turning",
+    "content":[
+        {
+            "monitor":[
+                "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoyNjozNgk2MS4xM…OTI5YjMJCTI2ZDlmZTBhNTc5MwlBRQkyMjMxNDQwOTU1CTEJLQktCS0JLQktCS0JLQktCTE%3D"
+            ],
+            "link":[
+                "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoyNjozNgk2MS4xM…OTU1CTEJLQktCS0JLQktCS0JLQktCTE%3D&url=http%3A%2F%2Ffood.jx.sina.com.cn%2F"
+            ],
+            "type":["image"],
+            "src":["http://d1.sina.com.cn/201311/18/522854.jpg"],
+            "pv":[""],
+            "origin_monitor":[
+                "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoyNjozNgk2MS4xM…OTI5YjMJCTI2ZDlmZTBhNTc5MwlBRQkyMjMxNDQwOTU1CTEJLQktCS0JLQktCS0JLQktCTE%3D"
+            ]
+        },
+        {
+            "monitor":[
+                "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoyNjozNgk2MS4xM…OTI5YjMJCTI2ZDlmZTBhNTc5MwlBRQkyMjMxNDQwOTU1CTEJLQktCS0JLQktCS0JLQktCTE%3D"
+            ],
+            "link":[
+                "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoyNjozNgk2MS4xM…U1CTEJLQktCS0JLQktCS0JLQktCTE%3D&url=http%3A%2F%2Fjx.travel.sina.com.cn%2F"
+            ],
+            "type":["image"],
+            "src":["http://d1.sina.com.cn/201311/19/523158.jpg"],
+            "pv":[""],
+            "origin_monitor":[
+                "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzoyNjozNgk2MS4xM…OTI5YjMJCTI2ZDlmZTBhNTc5MwlBRQkyMjMxNDQwOTU1CTEJLQktCS0JLQktCS0JLQktCTE%3D"
+            ]
+        }
+    ],
+    "size":"160*90",
+    "id":"PDPS000000042966"
+}
+
+//乐居 html片段代码
+{
+    "type":"embed",
+    "content":[{
+        "monitor":[
+            "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzozNDozNQk2MS4xMzUuMTUyLjIxOAkxMC4yMDkuMC4xMDVfMTQwOTAyNzA3OS43NzA1NjQJaHR0cDovL3d3dy5zaW5hLmNvbS5jbi8JUERQUzAwMDAwMDA0NTgyNQlhMzk5NDVlMC1hOTYzLTQxMjUtOGM0Mi01MWI2ZWQ0MWYwOTkJYmJlMTg0YWUxYzE1CWJiZTE4NGFlMWMxNQktCS0JMzAyMDAwfDMwMjAwMAliYmUxODRhZTFjMTUJOGIxMTRlZWI5MWNmZGViMAkJYmJlMTg0YWUxYzE1CUFFCTIyMzE0NDA5NTUJMQktCS0JLQktCS0JLQktCS0JMQ%3D%3D"
+        ],
+        "pvBegin":null,
+        "size":null,
+        "pvEnd":null,
+        "len":null,
+        "pid":null,
+        "link":[],
+        "adId":"bbe184ae1c15",
+        "type":["html"],
+        "volume":null,
+        "src":["<div id=\"Container\"></div>\r\n<script charset=\"utf-8\" src=\"http://d1.sina.com.cn/litong/zhitou/sinaads/release/sinaadToolkit.js\"></script>\r\n<script>\r\n var pos = \"ad_45825\";\r\n function fold() {
+        \r\n parent.document.getElementById(sinaadToolkitSandboxId).parentNode.parentNode.style.display = \"none\";\r\n
+        }\r\n var timer = setInterval(function () {
+        \r\n if (sinaadToolkit) {
+        \r\n clearInterval(timer);\r\n parent.lejuMedia.then(function (data) {
+        \r\n var data = data[pos];\r\n if (data && data[0] && (data = data[0].params)) {
+        \r\n document.getElementById(\"Container\").innerHTML = sinaadToolkit.ad.createHTML(sinaadToolkit.ad.getTypeBySrc(data.src),
+        data.src,
+        sinaads_ad_width,
+        sinaads_ad_height,
+        data.link);\r\n
+        } else {
+        \r\n fold();\r\n
+        }\r\n
+        },
+        function () {
+        \r\n fold();\r\n
+        });\r\n
+        }\r\n
+        },
+        100);\r\n</script>"],
+        "pv":[""],
+        "origin_monitor":[
+            "http://sax.sina.com.cn/mfp/click?type=3&t=MjAxNC0wOC0yNiAxMzozNDozNQk2MS4xMzUuMTUyLjIxOAkxMC4yMDkuMC4xMDVfMTQwOTAyNzA3OS43NzA1NjQJaHR0cDovL3d3dy5zaW5hLmNvbS5jbi8JUERQUzAwMDAwMDA0NTgyNQlhMzk5NDVlMC1hOTYzLTQxMjUtOGM0Mi01MWI2ZWQ0MWYwOTkJYmJlMTg0YWUxYzE1CWJiZTE4NGFlMWMxNQktCS0JMzAyMDAwfDMwMjAwMAliYmUxODRhZTFjMTUJOGIxMTRlZWI5MWNmZGViMAkJYmJlMTg0YWUxYzE1CUFFCTIyMzE0NDA5NTUJMQktCS0JLQktCS0JLQktCS0JMQ%3D%3D"
+        ]
+    }],
+    "size":"1000*90",
+    "id":"PDPS000000045825"
+}
+
+//背投广告
+
+
+
