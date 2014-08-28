@@ -85,6 +85,23 @@ var _init = (function (core, model, view, controller) {
                 //('bp' !== mediaType) && pv[i] && core.sio.log(pv[i]);
                 pv[i] && core.sio.log(pv[i]);
             });
+
+            /**
+             * 20140820 增加origin_monitor传递给第三方需要用到的监测链接
+             * url类型： iframe name="clickTAG=encodeURIComponent(monitor1)|encodeURIComponent(monitor2)|encodeURIComponent(monitor3)"
+             * html片段类型： <script>var clickTAG = encodeURIComponent(monitor1)|encodeURIComponent(monitor2)|encodeURIComponent(monitor3)</script>
+             * js类型： 同上
+             * 页面上的富媒体类型: var sinaads_pdps_clickTAG = 'encodeURIComponent(monitor1)|encodeURIComponent(monitor2)|encodeURIComponent(monitor3)';
+             * 处理模板变量
+             */
+            core.array.each(content.monitor, function (m) {
+                m && origin_monitor.push(core.monitor.parseTpl(m, config));
+            });
+            core.array.each(content.origin_monitor, function (om) {
+                om && origin_monitor.push(core.monitor.parseTpl(om, config));
+            });
+            content.origin_monitor = origin_monitor;
+            
             /**
              * 解析监控链接，注入模版， 后续使用
              * 增加过滤出saxclick和saxdspclick链接，并按照逆序方式压入，先saxclick后saxdspclick
@@ -140,23 +157,6 @@ var _init = (function (core, model, view, controller) {
                 //link增加monitor处理
                 link[i] = core.monitor.createTrackingMonitor(url, monitor);
             });
-
-
-            /**
-             * 20140820 增加origin_monitor传递给第三方需要用到的监测链接
-             * url类型： iframe name="clickTAG=encodeURIComponent(monitor1)|encodeURIComponent(monitor2)|encodeURIComponent(monitor3)"
-             * html片段类型： <script>var clickTAG = encodeURIComponent(monitor1)|encodeURIComponent(monitor2)|encodeURIComponent(monitor3)</script>
-             * js类型： 同上
-             * 页面上的富媒体类型: var sinaads_pdps_clickTAG = 'encodeURIComponent(monitor1)|encodeURIComponent(monitor2)|encodeURIComponent(monitor3)';
-             * 处理模板变量
-             */
-            core.array.each(content.monitor, function (m) {
-                m && origin_monitor.push(core.monitor.parseTpl(m, config));
-            });
-            core.array.each(content.origin_monitor, function (om) {
-                om && origin_monitor.push(core.monitor.parseTpl(om, config));
-            });
-            content.origin_monitor = origin_monitor;
 
         });
 
