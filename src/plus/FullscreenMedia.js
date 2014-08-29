@@ -36,6 +36,7 @@
         this.link = config.link;
         this.type = config.type;
         this.monitor = config.monitor;
+        this.pv = config.pv;
         this.transitionStep = config.hasClose ? 90 : 98;
         this.replaySrc = config.replaySrc || REPLAY_BTN;
         this.replaySrcType = config.replaySrcType || 'flash';
@@ -85,7 +86,9 @@
                     this.replaySrcType,
                     this.replaySrc,
                     25,
-                    100
+                    100,
+                    this.monitor,
+                    this.pv
                 );
                 mini.appendChild(closeMask);
                 sinaadToolkit.event.on(closeMask, 'click', this.getReplayHandler());
@@ -135,7 +138,8 @@
                 this.width,
                 this.contentHeight,
                 this.link,
-                this.monitor
+                this.monitor,
+                this.pv
             );
             this.main.style.display = 'block';
 

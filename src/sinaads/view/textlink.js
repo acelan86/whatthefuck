@@ -3,7 +3,7 @@
         var tpl = config.sinaads_ad_tpl || '',
             html = [];
         core.array.each(content, function (content, i) {
-            html.push(core.ad.createHTML(content.type, content.src, 0, 0, content.link, content.origin_monitor, core.isFunction(tpl) ? tpl(i) : tpl));
+            html.push(core.ad.createHTML(content.type, content.src, 0, 0, content.link, content.origin_monitor, content.pv, core.isFunction(tpl) ? tpl(i) : tpl));
         });
         element.style.cssText += ';text-decoration:none';
         element.innerHTML = html.join('');

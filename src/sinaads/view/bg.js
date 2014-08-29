@@ -5,6 +5,8 @@
         content = content[0];
 
         window.sinaadsROC.bg = config.sinaads_ad_pdps;
+        window.sinaadsBgClickTAG = core.monitor.stringify(core.array.ensureArray(content.origin_monitor));
+        window.sinaadsBgViewTAG = core.monitor.stringify(core.array.ensureArray(content.pv));
 
         var bgMediaData = {
             pdps : config.sinaads_ad_pdps,
@@ -17,7 +19,8 @@
             headHeight : config.sinaads_bg_headHeight || 30,
             top : 'undefined' !== typeof config.sinaads_bg_top ? config.sinaads_bg_top : 46,
             asideClickable: config.sinaads_bg_asideClick,
-            monitor : content.origin_monitor || []
+            monitor : content.origin_monitor || [],
+            pv : content.pv || []
         };
         if (core.BgMedia) {
             new core.BgMedia(bgMediaData);

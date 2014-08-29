@@ -62,7 +62,8 @@
             config.width,
             config.height,
             config.link,
-            config.monitor
+            config.monitor,
+            config.pv
         ) : '';   //广告内容， 如果没有src，则不渲染 
 
         switch (config.type[0]) {

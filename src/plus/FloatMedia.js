@@ -77,7 +77,8 @@
             config.sideWidth,
             config.sideHeight,
             config.link[0],
-            config.monitor
+            config.monitor,
+            config.pv
         );
 
         var leftCloseBtn = this.leftCloseBtn = document.createElement('div');
@@ -92,7 +93,8 @@
             config.sideWidth,
             config.sideHeight,
             config.link[1] || config.link[0],
-            config.monitor
+            config.monitor,
+            config.pv
         );
 
         var rightCloseBtn = this.rightCloseBtn = document.createElement('div');

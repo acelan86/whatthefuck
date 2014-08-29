@@ -49,7 +49,8 @@
             0,
             0,
             config.link[0] || '',
-            config.monitor
+            config.monitor,
+            config.pv
         ) || '';
 
         if (config.src[1]) {
@@ -73,7 +74,8 @@
                 config.width,
                 config.height,
                 config.link[1] || config.link[0] || '',
-                config.monitor
+                config.monitor,
+                config.pv
             );
 
             config.autoShow && this.tip.show();

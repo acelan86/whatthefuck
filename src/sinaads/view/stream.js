@@ -12,6 +12,9 @@
         //暴露个变量供第三方使用监测链接
         //WTF，如果多个video就shi了
         window.sinaadsStreamMonitor = content.origin_monitor || [];
+        window.sinaadsStreamClickTAG = core.monitor.stringify(core.array.ensureArray(content.origin_monitor));
+        window.sinaadsStreamViewTAG = core.monitor.stringify(core.array.ensureArray(content.pv));
+
 
         if (content.src.length === 1) {
             //生成一个用于渲染容器到页面中
@@ -48,7 +51,8 @@
                     link    : content.link[1] || content.link[0] || ''
                 },
                 pdps: config.sinaads_ad_pdps,
-                monitor : content.origin_monitor || []
+                monitor : content.origin_monitor || [],
+                pv : content.pv || []
             };
             if (core.StreamMedia) {
                 new core.StreamMedia(StreamMediaData);

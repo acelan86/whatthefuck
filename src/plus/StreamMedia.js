@@ -110,6 +110,7 @@
                 config.main.height,
                 config.main.link || config.link,
                 config.monitor,
+                config.pv,
                 '',
                 {
                     wmode : 'transparent'
@@ -135,7 +136,8 @@
                 25,
                 150,
                 config.mini.link || config.link,
-                config.monitor
+                config.monitor,
+                config.pv
             );
             try {
                 sinaadToolkit.debug('Media: In building stream complete!');

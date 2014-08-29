@@ -2,7 +2,12 @@
     view.register('follow', function (element, width, height, content, config) {
         var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/FollowMedia.js';
 
+
         content = content[0];
+
+        window.sinaadsFollowClickTAG = core.monitor.stringify(core.array.ensureArray(content.origin_monitor));
+        window.sinaadsFollowViewTAG = core.monitor.stringify(core.array.ensureArray(content.pv));
+
         var FollowMediaData = {
                 main : {
                     width : width,
@@ -19,6 +24,7 @@
                     top : config.sinaads_follow_mini_top || 'bottom'
                 },
                 monitor : content.origin_monitor || [],
+                pv : content.pv || [],
                 duration : config.sinaads_ad_duration || 5
             };
         if (core.FollowMedia) {

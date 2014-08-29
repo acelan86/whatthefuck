@@ -2074,7 +2074,7 @@
          *         @param {Boolean} wmode 是否透明
          * @return {String}         广告展现html
          */
-        createHTML : function (type, src, width, height, link, monitor, tpl, opt_options) {
+        createHTML : function (type, src, width, height, link, monitor, pv, tpl, opt_options) {
             var html = [],
                 _html = '',
                 config,
@@ -2087,6 +2087,7 @@
             src = sinaadToolkit.array.ensureArray(src),
             type = sinaadToolkit.array.ensureArray(type),
             link = sinaadToolkit.array.ensureArray(link),
+            pv = sinaadToolkit.monitor.stringify(sinaadToolkit.array.ensureArray(pv)),
             monitor = sinaadToolkit.monitor.stringify(sinaadToolkit.array.ensureArray(monitor));
 
             width += sinaadToolkit.isNumber(width) ? 'px' : '',
@@ -2165,18 +2166,23 @@
                         config = {};
                         sinaadToolkit.iframe.init(config, width, height, false);
                         config.src = sinaadToolkit.url.ensureURL(src);
-                        monitor && (config.name = 'clickTAG=' + monitor);
+                        config.name = config.name ? ['name=' + config.name] : [];
+                        monitor && config.name.push('clickTAG=' + monitor);
+                        pv && config.name.push('viewTAG=' + pv);
+                        config.name = config.name.join('&');
                         _html = sinaadToolkit.iframe.createHTML(config);
                         break;
                     case 'js' :
                         _html = [
-                                '<', 'script>var clickTAG=\"' + monitor + '\";</', 'script>',
+                                '<', 'script>window.clickTAG=\"' + monitor + '\";</', 'script>',
+                                '<', 'script>window.viewTAG=\"' + pv + '\";</', 'script>',
                                 '<', 'script charset="utf-8" src="', sinaadToolkit.url.ensureURL(src), '"></', 'script>'
                             ].join('');
                         break;
                     default :
                         _html = [
-                                '<', 'script>var clickTAG=\"' + monitor + '\";</', 'script>',
+                                '<', 'script>window.clickTAG=\"' + monitor + '\";</', 'script>',
+                                '<', 'script>window.viewTAG=\"' + pv + '\";</', 'script>',
                                 src.replace(/\\x3c/g, '<').replace(/\\x3e/g, '>')
                             ].join('');
                         break;

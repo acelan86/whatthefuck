@@ -6,6 +6,10 @@
         window.sinaadsROC['float'] = config.sinaads_ad_pdps;
 
         content = content[0];
+
+        window.sinaadsFloatClickTAG = core.monitor.stringify(core.array.ensureArray(content.origin_monitor));
+        window.sinaadsFloatViewTAG = core.monitor.stringify(core.array.ensureArray(content.pv));
+
         element.style.cssText = 'position:absolute;top:-99999px';
         if (content.src.length === 1 && 'js' === content.type[0]) {
             core.sio.loadScript(content.src[0], null, {charset: 'gb2312'});
@@ -16,6 +20,7 @@
                 src : content.src,
                 top : config.sinaads_float_top || 0,
                 monitor : content.origin_monitor || [],
+                pv  : content.pv || [],
                 link : content.link,
                 sideWidth : width,
                 sideHeight : height,

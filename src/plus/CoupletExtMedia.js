@@ -43,7 +43,8 @@
             type : config.type[0],
             src : config.src[0],
             link : config.link[0],
-            monitor : config.monitor
+            monitor : config.monitor,
+            pv : config.pv
         });
         var leftSmallCloseBtn = this.leftSmallCloseBtn = createCloseBtn('small');
         var leftSmall = this.leftSmall = createContainer('small', 'left ' + config.offsettop);
@@ -54,7 +55,8 @@
             type : config.type[1] || config.type[0],
             src : config.src[1],
             link : config.link[1] || config.link[0],
-            monitor : config.monitor
+            monitor : config.monitor,
+            pv : config.pv
         });
         var leftBigCloseBtn = this.leftBigCloseBtn = createCloseBtn('big');
         var leftBig = this.leftBig = createContainer('big', 'left ' + config.offsettop);
@@ -65,7 +67,8 @@
             type : config.type[2] || config.type[0],
             src : config.src[2] || config.src[0],
             link : config.link[2] || config.link[0],
-            monitor : config.monitor
+            monitor : config.monitor,
+            pv : config.pv
         });
         var rightSmallCloseBtn = this.rightSmallCloseBtn = createCloseBtn('small');
         var rightSmall = this.rightSmall = createContainer('small', 'right ' + config.offsettop);
@@ -76,7 +79,8 @@
             type : config.type[3] || config.type[1] || config.type[0],
             src : config.src[3] || config.src[1],
             link : config.link[3] || config.link[1] || config.link[0],
-            monitor : config.monitor
+            monitor : config.monitor,
+            pv : config.pv
         });
         var rightBigCloseBtn = this.rightBigCloseBtn = createCloseBtn('big');
         var rightBig = this.rightBig = createContainer('big', 'right ' + config.offsettop);
@@ -110,7 +114,8 @@
             adContentSize[0],
             adContentSize[1],
             adContentConfig.link,
-            adContentConfig.monitor
+            adContentConfig.monitor,
+            adContentConfig.pv
         );
         return adContent;
     }

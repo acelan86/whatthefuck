@@ -4,8 +4,13 @@
         var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/CoupletMedia.js';
 
         window.sinaadsROC.couplet = config.sinaads_ad_pdps;
-        
+
         content = content[0]; //只用第一个内容
+
+        window.sinaadsCoupletClickTAG = core.monitor.stringify(core.array.ensureArray(content.origin_monitor));
+        window.sinaadsCoupletViewTAG = core.monitor.stringify(core.array.ensureArray(content.pv));
+
+        
         //是跨栏，隐藏掉改区块
         element.style.cssText = 'position:absolute;top:-9999px';
         //这里认为如果couplet类型给的是素材的话，那么素材必须大于1个，否则为html类型
@@ -31,6 +36,7 @@
                 mainHeight  : height,
                 top         : config.sinaads_couple_top || 0,
                 monitor     : content.origin_monitor || [],
+                pv          : content.pv || [],
                 sideWidth   : config.sinaads_ad_side_width,
                 sideHeight  : config.sinaads_ad_side_height
             };
@@ -49,6 +55,10 @@
     view.register('coupletExt', function (element, width, height, content, config) {
         var RESOURCE_URL = PLUS_RESOURCE_URL || core.RESOURCE_URL + '/src/plus/CoupletExtMedia.js';
         
+         window.sinaadsCoupletExtClickTAG = core.monitor.stringify(core.array.ensureArray(content.origin_monitor));
+        window.sinaadsCoupletExtViewTAG = core.monitor.stringify(core.array.ensureArray(content.pv));
+
+
         content = content[0]; //只用第一个内容
         //是对联，隐藏掉改区块
         element.style.cssText = 'position:absolute;top:-9999px';
@@ -65,7 +75,8 @@
                 expandpos   : config.sinaads_coupletext_expandpos || 700,
                 smallsize   : config.sinaads_coupletext_smallsize,
                 bigsize     : config.sinaads_coupletext_bigsize,
-                monitor     : content.monitor || []
+                monitor     : content.origin_monitor || [],
+                pv          : content.pv || []
             };
             if (core.CoupletExtMediaData) {
                 new core.CoupletExtMedia(CoupletExtMediaData);

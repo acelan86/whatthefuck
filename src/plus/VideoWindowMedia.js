@@ -80,7 +80,8 @@
                 this.config.width,
                 this.config.height,
                 '',
-                this.config.monitor
+                this.config.monitor,
+                this.config.pv
             //增加一个遮罩层
             ) + (this.config.link ? '<a style="position:absolute;background:#fff;opacity:0;filter:alpha(opacity=0);width:' + this.config.innerWidth + 'px;height:' + this.config.innerHeight + 'px;left:0;top:24px" href="' + this.config.link + '" target="_blank"></a>' : '');
             this.tmpHeight = 0;

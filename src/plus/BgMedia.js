@@ -51,6 +51,7 @@
                 config.height,
                 config.link[1] || config.link[0],
                 config.monitor,
+                config.pv,
                 undefined,
                 options
             );
@@ -69,6 +70,7 @@
                 config.height,
                 config.link[2] || config.link[1] || config.link[0],
                 config.monitor,
+                config.pv,
                 undefined,
                 options
             );

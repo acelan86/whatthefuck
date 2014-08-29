@@ -11,6 +11,9 @@
         //暴露个变量供第三方使用监测链接
         //WTF，如果多个video就shi了
         window.sinaadsVideoWindowMonitor = content.origin_monitor || [];
+        window.sinaadsVideoWindowClickTAG = core.monitor.stringify(core.array.ensureArray(content.origin_monitor));
+        window.sinaadsVideoWindowViewTAG = core.monitor.stringify(core.array.ensureArray(content.pv));
+
 
         switch (content.type[0]) {
             case 'js' :
@@ -28,6 +31,7 @@
                     height  : height,
                     link    : content.link[0],
                     monitor : content.origin_monitor || [],
+                    pv      : content.pv || [],
                     zIndex  : config.sinaads_ad_zindex
                 };
                 if (core.VideoWindowMedia) {

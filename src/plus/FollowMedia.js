@@ -120,7 +120,8 @@
                 config.main.width,
                 config.main.height,
                 config.main.link,
-                config.monitor
+                config.monitor,
+                config.pv
             );
             this.main.show();
 
@@ -150,7 +151,8 @@
                     25,
                     150,
                     config.mini.link,
-                    config.monitor
+                    config.monitor,
+                    config.pv
                 );
             }
         },
