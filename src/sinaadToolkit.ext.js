@@ -25,6 +25,11 @@
                 this.list[key] = frequence;
             }
         },
+        enable : function (key) {
+            if (this.has(key)) {
+                core.storage.remove(this.uid + key + '_disabled');
+            }
+        },
         disable : function (key) {
             if (this.has(key)) {
                 core.storage.set(this.uid + key + '_disabled', 1, this.list[key] * 1000);
