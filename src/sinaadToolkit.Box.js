@@ -15,7 +15,7 @@
  *     });
  * @constructor
  */
-(function (window, core, undefined) {
+(function (window, document, core, undefined) {
     "use strict";
 
     function Box(options) {
@@ -42,11 +42,11 @@
             'height:' + this.height + 'px',
             'z-index:' + this.zIndex,
             'display:' + (this.autoShow ? 'block' : 'none'),
-            '-webkit-transition:.5s',
+            '-webkit-transition:.5s'
             //for test
-            'background-color:#ccc'
+            //'background-color:#ccc'
         ].join(';');
-        document.body.appendChild(main);
+        document.body.insertBefore(main, document.body.firstChild);
 
         this.main = main;
 
@@ -156,7 +156,7 @@
                 timer && clearTimeout(timer);
                 timer = setTimeout(function () {
                     me.setPosition();
-                }, 1000/60);
+                }, 100);
             };
         },
         _getSize : function (dom) {
@@ -250,4 +250,4 @@
     };
 
     core.Box = Box;
-})(window, window.sinaadToolkit);
+})(window, document, window.sinaadToolkit);
