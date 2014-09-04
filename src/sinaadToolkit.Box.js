@@ -217,53 +217,53 @@
 
             return;
 
-            var element = this.getMain(),
-                viewWidth = core.page.getViewWidth(),
-                viewHeight = core.page.getViewHeight(),
-                offsetTop = 0,
-                offsetLeft = 0,
-                hOffset = Math.min(this.minViewportWidth ? (viewWidth / 2 - this.minViewportWidth / 2) : 0, 0);
+            // var element = this.getMain(),
+            //     viewWidth = core.page.getViewWidth(),
+            //     viewHeight = core.page.getViewHeight(),
+            //     offsetTop = 0,
+            //     offsetLeft = 0,
+            //     hOffset = Math.min(this.minViewportWidth ? (viewWidth / 2 - this.minViewportWidth / 2) : 0, 0);
 
-            offsetTop = this.useFix ? 0 : core.page.getScrollTop() || 0;
-            offsetLeft = this.useFix ? 0 : core.page.getScrollLeft() || 0;
+            // offsetTop = this.useFix ? 0 : core.page.getScrollTop() || 0;
+            // offsetLeft = this.useFix ? 0 : core.page.getScrollLeft() || 0;
 
 
-            switch (at.pos[0]) {
-                case 'center' :
-                    element.style.left = offsetLeft + (viewWidth - this.width) / 2 + offsetLeft + 'px';
-                    break;
-                case 'left' :
-                    element.style.left = offsetLeft + hOffset + 'px';
-                    break;
-                case 'right' :
-                    if (this.follow) {
-                        element.style.left = offsetLeft + (viewWidth - this.width) - hOffset + 'px';
-                    } else {
-                        element.style.right = hOffset + 'px';
-                    }
-                    break;
-                default :
-                    element.style.left = offsetLeft + at.pos[0] + 'px';
-                    break;
-            }
-            switch (at.pos[1]) {
-                case 'center' :
-                    element.style.top = (viewHeight - this.height) / 2 + offsetTop + 'px';
-                    break;
-                case 'top' :
-                    element.style.top = offsetTop + 'px';
-                    break;
-                case 'bottom' :
-                    if (this.follow) {
-                        element.style.top = offsetTop + (viewHeight - this.height) + 'px';
-                    } else {
-                        element.style.bottom = '0px';
-                    }
-                    break;
-                default :
-                    element.style.top = offsetTop + pos.at.pos[1] + 'px';
-                    break;
-            }
+            // switch (at.pos[0]) {
+            //     case 'center' :
+            //         element.style.left = offsetLeft + (viewWidth - this.width) / 2 + offsetLeft + 'px';
+            //         break;
+            //     case 'left' :
+            //         element.style.left = offsetLeft + hOffset + 'px';
+            //         break;
+            //     case 'right' :
+            //         if (this.follow) {
+            //             element.style.left = offsetLeft + (viewWidth - this.width) - hOffset + 'px';
+            //         } else {
+            //             element.style.right = hOffset + 'px';
+            //         }
+            //         break;
+            //     default :
+            //         element.style.left = offsetLeft + at.pos[0] + 'px';
+            //         break;
+            // }
+            // switch (at.pos[1]) {
+            //     case 'center' :
+            //         element.style.top = (viewHeight - this.height) / 2 + offsetTop + 'px';
+            //         break;
+            //     case 'top' :
+            //         element.style.top = offsetTop + 'px';
+            //         break;
+            //     case 'bottom' :
+            //         if (this.follow) {
+            //             element.style.top = offsetTop + (viewHeight - this.height) + 'px';
+            //         } else {
+            //             element.style.bottom = '0px';
+            //         }
+            //         break;
+            //     default :
+            //         element.style.top = offsetTop + pos.at.pos[1] + 'px';
+            //         break;
+            // }
         }
     };
 
