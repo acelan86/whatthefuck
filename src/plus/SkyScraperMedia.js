@@ -26,7 +26,7 @@
      * @param  {Boolean} isFirstIn 是否是第一次进入
      * @return {number}            是第几次展示
      */
-    function _getShowCount(pdps, isFirstIn) {
+    function _getShowInfo(pdps, isFirstIn) {
         var showCount = sinaadToolkit.cookie.get(COUNT_PREFIX + pdps);
         var expires = new Date();
         if (sinaadToolkit.isNull(showCount)) {
@@ -143,26 +143,34 @@
         mini.getMain().appendChild(miniCloseBtn);
         mini.getMain().appendChild(miniContent);
         this.timer = null;
-        this.isMainClosed = false; //大图标是否被关闭了
 
-        var showCount = _getShowCount(config.pdps, true);
-        if (showCount.showCount === 1) {
-            sinaadToolkit.cookie.set(COUNT_PREFIX + this.config.pdps, showCount.showCount, {
-                expires: new Date(parseInt(showCount.expires, 10))
-            });
-            setTimeout(function() {
-                THIS.show();
-            }, this.delay * 1000);
-
-        } else {
-            setTimeout(function() {
-                THIS.showMini();
-            }, 0);
-        }
+        var showInfo = this.showInfo = _getShowInfo(config.pdps, true);
+        setTimeout(function () {
+            THIS.render(showInfo.showCount === 1);
+        }, this.delay * 1000);
 
     }
     SkyScraperMedia.prototype = {
-
+        /**
+         * [render 重新渲染广告，检查浏览器宽度判断是否能够显示广告，清除旧广告，重新填充广告以便flash能再次播放]
+         * @param  {Boolean} isMain [渲染主素材]
+         */
+        render: function (isMain) {
+            var config = this.config,
+                showInfo = this.showInfo;
+            this.hide();
+            this.hideMini();
+            if (sinaadToolkit.page.getViewWidth() >= config.midWidth + (this.width + config.left) * 2) {//首先判断屏幕是否够宽，是否容得下显示
+                if (isMain) {
+                    sinaadToolkit.cookie.set(COUNT_PREFIX + config.pdps, showInfo.showCount, {
+                        expires: new Date(parseInt(showInfo.expires, 10))
+                    });
+                    this.show();
+                } else {
+                    this.showMini();
+                }
+            }
+        },
         show: function() { //展示大图片调用的方法
             var THIS = this,
                 config = this.config;
@@ -175,13 +183,14 @@
                 config.monitor
             );
             this.main.show();
-            clearTimeout(this.timer);
             this.timer = setTimeout(function() {
-                THIS.hide();
-                THIS.showMini();
+                THIS.render();
             }, config.duration * 1000 || 8000);
-
-            this.hideMini();
+        },
+        hide: function() { //隐藏大图片调用的方法
+            this.timer && clearTimeout(this.timer);
+            this.mainContent.innerHTML = '';
+            this.main.hide();
         },
         showMini: function() { // 展示小图片调用的方法
             var config = this.config;
@@ -201,32 +210,18 @@
             this.miniContent.innerHTML = '';
             this.mini.hide();
         },
-        hide: function() { //隐藏大图片调用的方法
-            clearTimeout(this.timer);
-            this.mainContent.innerHTML = '';
-            this.main.hide();
-        },
         getResizeHandler: function() {
-            var THIS = this,
-                config = this.config;
-            var left = this.config.left;
+            var THIS = this;
             return function() {
                 THIS.resizeTimer && clearTimeout(THIS.resizeTimer);
                 THIS.resizeTimer = setTimeout(function() {
-                    if (document.body.clientWidth < config.midWidth + (THIS.width + left) * 2) {
-                        THIS.hide();
-                        THIS.hideMini();
-                    } else {
-                        THIS.hide();
-                        THIS.showMini();
-                    }
-                }, 10);
+                    THIS.render();
+                }, 500);
             };
         },
         getCloseHandler: function() {
             var THIS = this;
             return function() {
-                // clearTimeout(THIS.timer);
                 THIS.hide();
                 THIS.hideMini();
                 sinaadToolkit.event.un(THIS.mainCloseBtn, 'click', THIS.closeHandler);
@@ -238,14 +233,10 @@
         getMiniMouseOverHandler: function() { //当指针移动到mini时触发的事件
             var THIS = this;
             return function() {
-                var showCount = _getShowCount(THIS.config.pdps, false);
-                if (showCount.showCount < SHOW_COUNT + 1) {
-                    sinaadToolkit.cookie.set(COUNT_PREFIX + THIS.config.pdps, showCount.showCount, {
-                        expires: new Date(parseInt(showCount.expires, 10))
-                    });
-                    THIS.show();
+                var showInfo = THIS.showInfo = _getShowInfo(THIS.config.pdps, false);
+                if (showInfo.showCount <= SHOW_COUNT) {
+                    THIS.render(true);
                 }
-
             };
         }
     };
