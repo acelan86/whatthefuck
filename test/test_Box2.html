@@ -7,15 +7,15 @@
     <body>
         <script src="../src/sinaadToolkit.js"></script>
         <script src="../src/sinaadToolkit.Box.js"></script>
-        <div id="Body" style="width:500px;margin:0px auto;height:1000px;border:1px solid #ccc;"></div>
+        <div id="Body" style="width:500px;margin:100px auto;height:1000px;border:1px solid #ccc;"></div>
         <script>
             var box1 = new sinaadToolkit.Box({
                 position : {
-                    //of : 'Body',
-                    at : 'right top'
-                    //my : 'center center'
+                    of : ['Body', 'window'],
+                    at : 'left-20 top+200',
+                    my : 'right top'
                 },
-                //follow : 1,
+                follow : 1,
                 width : 120,
                 height : 270
             });

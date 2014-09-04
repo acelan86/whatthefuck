@@ -110,20 +110,30 @@
          * *********************************
          */
         _parsePosition : function (position) {
-            var pos = {};
+            var pos = {},
+                of = [];
+
             if ('string' === typeof position) {
+                pos.of = window;
                 pos.at = position;
             } else {
-                pos = position || {};
+                position = position || {};
+                pos.of = position.of || window;
+                pos.at = position.at;
+                pos.my = position.my;
             }
-            pos.of = 'string' === typeof pos.of ?
-                        'body' === pos.of ?
+            core.array.each(pos.of, function (o) {
+                of.push(
+                    'string' === typeof o ?
+                        'body' === o ?
                             document.body :
-                            'window' === pos.of ?
+                            'window' === o ?
                                 window :
-                                document.getElementById(pos.of) :
-                        (pos.of || window);
-
+                                document.getElementById(o) :
+                        (o || window)
+                );
+            });
+            pos.of = of;
             pos.at = this._parseStringPosition(pos.at);
             //如果pos.my没有指明，则等同与使用pos.at.pos, 即right,top也是right,top对应
             pos.my = this._parseStringPosition(pos.my || pos.at.pos.join(' '));
@@ -181,34 +191,36 @@
                 of = pos.of,
                 at = pos.at,
                 my = pos.my,
-                ofSize = this._getSize(of),
-                ofPosition = this._getPosition(of),
+                //计算对应的值，如果只有一个相对参考系，用唯一的这个参考系当垂直跟水平参考系
+                hOfSize = this._getSize(of[0]),
+                hOfPosition = this._getPosition(of[0]),
+                vOfSize = of[1] ? this._getSize(of[1]) : hOfSize,
+                vOfPosition = of[1] ? this._getPosition(of[1]) : hOfPosition,
                 mainSize = this._getSize(main);
 
+            console.log(vOfSize, vOfPosition, hOfSize, hOfPosition, mainSize);
 
-            console.log(ofSize, ofPosition, mainSize);
-
-            var x = ofPosition[0] + my.offset[0] + at.offset[0];
+            var x = hOfPosition[0] + my.offset[0] + at.offset[0];
             switch (my.pos[0]) {
                 case 'center'   : x -= mainSize[0] / 2; break;
                 case 'right'    : x -= mainSize[0]; break;
                 default         : x += 0; break; //left    
             }
             switch (at.pos[0]) {
-                case 'center'   : x += ofSize[0] / 2; break;
-                case 'right'    : x += ofSize[0]; break;
+                case 'center'   : x += hOfSize[0] / 2; break;
+                case 'right'    : x += hOfSize[0]; break;
                 default         : x += 0; break; //left
             }
 
-            var y = ofPosition[1] + my.offset[1] + at.offset[1];
+            var y = vOfPosition[1] + my.offset[1] + at.offset[1];
             switch (my.pos[1]) {
                 case 'center'   : y -= mainSize[1] / 2; break;
                 case 'bottom'   : y -= mainSize[1]; break;
                 default         : y += 0; break; //top
             }
             switch (at.pos[1]) {
-                case 'center'   : y += ofSize[1] / 2; break;
-                case 'bottom'   : y += ofSize[1]; break;
+                case 'center'   : y += vOfSize[1] / 2; break;
+                case 'bottom'   : y += vOfSize[1]; break;
                 default         : y += 0; break; //top
             }
 
