@@ -143,7 +143,6 @@
         mini.getMain().appendChild(miniCloseBtn);
         mini.getMain().appendChild(miniContent);
         this.timer = null;
-        this.isMainClosed = false; //大图标是否被关闭了
 
         var showInfo = this.showInfo = _getShowInfo(config.pdps, true);
         setTimeout(function () {
@@ -153,7 +152,7 @@
     }
     SkyScraperMedia.prototype = {
         /**
-         * [render 重新渲染广告，清除旧广告，检查宽度，重新填充广告以便flash能再次播放]
+         * [render 重新渲染广告，检查浏览器宽度判断是否能够显示广告，清除旧广告，重新填充广告以便flash能再次播放]
          * @param  {Boolean} isMain [渲染主素材]
          */
         render: function (isMain) {
