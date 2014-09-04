@@ -53,7 +53,7 @@ module.exports = function(grunt) {
       },
       sinaads : {
         files : [
-          { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.js'] }
+          { dest : 'release/sinaads.full.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.Box.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.js'] }
         ]
       }
       // ,
@@ -148,7 +148,7 @@ module.exports = function(grunt) {
           sourceMap: 'sinaadToolkit.js.map'
         },
         files : [
-          { dest : 'release/sinaadToolkit.js', src : 'src/sinaadToolkit.js'}
+          { dest : 'release/sinaadToolkit.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.Box.js']}
         ]
       },
       // sinaadToolkitDev: {
@@ -178,7 +178,7 @@ module.exports = function(grunt) {
           sourceMap: 'sinaads.js.map'
         },
         files : [
-          { dest : 'release/sinaads.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.js'] }
+          { dest : 'release/sinaads.js', src : ['src/sinaadToolkit.js', 'src/sinaadToolkit.Box.js', 'src/sinaadToolkit.ext.js', 'src/sinaads.js'] }
         ]
       },
       sinaadsMoHelper : {

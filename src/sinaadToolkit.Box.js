@@ -1,13 +1,23 @@
 /**
  * Box2.0
+ * @class 创建一个附属在任意元素或者视口的盒子，并可以实现跟随，是大部分富媒体广告的基础
+ * @usage
+ *     new Box({
+ *         position : {
+ *             my : 'left+200 top+100',
+ *             of : [window, #id] | 'window' | #id | dom | 'body',
+ *             at : 'left-20 top'
+ *         },
+ *         follow : 1,
+ *         minViewportWidth : 1000,
+ *         width : 100,
+ *         height : 100
+ *     });
+ * @constructor
  */
 (function (window, core, undefined) {
     "use strict";
 
-    /**
-     * 用于展示广告的全局盒子
-     * @param {[type]} options [description]
-     */
     function Box(options) {
         options = options || {};
 
@@ -34,7 +44,7 @@
             'display:' + (this.autoShow ? 'block' : 'none'),
             '-webkit-transition:.5s',
             //for test
-            'border:1px solid #ccc'
+            'background-color:#ccc'
         ].join(';');
         document.body.appendChild(main);
 
@@ -206,9 +216,9 @@
                 viewWidth = core.page.getViewWidth(),
                 overflowOffset = Math.min(window === of[0] && this.minViewportWidth ? (viewWidth / 2 - this.minViewportWidth / 2) : 0, 0); //水平方向的溢出补偿
 
-            console.log(vOfSize, vOfPosition, hOfSize, hOfPosition, mainSize);
+            //console.log(vOfSize, vOfPosition, hOfSize, hOfPosition, mainSize);
 
-            var x = hOfPosition[0] + my.offset[0] + at.offset[0];
+            var x = hOfPosition[0] + my.offset[0] + at.offset[0] + (this.follow && !core.browser.isSupportFixed ? core.page.getScrollLeft() : 0);
             switch (my.pos[0]) {
                 case 'center'   : x -= mainSize[0] / 2;                 break;
                 case 'right'    : x -= mainSize[0] + overflowOffset;    break;
@@ -220,7 +230,7 @@
                 default         : x += 0;               break; //left
             }
 
-            var y = vOfPosition[1] + my.offset[1] + at.offset[1];
+            var y = vOfPosition[1] + my.offset[1] + at.offset[1] + (this.follow && !core.browser.isSupportFixed ? core.page.getScrollTop() : 0);
             switch (my.pos[1]) {
                 case 'center'   : y -= mainSize[1] / 2; break;
                 case 'bottom'   : y -= mainSize[1];     break;
