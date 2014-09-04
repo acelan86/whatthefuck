@@ -249,5 +249,5 @@
         }
     };
 
-    core.Box = Box;
+    core.Box = core.Box || Box;
 })(window, document, window.sinaadToolkit);
