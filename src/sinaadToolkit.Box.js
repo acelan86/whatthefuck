@@ -63,7 +63,7 @@
          * @return {[type]}             [description]
          */
         _parseStringPosition : function (strPosition) {
-            var tmp = (strPosition || '').match(/^(\w+)([+|-]\d+)*(?:px)*\s(\w+)([+|-]\d+)*(?:px)*$/),
+            var tmp = (strPosition || '').match(/^([a-zA-Z]+)*([+|-]*\d+)*(?:px)*\s+([a-zA-Z]+)*([+|-]*\d+)*(?:px)*$/),
                 pos = {};
 
             if (!tmp) {
@@ -172,6 +172,12 @@
         getMain : function () {
             return this.main;
         },
+        show : function () {
+            this.getMain().style.display = 'block';
+        },
+        hide : function () {
+            this.getMain().style.display = 'none';
+        },
         setPosition : function () {
             /**
              * pos = {
@@ -196,86 +202,40 @@
                 hOfPosition = this._getPosition(of[0]),
                 vOfSize = of[1] ? this._getSize(of[1]) : hOfSize,
                 vOfPosition = of[1] ? this._getPosition(of[1]) : hOfPosition,
-                mainSize = this._getSize(main);
+                mainSize = this._getSize(main),
+                viewWidth = core.page.getViewWidth(),
+                overflowOffset = Math.min(window === of[0] && this.minViewportWidth ? (viewWidth / 2 - this.minViewportWidth / 2) : 0, 0); //水平方向的溢出补偿
 
             console.log(vOfSize, vOfPosition, hOfSize, hOfPosition, mainSize);
 
             var x = hOfPosition[0] + my.offset[0] + at.offset[0];
             switch (my.pos[0]) {
-                case 'center'   : x -= mainSize[0] / 2; break;
-                case 'right'    : x -= mainSize[0]; break;
-                default         : x += 0; break; //left    
+                case 'center'   : x -= mainSize[0] / 2;                     break;
+                case 'right'    : x -= mainSize[0]; x -= overflowOffset;    break;
+                default         : x += overflowOffset;                      break; //left    
             }
             switch (at.pos[0]) {
-                case 'center'   : x += hOfSize[0] / 2; break;
-                case 'right'    : x += hOfSize[0]; break;
-                default         : x += 0; break; //left
+                case 'center'   : x += hOfSize[0] / 2;  break;
+                case 'right'    : x += hOfSize[0];      break;
+                default         : x += 0;               break; //left
             }
 
             var y = vOfPosition[1] + my.offset[1] + at.offset[1];
             switch (my.pos[1]) {
                 case 'center'   : y -= mainSize[1] / 2; break;
-                case 'bottom'   : y -= mainSize[1]; break;
-                default         : y += 0; break; //top
+                case 'bottom'   : y -= mainSize[1];     break;
+                default         : y += 0;               break; //top
             }
             switch (at.pos[1]) {
-                case 'center'   : y += vOfSize[1] / 2; break;
-                case 'bottom'   : y += vOfSize[1]; break;
-                default         : y += 0; break; //top
+                case 'center'   : y += vOfSize[1] / 2;  break;
+                case 'bottom'   : y += vOfSize[1];      break;
+                default         : y += 0;               break; //top
             }
 
             main.style.left = x + 'px';
             main.style.top  = y + 'px';
 
             return;
-
-            // var element = this.getMain(),
-            //     viewWidth = core.page.getViewWidth(),
-            //     viewHeight = core.page.getViewHeight(),
-            //     offsetTop = 0,
-            //     offsetLeft = 0,
-            //     hOffset = Math.min(this.minViewportWidth ? (viewWidth / 2 - this.minViewportWidth / 2) : 0, 0);
-
-            // offsetTop = this.useFix ? 0 : core.page.getScrollTop() || 0;
-            // offsetLeft = this.useFix ? 0 : core.page.getScrollLeft() || 0;
-
-
-            // switch (at.pos[0]) {
-            //     case 'center' :
-            //         element.style.left = offsetLeft + (viewWidth - this.width) / 2 + offsetLeft + 'px';
-            //         break;
-            //     case 'left' :
-            //         element.style.left = offsetLeft + hOffset + 'px';
-            //         break;
-            //     case 'right' :
-            //         if (this.follow) {
-            //             element.style.left = offsetLeft + (viewWidth - this.width) - hOffset + 'px';
-            //         } else {
-            //             element.style.right = hOffset + 'px';
-            //         }
-            //         break;
-            //     default :
-            //         element.style.left = offsetLeft + at.pos[0] + 'px';
-            //         break;
-            // }
-            // switch (at.pos[1]) {
-            //     case 'center' :
-            //         element.style.top = (viewHeight - this.height) / 2 + offsetTop + 'px';
-            //         break;
-            //     case 'top' :
-            //         element.style.top = offsetTop + 'px';
-            //         break;
-            //     case 'bottom' :
-            //         if (this.follow) {
-            //             element.style.top = offsetTop + (viewHeight - this.height) + 'px';
-            //         } else {
-            //             element.style.bottom = '0px';
-            //         }
-            //         break;
-            //     default :
-            //         element.style.top = offsetTop + pos.at.pos[1] + 'px';
-            //         break;
-            // }
         }
     };
 

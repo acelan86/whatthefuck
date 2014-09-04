@@ -10,11 +10,15 @@
         <div id="Body" style="width:500px;margin:100px auto;height:1000px;border:1px solid #ccc;"></div>
         <script>
             var box1 = new sinaadToolkit.Box({
-                position : {
-                    of : ['Body', 'window'],
-                    at : 'left-20 top+200',
-                    my : 'right top'
-                },
+                position : '100 200',
+                minViewportWidth : 1000,
+                follow : 1,
+                width : 120,
+                height : 270
+            });
+            var box2 = new sinaadToolkit.Box({
+                position : 'right top+200',
+                minViewportWidth : 1000,
                 follow : 1,
                 width : 120,
                 height : 270
