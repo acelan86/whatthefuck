@@ -124,6 +124,13 @@ module.exports = function(grunt) {
         //"maxlen": 100,
         "maxparams": 10,
         "maxdepth": 10,
+        "globals": {
+          "sinaadsRenderHandler": true,
+          "Backbone": false,
+          "_": false,
+          "sinaadToolkit": false,
+          "sinaadsRFC": false
+        }
         //"indent": 4
       },
       files: ['src/*.js', 'src/plus/*.js', 'src/spec/*.js'],

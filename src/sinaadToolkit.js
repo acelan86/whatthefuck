@@ -2362,6 +2362,19 @@
             }
         },
         /**
+         * [stickOn 贴着某个元素]
+         * @param  {[Element]} ele [目标节点]
+         * @return {[type]}     [description]
+         */
+        stickOn: function (ele) {
+            if (!ele) {
+                return;
+            }
+            //var pos = sinaadToolkit.dom.getPosition(ele);
+            //element.style.cssText = 'position:absolute;left:' + pos.left + ';top:' + pos.top;
+            
+        },
+        /**
          * 显示盒子
          */
         show : function () {

@@ -237,7 +237,8 @@ var modelModule = (function (core, controller, uid) {
                 'bt'    : 'bp',
                 'sx'    : 'follow',
                 'kzdl'  : 'coupletExt',
-                'fc1'   : 'pop'
+                'fc1'   : 'pop',
+                'kzan'  : 'skyscraper'
             }[ad.type]) || ad.type || 'embed';
 
             ad.content[i] = content;

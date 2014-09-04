@@ -1,4 +1,5 @@
 /**
+ * 
  * desc: 他们管这个广告叫 随屏扩展按钮
  * 擎天柱广告类型 左侧长条广告，展示5s后，收缩成小长条广告。鼠标移到小广告上，长广告展开，小广告隐藏。
  * 默认需要两个素材：
@@ -14,10 +15,39 @@
 
     var MAIN_CLOSE_BTN = 'http://d9.sina.com.cn/litong/zhitou/test/images/close-h.jpg',
         MAIN_CLOSE_BTN_SIZE = [40, 18],
-        MINI_CONTENT_HEIGHT = 270; // 小广告高度固定设置为270
+        MINI_CONTENT_HEIGHT = 270,
+        COUNT_PREFIX = "SkyScraperMediaCount",
+        OUTDATE_PREFIX = "SkyScraperMediaOutdate",
+        OUTDATE = 24,
+        SHOW_COUNT = 3; // 总共只能展示三次     
+    /**
+     * 一个私有方法返回的是第几次展示和展示次数的过期时间
+     * @param  {string}  pdps
+     * @param  {Boolean} isFirstIn 是否是第一次进入
+     * @return {number}            是第几次展示
+     */
+    function _getShowInfo(pdps, isFirstIn) {
+        var showCount = sinaadToolkit.cookie.get(COUNT_PREFIX + pdps);
+        var expires = new Date();
+        if (sinaadToolkit.isNull(showCount)) {
+            expires = expires.getTime() + OUTDATE * 60 * 60 * 1000;
+            sinaadToolkit.cookie.set(OUTDATE_PREFIX + pdps, "" + expires + "", {
+                expires: 48 * 60 * 60 * 1000
+            }); //将过期时间在客户端保存成一个较久远的值，设为2天
+            showCount = isFirstIn ? 1 : 2;
+        } else {
+            expires = sinaadToolkit.cookie.get(OUTDATE_PREFIX + pdps);
+            showCount = parseInt(showCount, 10) + 1;
+        }
+        return {
+            showCount: showCount,
+            expires: expires
+        };
+    }
 
     function SkyScraperMedia(config) {
         var THIS = this;
+        //频次控制，12小时内大广告只能播放三次
 
         var width = this.width = config.main.width,
             height = this.height = config.main.height,
@@ -114,11 +144,34 @@
         mini.getMain().appendChild(miniContent);
         this.timer = null;
         this.isMainClosed = false; //大图标是否被关闭了
-        setTimeout(function() {
-            THIS.show();
+
+        var showInfo = this.showInfo = _getShowInfo(config.pdps, true);
+        setTimeout(function () {
+            THIS.render(showInfo.showCount === 1);
         }, this.delay * 1000);
+
     }
     SkyScraperMedia.prototype = {
+        /**
+         * [render 重新渲染广告，清除旧广告，检查宽度，重新填充广告以便flash能再次播放]
+         * @param  {Boolean} isMain [渲染主素材]
+         */
+        render: function (isMain) {
+            var config = this.config,
+                showInfo = this.showInfo;
+            this.hide();
+            this.hideMini();
+            if (sinaadToolkit.page.getViewWidth() >= config.midWidth + (this.width + config.left) * 2) {//首先判断屏幕是否够宽，是否容得下显示
+                if (isMain) {
+                    sinaadToolkit.cookie.set(COUNT_PREFIX + config.pdps, showInfo.showCount, {
+                        expires: new Date(parseInt(showInfo.expires, 10))
+                    });
+                    this.show();
+                } else {
+                    this.showMini();
+                }
+            }
+        },
         show: function() { //展示大图片调用的方法
             var THIS = this,
                 config = this.config;
@@ -131,15 +184,16 @@
                 config.monitor
             );
             this.main.show();
-            clearTimeout(this.timer);
             this.timer = setTimeout(function() {
-                THIS.hide();
-                THIS.showMini();
+                THIS.render();
             }, config.duration * 1000 || 8000);
-
-            this.hideMini();
         },
-        showMini: function() {
+        hide: function() { //隐藏大图片调用的方法
+            this.timer && clearTimeout(this.timer);
+            this.mainContent.innerHTML = '';
+            this.main.hide();
+        },
+        showMini: function() { // 展示小图片调用的方法
             var config = this.config;
             if (!!config.mini.src) { // 检查是否有小图片
                 this.miniContent.innerHTML = sinaadToolkit.ad.createHTML(
@@ -157,32 +211,18 @@
             this.miniContent.innerHTML = '';
             this.mini.hide();
         },
-        hide: function() { //隐藏大图片调用的方法
-            clearTimeout(this.timer);
-            this.mainContent.innerHTML = '';
-            this.main.hide();
-        },
         getResizeHandler: function() {
-            var THIS = this,
-                config = this.config;
-            var left = this.config.left;
+            var THIS = this;
             return function() {
-                if (document.body.clientWidth < config.midWidth + (THIS.width + left) * 2) {
-                    THIS.hide();
-                    THIS.hideMini();
-                } else if (THIS.isMainClosed) { // 关闭过，再次显示小的
-                    THIS.hide();
-                    THIS.showMini();
-                } else {
-                    THIS.show();
-                }
-
+                THIS.resizeTimer && clearTimeout(THIS.resizeTimer);
+                THIS.resizeTimer = setTimeout(function() {
+                    THIS.render();
+                }, 500);
             };
         },
         getCloseHandler: function() {
             var THIS = this;
             return function() {
-                // clearTimeout(THIS.timer);
                 THIS.hide();
                 THIS.hideMini();
                 sinaadToolkit.event.un(THIS.mainCloseBtn, 'click', THIS.closeHandler);
@@ -194,7 +234,10 @@
         getMiniMouseOverHandler: function() { //当指针移动到mini时触发的事件
             var THIS = this;
             return function() {
-                THIS.show();
+                var showInfo = THIS.showInfo = _getShowInfo(THIS.config.pdps, false);
+                if (showInfo.showCount <= SHOW_COUNT) {
+                    THIS.render(true);
+                }
             };
         }
     };

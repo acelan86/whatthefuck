@@ -323,6 +323,8 @@
             }
         } catch (e) {}
 
+        browser.mobile = browser.tablet || browser.phone || browser.touchpad;
+
         /**
          * 如果是safari浏览器，返回safari版本号
          * @type {Number}
@@ -1947,10 +1949,12 @@
 
             sinaadToolkit.array.each(monitor, function (url) {
                 url = sinaadToolkit.url.ensureURL(url);
+                
                 if (url) {
                     clickTAG = url + encodeURIComponent(clickTAG);
                 }
             });
+
             return clickTAG;
         }
     };
@@ -2358,6 +2362,19 @@
             }
         },
         /**
+         * [stickOn 贴着某个元素]
+         * @param  {[Element]} ele [目标节点]
+         * @return {[type]}     [description]
+         */
+        stickOn: function (ele) {
+            if (!ele) {
+                return;
+            }
+            //var pos = sinaadToolkit.dom.getPosition(ele);
+            //element.style.cssText = 'position:absolute;left:' + pos.left + ';top:' + pos.top;
+            
+        },
+        /**
          * 显示盒子
          */
         show : function () {
@@ -2618,7 +2635,8 @@ var UUID = 1;
 var PAGE_HASH = 'sinaads_' + core.hash(window.location.host.split('.')[0] + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')));
 var IMPRESS_URL = 'http://sax.sina.com.cn/newimpress'; //向广告引擎请求正式广告的地址
 var SERVER_PREVIEW_IMPRESS_URL = 'http://sax.sina.com.cn/preview'; //向广告引擎请求服务端预览广告的地址
-var PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
+// var PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
+var PLUS_RESOURCE_URL = 'http://d1.sina.com.cn/litong/zhitou/zhangfei/demo/skyscraper/Media.full.js';
 //PLUS_RESOURCE_URL = ''; //测试富媒体分文件用
 var SAX_TIMEOUT = parseInt(window._SINAADS_CONF_SAX_REQUEST_TIMEOUT || 30, 10) * 1000; //请求数据超时时间
 var PAGE_MEDIA_ORDER = window._SINAADS_CONF_PAGE_MEDIA_ORDER || []; //渲染顺序配置
@@ -2685,6 +2703,27 @@ var modelModule = (function (core, controller, uid) {
             return SERVER_PREVIEW_IMPRESS_URL;
         }
         return IMPRESS_URL;
+    }
+
+    /**
+     * 获取外部定义额外参数的请求串
+     */
+    function getExParamsQueryString() {
+        var params = window.sinaadsExParams || {},
+            str = [];
+        for (var key in params) {
+            str.push(key + '=' + encodeURIComponent(params[key]));
+        }
+        return str.join('&');
+    }
+
+    /**
+     * 判断是否是服务端预览广告位
+     * @param  {String}  pdps 广告位pdps
+     * @return {Boolean}      是否
+     */
+    function _isServerPreviewSlot(pdps) {
+        return serverPreviewSlots[pdps];
     }
 
     /**
@@ -2767,12 +2806,13 @@ var modelModule = (function (core, controller, uid) {
                 '4' : 'http://d3.sina.com.cn/litong/zhitou/union/baidu.html?pid=',
                 '5' : 'http://js.miaozhen.com/mzad_iframe.html?_srv=MZHKY&l='
             },
-            size = ad.size.split('*'),
+            size,
             engineType = ad.engineType;
 
         //旧格式数据，需要适配成新格式
         if (!ad.content && ad.value) {
             core.debug('sinaads:Old data format, need adapter(pdps)', ad.id);
+            size = ad.size.split('*');
             ad.content = [];
             core.array.each(ad.value, function (value) {
                 if (engineType === 'network') {
@@ -2853,7 +2893,9 @@ var modelModule = (function (core, controller, uid) {
                 'tip'   : 'tip',
                 'bt'    : 'bp',
                 'sx'    : 'follow',
-                'kzdl'  : 'coupletExt'
+                'kzdl'  : 'coupletExt',
+                'fc1'   : 'pop',
+                'kzan'  : 'skyscraper'
             }[ad.type]) || ad.type || 'embed';
 
             ad.content[i] = content;
@@ -2890,10 +2932,20 @@ var modelModule = (function (core, controller, uid) {
                 'adunitid=' + _pdps.join(','),                                 //pdps数组
                 'rotate_count=' + _getSeed(_pdps.length > 1 ? '' : _pdps[0]),   //轮播数，批量加载使用普通rotator
                 'TIMESTAMP=' + enterTime.toString(36),           //时间戳
-                'referral=' + encodeURIComponent(core.url.top),                  //当前页面url
-                'date=' + core.date.format(new Date(), 'yyyyMMddHH') //请求广告的本地时间, 格式2014020709
+                'referral=' + encodeURIComponent(core.url.top)                  //当前页面url
             ];
 
+            //如果是预览位置，增加date参数,从url上获取，如果获取不到使用本地时间
+            var _serverPreviewDate = _isServerPreviewSlot(_pdps.join(','));
+            if (_serverPreviewDate) {
+                params.push('date=' + _serverPreviewDate); //请求广告的本地时间, 格式2014020709
+            }
+
+            //如果有额外的传递参数，请求时传入
+            var _exParams = getExParamsQueryString();
+            if (_exParams) {
+                params.push(_exParams);
+            }
 
             for (var key in targeting) {
                 params.push('tg' + key + '=' + encodeURIComponent(targeting[key]));
@@ -2949,7 +3001,7 @@ var modelModule = (function (core, controller, uid) {
      */
     function _init(oninit) {
         //1、将页面上默认存在的数据填充到数据缓存中
-        _cache = window._sinaadsCacheData || {};
+        _cache = window._sinaadsCacheData = window._sinaadsCacheData || {};
 
 
         /**
@@ -3015,12 +3067,24 @@ var modelModule = (function (core, controller, uid) {
             var query = par.split('&'),
                 slots = {},
                 key = 'sinaads_server_preview', //必需有的key
-                q;
-            for (var i = 0, len = query.length; i < len; i++) {
+                dateKey = 'sinaads_preview_date', //预览日期
+                q,
+                i = 0,
+                len = 0,
+                date = core.date.format(new Date(), 'yyyyMMddHH');
+            for (i = 0, len = query.length; i < len; i++) {
                 if ((q = query[i])) {
                     q = q.split('=');
-                    if (q[0].indexOf(key) === 0) {
-                        slots[q[1]] = 1;
+                    if (q[0] === dateKey) {
+                        q[1] && (date = q[1]);
+                    }
+                }
+            }
+            for (i = 0, len = query.length; i < len; i++) {
+                if ((q = query[i])) {
+                    q = q.split('=');
+                    if (q[0] === key) {
+                        slots[q[1]] = date;
                     }
                 }
             }
@@ -3055,9 +3119,14 @@ var modelModule = (function (core, controller, uid) {
     return {
         init : _init,
         request : _request,
+        getSeed : _getSeed,
+        add : function (pdps, data) {
+            _cache[pdps] = data;
+        },
         get : function (pdps) {
             return (pdps ? _cache[pdps] : _cache);
-        }
+        },
+        getExParamsQueryString : getExParamsQueryString
     };
 })(core, controllerModule, PAGE_HASH);
 /**
@@ -3124,8 +3193,8 @@ var viewModule = (function () {
         element.style.cssText = 'position:absolute;top:-9999px';
         var par = [
             content.type[0],
-            encodeURIComponent(content.src[0]),
-            encodeURIComponent(content.link[0]),
+            content.src[0] ? encodeURIComponent(content.src[0]) : '',
+            content.link[0] ? encodeURIComponent(content.link[0]) : '',
             width,
             height
         ];
@@ -3304,7 +3373,6 @@ var viewModule = (function () {
     });
 })(core, viewModule);
 (function (core, view) {
-    var fmManager = window.sinaadsFloatMediaManager || {};
     view.register('float', function (element, width, height, content, config) {
         core.debug('sinaads:Rendering float.');
         var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/FloatMedia.js';
@@ -3325,18 +3393,18 @@ var viewModule = (function () {
                 link : content.link,
                 sideWidth : width,
                 sideHeight : height,
-                pdps : config.sinaads_ad_pdps
+                pdps : config.sinaads_ad_pdps,
+                contentWidth : config.sinaads_ad_contentWidth //当小于这个值时候对联两边隐藏
             };
             if (core.FloatMedia) {
-                fmManager[config.sinaads_ad_pdps] = new core.FloatMedia(FloatMediaData);
+                new core.FloatMedia(FloatMediaData);
             } else {
                 core.sio.loadScript(RESOURCE_URL, function () {
-                    fmManager[config.sinaads_ad_pdps] = new core.FloatMedia(FloatMediaData);
+                    new core.FloatMedia(FloatMediaData);
                 });
             }
         }
     });
-    window.sinaadsFloatMediaManager = fmManager;
 })(core, viewModule);
 (function (core, view) {
     view.register('follow', function (element, width, height, content, config) {
@@ -3605,8 +3673,12 @@ var viewModule = (function () {
 })(core, viewModule);
 (function (core, view) {
     view.register('bg', function (element, width, height, content, config) {
+        core.debug('sinaads:Rendering bp.');
         var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/BgMedia.js';
         content = content[0];
+
+        window.sinaadsROC.bg = config.sinaads_ad_pdps;
+
         var bgMediaData = {
             pdps : config.sinaads_ad_pdps,
             src : content.src,
@@ -3617,7 +3689,7 @@ var viewModule = (function () {
             midWidth : config.sinaads_bg_midWidth || 1000,
             headHeight : config.sinaads_bg_headHeight || 30,
             top : config.sinaads_bg_top || 120,
-            asideClickable: config.sinaads_bg_asideClick || true,
+            asideClickable: config.sinaads_bg_asideClick,
             monitor : content.monitor || []
         };
         if (core.BgMedia) {
@@ -3629,6 +3701,67 @@ var viewModule = (function () {
         }
     });
 
+})(core, viewModule);
+(function (core, view) {
+    view.register('pop', function (element, width, height, content, config) {
+        core.debug('sinaads:Rendering pop.');
+        var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/PopMedia.js';
+        content = content[0];
+
+        var popMediaData = {
+            pdps : config.sinaads_ad_pdps,
+            src : content.src,
+            type : content.type,
+            link : content.link,
+            width : width || 300,
+            height : height || 250,
+            position : config.sinaads_pop_position || 'center center',
+            monitor : content.monitor || []
+        };
+
+        if (core.PopMedia) {
+            new core.PopMedia(element, popMediaData);
+        } else {
+            core.sio.loadScript(RESOURCE_URL, function () {
+                new core.PopMedia(element, popMediaData);
+            });
+        }
+    });
+})(core, viewModule);
+(function(core, view) {
+    view.register('skyscraper', function(element, width, height, content, config) {
+        var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/SkyscraperMedia.js';
+
+        content = content[0];
+        var skyscraperMediaData = {
+            main: {
+                width: width,
+                height: height,
+                src: content.src[0] || '',
+                type: content.type[0] || '',
+                link: content.link[0] || ''
+
+            },
+            mini: {
+                src: content.src[1] || '',
+                type: content.type[1] || '',
+                link: content.link[1] || content.link[0] || '',
+                width: config.sinaads_mini_width || width //此处的mini width，如果页面没有传入配置的参数，就使用和大素材一致的宽度
+            },
+            monitor: content.monitor,
+            duration: config.sinaads_ad_duration || 5,
+            midWidth: config.sinaads_ss_mdWidth || 950,
+            top: config.sinaads_ss_top || 0,
+            left: config.sinaads_ss_left || 0
+        };
+        if (core.SkyScraperMedia) {
+            new core.SkyScraperMedia(skyscraperMediaData);
+        } else {
+            core.sio.loadScript(RESOURCE_URL, function() {
+                new core.SkyScraperMedia(skyscraperMediaData);
+            });
+        }
+    });
 })(core, viewModule);
 
 /**
@@ -3682,7 +3815,8 @@ var _init = (function (core, model, view, controller) {
         var start = core.now(),
             size    = data.size.split('*'),
             width   = config.sinaads_ad_width || (config.sinaads_ad_width = Number(size[0])) || 0,
-            height  = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])) || 0;
+            height  = config.sinaads_ad_height || (config.sinaads_ad_height = Number(size[1])) || 0,
+            _exParams = model.getExParamsQueryString(); //获取额外参数
 
         core.array.each(data.content, function (content, i) {
             core.debug('sinaads:Processing the impression of the ' + (i + 1) + ' creative of ad unit ' + config.sinaads_ad_pdps);
@@ -3692,7 +3826,7 @@ var _init = (function (core, model, view, controller) {
             content.type   = core.array.ensureArray(content.type);
             //content.sinaads_content_index = i;  //带入该内容在广告中的序号
             
-            var monitor = content.monitor,
+            var monitor = [],
                 pv = content.pv,
                 link = content.link;
                 //pid = content.pid ? 'sudapid=' + content.pid : '';
@@ -3704,21 +3838,66 @@ var _init = (function (core, model, view, controller) {
                这里需要修改方案
             */
             core.array.each(pv, function (url, i) {
+                //增加额外参数
+                if (_exParams && url && (url.indexOf('sax.sina.com.cn\/view') !== -1 || url.indexOf('sax.sina.com.cn\/dsp\/view') !== -1)) {
+                    url += (url.indexOf('?') !== -1 ? '&' : '?') + _exParams;
+                }
+
                 pv[i] = core.monitor.parseTpl(url, config);
                 core.debug('sinaads:Recording the impression of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
                 //修改下这里的曝光监测的log, 不需要使用随机参数发送，而是在曝光值替换的时候将{__timestamp__} 替换成当前值，因为可能有些第三方监测会直接把url
                 //后面的内容当作跳转连接传递，造成allyes.com/url=http://d00.sina.com.cn/a.gif&_sio_kdflkf请求跳转后为http://d00.sina.com.cn/a.gif&_sio_kdflkf，这个连接是个404的请求
                 pv[i] && core.sio.log(pv[i], 1);
             });
-            /* 解析监控链接，注入模版， 后续使用*/
-            core.array.each(monitor, function (url, i) {
+            /**
+             * 解析监控链接，注入模版， 后续使用
+             * 增加过滤出saxclick和saxdspclick链接，并按照逆序方式压入，先saxclick后saxdspclick
+             * 由于后续拼接需要逆序进行包裹，所以这里实际需要dspclick在前面则需要dspclick后压入
+             */
+            // core.array.each(monitor, function (url, i) {
+            //     //为sax monitor兼容一定是二跳的方案
+            //     if (url && (url.indexOf('sax.sina.com.cn\/click') !== -1 || url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1)) {
+            //         url = url.replace(/&url=$/, '') + '&url=';
+            //     }
+            //     monitor[i] = core.monitor.parseTpl(url, config);
+            //     core.debug('sinaads:Processing the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
+            // });
+            // 
+            var _dspMonitorURL,
+                _mfpMonitorURL,
+                _saxMonitorURL;
+
+            core.array.each(content.monitor, function (url) {
                 //为sax monitor兼容一定是二跳的方案
-                if (url && (url.indexOf('sax.sina.com.cn\/click') !== -1 || url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1)) {
-                    url = url.replace(/&url=$/, '') + '&url=';
+                if (url && url.indexOf('sax.sina.com.cn\/click') !== -1) {
+                    url = url.replace(/&url=$/, '') +
+                        (_exParams ? '&' + _exParams : '') + //增加额外参数
+                        '&url=';                             //加上&url=
+
+                    _saxMonitorURL = core.monitor.parseTpl(url, config);
+                } else if (url && url.indexOf('sax.sina.com.cn\/dsp\/click') !== -1) {
+                    url = url.replace(/&url=$/, '') +
+                        (_exParams ? '&' + _exParams : '') + //增加额外参数
+                        '&url=';                             //加上&url=
+
+                    _dspMonitorURL = core.monitor.parseTpl(url, config);
+                } else if (url && url.indexOf('sax.sina.com.cn\/mfp\/click') !== -1) {
+                    url = url.replace(/&url=$/, '') +
+                        (_exParams ? '&' + _exParams : '') + //增加额外参数
+                        '&url=';                             //加上&url=
+
+                    _mfpMonitorURL = core.monitor.parseTpl(url, config);
+                } else {
+                    url = core.monitor.parseTpl(url, config);
+                    url && monitor.push(url);
                 }
-                monitor[i] = core.monitor.parseTpl(url, config);
                 core.debug('sinaads:Processing the click of ad unit ' + config.sinaads_ad_pdps + ' via url ' + url);
             });
+
+            _saxMonitorURL && monitor.push(_saxMonitorURL);
+            _mfpMonitorURL && monitor.push(_mfpMonitorURL);
+            _dspMonitorURL && monitor.push(_dspMonitorURL);
+
 
             //如果存在pid为每个link加上pid
             core.array.each(link, function (url, i) {
@@ -3736,6 +3915,8 @@ var _init = (function (core, model, view, controller) {
                 //     link[i] = left + (left.indexOf('?') !== -1 ? '&' : '?') + pid + hash;
                 // }
             });
+
+            content.monitor = monitor;
         });
 
         /** 
@@ -3872,6 +4053,19 @@ var _init = (function (core, model, view, controller) {
 
 
         var pdps = config.sinaads_ad_pdps;
+
+        /* 处理本地轮播数据2014-04-29 acelan*/
+        var localData = config.sinaads_ad_data,
+            rotateCount = 0;
+        if (localData) {
+            //如果localData不是数组，把内容作为数组元素
+            localData = core.array.ensureArray(localData);
+            rotateCount = localData.length <= 1 ? 0 : (model.getSeed(pdps) % localData.length);
+            model.add(pdps, localData[rotateCount]);
+            core.debug('sinaads: Use local data in count ' + rotateCount);
+        }
+
+
         //注册一个频率控制器
         controller.frequenceController.register(pdps, config.sinaads_frequence || 0);
 
@@ -3897,7 +4091,7 @@ modelModule.init(function () {
     /* 在脚本加载之前注入的广告数据存入在sinaads数组中，遍历数组进行初始化 */
     var preloadAds = window.sinaads;
     if (preloadAds && preloadAds.shift) {
-        for (var ad, len = 50; (ad = preloadAds.shift()) && 0 < len--;) {
+        for (var ad, len = 100; (ad = preloadAds.shift()) && 0 < len--;) {
             _init(ad);
         }
     }
@@ -3909,6 +4103,7 @@ modelModule.init(function () {
 window.sinaadsROC = controllerModule.orderController;
 window.sinaadsRFC = controllerModule.frequenceController;
 window._sinaadsCacheData = modelModule.get();
+window.sinaadsGetSeed = modelModule.getSeed;
 window.sinaadsRenderHandler = viewModule.handlerMap;
 
     return true; //初始化完成

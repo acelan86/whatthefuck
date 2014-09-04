@@ -1,0 +1,37 @@
+<html>
+<head></head>
+<body>
+<div id="d"></div>
+<script>
+    
+
+function $ (strId) {
+    if(typeof strId==="string"){
+        if(/^#(\w+)/g.test(strId)){
+            return new $_dom(document.getElementById(RegExp["$1"])?document.getElementById(RegExp["$1"]):undefined);
+            }
+        }
+    else
+        return null;
+}
+function $_dom(element){
+    this.element=element;
+ }
+$_dom.prototype={
+    hide:function(){
+        console.log(this.element.nodeType);
+        console.log("it is hide");
+        },
+    show:function(){
+            console.log("it is show");
+            }
+    };
+var doms = $('#d');
+doms.hide();
+
+
+</script>
+
+ </body>
+
+</html>
