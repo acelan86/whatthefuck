@@ -210,9 +210,9 @@
 
             var x = hOfPosition[0] + my.offset[0] + at.offset[0];
             switch (my.pos[0]) {
-                case 'center'   : x -= mainSize[0] / 2;                     break;
-                case 'right'    : x -= mainSize[0]; x -= overflowOffset;    break;
-                default         : x += overflowOffset;                      break; //left    
+                case 'center'   : x -= mainSize[0] / 2;                 break;
+                case 'right'    : x -= mainSize[0] + overflowOffset;    break;
+                default         : x += overflowOffset;                  break; //left    
             }
             switch (at.pos[0]) {
                 case 'center'   : x += hOfSize[0] / 2;  break;
