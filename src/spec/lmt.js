@@ -2,11 +2,10 @@
  * [从右边推出来的广告]
  * @return {[type]} [description]
  */
-(function(){
+(function(window, mediaControl, undefined){
     "use strict";
-    var mediaControl,
-        shiftList = ['.main', '.top-search-wrap'], //左侧需要移动的DOM
-        offsettop = 120,    //距顶部偏移量
+    var shiftList = ['.main', '.top-search-wrap'], //左侧需要移动的DOM
+        offsettop = 46,    //距顶部偏移量
         doms = [],
         ad_box;
 
@@ -136,4 +135,4 @@
         }
     }
     init();
-})();
+})(window, window.sinaadsROC);

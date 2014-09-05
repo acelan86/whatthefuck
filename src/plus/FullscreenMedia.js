@@ -10,16 +10,24 @@
     var MAIN_CLOSE_BTN = 'http://d1.sina.com.cn/d1images/fullscreen/cls_77x31.gif',
         MINI_CLOSE_BTN = 'http://d3.sina.com.cn/d1images/fullscreen/close.gif',
         REPLAY_BTN = 'http://d2.sina.com.cn/litong/zhitou/sinaads/release/fullscreen_replay_btn.swf',
-        height = 0;
+        height = 0,
+        SHOW_COUNT = 2; //自动显示次数;
 
     function FullscreenMedia(config) {
         var element = document.getElementById('FullScreenWrap');
         if (!element) {
+            try {
+                sinaadToolkit.debug('Media: In building fullscreen complete!');
+                mediaControl.done(mediaControl.fullscreen);
+            } catch(e) {}
             return;
         }
         var THIS = this;
 
         this.deferred = new sinaadToolkit.Deferred();
+
+        //频次控制，24小时内只能自动播放2次
+        var showMain = config.hasClose ? sinaadToolkit.ad.getTimesInRange('FullscreenMedia' + config.pdps, SHOW_COUNT, 24 * 60 * 60 * 1000) : 1;
 
         this.width = config.width;
         this.height = config.height + (config.hasClose ? 40 : 0);
@@ -31,7 +39,7 @@
         this.transitionStep = config.hasClose ? 90 : 98;
         this.replaySrc = config.replaySrc || REPLAY_BTN;
         this.replaySrcType = config.replaySrcType || 'flash';
-        this.duration = config.duration || (config.hasClose ? 5000 : 8000);
+        this.duration = config.duration || (config.hasClose ? 8000 : 5000);
         this.pdps = config.pdps;
         this.replayFuncName = "fullscreenReplayFunc" + config.pdps;
 
@@ -43,6 +51,7 @@
         element.appendChild(container);
 
         var main = this.main = document.createElement('div');
+        main.className = 'sinaads-fullscreen-main';
         main.style.cssText = 'display:none;';
 
         var mainContent = this.mainContent = document.createElement('div');
@@ -105,12 +114,11 @@
 
         if (this.delay) {
             setTimeout(function () {
-                THIS.show();
+                showMain ? THIS.show() : THIS.hide();
             }, this.delay * 1000);
         } else {
-            this.show();
+            showMain ? THIS.show() : THIS.hide();
         }
-
     }
 
     FullscreenMedia.prototype = {

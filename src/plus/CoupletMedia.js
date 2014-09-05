@@ -15,12 +15,22 @@
      * @return {[type]}          [description]
      */
     function CoupletMedia(config) {
+        /* 移动端不出广告 */
+        if (sinaadToolkit.browser.mobile) {
+            try {
+                sinaadToolkit.debug('Media: In building couplet complete!');
+                mediaControl.done(mediaControl.couplet);
+            } catch(e) {}
+
+            return;
+        }
+
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
         config.mainWidth = config.mainWidth || MAIN_SIZE[0];
         config.mainHeight = config.mainHeight || MAIN_SIZE[1];
-        config.sideWidth = SIDE_SIZE[0];
-        config.sideHeight = SIDE_SIZE[1];
+        config.sideWidth = config.sideWidth || SIDE_SIZE[0];
+        config.sideHeight = config.sideHeight || SIDE_SIZE[1];
 
 
         config.src = sinaadToolkit.array.ensureArray(config.src);
@@ -38,7 +48,8 @@
             position : 'left ' + config.top || 0,
             autoShow : 1,
             minViewportWidth : config.mainWidth + 2 * config.sideWidth,
-            zIndex : 10500
+            zIndex : 10500,
+            className : 'sinaads-couplet-side sinaads-couplet-side-left'
         });
 
         var right = this.right = new sinaadToolkit.Box({
@@ -47,7 +58,8 @@
             position : 'right ' + config.top || 0,
             autoShow : 1,
             minViewportWidth : config.mainWidth + 2 * config.sideWidth,
-            zIndex : 10500
+            zIndex : 10500,
+            className : 'sinaads-couplet-side sinaads-couplet-side-right'
         });
 
         var main = this.main = new sinaadToolkit.Box({
@@ -76,7 +88,8 @@
         );
 
         var leftCloseBtn = this.leftCloseBtn = document.createElement('div');
-        leftCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat right center #ebebeb;cursor:pointer';
+        leftCloseBtn.className = 'sinaads-couplet-side-close';
+        leftCloseBtn.style.cssText = 'width:' + config.sideWidth + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat right center #ebebeb;cursor:pointer';
 
         var rightContent = this.rightContent = document.createElement('div');
         rightContent.style.cssText = 'width:' + config.sideWidth + 'px;height:' + config.sideHeight + 'px;position:absolute;left:0px;top:0px;';
@@ -90,7 +103,8 @@
         );
 
         var rightCloseBtn = this.rightCloseBtn = document.createElement('div');
-        rightCloseBtn.style.cssText = 'width:' + SIDE_CLOSE_BTN_SIZE[0] + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat left center #ebebeb;cursor:pointer';
+        rightCloseBtn.className = 'sinaads-couplet-side-close';
+        rightCloseBtn.style.cssText = 'width:' + config.sideWidth + 'px;height:' + SIDE_CLOSE_BTN_SIZE[1] + 'px;position:absolute;left:0px;top:' + config.sideHeight + 'px;background:url(' + SIDE_CLOSE_BTN + ') no-repeat left center #ebebeb;cursor:pointer';
 
 
         main.getMain().appendChild(mainContent);

@@ -1,5 +1,4 @@
 (function (core, view) {
-    var fmManager = window.sinaadsFloatMediaManager || {};
     view.register('float', function (element, width, height, content, config) {
         core.debug('sinaads:Rendering float.');
         var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/FloatMedia.js';
@@ -20,16 +19,18 @@
                 link : content.link,
                 sideWidth : width,
                 sideHeight : height,
-                pdps : config.sinaads_ad_pdps
+                pdps : config.sinaads_ad_pdps,
+                contentWidth : config.sinaads_ad_contentWidth, //当小于这个值时候对联两边隐藏
+                follow : config.sinaads_ad_follow || 0,
+                showPos : config.sinaads_float_show_pos
             };
             if (core.FloatMedia) {
-                fmManager[config.sinaads_ad_pdps] = new core.FloatMedia(FloatMediaData);
+                new core.FloatMedia(FloatMediaData);
             } else {
                 core.sio.loadScript(RESOURCE_URL, function () {
-                    fmManager[config.sinaads_ad_pdps] = new core.FloatMedia(FloatMediaData);
+                    new core.FloatMedia(FloatMediaData);
                 });
             }
         }
     });
-    window.sinaadsFloatMediaManager = fmManager;
 })(core, viewModule);

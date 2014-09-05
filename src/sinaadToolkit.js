@@ -65,6 +65,20 @@
          * 错误信息
          */
         error : function (msg, e) {
+            try {
+                sinaadToolkit.sio.log('//d00.sina.com.cn/a.gif?' + [
+                    'type=' + 'sinaads_error',
+                    'msg=' + encodeURIComponent(msg ? msg : e ? e.message : 'unknow'),
+                    'ref=' + encodeURIComponent(sinaadToolkit.url.top),
+                    'ja=' + (navigator.javaEnabled() ? 1 : 0),
+                    'ck=' + (navigator.cookieEnabled ? 1 : 0),
+                    'ds=' + (window.screen.width + "x" + window.screen.height),
+                    'ua=' + encodeURIComponent(navigator.appVersion),
+                    'pf=' + navigator.platform,
+                    'ts=' + sinaadToolkit.now()
+                ].join('&'));
+            } catch (e) {}
+
             if (sinaadToolkit.mode === 'debug') {
                 throw new Error(msg + (e ? ':' + e.message : ''));
             }
@@ -322,6 +336,8 @@
                 browser.maxthon = + RegExp.$1;
             }
         } catch (e) {}
+
+        browser.mobile = browser.tablet || browser.phone || browser.touchpad;
 
         /**
          * 如果是safari浏览器，返回safari版本号
@@ -1947,10 +1963,12 @@
 
             sinaadToolkit.array.each(monitor, function (url) {
                 url = sinaadToolkit.url.ensureURL(url);
+                
                 if (url) {
                     clickTAG = url + encodeURIComponent(clickTAG);
                 }
             });
+
             return clickTAG;
         }
     };
@@ -1959,6 +1977,37 @@
      * @namespace sinaadToolkit.ad
      */
     sinaadToolkit.ad = sinaadToolkit.ad || /** @lends sinaadToolkit.ad */{
+        /**
+         * 获取某个存储值在某段时间内的次数，0为超出次数
+         * @param  {String}  key   存储标识
+         * @param  {Number}  times 次数
+         * @param  {Number}  range 时间范围毫秒数
+         * @return {Number}        当前次数，0为超出
+         *
+         * storage   time::timestamp
+         */
+        getTimesInRange : function (key, times, range) {
+            key = 'sinaads_tc_' + key,
+            range = range || 0;
+
+            var time = (sinaadToolkit.storage.get(key) || '').split('::'),
+                timestamp,
+                now = sinaadToolkit.now();
+
+            timestamp = time[1] ? parseInt(time[1], 10) : (now + range);
+
+            //未过期
+            if (timestamp - now >= 0) {
+                time = time[0] ? parseInt(time[0], 10) + 1 : 1;
+            } else {
+                time = 1;
+                timestamp = now + range;
+                sinaadToolkit.storage.remove(key);
+            }
+            sinaadToolkit.storage.set(key, time + '::' + timestamp, now + range);
+
+            return time > times ? 0 : time;
+        },
         /**
          * 通过src地址获取资源类型
          * @param  {String} src 资源地址
@@ -2086,7 +2135,8 @@
                             width : width,
                             height : height,
                             wmode : opt_options.wmode || 'opaque',
-                            vars : vars
+                            vars : vars,
+                            id : opt_options.id || ''
                         });
                         if (link) {
                             _html = [
@@ -2260,126 +2310,6 @@
             }
         };
     })();
-
-
-
-    /**
-     * @name Box
-     * @class 跟随容器，创建一个可以指定展现位置的跟随容器盒
-     * @constructor
-     */
-    function Box(config) {
-        this.uid = config.uid || ('sinaadToolkitBox' + Box.uid++);
-        this.width = config.width || 0;
-        this.height = config.height || 'auto';
-        this.position = config.position || "center center";
-        this.follow = config.follow || 0;
-        this.zIndex = config.zIndex || 99999;
-        this.minViewportWidth = config.minViewportWidth || 0;  //容器最小宽度
-
-        this.positionStyle = this.follow ? (sinaadToolkit.browser.isSupportFixed ? 'fixed' : 'absolute') : 'absolute';
-
-        var element = document.createElement('div');
-        element.id = this.uid;
-        element.style.cssText += 'position:' + this.positionStyle + ';width:' + this.width + 'px;height:' + this.height + 'px;z-index:' + this.zIndex + ';display:' + (config.autoShow ? 'block' : 'none');
-        document.body.insertBefore(element, document.body.firstChild);
-
-        this.setPosition();
-        this.resetPositionHandler = this.getResetPositionHandler();
-        sinaadToolkit.event.on(window, 'resize', this.resetPositionHandler);
-        if (this.follow && !sinaadToolkit.browser.isSupportFixed) {
-            sinaadToolkit.event.on(window, 'scroll', this.resetPositionHandler);
-        }
-    }
-    Box.uid = 0;
-
-    Box.prototype = /** @lends Box.prototype */{
-        getMain : function () {
-            return document.getElementById(this.uid);
-        },
-        getResetPositionHandler : function () {
-            var THIS = this;
-            return function () {
-                THIS.setPosition();
-            };
-        },
-        /**
-         * 设置盒子的位置
-         */
-        setPosition : function () {
-            var element = this.getMain(),
-                position = this.position.split(' '),
-                viewWidth = sinaadToolkit.page.getViewWidth(),
-                viewHeight = sinaadToolkit.page.getViewHeight(),
-                offsetTop = 0,
-                offsetLeft = 0,
-                hOffset = Math.min(this.minViewportWidth ? (viewWidth / 2 - this.minViewportWidth / 2) : 0, 0);
-
-            if (this.follow) {
-                offsetTop = sinaadToolkit.browser.isSupportFixed ? 0 : sinaadToolkit.page.getScrollTop() || 0;
-                offsetLeft = sinaadToolkit.browser.isSupportFixed ? 0 : sinaadToolkit.page.getScrollLeft() || 0;
-            }
-
-            switch (position[0]) {
-                case 'center' :
-                    element.style.left = offsetLeft + (viewWidth - this.width) / 2 + offsetLeft + 'px';
-                    break;
-                case 'left' :
-                    element.style.left = offsetLeft + hOffset + 'px';
-                    break;
-                case 'right' :
-                    if (this.follow) {
-                        element.style.left = offsetLeft + (viewWidth - this.width) - hOffset + 'px';
-                    } else {
-                        element.style.right = hOffset + 'px';
-                    }
-                    break;
-                default :
-                    element.style.left = offsetLeft + (parseInt(position[0], 10) || 0) + 'px';
-                    break;
-            }
-            switch (position[1]) {
-                case 'center' :
-                    element.style.top = (viewHeight - this.height) / 2 + offsetTop + 'px';
-                    break;
-                case 'top' :
-                    element.style.top = offsetTop + 'px';
-                    break;
-                case 'bottom' :
-                    if (this.follow) {
-                        element.style.top = offsetTop + (viewHeight - this.height) + 'px';
-                    } else {
-                        element.style.bottom = '0px';
-                    }
-                    break;
-                default :
-                    element.style.top = offsetTop + (parseInt(position[1], 10) || 0) + 'px';
-                    break;
-            }
-        },
-        /**
-         * 显示盒子
-         */
-        show : function () {
-            this.getMain().style.display = 'block';
-        },
-        /**
-         * 隐藏盒子
-         */
-        hide : function () {
-            this.getMain().style.display = 'none';
-        },
-        remove : function () {
-            var element = this.getMain();
-            if (element.parentNode) {
-                element.parentNode.removeChild(element);
-            }
-            element = null;
-            sinaadToolkit.event.un(window, 'scroll', this.resetPositionHandler);
-            sinaadToolkit.event.un(window, 'resize', this.resetPositionHandler);
-        }
-    };
-    sinaadToolkit.Box = sinaadToolkit.Box || Box;
 
     /**
      * @todo 简单动画方法

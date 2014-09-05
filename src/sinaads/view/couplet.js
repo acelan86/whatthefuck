@@ -30,7 +30,9 @@
                 mainWidth   : width,
                 mainHeight  : height,
                 top         : config.sinaads_couple_top || 0,
-                monitor     : content.monitor || []
+                monitor     : content.monitor || [],
+                sideWidth   : config.sinaads_ad_side_width,
+                sideHeight  : config.sinaads_ad_side_height
             };
             if (core.CoupletMediaData) {
                 new core.CoupletMedia(CoupletMediaData);

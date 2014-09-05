@@ -3,33 +3,16 @@
 
 src/.DS_Store
 
-release/
-issue/
-test/
-release/plus/
-
-sinaads.dev.js.map
-
+release
+release-bak
+node-module
+src/sinaads.js
+Media.js.map
+sinaadToolkit.js.map
 sinaads.js.map
 
-release-bak/
+demo/
 
-sinaadToolkit.js.map
+*.dump
 
-sinaadsMoHelper.js.map
-release/plus/Media.js
-
-Media.js.map
-
-node_modules/
-
-
-tool/monitor/start.php
-
-tool/monitor/monitor.sql
-
-tool/monitor/network.js
-
-tool/monitor/third_party/
-
-demo/.DS_Store
+node_modules/grunt-contrib-concat/.jshintrc

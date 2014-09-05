@@ -18,6 +18,11 @@
      * @return {[type]}          [description]
      */
     function CoupletExtMedia(config) {
+        /* 移动端不出广告 */
+        if (sinaadToolkit.browser.mobile) {
+            return;
+        }
+
         this.delay = config.delay ? parseInt(config.delay, 10) : 0;
 
         config.src = sinaadToolkit.array.ensureArray(config.src);

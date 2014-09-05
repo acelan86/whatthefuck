@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title> 快讯测试 </title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            (function(){
+                if(window.top !== window.self || window._thereIsNoRealTimeMessage){return};
+                var script = document.createElement('script');
+                script.setAttribute('charset', 'utf-8');
+                script.src = 'http://d7.sina.com.cn/litong/zhitou/sinaads/demo/lianghui2014/realtime.js';
+                document.getElementsByTagName('head')[0].appendChild(script);
+            })();
+            setInterval(function () {
+                realTimeWindow.msg._msg([{"i": ((new Date()).getTime()/1000) ,"m":"测试文本测试文本测试文本","u":"http://www.sina.com.cn/","l":" 测试文本 测试文本测试文本","t":1,"c":1}]);
+            }, 20000);
+        </script>
+    </body>
+</html>

@@ -18,8 +18,8 @@
         element.style.cssText = 'position:absolute;top:-9999px';
         var par = [
             content.type[0],
-            encodeURIComponent(content.src[0]),
-            encodeURIComponent(content.link[0]),
+            content.src[0] ? encodeURIComponent(content.src[0]) : '',
+            content.link[0] ? encodeURIComponent(content.link[0]) : '',
             width,
             height
         ];
@@ -34,6 +34,18 @@
 
         if (par.join('${}').length + monitor.length < 2000) {
             par.push(monitor);
+        }
+
+        var pv = [];
+        core.array.each(content.pv, function (url) {
+            if (url) {
+                pv.push(url);
+            }
+        });
+
+        pv = encodeURIComponent(pv.join('|'));
+        if (par.join('${}').length + pv.length < 2000) {
+            par.push(pv);
         }
 
         // core.underPop(

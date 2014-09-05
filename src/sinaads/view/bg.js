@@ -1,7 +1,11 @@
 (function (core, view) {
     view.register('bg', function (element, width, height, content, config) {
+        core.debug('sinaads:Rendering bp.');
         var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/BgMedia.js';
         content = content[0];
+
+        window.sinaadsROC.bg = config.sinaads_ad_pdps;
+
         var bgMediaData = {
             pdps : config.sinaads_ad_pdps,
             src : content.src,
@@ -11,7 +15,7 @@
             height : height || config.sinaads_bg_height,
             midWidth : config.sinaads_bg_midWidth || 1000,
             headHeight : config.sinaads_bg_headHeight || 30,
-            top : config.sinaads_bg_top || 120,
+            top : 'undefined' !== typeof config.sinaads_bg_top ? config.sinaads_bg_top : 46,
             asideClickable: config.sinaads_bg_asideClick,
             monitor : content.monitor || []
         };

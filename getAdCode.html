@@ -1,0 +1,623 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>新浪广告 -- 五合一高端工具箱</title>
+        <style>
+            html,body,div,input{margin:0;padding:0;}
+            body{background:#eee;}
+            #tabs{
+                width:520px;height:26px;font:12px/25px "宋体";margin:20px auto 0;
+            }
+            #tabs a{float:left;display: block;padding:0 5px;border:1px solid #ddd;border-bottom:0;margin-right:5px;}
+            #tabs a.active{background:#f9f9ff;border:1px solid #ccc;border-bottom:1px solid #f9f9ff;}
+            
+            #feedback{float: right;cursor:pointer;}
+            .button{padding:0 10px;height:24px;font:14px/20px "微软雅黑";border:1px solid #ccc;background:#dde;}
+            #leju{margin: 2px 0 0 10px;text-decoration: underline; color:#369;}
+            #preview{margin:10px auto;position:relative;width:1000px;}
+            #preview ins{transition-duration:0.5s}
+            #code{width:475px; height:90px; resize: none;transition-duration:0.5s;}
+            .code{width:475px; margin:20px auto;}
+            .divide{font-size:0;line-height:0;height:0;border-top:1px solid #ddd; border-bottom:1px solid #fff;}
+            #batch{width:180px; height:90px; resize: none;}
+            .batch,.batch1{width:520px; padding:10px 0; margin:0px auto 10px; font:12px/20px "微软雅黑"; text-align:center;border:1px solid #ccc;background:#f9f9ff;}
+            .batch1{font:12px/20px Verdana,"宋体";}
+            .batch .input{width:180px;height:20px;font:12px/18px Verdana;}
+            .batch1 .line{width:360px;height:22px;margin:0 auto;padding:5px 15px;border-bottom:1px dotted #eee;overflow: hidden;}
+            .batch1 .line *{float:left;}
+            .batch1 .line span{float:left;display:inline;width:80px;text-align:right;padding:0 10px 0 0;}
+            .batch1 .line .button {margin-left:90px;}
+            #previewbtn2{margin-left:10px;}
+            .batch1 .input{width:260px;height:20px;font:12px/18px Verdana;}
+            .batch *{vertical-align: middle;}
+            h2.pdpsname{width:800px;text-align:center;font:16px/20px Verdana;margin:5px auto 2px;color:#999;}
+            a:link,a:visited{color:#666; text-decoration: none;}
+            a:hover{color:#333; text-decoration: none;}
+
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+        try{
+            document.domain = "sina.com.cn";
+        }catch(e){}
+        </script>
+        <script type="text/javascript" src="http://d1.sina.com.cn/litong/zhitou/sinaads/release/sinaads.js"></script>
+        <script async type="text/javascript" src="http://d1.sina.com.cn/litong/zhitou/sinaads/data/pdpsinfo.js"></script>
+        <script type="text/javascript" src="http://d1.sina.com.cn/litong/zhitou/sinaads/pdps.js"></script>
+        
+        <div id="tabs">
+            <a href="javascript:void(0);" class="active">生成代码</a>
+            <a href="javascript:void(0);">组合查询</a>
+            <a href="javascript:void(0);">按页面查询</a>
+            <a href="javascript:void(0);">实景预览</a>
+            <a href="javascript:void(0);">第三方校验</a>
+            <a href="javascript:void(0);">编码解码</a>
+            <span id="feedback">给作者反馈bug</span>
+        </div>
+        <div id="container"><div class="batch1">
+                <form id="adposform">
+                    <div class="line">
+                        <span>地域定向:</span>
+                        <select id="city">
+                            <option value="">通投</option>
+                            <option value="1.12.1.150">北京</option>
+                            <option value="58.67.161.100">安徽</option>
+                            <option value="58.67.161.102">合肥</option>
+                            <option value="58.207.80.100">重庆</option>
+                            <option value="59.56.1.125">福建</option>
+                            <option value="59.56.1.127">福州</option>
+                            <option value="59.57.128.100">厦门</option>
+                            <option value="60.13.17.100">甘肃</option>
+                            <option value="60.13.4.100">兰州</option>
+                            <option value="60.204.128.100">广东</option>
+                            <option value="60.204.129.100">广州</option>
+                            <option value="61.28.9.129">深圳</option>
+                            <option value="61.145.160.100">东莞</option>
+                            <option value="61.28.60.100">佛山</option>
+                            <option value="61.242.58.100">中山</option>
+                            <option value="61.242.85.100">珠海</option>
+                            <option value="110.72.1.100">广西</option>
+                            <option value="110.72.232.100">南宁</option>
+                            <option value="110.216.1.100">贵州</option>
+                            <option value="111.85.129.100">贵阳</option>
+                            <option value="116.13.8.100">海南</option>
+                            <option value="116.13.12.100">海口</option>
+                            <option value="116.62.76.100">河北</option>
+                            <option value="116.216.0.100">石家庄</option>
+                            <option value="118.203.128.100">黑龙江</option>
+                            <option value="118.203.0.100">哈尔滨</option>
+                            <option value="119.31.192.100">河南</option>
+                            <option value="120.44.0.100">郑州</option>
+                            <option value="120.65.254.100">湖北</option>
+                            <option value="120.65.250.100">武汉</option>
+                            <option value="121.46.160.100">湖南</option>
+                            <option value="121.51.224.100">长沙</option>
+                            <option value="121.56.32.100">内蒙古</option>
+                            <option value="121.226.0.100">江苏</option>
+                            <option value="121.225.0.100">南京</option>
+                            <option value="121.224.240.100">苏州</option>
+                            <option value="121.235.0.100">无锡</option>
+                            <option value="122.8.96.100">江西</option>
+                            <option value="122.8.192.100">南昌</option>
+                            <option value="122.10.248.100">吉林</option>
+                            <option value="122.12.128.100">长春</option>
+                            <option value="122.66.240.100">辽宁</option>
+                            <option value="122.67.128.100">沈阳</option>
+                            <option value="122.68.32.100">大连</option>
+                            <option value="124.224.0.100">宁夏</option>
+                            <option value="125.72.0.100">青海</option>
+                            <option value="171.119.0.100">山西</option>
+                            <option value="171.116.0.100">太原</option>
+                            <option value="182.80.0.100">陕西</option>
+                            <option value="1.80.0.100">西安</option>
+                            <option value="27.192.0.100">山东</option>
+                            <option value="58.14.0.100">济南</option>
+                            <option value="58.56.128.100">青岛</option>
+                            <option value="27.115.0.100">上海</option>
+                            <option value="58.66.0.100">四川</option>
+                            <option value="58.66.8.100">成都</option>
+                            <option value="58.194.96.100">天津</option>
+                            <option value="103.3.124.100">西藏</option>
+                            <option value="103.3.136.100">新疆</option>
+                            <option value="14.204.140.100">云南</option>
+                            <option value="58.66.240.100">昆明</option>
+                            <option value="36.22.128.100">浙江</option>
+                            <option value="42.0.128.100">杭州</option>
+                            <option value="36.22.64.100">温州</option>
+                            <option value="36.22.0.100">宁波</option>
+                        </select></div>
+                    <div class="line"><span>入口定向:</span> <select id="entry">
+                        <option value="">通投</option>
+                        <option value="jnc">剑南春</option>
+                        <option value="abc">农行</option>
+                        <option value="samsung">三星</option>
+                        <option value="zheshang">浙商</option>
+                        <option value="huaan">华安基金</option>
+                        <option value="wcp">微操盘</option>
+                        <option value="youchu">邮储银行</option>
+                    </select></div>
+                    <div class="line">
+                        <span>广告位PDPS:</span> <input type="text" class="input" id="pdps" value="" placeholder="PDPS0000000*****" maxlength="16" />
+                    </div>
+                     <div class="line"><input type="submit" id="submit" class="button" value="生成" /> <a href="javascript:void(0);" id="leju" class="">获取乐居代码</a></div> 
+                </form>
+            </div><div class="batch" style="display:none;">
+                <span>广告位PDPS:</span> <textarea id="batch">PDPS000000003881
+PDPS000000005539
+PDPS000000005575
+PDPS000000040587
+PDPS000000004684
+PDPS000000003876</textarea>
+                <input type="button" id="batchShow" value="批量" class="button" />
+            </div><div class="batch" style="display:none;">
+                <form id="urlform">
+                    <span>页面URL:</span> <input type="text" class="input" id="findurl" value="http://news.sina.com.cn" placeholder="http://news.sina.com.cn" /> <input type="submit" class="button" value="查询" />
+                </form>
+            </div><div class="batch1" style="display:none;">
+                <div class="line"><span>页面URL:</span> <input type="text" class="input" id="previewurl" value="http://eladies.sina.com.cn" placeholder="http://..." /></div>
+                <div class="line"><span>位置类型: </span> <select class="select" id="previewadtype">
+                    <option value="embed">普通展示广告</option>
+                    <option value="fullscreen">全屏</option>
+                    <option value="stream">流媒体</option>
+                    <option value="videoWindow">视窗</option>
+                    <option value="couplet">跨栏</option>
+                    <option value="float">对联</option>
+                    <option value="bp">背投</option>
+                </select></div>
+                <div class="line"><span>广告位PDPS:</span> <input type="text" class="input" id="previewpdps" value="PDPS000000047342" placeholder="PDPS..." /></div>
+                <div class="line"><span>素材类型: </span> <select class="select" id="previewtype">
+                    <option value="image">图片格式</option>
+                    <option value="flash">Flash格式</option>
+                    <option value="url">URL(iframe)</option>
+                    <option value="js">JS(外引js)</option>
+                    <option value="html">HTML(html片段)</option>
+                    <option value="text">文字链</option>
+                </select></div>
+                <div class="line"><span>素材尺寸: </span> <input type="text" class="input" id="previewsize" value="1000*90" placeholder="宽*高" /></div>
+                <div class="line"><span>素材地址: </span> <input type="text" class="input" id="previewsrc" value="http://i3.sinaimg.cn/dy/deco/2013/0905/0905_elad_croBg.jpg" placeholder="image | flash | url | js | html | text" /></div>
+                <div class="line"><span>连接地址: </span> <input type="text" class="input" id="previewlink" value="http://sina.com.cn" placeholder="link1|link2|...|linkn" /></div>
+                <div class="line"><input type="button" id="previewbtn" class="button" value="生成预览地址" />  <input type="button" id="previewbtn2" class="button" value="打开预览页面" /></div>
+            </div>
+            <div class="batch1" style="display:none;">
+                <div class="line">
+                    <span>广告类型:</span>
+                    <select class="select" id="jstype">
+                        <option value="0">流媒体</option>
+                        <option value="1">视窗</option>
+                        <option value="2">全屏</option>
+                        <option value="3">1000*90通栏</option>
+                        <option value="4">300*500画中画</option>
+                        <option value="5">300*250画中画</option>
+                    </select>
+                </div>
+                <div class="line">
+                    <span>第三方JS:</span> <input type="text" class="input" id="thirdjs" value="" placeholder="http://" />
+                </div>
+                <div class="line">
+                    <input type="button" id="testbtn" class="button" value="测试" />
+                </form>
+            </div>
+            </div>
+            <div class="batch1" style="display:none;padding:10px;overflow:hidden;">
+                <textarea id="encode" style="width:150px;float:left;height:300px;"></textarea>
+                <div style="width:80px;float:left;">
+                    <input type="button" id="encodebtn" style="margin-bottom:50px;" value="编码 &raquo;" class="button"/>
+                    <input type="button" id="decodebtn" value="&laquo; 解码" class="button"/>
+                </div>
+                <textarea id="decode" style="width:150px;float:left;height:300px;"></textarea>
+            </div>
+        </div>
+        <div class="divide"></div>
+        <span id="FullScreenWrap"></span>
+        <span id="afp_videofm_video" style="float:right"></span>
+        <div id="preview"></div>
+        <div class="divide"></div>
+        <div class="code">
+            <textarea id="code"></textarea>
+        </div>
+        <div class="divide"></div>
+        <div class="divide"></div>
+        <div class="divide"></div>
+        <div class="divide"></div>
+        <div class="divide"></div>
+        <!-- <div style="text-align:center"><input type="submit" id="copy" value="拷贝" class="button" /></div> -->
+        <script type="text/javascript">
+            var $ = function (id) {
+                return document.getElementById(id);
+            }
+            $("code").onfocus = function () {
+                this.style.height = this.scrollHeight + "px";
+            }
+            $("code").onblur = function () {
+                this.style.height = 90 + "px";
+            }
+            function showAD (pdps) {
+                var pdps =  pdps || $("pdps").value;
+                if(pdps){
+                    $("preview").innerHTML = '<ins class="sinaads" data-ad-pdps="'+ pdps +'"></ins><input type="button" class="button" id="debug" value="调试" style="display:block;margin:10px auto" />';
+                    (sinaads = window.sinaads || []).push({});
+                    var today = ((new Date()).getDate() + "");
+                    var rnd = today.length == 1 ? today : today.charAt(1);
+                    $("code").value =
+                        '<!—$$ 20140718 00:00:00-20140721 12:00:00 作者 $-->\n' + 
+                        '<ins class="sinaads" data-ad-pdps="' + pdps + '"></ins>\n' +
+                        '<' + 'script>\n' +
+                        '(function (d, s, id) {\n' +
+                            '\tvar s, n = d.getElementsByTagName(s)[0];\n' +
+                            '\tif (d.getElementById(id)) return;\n' +
+                            '\ts = d.createElement(s);\n' +
+                            '\ts.id = id;\n' +
+                            '\ts.setAttribute("charset", "utf-8");\n' + 
+                            '\ts.src = \"//d\" + Math.floor(0 + Math.random() * (9 - 0 + 1)) + \".sina.com.cn/litong/zhitou/sinaads/release/sinaads.js\";\n' +
+                            '\tn.parentNode.insertBefore(s, n);\n' +
+                        '})(document, \"script\", \"sinaads-script\");\n' +
+                        '(sinaads = window.sinaads || []).push({});\n' +
+                        '</' + 'script>\n';
+                    if (window.attachEvent) { 
+                        $("debug").attachEvent("onclick", debug); 
+                    } else if (window.addEventListener) { 
+                        $("debug").addEventListener("click", debug, false);   
+                    }
+                    var debugmode = location.search.indexOf("__sinaadToolkitDebug__") != -1;
+                    if(debugmode){
+                        $("debug").value = "退出调试模式";
+                    }else{
+                        $("debug").value = "调试模式";
+                    }
+                }else{
+                    alert("请输入正确的PDPS!");
+                }
+            }
+            function showLeju () {
+                var pdps = $("pdps").value;
+                if(pdps){
+                    $("preview").innerHTML = "";
+                    $("code").value = [
+                    '<div id="Container"></div>',
+                    '<script charset="utf-8" src="http://d1.sina.com.cn/litong/zhitou/sinaads/release/sinaadToolkit.js"></sc' + 'ript>',
+                    '<script>',
+                        'var pos = "'+ pdps +'";',
+                        'function fold() {',
+                            'parent.document.getElementById(sinaadToolkitSandboxId).parentNode.parentNode.style.display = "none";',
+                        '}',
+                        'var timer = setInterval(function () {',
+                            'if (sinaadToolkit) {',
+                                 'clearInterval(timer);',
+                                 'parent.lejuMedia.then(function (data) {',
+                                     'var data = data[pos];',
+                                     'if (data && data[0] && (data = data[0].params)) {',
+                                        'document.getElementById("Container").innerHTML = sinaadToolkit.ad.createHTML(sinaadToolkit.ad.getTypeBySrc(data.src), data.src, sinaads_ad_width, sinaads_ad_height, data.link);',
+                                     '} else {',
+                                         'fold();',
+                                     '}',
+                                 '}, function () {',
+                                     'fold();',
+                                 '});',
+                           '}',
+                        '}, 100);',
+                    '</sc' + 'ript>'
+                    ].join("");
+                    $("code").focus();
+                }
+            }
+            var lejuMedia = {
+                then: function () {
+                    alert("乐居广告请求正常, 但本工具暂不支持渲染");
+                }
+            }
+            $("leju").onclick = showLeju;
+            var validPdps = [];
+            for(var k in exports.list){
+                if(exports.list[k]){
+                    validPdps.push(k);
+                }
+            }
+            $("batch").value = validPdps.join("\n");
+            function debug () {
+                if(location.search.indexOf("__sinaadToolkitDebug__") != -1){
+                    location.href = location.href.replace(/[\?\&]__sinaadToolkitDebug__/g,"");
+                    try{
+                        $("debug").value = "调试模式";
+                        $("debug").style.background = "";
+                    }catch(e){}
+                }else{
+                    location.href = location.search ? location.href + "&__sinaadToolkitDebug__" : "?__sinaadToolkitDebug__";
+                    try{
+                        $("debug").value = "退出调试模式";
+                    }catch(e){}
+                }
+            }
+            function setEntryStorage () {
+                if(this.value){
+                    sinaadToolkit.storage.set("sinaads_entry", this.value, 30000)
+                }else{
+                    sinaadToolkit.storage.remove("sinaads_entry");
+                }
+            }
+            function setCityStorage () {
+                if(this.value){
+                    sinaadToolkit.storage.set("sinaads_ip", this.value, 30000)
+                }else{
+                    sinaadToolkit.storage.remove("sinaads_ip");
+                }
+            }
+            $("city").onchange = setCityStorage;
+            $("entry").onchange = setEntryStorage;
+            $("adposform").onsubmit = reposAd;
+            $("batchShow").onclick = batchAd;
+            $("urlform").onsubmit = findAd;
+            $("previewbtn").onclick = previewAd();
+            $("previewbtn2").onclick = previewAd(true);
+            $("testbtn").onclick = testThirdJs;
+            function reposAd () {
+                var searchList = location.search.split("?")[1],
+                    pdpsnew = $("pdps").value;
+                location.href = searchList ? location.href.replace(/\?\w+(?=(?=&*)|(?=\b))/, "?" + pdpsnew) : pdpsnew ? location.href + "?" + pdpsnew : location.href;
+                return false;
+            };
+            function batchAd () {
+                var pdpslist = $("batch").value;
+                if(pdpslist){
+                    var pdpsarray = $("batch").value.split(/[\n\b\s]+/);
+                    $("preview").innerHTML = '<input type="button" class="button" id="els" value="Magic" style="display:block;margin:10px auto" />';
+                    sinaadToolkit.array.each(pdpsarray,function(item,i){
+                        if(item.match(/^(PDPS|TEST|ZTZT|FBFB)\d{12}$/)){
+                            $("preview").innerHTML += '<h2 class="pdpsname">------------'+ item +' '+ exports.pdpsinfo[item] +'------------</h2><ins class="sinaads" data-ad-pdps="'+ item +'"></ins><div class="divide" style="margin:5px 0 0 0;"></div>';
+                        }else{
+                            alert("第"+ i +"个PDPS格式有误, 请检查!");
+                        }
+                    });
+                    sinaadToolkit.array.each(pdpsarray,function(item,i){
+                        if(item.match(/^(PDPS|TEST|ZTZT|FBFB)\d{12}$/)){
+                            (sinaads = window.sinaads || []).push({});
+                        }
+                    })
+                }
+                $("els").onclick = reBuild;
+                function reBuild () {
+                    function getAllIns () {
+                        var ads = $("preview").childNodes;
+                        var ins = [];
+                        var div = [];
+                        var h2 = [];
+                        for(var i = 0, il = ads.length; i < il; i++){
+                            if(ads[i].nodeName.toLowerCase() == "ins"){
+                                ins.push(ads[i]);
+                            }
+                            if(ads[i].nodeName.toLowerCase() == "div"){
+                                div.push(ads[i]);
+                            }
+                            if(ads[i].nodeName.toLowerCase() == "h2"){
+                                h2.push(ads[i]);
+                            }
+                        }
+                        doms = {
+                            "ins" : ins,
+                            "div" : div,
+                            "h2" : h2
+                        }
+                        return doms;
+                    }
+                    var ins = getAllIns().ins;
+                    function getGrid (px) {
+                        return Math.ceil(px/50);
+                    }
+                    var posRecord = [0];
+                    for(var i = 0, il = ins.length; i < il; i++){
+                        var thisW = ins[i].getElementsByTagName("ins")[0] ? getGrid(ins[i].getElementsByTagName("ins")[0].offsetWidth) : ins[i].getElementsByTagName("a")[0] ? getGrid(ins[i].getElementsByTagName("a")[0].offsetWidth) : 0,
+                            thisH = ins[i].getElementsByTagName("ins")[0] ? getGrid(ins[i].getElementsByTagName("ins")[0].offsetHeight) : ins[i].getElementsByTagName("a")[0] ? getGrid(ins[i].getElementsByTagName("a")[0].offsetHeight) : 0;
+                        var validPos = -1;
+                        for(var j = 0, jl = posRecord.length; j < jl; j++){
+                            var maxWidth = 0,validHeight = 0;
+                            for(var k = 0; k < thisH; k++){
+                                if((posRecord[j+k] + thisW) > 20){
+                                    break;
+                                }else{
+                                    validHeight++;
+                                    if(validHeight == thisH){
+                                        validPos = j;
+                                    }
+                                    maxWidth = (maxWidth < (posRecord[j+k])) ? (posRecord[j+k]) : maxWidth;
+                                }
+                            }
+                            if(validPos != -1){
+                                break;
+                            }
+                        }
+                        validPos = (validPos == -1) ? posRecord.length : validPos;
+                        ins[i].style.position = "absolute";
+                        ins[i].style.zIndex = 2;
+                        ins[i].style.top = validPos * 50 + "px";
+                        ins[i].style.left = (posRecord[validPos] ? posRecord[validPos] : 0) * 50 + "px";
+                        for(var l = 0; l < thisH; l++){
+                            posRecord[validPos+l] = maxWidth + thisW;
+                        }
+                        console.log(posRecord);
+                    }
+                    var cover = document.createElement("div");
+                    $("preview").appendChild(cover);
+                    cover.style.cssText += ";position:absolute;z-index:1;top:0;left:0;width:1000px;height:"+ (posRecord.length + 6) * 50 +"px;background:#eee;";
+                    $("preview").style.height = (posRecord.length + 6) * 50 + "px";
+                    posRecord = [0];
+                }
+                $("code").value = 
+                    "当前轮:"+ sinaadToolkit.seed + "\n" +
+                    "请求数量:" + pdpsarray.length + "\n" ;
+            }
+            function findAd () {
+                var findUrl = $("findurl").value;
+                var filterPDPS = [];
+                $("preview").innerHTML = "";
+                if(findurl){
+                    if(!$("findifr")){
+                        var ifr = document.createElement("iframe");
+                        ifr.style.display = "none";
+                        ifr.id = "findifr";
+                    }else{
+                        ifr = $("findifr");
+                    }
+                    ifr.src = findUrl;
+                    document.body.appendChild(ifr);
+                    ifr.onload = function () {
+                        try{
+                            document.domain = "sina.com.cn";
+                            var inss = ifr.contentWindow.document.getElementsByTagName("ins");
+                        }catch(e){
+                            $("code").value = '由于该站点未设置domain为"sina.com.cn",因此无法获取广告位信息!';
+                        }
+                        for(var i = 0, il = inss.length; i < il; i++){
+                            if(inss[i].getAttribute("data-ad-pdps")){
+                                filterPDPS.push(inss[i].getAttribute("data-ad-pdps"));
+                            }
+                        }
+                        $("code").value = filterPDPS.join("\n");
+                    }
+                }
+                return false;
+            }
+            function previewAd (direct) {
+                return function (){
+                    if(!$("previewpdps").value){
+                        alert("未输入PDPS!");
+                    }
+                    if(!$("previewurl").value){
+                        alert("未输入页面URL!");
+                    }
+                    if(!$("previewsize").value){
+                        alert("未输入广告尺寸!");
+                    }
+                    if(!$("previewsrc").value){
+                        alert("未输入素材地址!");
+                    }
+                    $("preview").innerHTML = "";
+                    // var joinwith = $("previewurl").value.indexOf("?") == -1 ? "?" : "&";
+                    var joinwith = "#";
+                    var preUrl = $("previewurl").value + joinwith + "sinaads_preview_pdps=" + $("previewpdps").value +"&sinaads_preview_size=" + $("previewsize").value + "&sinaads_preview_src=" + $("previewsrc").value + "&sinaads_preview_type=" + $("previewtype").value + "&sinaads_preview_highlight=1&sinaads_preview_adtype=" + $("previewadtype").value + '&sinaads_preview_link=' + $("previewlink").value;
+                    if(direct){
+                        location.href = preUrl;
+                    }
+                    $("code").value = preUrl;
+                }
+            }
+            function testThirdJs () {
+                var jscode = $("thirdjs").value;
+                var adtype = $("jstype").value;
+                //alert(jscode);
+                var TypeObj = {
+                    "0" : {
+                        "size" : "1000*300",
+                        "type" : "stream"
+                    },
+                    "1" : {
+                        "size" : "300*297",
+                        "type" : "videoWindow"
+                    },
+                    "2" : {
+                        "size" : "950*300",
+                        "type" : "fullscreen"
+                    },
+                    "3" : {
+                        "size" : "1000*90",
+                        "type" : "embed"
+                    },
+                    "4" : {
+                        "size" : "300*500",
+                        "type" : "embed"
+                    },
+                    "5" : {
+                        "size" : "300*250",
+                        "type" : "embed"
+                    }
+                }
+                _sinaadsCacheData["TEST000000000001"] = {
+                    size : TypeObj[adtype].size,
+                    type : TypeObj[adtype].type,
+                    content : [{
+                        pv : [],
+                        type : [/*'flash'*/'js'],
+                        src : [
+                            //'http://d1.sina.com.cn/rwei/shijia2012/shichuang1129/300x250.swf'
+                            //互动通js
+                            jscode
+                        ],
+                        monitor : ["http://sax.sina.com.cn/click?type=nonstd&t=TkEwMDAwMDAzNA%3D%3D&url="],
+                        link : [""]
+                    }]
+                };
+                $("preview").innerHTML = '<ins class="sinaads" data-ad-pdps="TEST000000000001"></ins>';
+                (sinaads = window.sinaads || []).push({});
+            } 
+            function init () {
+                var searchList = location.search.match(/((PDPS|TEST|ZTZT|FBFB)\d{0,12})|\d{4,5}$/)[0];
+                searchList = (function () {
+                    switch(searchList.length){
+                        case 4:
+                            return "PDPS00000000" + searchList;
+                            break;
+                        case 5:
+                            return "PDPS0000000" + searchList;
+                            break;
+                        default:
+                            return searchList;
+                    }
+                })();
+                var pdps = searchList ? searchList : "";
+                if(pdps){
+                    $("pdps").value = pdps;
+                    showAD();
+                }
+                $("code").select();
+            }
+            var tablist = [];
+            var tabs = $("tabs").getElementsByTagName("a");
+            for(var i = 0, il = tabs.length; i<il; i++){
+                tablist.push(tabs[i]);
+            }
+            var showlist = [];
+            var showContain = $("container").childNodes;
+            for (var j = 0, jl = showContain.length; j < jl; j++) {
+                if(showContain[j].nodeType == 1){
+                    showlist.push(showContain[j]);
+                }
+            }
+            sinaadToolkit.array.each(tablist, function(item,i){
+                item.onclick = function () {
+                    sinaadToolkit.array.each(tablist, function (item) {
+                        item.className = "";
+                    })
+                    sinaadToolkit.array.each(showlist, function(item,i){
+                        item.style.display = "none"; 
+                    })
+                    this.className = "active";
+                    showlist[i].style.display = "block";
+                }
+            })
+            init();
+        </script>
+        <script>
+            $('encodebtn').onclick = function () {
+                $('decode').value = encodeURIComponent($('encode').value);
+            };
+            $('decodebtn').onclick = function () {
+                $('encode').value = decodeURIComponent($('decode').value);
+            }
+        </script>
+
+        <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=3419073649" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            WB2.anyWhere(function(W){
+                W.widget.publish({
+                    'id' : 'feedback',
+                    'default_text': "高端大气上档次的#新浪广告工具#特好用~! @无名Di叶子, 我建议...",
+                    'callback': function (data) {//发送成功回调
+                        // voteAd.getYouhui(voteAd.uid,voteAd.uname);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

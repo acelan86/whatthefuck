@@ -1,0 +1,32 @@
+<!-- 世界杯赞助logo  -->
+<style>
+    .worldcup1{
+        position: relative;
+    }
+    .worldcup2014_logo{
+        position: absolute;
+        right: 4px;
+        top: 5px;
+        z-index: 2;
+        width:100px;
+        height:25px;
+    }
+</style>
+<ins class="sinaads worldcup2014_logo" data-ad-pdps="42494D50706A"></ins>
+<script>
+    !(sinaads = window.sinaads || []).push({
+        params : {
+            sinaads_ad_tpl : '<a href="#{link}" target="_blank" style="'
+                + 'z-index:10;'
+                + 'background:url(\'#{src}\') center center no-repeat;'
+                + '_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=noscale, src=\'#{src}\');'
+                + '_background:none;'
+                + 'text-decoration:none;'
+                + 'width:#{width};'
+                + 'height:#{height};'
+                + 'display:block;">'
+                + '</a>'
+        }
+    });
+</script>
+<!-- 世界杯赞助logo  -->

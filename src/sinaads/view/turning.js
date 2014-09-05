@@ -19,6 +19,7 @@
                         url : 'http://d3.sina.com.cn/litong/zhitou/sinaads/release/picshow_new.swf',
                         width : width,
                         height : height,
+                        wmode : 'transparent',
                         vars : {
                             ad_num : len,
                             pics : src.join('§'),

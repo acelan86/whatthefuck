@@ -2,7 +2,6 @@
     view.register('videoWindow', function (element, width, height, content, config) {
         core.debug('sinaads:Rendering videoWindow.');
         var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/VideoWindowMedia.js';
-
         window.sinaadsROC.videoWindow = config.sinaads_ad_pdps;
 
         content = content[0];
