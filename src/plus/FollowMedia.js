@@ -6,7 +6,7 @@
 
     var MINI_REPLAY_BTN = 'http://d5.sina.com.cn/d1images/lmt/play.gif',
         MINI_CLOSE_BTN = 'http://d1.sina.com.cn/d1images/lmt/close1.jpg',
-        MAIN_CLOSE_BTN = 'http://simg.sinajs.cn/blog7style/images/common/ad/closenew.jpg',
+        MAIN_CLOSE_BTN = 'http://d9.sina.com.cn/litong/zhitou/test/images/close-h.jpg',
         MAIN_CLOSE_BTN_SIZE = [40, 18],
         MINI_CONTENT_SIZE = [25, 150],
         MINI_REPLAY_BTN_SIZE = [25, 24],
@@ -68,7 +68,7 @@
             'height:' + MAIN_CLOSE_BTN_SIZE[1] + 'px',
             'position:absolute',
             'right:0px',
-            'top:-' + MAIN_CLOSE_BTN_SIZE[1] + 'px',
+            'bottom:-' + MAIN_CLOSE_BTN_SIZE[1] + 'px',
             'z-index:9999',
             'background:url(' + MAIN_CLOSE_BTN +  ') no-repeat',
             'margin:0',
@@ -130,11 +130,11 @@
 
             this.deferred.resolve();
 
-            if (!this.isHideMini) {
+            //if (!this.isHideMini) {
                 this.timer = setTimeout(function () {
                     THIS.hide();
-                },  config.duration * 1000 || 8000);
-            }
+                },  config.duration * 1000 || 5000);
+            //}
         },
         hide : function () {
             var config = this.config;

@@ -1,7 +1,6 @@
-//加点注释看看能不能变,,反正就是变了，再试一试，呵呵呵。。。
 (function(core, view) {
     view.register('skyscraper', function(element, width, height, content, config) {
-        var RESOURCE_URL = PLUS_RESOURCE_URL||'./src/plus/SkyscraperMedia.js';
+        var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/SkyscraperMedia.js';
 
         content = content[0];
         var skyscraperMediaData = {
