@@ -28,7 +28,7 @@
         this.height = options.height || 100;
         this.follow = options.follow || 0;
         this.zIndex = options.zIndex || 99999;
-        this.autoShow = 'undefined' === typeof options.autoShow ? 1 : options.autoShow;
+        this.autoShow = 'undefined' === typeof options.autoShow ? 0 : options.autoShow;
         this.minViewportWidth = options.minViewportWidth || 0;  //容器最小宽度
         this.useFix = this.follow && core.browser.isSupportFixed ? 1 : 0;
 
@@ -41,8 +41,8 @@
             'width:' + this.width + 'px',
             'height:' + this.height + 'px',
             'z-index:' + this.zIndex,
-            'display:' + (this.autoShow ? 'block' : 'none'),
-            '-webkit-transition:.5s'
+            'display:' + (this.autoShow ? 'block' : 'none')
+            // '-webkit-transition:.5s'
             //for test
             //'background-color:#ccc'
         ].join(';');
