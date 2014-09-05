@@ -5,16 +5,25 @@
         <title> 测试Box2.0</title>
     </head>
     <body>
+        <style>
+            div{
+                background:#ccc;
+            }
+        </style>
         <script src="../src/sinaadToolkit.js"></script>
         <script src="../src/sinaadToolkit.Box.js"></script>
         <div id="Body" style="width:500px;margin:100px auto;height:1000px;border:1px solid #ccc;"></div>
         <script>
             var box1 = new sinaadToolkit.Box({
-                position : '100 200',
+                position : {
+                    of : [window],
+                    at : 'left bottom',
+                    my : 'left+10 bottom-10'
+                },
                 minViewportWidth : 1000,
                 follow : 1,
                 width : 120,
-                height : 270
+                height : 120
             });
             var box2 = new sinaadToolkit.Box({
                 position : 'right top+200',
