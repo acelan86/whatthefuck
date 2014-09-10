@@ -329,7 +329,7 @@ var modelModule = (function (core, controller, uid) {
             }, {
                 timeout : SAX_TIMEOUT,
                 onfailure : function () {
-                    core.debug('sinaads:request timeout, via ' + _pdps.join());
+                    core.error('sinaads:request timeout, via ' + _pdps.join());
                     deferred.reject();
                 }
             });
