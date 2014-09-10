@@ -13,7 +13,7 @@
 
         element.style.cssText = 'position:absolute;top:-9999px';
 
-        window.sinaadsFullscreenMonitor = config.origin_monitor || [];
+        window.sinaadsFullscreenMonitor = content.origin_monitor || [];
 
         switch (content.type[0]) {
             case 'js' :
