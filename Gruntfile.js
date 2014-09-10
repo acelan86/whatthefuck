@@ -261,6 +261,11 @@ module.exports = function(grunt) {
         files : [
           { dest : 'release/spec/getSinaadsExParamsForBlog.js',  src : 'src/spec/getSinaadsExParamsForBlog.js' }
         ]
+      },
+      fuyiThirdpartCode : {
+        files : [
+          { dest : 'release/spec/fuyi_thirdpart_code.js',  src : 'src/spec/fuyi_thirdpart_code.source.js' }
+        ]
       }
     },
     copy: {
