@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title> </title>
+    </head>
+    <body>
+        <script>
+            var api = (window.name || '').split('&'),
+                par = {},
+                item;
+            for (var i = 0, len = api.length; i < len; i++) {
+                item = api[i].split('=');
+                item[1] && (par[item[0]] = item[1]);
+            }
+            var clickTAG = par.clickTAG || '',
+                viewTAG = par.viewTAG || '';
+
+            function send(urls) {
+                var urls = urls.split('|');
+                for (var i = 0, len = urls.length; i < len; i++) {
+                    urls[i] && (function (url, rand) {
+                        var img = new Image(),
+                            key = '_sinaads_sio_log_' + (+new Date()).toString(36),
+                            quote = url.indexOf('?') !== -1 ? '&' : '?';
+                        window[key] = img;
+                        img.onload = img.onerror = img.onabort = function () {
+                            img.onload = img.onerror = img.onabort = null; 
+                            window[key] = null;
+                            img = null; 
+                        };
+                        img.src = rand ? url + quote + key : url;
+                    })(decodeURIComponent(urls[i]), 1);
+                }
+            }
+
+            window.onload = function () {
+                var as = document.getElementsByTagName('a');
+                for (var i = 0, len = as.length; i < len; i++) {
+                    as[i].onmouseup = function () {
+                        send(clickTAG);
+                    };
+                }
+            };
+        </script>
+        <a href="http://sina.com.cn" target="_blank">link</a>
+    </body>
+</html>

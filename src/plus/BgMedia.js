@@ -44,16 +44,22 @@
             if (type === 'flash' || /\.swf$/.test(src)) {
                 options = {wmode: 'transparent'};
             }
-            leftAd.innerHTML = sinaadToolkit.ad.createHTML(
+            sinaadToolkit.ad.embed(
+                leftAd,
                 type,
-                src,
                 halfWidth,
                 config.height,
-                config.link[1] || config.link[0],
-                config.monitor,
-                config.pv,
-                undefined,
-                options
+                sinaadToolkit.ad.createHTML(
+                    type,
+                    src,
+                    halfWidth,
+                    config.height,
+                    config.link[1] || config.link[0],
+                    config.monitor,
+                    config.pv,
+                    undefined,
+                    options
+                )
             );
 
             type = config.type[2] || config.type[1] || config.type[0],
@@ -63,16 +69,22 @@
                 options = {wmode: 'transparent'};
             }
 
-            rightAd.innerHTML = sinaadToolkit.ad.createHTML(
+            sinaadToolkit.ad.embed(
+                rightAd,
                 type,
-                src,
                 halfWidth,
                 config.height,
-                config.link[2] || config.link[1] || config.link[0],
-                config.monitor,
-                config.pv,
-                undefined,
-                options
+                sinaadToolkit.ad.createHTML(
+                    type,
+                    src,
+                    halfWidth,
+                    config.height,
+                    config.link[2] || config.link[1] || config.link[0],
+                    config.monitor,
+                    config.pv,
+                    undefined,
+                    options
+                )
             );
         } else if (config.asideClickable) {//该变量应该是只读的，应该有更好的写法
             //左右可点击

@@ -313,6 +313,11 @@ var _init = (function (core, model, view, controller) {
             core.debug('sinaads: Use local data in count ' + rotateCount);
         }
 
+        //@TODO 通过sinaad-ad-disable参数+frequenceController来实现可以禁用某个广告
+        //如果广告位标记了不发请求，那么注册一个广告频次控制器,且设置广告为disable状态
+        //
+        //
+        //
 
         //注册一个频率控制器
         controller.frequenceController.register(pdps, config.sinaads_frequence || 0);

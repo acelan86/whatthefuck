@@ -236,7 +236,8 @@ var modelModule = (function (core, controller, uid) {
                 'bt'    : 'bp',
                 'sx'    : 'follow',
                 'kzdl'  : 'coupletExt',
-                'fc1'   : 'pop'
+                'fc1'   : 'pop',
+		'kzan'  : 'skyscraper'
             }[ad.type]) || ad.type || 'embed';
 
             ad.content[i] = content;
@@ -328,7 +329,7 @@ var modelModule = (function (core, controller, uid) {
             }, {
                 timeout : SAX_TIMEOUT,
                 onfailure : function () {
-                    core.debug('sinaads:request timeout, via ' + _pdps.join());
+                    core.error('sinaads:request timeout, via ' + _pdps.join());
                     deferred.reject();
                 }
             });

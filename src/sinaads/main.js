@@ -6,8 +6,7 @@
  * @version 1.0.0
  * @date 2013-08-08
  */
-
- /** 
+/**
   * @useage
   *     window.sinaadsPreloadData = [pdps1, pdps2, pdps3, ..., pdpsn]; 批量加载的代码
   *     (window.sinaads = window.sinaads || []).push({}); 投放一个位置
@@ -52,6 +51,7 @@ window._sinaadsIsInited = window._sinaadsIsInited || (function (window, core, un
     import "view/videoWindow";
     import "view/bg";
     import "view/pop";
+    import "view/skyscraper.js";	
 
     import "init";
 
