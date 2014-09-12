@@ -78,15 +78,6 @@
 
         var leftContent = this.leftContent = document.createElement('div');
         leftContent.style.cssText = 'width:' + config.sideWidth + 'px;height:' + config.sideHeight + 'px;position:absolute;left:0px;top:0px;';
-        leftContent.innerHTML = sinaadToolkit.ad.createHTML(
-            config.type[1],
-            config.src[1],
-            config.sideWidth,
-            config.sideHeight,
-            config.link[1] || config.link[0],
-            config.monitor,
-            config.pv
-        );
 
         var leftCloseBtn = this.leftCloseBtn = document.createElement('div');
         leftCloseBtn.className = 'sinaads-couplet-side-close';
@@ -94,15 +85,6 @@
 
         var rightContent = this.rightContent = document.createElement('div');
         rightContent.style.cssText = 'width:' + config.sideWidth + 'px;height:' + config.sideHeight + 'px;position:absolute;left:0px;top:0px;';
-        rightContent.innerHTML = sinaadToolkit.ad.createHTML(
-            config.type[2] || config.type[1],
-            config.src[2] || config.src[1],
-            config.sideWidth,
-            config.sideHeight,
-            config.link[2] || config.link[1] || config.link[0],
-            config.monitor,
-            config.pv
-        );
 
         var rightCloseBtn = this.rightCloseBtn = document.createElement('div');
         rightCloseBtn.className = 'sinaads-couplet-side-close';
@@ -116,6 +98,37 @@
         left.getMain().appendChild(leftCloseBtn);
         right.getMain().appendChild(rightContent);
         right.getMain().appendChild(rightCloseBtn);
+
+        sinaadToolkit.ad.embed(
+            leftContent,
+            config.type[1],
+            config.sideWidth,
+            config.sideHeight,
+            sinaadToolkit.ad.createHTML(
+                config.type[1],
+                config.src[1],
+                config.sideWidth,
+                config.sideHeight,
+                config.link[1] || config.link[0],
+                config.monitor,
+                config.pv
+            )
+        );
+        sinaadToolkit.ad.embed(
+            rightContent,
+            config.type[2] || config.type[1],
+            config.sideWidth,
+            config.sideHeight,
+            sinaadToolkit.ad.createHTML(
+                config.type[2] || config.type[1],
+                config.src[2] || config.src[1],
+                config.sideWidth,
+                config.sideHeight,
+                config.link[2] || config.link[1] || config.link[0],
+                config.monitor,
+                config.pv
+            )
+        );
 
 
         sinaadToolkit.event.on(mainCloseBtn, 'click', this.getCloseMainHandler());
@@ -148,14 +161,20 @@
             this.isshow = 1;
             clearTimeout(this.timer);
             this.mainContent.style.width = '0px';
-            this.mainContent.innerHTML = sinaadToolkit.ad.createHTML(
+            sinaadToolkit.ad.embed(
+                this.mainContent,
                 this.config.type[0],
-                this.config.src[0],
                 this.config.mainWidth,
                 this.config.mainHeight,
-                this.config.link[0],
-                this.config.monitor,
-                this.config.pv
+                sinaadToolkit.ad.createHTML(
+                    this.config.type[0],
+                    this.config.src[0],
+                    this.config.mainWidth,
+                    this.config.mainHeight,
+                    this.config.link[0],
+                    this.config.monitor,
+                    this.config.pv
+                )
             );
             this.main.show();
 

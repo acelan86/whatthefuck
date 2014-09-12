@@ -132,14 +132,20 @@
 
             clearTimeout(this.timer);
 
-            this.mainContent.innerHTML = sinaadToolkit.ad.createHTML(
+            sinaadToolkit.ad.embed(
+                this.mainContent,
                 this.type,
-                this.src,
                 this.width,
                 this.contentHeight,
-                this.link,
-                this.monitor,
-                this.pv
+                sinaadToolkit.ad.createHTML(
+                    this.type,
+                    this.src,
+                    this.width,
+                    this.contentHeight,
+                    this.link,
+                    this.monitor,
+                    this.pv
+                )
             );
             this.main.style.display = 'block';
 

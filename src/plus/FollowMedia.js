@@ -114,14 +114,20 @@
                 config = this.config;
 
             clearTimeout(this.timer);
-            this.mainContent.innerHTML = sinaadToolkit.ad.createHTML(
+            sinaadToolkit.ad.embed(
+                this.mainContent,
                 config.main.type,
-                config.main.src,
                 config.main.width,
                 config.main.height,
-                config.main.link,
-                config.monitor,
-                config.pv
+                sinaadToolkit.ad.createHTML(
+                    config.main.type,
+                    config.main.src,
+                    config.main.width,
+                    config.main.height,
+                    config.main.link,
+                    config.monitor,
+                    config.pv
+                )
             );
             this.main.show();
 
@@ -145,14 +151,20 @@
             this.main.hide();
             if (!this.isHideMini) {
                 this.mini.show();
-                this.miniContent.innerHTML = sinaadToolkit.ad.createHTML(
+                sinaadToolkit.ad.embed(
+                    this.miniContent,
                     config.mini.type,
-                    config.mini.src,
                     25,
                     150,
-                    config.mini.link,
-                    config.monitor,
-                    config.pv
+                    sinaadToolkit.ad.createHTML(
+                        config.mini.type,
+                        config.mini.src,
+                        25,
+                        150,
+                        config.mini.link,
+                        config.monitor,
+                        config.pv
+                    )
                 );
             }
         },

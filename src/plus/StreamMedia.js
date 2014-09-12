@@ -103,18 +103,24 @@
 
             clearTimeout(this.timer);
             this.miniContent.innerHTML = '';
-            this.mainContent.innerHTML = sinaadToolkit.ad.createHTML(
+            sinaadToolkit.ad.embed(
+                this.mainContent,
                 config.main.type,
-                config.main.src,
                 config.main.width,
                 config.main.height,
-                config.main.link || config.link,
-                config.monitor,
-                config.pv,
-                '',
-                {
-                    wmode : 'transparent'
-                }
+                sinaadToolkit.ad.createHTML(
+                    config.main.type,
+                    config.main.src,
+                    config.main.width,
+                    config.main.height,
+                    config.main.link || config.link,
+                    config.monitor,
+                    config.pv,
+                    '',
+                    {
+                        wmode : 'transparent'
+                    }
+                )
             );
             this.main.show();
             this.mini.hide();
@@ -130,14 +136,20 @@
             this.mainContent.innerHTML = '';
             this.mini.show();
             this.main.hide();
-            this.miniContent.innerHTML = sinaadToolkit.ad.createHTML(
+            sinaadToolkit.ad.embed(
+                this.miniContent,
                 config.mini.type,
-                config.mini.src,
                 25,
                 150,
-                config.mini.link || config.link,
-                config.monitor,
-                config.pv
+                sinaadToolkit.ad.createHTML(
+                    config.mini.type,
+                    config.mini.src,
+                    25,
+                    150,
+                    config.mini.link || config.link,
+                    config.monitor,
+                    config.pv
+                )
             );
             try {
                 sinaadToolkit.debug('Media: In building stream complete!');

@@ -71,14 +71,20 @@
 
         var leftContent = this.leftContent = document.createElement('div');
         leftContent.style.cssText = 'width:' + config.sideWidth + 'px;height:' + config.sideHeight + 'px;position:absolute;left:0px;top:0px;';
-        leftContent.innerHTML = sinaadToolkit.ad.createHTML(
+        sinaadToolkit.ad.embed(
+            leftContent,
             config.type[0],
-            config.src[0],
             config.sideWidth,
             config.sideHeight,
-            config.link[0],
-            config.monitor,
-            config.pv
+            sinaadToolkit.ad.createHTML(
+                config.type[0],
+                config.src[0],
+                config.sideWidth,
+                config.sideHeight,
+                config.link[0],
+                config.monitor,
+                config.pv
+            )
         );
 
         var leftCloseBtn = this.leftCloseBtn = document.createElement('div');
@@ -87,14 +93,20 @@
 
         var rightContent = this.rightContent = document.createElement('div');
         rightContent.style.cssText = 'width:' + config.sideWidth + 'px;height:' + config.sideHeight + 'px;position:absolute;left:0px;top:0px;';
-        rightContent.innerHTML = sinaadToolkit.ad.createHTML(
+        sinaadToolkit.ad.embed(
+            rightContent,
             config.type[1] || config.type[0],
-            config.src[1] || config.src[0],
             config.sideWidth,
             config.sideHeight,
-            config.link[1] || config.link[0],
-            config.monitor,
-            config.pv
+            sinaadToolkit.ad.createHTML(
+                config.type[1] || config.type[0],
+                config.src[1] || config.src[0],
+                config.sideWidth,
+                config.sideHeight,
+                config.link[1] || config.link[0],
+                config.monitor,
+                config.pv
+            )
         );
 
         var rightCloseBtn = this.rightCloseBtn = document.createElement('div');
