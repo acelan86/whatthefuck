@@ -2054,6 +2054,21 @@
             }
             return type;
         },
+        embed : function (element, type, width, height, adContent) {
+            switch (type) {
+                case 'text' :
+                case 'image' :
+                case 'url' :
+                case 'adbox' :
+                case 'flash' :
+                    element.innerHTML = adContent;
+                    break;
+                default :
+                    //创建广告渲染的沙箱环境，并传递部分广告参数到沙箱中
+                    sinaadToolkit.sandbox.create(element, width, height, adContent);
+                    break;
+            }
+        },
         /**
          * 创建广告展现html
          * @param  {String} type    广告类型，如图片等

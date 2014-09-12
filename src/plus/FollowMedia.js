@@ -64,13 +64,13 @@
 
         var mainCloseBtn = this.mainCloseBtn = document.createElement('div');
         mainCloseBtn.style.cssText = [
-            'width:' + MAIN_CLOSE_BTN_SIZE[0] + 'px',
+            'width:' + width + 'px',
             'height:' + MAIN_CLOSE_BTN_SIZE[1] + 'px',
             'position:absolute',
             'right:0px',
             'bottom:-' + MAIN_CLOSE_BTN_SIZE[1] + 'px',
             'z-index:9999',
-            'background:url(' + MAIN_CLOSE_BTN +  ') no-repeat',
+            'background:url(' + MAIN_CLOSE_BTN +  ') no-repeat left top #eee',
             'margin:0',
             'padding:0',
             'cursor:pointer'
@@ -114,13 +114,19 @@
                 config = this.config;
 
             clearTimeout(this.timer);
-            this.mainContent.innerHTML = sinaadToolkit.ad.createHTML(
+            sinaadToolkit.ad.embed(
+                this.mainContent,
                 config.main.type,
-                config.main.src,
                 config.main.width,
                 config.main.height,
-                config.main.link,
-                config.monitor
+                sinaadToolkit.ad.createHTML(
+                    config.main.type,
+                    config.main.src,
+                    config.main.width,
+                    config.main.height,
+                    config.main.link,
+                    config.monitor
+                )
             );
             this.main.show();
 
@@ -144,13 +150,19 @@
             this.main.hide();
             if (!this.isHideMini) {
                 this.mini.show();
-                this.miniContent.innerHTML = sinaadToolkit.ad.createHTML(
+                sinaadToolkit.ad.embed(
+                    this.miniContent,
                     config.mini.type,
-                    config.mini.src,
                     25,
                     150,
-                    config.mini.link,
-                    config.monitor
+                    sinaadToolkit.ad.createHTML(
+                        config.mini.type,
+                        config.mini.src,
+                        25,
+                        150,
+                        config.mini.link,
+                        config.monitor
+                    )
                 );
             }
         },
