@@ -1,6 +1,4 @@
 'use strict';
-var sinaadToolkit;
-var sinaadsRenderHandler;
 sinaadsRenderHandler = window.sinaadsRenderHandler || {};
 sinaadsRenderHandler.blogbf = function (element, width, height, content, config) {
 
@@ -33,7 +31,13 @@ sinaadsRenderHandler.blogbf = function (element, width, height, content, config)
             CLOSE_ZINDEX + ';position:absolute;width:42px;height:19px;right:7px;top:1px;';
 
         var mainWrap = document.createElement('div');
-        mainWrap.innerHTML = mainContent;
+        sinaadToolkit.ad.embed(
+            mainWrap,
+            config.type,
+            config.width,
+            config.height,
+            mainContent
+        );
         container.getMain().appendChild(mainWrap);
         container.getMain().appendChild(closeBtn);
 

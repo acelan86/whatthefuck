@@ -17,14 +17,11 @@
         //如果之前的cssText不以;结尾，在IE8下 样式显示不正确。
         body.style.cssText += ';background:url(' + config.src[0] + ') no-repeat center ' + config.top + 'px;margin:0px;';
 
-<<<<<<< HEAD
-=======
         var midBg = this.midBg = document.getElementById('bgAdWrap');
         if (!midBg) {
             return;
         }
         
->>>>>>> bccfda956dbe4cd1cf70a9d701a733ee23314004
         midBg.style.cssText += ';position:relative;display:block;height: ' + config.headHeight + 'px;width: ' + config.midWidth + 'px;margin:0 auto;';
         midBg.innerHTML = '<a href="' + config.link[0] + '" target="_blank" style="display:block;height:' + config.headHeight + 'px;width: ' + config.midWidth + 'px;"></a>';
 
@@ -117,19 +114,12 @@
                 var  halfWidth = (me.config.width - me.config.midWidth) / 2;
                 me.leftAd.style.left = (midX - halfWidth) + 'px';
                 me.rightAd.style.left = (midX + midWidth) + 'px';
-<<<<<<< HEAD
-=======
 
->>>>>>> bccfda956dbe4cd1cf70a9d701a733ee23314004
                 var remainWidth = document.body.clientWidth - me.config.midWidth;
                 if (remainWidth < 0) {
                     remainWidth = 0;
                 }
-<<<<<<< HEAD
                 me.rightAd.style.width = Math.floor(Math.min(remainWidth / 2, halfWidth)) + 'px';
-=======
-                me.rightAd.style.width = Math.floor(remainWidth / 2) + 'px';
->>>>>>> bccfda956dbe4cd1cf70a9d701a733ee23314004
             };
         },
         getCloseHandler: function () {
