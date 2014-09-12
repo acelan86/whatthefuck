@@ -18,7 +18,8 @@
                 link: content.link[1] || content.link[0] || '',
                 width: config.sinaads_mini_width || width //此处的mini width，如果页面没有传入配置的参数，就使用和大素材一致的宽度
             },
-            monitor: content.monitor,
+            monitor: content.origin_monitor,
+            pv : content.pv,
             duration: config.sinaads_ad_duration || 5,
             midWidth: config.sinaads_ss_mdWidth || 950,
             top: config.sinaads_ss_top || 0,

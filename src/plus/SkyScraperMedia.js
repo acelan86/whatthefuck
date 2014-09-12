@@ -74,24 +74,10 @@
         });
         var mainContent = this.mainContent = document.createElement('div');
         mainContent.style.cssText = 'width:' + width + 'px;height:' + height + 'px;position:absolute;right:0px;bottom:0px;';
-        mainContent.innerHTML = sinaadToolkit.ad.createHTML(
-            config.main.type,
-            config.main.src,
-            width,
-            height,
-            config.main.link,
-            config.monitor
-        );
+        
         var miniContent = this.miniContent = document.createElement('div');
         miniContent.style.cssText = 'width:' + miniwidth + 'px;height:' + miniHeight + 'px;position:absolute;right:0px;bottom:0px;';
-        miniContent.innerHTML = sinaadToolkit.ad.createHTML(
-            config.mini.type,
-            config.mini.src,
-            miniwidth,
-            miniHeight,
-            config.link,
-            config.monitor
-        );
+        
 
         var mainCloseBtn = this.mainCloseBtn = document.createElement('div');
         mainCloseBtn.style.cssText = [
@@ -144,6 +130,38 @@
         mini.getMain().appendChild(miniContent);
         this.timer = null;
 
+        sinaadToolkit.ad.embed(
+            mainContent,
+            config.main.type,
+            width,
+            height,
+            sinaadToolkit.ad.createHTML(
+                config.main.type,
+                config.main.src,
+                width,
+                height,
+                config.main.link,
+                config.origin_monitor
+                config.pv
+            )
+        );
+
+        sinaadToolkit.ad.embed(
+            miniContent,
+            config.mini.type,
+            miniwidth,
+            miniHeight,
+            sinaadToolkit.ad.createHTML(
+                config.mini.type,
+                config.mini.src,
+                miniwidth,
+                miniHeight,
+                config.link,
+                config.origin_monitor,
+                config.pv
+            )
+        );
+
         var showInfo = this.showInfo = _getShowInfo(config.pdps, true);
         setTimeout(function () {
             THIS.render(showInfo.showCount === 1);
@@ -174,13 +192,20 @@
         show: function() { //展示大图片调用的方法
             var THIS = this,
                 config = this.config;
-            this.mainContent.innerHTML = sinaadToolkit.ad.createHTML(
+            sinaadToolkit.ad.embed(
+                this.mainContent,
                 config.main.type,
-                config.main.src,
                 config.main.width,
                 config.main.height,
-                config.main.link,
-                config.monitor
+                sinaadToolkit.ad.createHTML(
+                    config.main.type,
+                    config.main.src,
+                    config.main.width,
+                    config.main.height,
+                    config.main.link,
+                    config.origin_monitor,
+                    config.pv
+                )
             );
             this.main.show();
             this.timer = setTimeout(function() {
@@ -195,13 +220,20 @@
         showMini: function() { // 展示小图片调用的方法
             var config = this.config;
             if (!!config.mini.src) { // 检查是否有小图片
-                this.miniContent.innerHTML = sinaadToolkit.ad.createHTML(
+                sinaadToolkit.ad.embed(
+                    this.miniContent,
                     config.mini.type,
-                    config.mini.src,
                     config.mini.width,
                     this.miniHeight,
-                    config.mini.link,
-                    config.monitor
+                    sinaadToolkit.ad.createHTML(
+                        config.mini.type,
+                        config.mini.src,
+                        config.mini.width,
+                        this.miniHeight,
+                        config.mini.link,
+                        config.origin_monitor,
+                        config.pv
+                    )
                 );
                 this.mini.show();
             }
