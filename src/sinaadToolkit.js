@@ -885,8 +885,18 @@
         /** 
          * 根据浏览器支持选择相关的存储方案
          * 当ie且ie<8时使用userData方案，否则使用localStorage方案，否则使用cookie方案
+         * 隐私模式下storage会写入失败
          */
         var storage = window.localStorage ? ls : sinaadToolkit.browser.ie && sinaadToolkit.browser.ie < 8 ? userData : cookie;
+
+        /**
+         * 测试storage是否成功，隐私模式下localstorage会失败
+         */
+        try {
+            storage.setItem('sinaads_test_ls', 'support');
+        } catch (e) {
+            storage = cookie;
+        }
 
         return /** @lends sinaadToolkit.storage */{
             /**
