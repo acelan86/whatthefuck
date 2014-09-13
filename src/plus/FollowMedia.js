@@ -64,13 +64,13 @@
 
         var mainCloseBtn = this.mainCloseBtn = document.createElement('div');
         mainCloseBtn.style.cssText = [
-            'width:' + MAIN_CLOSE_BTN_SIZE[0] + 'px',
+            'width:' + width + 'px',
             'height:' + MAIN_CLOSE_BTN_SIZE[1] + 'px',
             'position:absolute',
             'right:0px',
             'bottom:-' + MAIN_CLOSE_BTN_SIZE[1] + 'px',
             'z-index:9999',
-            'background:url(' + MAIN_CLOSE_BTN +  ') no-repeat',
+            'background:url(' + MAIN_CLOSE_BTN +  ') no-repeat right center #ebebeb',
             'margin:0',
             'padding:0',
             'cursor:pointer'
