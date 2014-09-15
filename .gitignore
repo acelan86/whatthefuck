@@ -14,3 +14,5 @@ sinaads.js.map
 demo/
 
 *.dump
+
+node_modules/grunt-contrib-concat/.jshintrc
