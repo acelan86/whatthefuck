@@ -141,7 +141,7 @@
                 width,
                 height,
                 config.main.link,
-                config.origin_monitor
+                config.monitor,
                 config.pv
             )
         );
@@ -157,7 +157,7 @@
                 miniwidth,
                 miniHeight,
                 config.link,
-                config.origin_monitor,
+                config.monitor,
                 config.pv
             )
         );
@@ -203,7 +203,7 @@
                     config.main.width,
                     config.main.height,
                     config.main.link,
-                    config.origin_monitor,
+                    config.monitor,
                     config.pv
                 )
             );
@@ -231,7 +231,7 @@
                         config.mini.width,
                         this.miniHeight,
                         config.mini.link,
-                        config.origin_monitor,
+                        config.monitor,
                         config.pv
                     )
                 );
