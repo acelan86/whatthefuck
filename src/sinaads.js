@@ -37,7 +37,8 @@ var UUID = 1;
 var PAGE_HASH = 'sinaads_' + core.hash(window.location.host.split('.')[0] + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')));
 var IMPRESS_URL = 'http://sax.sina.com.cn/newimpress'; //向广告引擎请求正式广告的地址
 var SERVER_PREVIEW_IMPRESS_URL = 'http://sax.sina.com.cn/preview'; //向广告引擎请求服务端预览广告的地址
-var PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
+// var PLUS_RESOURCE_URL = core.RESOURCE_URL + '/release/plus/Media.js';
+var PLUS_RESOURCE_URL = 'http://d1.sina.com.cn/litong/zhitou/zhangfei/demo/zd/Media.js';
 //PLUS_RESOURCE_URL = ''; //测试富媒体分文件用
 var SAX_TIMEOUT = parseInt(window._SINAADS_CONF_SAX_REQUEST_TIMEOUT || 30, 10) * 1000; //请求数据超时时间
 var PAGE_MEDIA_ORDER = window._SINAADS_CONF_PAGE_MEDIA_ORDER || []; //渲染顺序配置
@@ -295,7 +296,8 @@ var modelModule = (function (core, controller, uid) {
                 'sx'    : 'follow',
                 'kzdl'  : 'coupletExt',
                 'fc1'   : 'pop',
-		'kzan'  : 'skyscraper'
+                'kzan'  : 'skyscraper',
+                'span'  : 'leftsuspend'
             }[ad.type]) || ad.type || 'embed';
 
             ad.content[i] = content;
@@ -1200,6 +1202,32 @@ var viewModule = (function () {
         } else {
             core.sio.loadScript(RESOURCE_URL, function() {
                 new core.SkyScraperMedia(skyscraperMediaData);
+            });
+        }
+    });
+})(core, viewModule);
+(function(core, view) {
+    view.register('leftsuspend', function(element, width, height, content, config) {
+        var RESOURCE_URL = PLUS_RESOURCE_URL || './src/plus/LeftSuspendMedia.js';
+
+        content = content[0];
+
+        var leftSuspendrMediaData = {
+            width: width,
+            height: height,
+            src: content.src[0] || '',
+            type: content.type[0] || '',
+            link: content.link[0] || '',
+            monitor: content.monitor,
+            cookieKey: config.sinaads_ls_cookieKey,
+            root: config.sinaads_ls_root,
+            pdps: config.sinaads_ad_pdps
+        };
+        if (window.sinaadToolkit.LeftSuspendMedia) {
+            new window.sinaadToolkit.LeftSuspendMedia(leftSuspendrMediaData);
+        } else {
+            window.sinaadToolkit.sio.loadScript(RESOURCE_URL, function() {
+                new window.sinaadToolkit.LeftSuspendMedia(leftSuspendrMediaData);
             });
         }
     });

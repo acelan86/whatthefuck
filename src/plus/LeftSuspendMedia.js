@@ -16,10 +16,11 @@
             },
             follow: 1,
             width: width,
+            autoShow: 1,
             height: height + CLOSE_BTN_SIZE[1]
         });
         var mainContent = this.mainContent = document.createElement('div');
-        mainContent.style.cssText = 'width:' + width + 'px;height:' + height + 'px;position:absolute;right:0px;bottom:0px;';
+        mainContent.style.cssText = 'width:' + width + 'px;height:' + height + 'px;position:absolute;right:0px;top:0px;';
         mainContent.innerHTML = sinaadToolkit.ad.createHTML(
             config.type,
             config.src,
