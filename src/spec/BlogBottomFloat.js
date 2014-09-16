@@ -1,6 +1,7 @@
 'use strict';
-sinaadsRenderHandler = window.sinaadsRenderHandler || {};
-sinaadsRenderHandler.blogbf = function (element, width, height, content, config) {
+window.sinaadsRenderHandler = window.sinaadsRenderHandler || {};
+window.sinaadsRenderHandler.blogbf = function (element, width, height, content, config) {
+    var sinaadToolkit = window.sinaadToolkit;
 
     function handler(config) {
         var CLOSE_NORMAL_BTN = "http://d1.sina.com.cn/shh/ws/2012/09/29/1/close1.gif",

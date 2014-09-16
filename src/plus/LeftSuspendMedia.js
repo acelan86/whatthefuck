@@ -21,13 +21,19 @@
         });
         var mainContent = this.mainContent = document.createElement('div');
         mainContent.style.cssText = 'width:' + width + 'px;height:' + height + 'px;position:absolute;right:0px;top:0px;';
-        mainContent.innerHTML = sinaadToolkit.ad.createHTML(
+        sinaadToolkit.ad.embed(
+            mainContent,
             config.type,
-            config.src,
             width,
             height,
-            config.link,
-            config.monitor
+            sinaadToolkit.ad.createHTML(
+                config.type,
+                config.src,
+                width,
+                height,
+                config.link,
+                config.monitor
+            )
         );
         var mainCloseBtn = this.mainCloseBtn = document.createElement('div');
         mainCloseBtn.style.cssText = [
