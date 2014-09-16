@@ -28,12 +28,12 @@
         var  halfWidth = (config.width - config.midWidth) / 2;
         var leftAd = this.leftAd = document.createElement('div');
         leftAd.id = 'bgLeftAd';
-        leftAd.style.cssText += ';position: absolute;height: ' + config.height + 'px;width:' + halfWidth + 'px;left:0px;top: ' + config.top + 'px';
+        leftAd.style.cssText += ';position: absolute;overflow:hidden;height: ' + config.height + 'px;width:' + halfWidth + 'px;left:0px;top: ' + config.top + 'px';
         body.appendChild(leftAd);
 
         var rightAd = this.rightAd = document.createElement('div');
         rightAd.id = 'bgRightAd';
-        rightAd.style.cssText += ';position: absolute;height: ' + config.height + 'px;width:' + halfWidth + 'px;left:0px;top: ' + config.top + 'px';
+        rightAd.style.cssText += ';position: absolute;overflow:hidden;height: ' + config.height + 'px;width:' + halfWidth + 'px;left:0px;top: ' + config.top + 'px';
         body.appendChild(rightAd);
 
         if (config.src[1]) { //左右两侧有广告内容
@@ -125,7 +125,6 @@
             return function () {
                 var midWidth = me.config.midWidth;
                 var midX = sinaadToolkit.dom.getPosition(document.getElementById('bgAdWrap')).left;
-
                 var  halfWidth = (me.config.width - me.config.midWidth) / 2;
                 me.leftAd.style.left = (midX - halfWidth) + 'px';
                 me.rightAd.style.left = (midX + midWidth) + 'px';
@@ -134,7 +133,7 @@
                 if (remainWidth < 0) {
                     remainWidth = 0;
                 }
-                me.rightAd.style.width = Math.floor(remainWidth / 2) + 'px';
+                me.rightAd.style.width = Math.floor(Math.min(remainWidth / 2, halfWidth)) + 'px';
             };
         },
         getCloseHandler: function () {
@@ -144,11 +143,8 @@
                 sinaadToolkit.event.un(window, 'resize', me.resizeHandler);
                 document.body.style.cssText += ';background:none;';
                 me.midBg.style.display = 'none';
-                
-                if (me.config.asideClickable) {
-                    me.leftAd.style.display = 'none';
-                    me.rightAd.style.display = 'none';
-                }
+                me.leftAd.style.display = 'none';
+                me.rightAd.style.display = 'none';
             };
         }
     };

@@ -36,9 +36,9 @@
      */
     function querySimpleSelector (sel) {
         var result = [];
-        if (sel[0] === '.') {
+        if (sel.charAt(0) === '.') {
             result = getElementsByClassName(document, sel.slice(1));
-        } else if (sel[0] === '#') {
+        } else if (sel.charAt(0) === '#') {
             result.push(document.getElementById(sel.slice(1)));
         } else {
             result.push(document.getElementById(sel));
