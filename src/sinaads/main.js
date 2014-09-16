@@ -51,7 +51,8 @@ window._sinaadsIsInited = window._sinaadsIsInited || (function (window, core, un
     import "view/videoWindow";
     import "view/bg";
     import "view/pop";
-    import "view/skyscraper.js";	
+    import "view/skyscraper.js";  
+    import "view/leftsuspend.js";
 
     import "init";
 
