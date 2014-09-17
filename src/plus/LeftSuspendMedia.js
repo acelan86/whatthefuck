@@ -64,8 +64,11 @@
             return function() {
                 THIS.mainContent.innerHTML = '';
                 THIS.main.hide();
-                if (!sinaadToolkit.storage.get(THIS.cookieKey)) {
-                    sinaadToolkit.storage.set(THIS.cookieKey, '1', 10 * 60 * 1000);
+                if (!sinaadToolkit.cookie.get(THIS.cookieKey)) {
+                    sinaadToolkit.cookie.set(THIS.cookieKey, '1', {
+                        path: '/',
+                        expires: 10 * 60 * 1000
+                    });
                 }
 
                 sinaadToolkit.event.un(THIS.mainCloseBtn, 'click', THIS.closeHandler);
