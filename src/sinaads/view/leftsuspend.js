@@ -10,7 +10,7 @@
             src: content.src[0] || '',
             type: content.type[0] || '',
             link: content.link[0] || '',
-            monitor: content.monitor,
+            monitor: content.origin_monitor,
             cookieKey: config.sinaads_ls_cookieKey,
             root: config.sinaads_ls_root,
             pdps: config.sinaads_ad_pdps
